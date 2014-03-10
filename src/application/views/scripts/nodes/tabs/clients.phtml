@@ -1,0 +1,49 @@
+<ul id="tabNodeClientsList" class="unstyled jsLineColor cssTab">
+    <? foreach ($this->html('clients') as $clientId => $client): ?>
+        <li id="tabNodeClientsListEntry-<?= $clientId ?>" class="row-fluid cssLine jsLine">
+            <a href="<?= $this->url(array($client->html('_id'), $client->html('label')), 'clientDetail') ?>"
+               title="<?= $client->html('label') ?>" class="span8">
+                <?= $client->html('label') ?>
+            </a>
+            <a href="#" class="pull-right jsDomainsOnClient">
+                <?= $this->translate('Domains') ?> (<?= count($client->html('domains')) ?>)
+            </a>
+            
+            <div class="jsUserNodeDomains" style="display:none;">
+            <? if($client->toBool('domains')): ?>
+                <ul id="tabNodeClientsListDomains-<?= $clientId ?>" class="cssPopoverTabList unstyled pull-left">
+                    <? foreach ($client->html('domains') as $domain): ?>
+                        <li>
+                            <a href="<?= $this->url(array($domain->html('name')), 'domaindetail') ?>"
+                               title="<?= $domain->html('name') ?>" class="pull-left">
+                                <span>
+                                    <?= $domain->html('name') ?>
+                                </span>
+                            </a>
+                        </li>
+                    <? endforeach; ?>
+                </ul>
+            <? endif; ?>
+            </div>
+        </li>
+    <? endforeach; ?>
+</ul>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('.jsDomainsOnClient').each(function() {
+            var parentLi = $(this).closest('li');
+            var content = $.trim($(parentLi).find('.jsUserNodeDomains').html());
+            
+            if(content) {
+                $(this).popover({
+                    placement: 'bottom',
+                    content: content,
+                    html: true,
+                    trigger: 'click'
+                });
+            }
+            
+            $(this).click(function(){return false;});
+        });
+    });
+</script>

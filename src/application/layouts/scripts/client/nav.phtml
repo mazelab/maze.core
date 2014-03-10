@@ -1,0 +1,14 @@
+<div class="cssNav">
+    <?= $this->navigation()->menuAsSelect()->setMaxDepth(0)->setUlClass('selectmenu')->render() ?>
+</div>
+<script type="text/javascript">
+    $(document).ready(function() {
+       $(".selectmenu").selectmenu({
+            style:'dropdown',
+            width:'220',
+            change: function(event, element) {
+                window.location.href = element.value;
+            }
+        });
+    });
+</script>

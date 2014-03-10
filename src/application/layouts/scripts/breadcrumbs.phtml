@@ -1,0 +1,16 @@
+<ul class="breadcrumb unstyled">
+    <? $index = 1;?>
+    <? foreach($this->pages as $page): ?>
+        <?php if(count($this->pages) == $index): ?>
+            <li class="active">
+                <?= $this->translate((string) $page->getLabel()) ?>
+            </li>
+        <? else: ?>
+            <li>
+                <a href="<?= $page->getHref() ?>"><?= $this->translate($page->getLabel()) ?></a> 
+                <span class="divider">/</span>
+            </li>
+        <? endif; ?>
+        <? $index++;?>
+    <? endforeach ?>
+</ul>

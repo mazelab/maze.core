@@ -1,0 +1,81 @@
+<div class="row-fluid">
+    <div class="span12">
+        <div class="row-fluid">
+            <form class="span8" id="databaseConfig" method="post">
+                <dl class="row-fluid cssBoxCenter">
+                    <dt class="span3">
+                        <label>
+                            <?= $this->translate('database name') ?>
+                        </label>
+                    </dt>
+                    <dd class="span9">
+                        <?= $this->form->dbSetting->dbName ?>
+                    </dd>
+                </dl>
+                <dl class="row-fluid">
+                    <dt class="span3">
+                        <label>
+                            <?= $this->translate('db collection prefix') ?>
+                        </label>
+                    </dt>
+                    <dd class="span9">
+                        <?= $this->form->dbSetting->dbCollectionPrefix ?>
+                    </dd>
+                </dl>
+                <a class="btn btn-danger jsReConfigure" href="<?= $this->url(array(), "updateDatabaseConfig") ?>">
+                    <?= $this->translate('save') ?>
+                </a>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+                
+            
+<div id="jsConfirmConfig" class="modal hide fade">
+    <div class="modal-header">
+        <h3><?= $this->translate('Attention') ?></h3>
+    </div>
+    <div class="modal-body">
+        <p><?= $this->translate('you have already performed an installation of Maze.dashboard and are already connected to a database') ?></p>
+        <p><br>Bei Bestätigung des Dialogs werden Sie zur Installationsübersicht weitergeleitet, welche eine Zusammenfassung der zu Konfigurierenden Datenbank anzeigt.</p>
+        <p>Durch die änderung der Konfiguration wird die aktuelle Datenbank nicht gelöscht !</p>
+    </div>
+    <div class="modal-footer">
+        <a class="btn jsButtonCancel" data-dismiss="modal"><?= $this->translate('cancel') ?></a>
+        <a class="btn btn-primary jsButtonOk" data-dismiss="modal"><?= $this->translate('database installation') ?></a>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function() {
+
+        $('a.jsReConfigure').click(function() {
+            var form = $("#databaseConfig");
+            var self = $(this);
+            var dialog = $("#jsConfirmConfig").modal({backdrop:"static", show:true});
+            dialog.find(".jsButtonOk").unbind("click").click(function(){
+                $.ajax({
+                    url : self.attr("href")+ "?format=json",
+                    data: form.serializeArray(),
+                    type: form.attr("method"),
+                    success: function(data) {
+                        if(data.result === true) {
+                            location = "<?= $this->url(array(), "installReconfigure"); ?>";
+                        }else if (!$.isEmptyObject(data.formErrors)){
+                            for (name in data.formErrors){
+                                setErrorTooltip(data.formErrors[name], $("#dbSetting-"+ name));
+                            }
+                        }
+                    }
+                });
+                dialog.modal("hide");
+            }).andSelf().find(".jsButtonCancel").click(function(){
+                dialog.modal("hide");
+            });
+            return false;
+        });
+
+    });
+</script>

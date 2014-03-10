@@ -1,0 +1,165 @@
+<div class="row-fluid">
+    <div class="span12" id="jsAdminContainer">
+        <div class="row-fluid">
+            <div class="span12">
+                <a class="btn btn-info" 
+                   href="<?= $this->url(array(), 'addAdministrator') ?>"
+                   id="createadmin">
+                    <?= $this->translate('Create admin') ?>
+                </a>
+            </div>
+        </div>
+        <div class="cssToolBar row-fluid">
+            <div class="cssPager pull-right">
+                <?= $this->render('shared/pager.phtml') ?>
+            </div>
+        </div>
+        <div class="row-fluid">
+            <div class="span12">
+                <div class="row-fluid cssColumn4">
+                    <? $columnCounter = 0; ?>    
+                    <? foreach ($this->html("pager/data") as $id => $admin): ?>
+                    <div class="cssListColumn4 span3 jsListColumn" id="jsAdmin-<?= $admin->html('username'); ?>">
+                        <div class="cssListColumn4Content">
+                            <div class="row-fluid">
+                                <span class="span3 cssBoxCenter"> 
+                                     <? if ($admin->html('avatar') != ''): ?>
+                                        <img src="<?= $this->urlAvatar($id, 120); ?>" 
+                                             class="img-rounded cssAvatar"
+                                             alt="<?= $this->translate('avatar') ?>"/>
+                                     <? else: ?>
+                                        <img src="<?= $this->baseUrl() ?>/img/dummy_admin_160.png" width="80px"
+                                             class="img-rounded cssAvatar"
+                                             alt="<?= $this->translate('avatar') ?>"/>
+                                     <? endif; ?>
+                                 </span>
+                                
+                                <span class="span9">
+                                    <span class="pull-left cssUserItemSpan">
+                                        <?= $admin->html('username'); ?>
+                                    </span>
+                                </span>
+                                <small class="span9 muted">
+                                    <?= $this->translate('status'); ?>
+                                    <span <?= !$admin->toBool("status") ? "style=\"display:none;\"" : null; ?> class="jsIconStateTxt">
+                                        <?= $this->translate("activated"); ?>
+                                    </span>
+                                    <span <?= $admin->toBool("status") ? "style=\"display:none;\"" : null; ?> class="jsIconStateTxt">
+                                        <?= $this->translate("deactivated"); ?>
+                                    </span>
+                                </small>
+                                <? if ($this->html('identity/username') != $admin->html('username')): ?>
+                                <div class="span12 jsStateContainer pull-right">
+                                    <a href="<?= $this->url(array($admin->html('username')), 'deleteAdministrator') ?>" 
+                                       class="btn btn-small jsIconDelete pull-right" 
+                                       title="<?= $this->translate('delete') ?>"
+                                       id="admindelete-<?= $admin->html('username'); ?>">
+                                        <i class="icon-trash"></i>
+                                        <?= $this->translate("delete"); ?>
+                                    </a>
+                                    <a <?= $admin->toBool('status') ? "style=\"display:none;\"" : null; ?>
+                                        href="<?= $this->url(array($admin->html('username')), "changeAdministratorState") ?>"
+                                        class="jsIconStateTxt btn btn-small" 
+                                        title="<?= $this->translate('activate') ?>"
+                                        id="adminstatusactivate-<?= $admin->html('username'); ?>">
+                                        <i class="icon-minus-sign"></i>
+                                        <?= $this->translate("activate"); ?>
+                                    </a>
+                                    <a <?= !$admin->toBool('status') ? "style=\"display:none;\"" : null; ?>
+                                        href="<?= $this->url(array($admin->html('username')), "changeAdministratorState") ?>"
+                                        class="jsIconStateTxt jsInactive btn btn-small" 
+                                        title="<?= $this->translate('deactivate') ?>"
+                                        id="adminstatusdeactivate-<?= $admin->html('username'); ?>">
+                                        <i class="icon-ok-sign"></i>
+                                        <?= $this->translate("deactivate"); ?>
+                                    </a>
+                                </div>
+                                <? endif; ?>
+                            </div>
+                        </div>
+                    </div>
+                    <? if(++$columnCounter==4): ?>
+                        <? $columnCounter = 0; ?> 
+                            </div>
+                            <div class="row-fluid cssColumn4">
+                    <? endif; ?>
+                    <? endforeach; ?>
+                </div>
+            </div>
+        </div>
+        
+        <div id="jsConfirmDelete" class="modal hide fade">
+            <div class="modal-body">
+                <p><?= $this->translate('Shall the admin really be deleted?'); ?></p>
+            </div>
+            <div class="modal-footer">
+                <a class="btn btn-info jsButtonCancel" data-dismiss="modal"><?= $this->translate('cancel') ?></a>
+                <a class="btn btn-info jsButtonDelete" data-dismiss="modal"><?= $this->translate('ok') ?></a>
+            </div>
+        </div>
+    </div>
+</div>
+<input id="adminsSearchInput" type="hidden" />
+<script type="text/javascript">
+    $(document).ready(function() {
+
+        $('#adminsSearchInput').mazeSearch({
+            source: '<?= $this->url(array(), 'administrators') ?>?format=html',
+            target: '#jsAdminContainer'
+        });
+
+        $('#jsPagerNext').unbind("click").click(function() {
+            $('#adminsSearchInput').mazeSearch('next');
+            return false;
+        });
+
+        $('#jsPagerPrev').unbind("click").click(function() {
+            $('#adminsSearchInput').mazeSearch('prev');
+            return false;
+        });
+
+        $('.jsPagerFirst').unbind("click").click(function() {
+            $('#adminsSearchInput').mazeSearch('first');
+            return false;
+        });
+
+        $('.jsPagerLast').unbind("click").click(function() {
+            $('#adminsSearchInput').mazeSearch('last');
+            return false;
+        });
+
+        $(".jsIconStateTxt").click(function(){
+            self = $(this);
+            $.ajax({
+                url: this.href,
+                data: {format: "json"},
+                success:function(data){
+                    if (!$.isEmptyObject(data.admin) && self.hasClass("jsInactive") !== data.admin.status){
+                        self.closest(".jsListColumn").find(".jsIconStateTxt").toggle();
+                    }
+                }
+            });
+            return false;
+        });
+
+        $('a.jsIconDelete').click(function() {
+            var elem = $(this);
+            var dialog = $("#jsConfirmDelete").modal({backdrop:"static", show:true});
+            dialog.find(".jsButtonDelete").unbind("click").click(function(){
+                $.ajax({
+                    url: elem.attr('href') + '?format=json',
+                    success: function(data) {
+                        if(data.status === true) {
+                            elem.closest('.jsListColumn').remove();
+                        }
+                    }
+                });
+                dialog.modal("hide");
+            }).andSelf().find(".jsButtonCancel").click(function(){
+                dialog.modal("hide");
+            });
+            return false;
+        });
+
+    });
+</script>

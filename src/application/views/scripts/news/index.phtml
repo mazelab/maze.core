@@ -1,0 +1,80 @@
+<div class="row-fluid">
+    <div class="span12" id="jsNewsPagerContainer">
+        <div class="row-fluid cssListing">
+            <div class="span12 cssHeaderList">
+                <div class="cssButton span12">
+                    <a class="btn btn-info jsButton" href="<?= $this->url(array(), "addNews") ?>">
+                        <?= $this->translate("New Message") ?>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <?= $this->render("shared/pager.phtml") ?>
+
+        <div id="newsListing" class="row-fluid cssListing">
+            <ul class="span12 unstyled">
+                <? foreach ($this->html("pager/data") as $id => $page): ?>
+                <li class="row-fluid">
+                    <div class="span10">
+                        <a class="cssListItem span12" title="<?= $this->translate("detail") ?>"
+                            href="<?= $this->url(array($page->html("_id")), "newsDetail") ?>">
+                            <span>
+                                <? if ($page->toBool("sticky") == true): ?>
+                                <span class="jsTooltip icon-arrow-up" style="opacity:0.6;"
+                                      title="<?= $this->translate("always kept at the upper position") ?>."></span>
+                                <? endif; ?>
+                                <? if ($page->html("status") == Core_Model_NewsManager::STATUS_DRAFT): ?>
+                                <span class="label label-warning"><?= $this->translate("Draft"); ?></span> 
+                                <? elseif ($page->html("status") == Core_Model_NewsManager::STATUS_CLOSED): ?>
+                                <span class="label"><?= $this->translate("Closed"); ?></span> 
+                                <? endif; ?>
+
+                                <? if ($page->toBool("sentEmail") === true): ?>
+                                    <span class="jsTooltip icon-envelope" style="opacity:0.6;"
+                                          title="<?= $this->translate("Message has been sent as an email"); ?>"></span>
+                                <? endif; ?>
+
+                                <?= $page->html("title"); ?>
+                            </span>
+                        </a>
+                    </div>
+                </li>
+                <? endforeach; ?>
+
+            </ul>
+        </div>
+    </div>
+</div>
+<input id="newsSearchInput" type="hidden" />
+<script type="text/javascript">
+    $(document).ready(function() {
+
+        $(".jsTooltip").tooltip();
+
+        $('#newsSearchInput').mazeSearch({
+            source: '<?= $this->url(array(), 'news') ?>?format=html',
+            target: '#jsNewsPagerContainer'
+        });
+
+        $('#jsPagerNext').unbind("click").click(function() {
+            $('#newsSearchInput').mazeSearch('next');
+            return false;
+        });
+
+        $('#jsPagerPrev').unbind("click").click(function() {
+            $('#newsSearchInput').mazeSearch('prev');
+            return false;
+        });
+
+        $('.jsPagerFirst').unbind("click").click(function() {
+            $('#newsSearchInput').mazeSearch('first');
+            return false;
+        });
+
+        $('.jsPagerLast').unbind("click").click(function() {
+            $('#newsSearchInput').mazeSearch('last');
+            return false;
+        });
+    });
+</script>

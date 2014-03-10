@@ -1,0 +1,43 @@
+<div class="cssLoginBox grid_16">
+    
+    <form method="post" action="<?= $this->url(array(), 'login') ?>">
+        <div class="cssLoginBoxHead">
+            <img src="<?= $this->baseUrl() ?>/img/icon_login.png"  alt="<?= $this->translate('image') ?>" />
+            <h1>
+                <?= $this->translate('login') ?>
+            </h1>
+            <a href="<?= $this->url(array(), 'forgotPassword') ?>" id ="linkForgotPassword">
+                <?= $this->translate('forgot password?') ?>
+            </a>
+        </div>
+        <? if ($this->html('result') == '-4'): ?>
+            <div class="cssErrorMessage ui-widget">
+                <div class="ui-state-error ui-corner-all">
+                    <p>
+                        <span class="ui-icon ui-icon-alert">
+                        </span>
+                        <strong>
+                            <?= $this->translate('Attention! Following errors occurred:') ?>
+                        </strong>
+                    </p>
+                    <p>
+                        <?= $this->translate('login failed, access is disabled') ?>
+                    </p>
+                    <p>
+                        <?= $this->translate('please contact your administrator') ?>
+                    </p>
+                </div>
+            </div>
+        <? endif; ?>
+        <dl><?= $this->form->username ?></dl>
+        <dl><?= $this->form->password ?></dl>
+        <div class="cssLoginButton">
+            <input type="submit" class="jsButton" name="login" value="<?= $this->translate('log on') ?>"/>
+        </div>
+    </form>
+</div>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('.jsButton').button();
+    });
+</script>

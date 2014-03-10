@@ -1,0 +1,1465 @@
+.container_16{
+    margin: 0 auto;
+    max-width:960px;
+    overflow:visible;
+}
+body {
+    margin:0 auto;
+    color:#3e3d3b;
+    background: url('../img/bg.jpg');
+}
+a{
+    text-decoration:none;
+}
+a:focus, focus {
+    outline: none;
+}
+input, dd{
+    position:relative;
+}
+.cssFont{
+    font-family:arial, helvetica;
+    color:#807C6B;
+    font-size:12px;
+}
+li{
+    margin:0;
+    padding:0;
+}
+.csstoolboxHead, .cssForm h6, .cssRightLevel a, .cssUserInfo > ul li a.cssUserName,
+.cssToolboxHead, .cssDomainFilter, .cssDomainFilter a, .cssUserNav li a,
+ul.cssUserInfo li.cssClientLevel, .cssFooterContent, .cssQtip, .cssLoginBoxHead a{
+    font-size:12px;
+}
+/*-------------------Userbox-------------------*/
+.cssUserbox{
+    float: right;
+}
+.cssUserInfo{
+    text-align:right;
+    float: right;
+    height:33px;
+    line-height:33px;
+    font-size: 14px;
+    position:relative;
+}
+ul.cssUserInfo li.cssClientLevel{
+    color:#15add2;
+    height: 25px;
+    line-height: 25px;
+    padding: 4px 15px 0 0;
+    position: relative;
+}
+ul.cssUserInfo li.cssClientLevel:hover{
+    background:none;
+}
+ul.cssUserInfo li{
+    list-style:none;
+    margin:0;
+    float: left;
+    padding:4px 4px 0 0;
+}
+ul.cssUserInfo li.active{
+    background:#fff;
+}
+ul.cssUserInfo li:hover, ul.cssUserInfo li a:hover, ul.cssUserInfo li:active{
+    background:#fff;
+    color:#15add2;
+    border-radius:5px;
+}
+.cssUserName img{
+    float:left;
+    width:25px;
+    height:25px;
+    margin-right:15px;
+    border-radius:5px;
+}
+.cssUserInfo > ul li a.cssUserName{
+    position:relative;
+    padding: 0 15px 4px 4px;
+    overflow:hidden;
+    display:block;
+    float: left;
+    height:25px;
+    line-height:25px;
+    white-space:nowrap;
+    color:#3e3d3b;
+}
+.cssUserInfo > ul li a.cssUserName:hover{
+    color:#15add2;
+}
+a.cssUserInfoButton{
+    padding:5px 4px 4px 4px;
+    float: left;
+    overflow: hidden;
+    height: 16px;
+}
+ul.cssUserInfo li a.cssUserInfoButton:hover, a.cssUserName:hover{
+    background:#a19d91;
+    border-radius:2px;
+}
+span.cssUserInfoButton{
+    background-image:  url('js/images/ui-icons_3e3d3b_256x240.png');
+    background-position: -64px -16px;
+    border-left-color:#a19d91;
+    border-left-style:dotted;
+    border-left-width:1px;
+    height:16px;
+    padding:0;
+    position:relative;
+    text-indent:1000px;
+    width:16px;
+    overflow:hidden;
+    display:block;
+}
+.cssUserNav{
+    height:auto;
+    margin:0;
+    border-radius:4px;
+}
+.cssUserNav li{
+    margin:0;
+    height: 35px;
+    line-height:35px;
+    list-style:none;
+}
+.cssUserNav li a{
+    width:100%;
+    color:#3e3d3b;
+    float: left;
+    text-indent:20px;
+}
+.cssUserNav li a:hover{
+    color:#fff;
+    background:url('js/images/ui-bg_highlight-soft_75_535043_1x100.png') repeat-x scroll 50% 50% #535043;
+}
+.cssUserInfo{
+    position: relative;
+}
+ul.cssUserInfo li.cssRightLevel{
+    margin-right:10px;
+}
+ul.cssUserInfo li.cssRightLevel:hover{
+    background:none;
+}
+.cssRightLevel a{
+    color:#fff;
+    padding:0 10px 4px 10px;
+    height:20px;
+    line-height:23px;
+    text-align:center;
+    background:#1AA8C9;
+    border:0px solid #fff;
+    border-radius:5px;
+    box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.6);
+    float:left;
+}
+/*-------------------Navigation-------------------*/
+.cssNav{
+    height:40px;
+    line-height: 40px;
+    margin-top:27px;
+    position:relative;
+    text-align:right;
+    float: right;
+    padding-left: 50px;
+    background:url('../img/bg_nav_left.png') no-repeat left top;    
+}
+.cssNav .ui-selectmenu.ui-widget.ui-state-active{
+    background:url('../img/bg_nav.png');
+    height:40px;
+    line-height: 40px;
+    border:0;
+    border-radius:0 15px 0 0;
+}
+.cssNav .ui-selectmenu.ui-widget{
+    font-family: 'Helvetica';
+}
+.ui-selectmenu.ui-widget.ui-state-default.ui-corner-all.ui-selectmenu-dropdown,
+.ui-selectmenu.ui-widget.ui-state-default.ui-corner-all.ui-selectmenu-dropdown.ui-state-active{
+    background:url('../img/bg_nav.png') repeat-x;
+    height:40px;
+    line-height: 40px;
+    color:#fff;
+    font-weight: normal;
+    position: relative;
+    border:0;
+    border-radius:0 15px 0 0;
+}
+span.ui-selectmenu-icon{
+    border-left:1px dotted #A19D91;
+    padding-left: 2px;
+}
+.ui-selectmenu.ui-widget{
+    font-size:18px;
+}
+.ui-selectmenu-menu li a, .ui-selectmenu-status{
+    font-size:17px;
+    text-align:right;
+    padding-right:40px;
+}
+.ui-selectmenu-menu li{
+    border:0;
+}
+.ui-selectmenu-item-focus.ui-state-hover{
+    border:0;    
+}
+.ui-selectmenu-menu-dropdown{
+    border-top:0;
+}
+/*-------------------SubNav-------------------*/
+.cssSubNav{
+    border-top:1px solid #807c6b;
+    background: #807c6b url('../img/bg_subnav.jpg') repeat-x scroll;
+    height:50px;
+    font-size:17px;
+}
+.cssSubNav li a{
+    color:#fff;
+    float:left;
+    height:50px;
+    width:auto;
+    padding:0 15px;
+    text-align:center;
+}
+.cssSubNav li a:hover{
+    background: #807c6b url('../img/bg_subnav_active.jpg') repeat-x left top;
+    text-decoration:none;
+}
+.cssSubNav li.active a{
+    background: #807c6b url('../img/bg_subnav_hover_50.jpg') repeat-x left top;
+    text-decoration:none;
+    cursor:default;
+}
+.cssSubNav li a.cssSubNavDisabled {
+    color: #6E6D6B;
+    cursor:default;
+}
+.cssSubNav li a.cssSubNavDisabled:hover {
+    background: none;
+    cursor:default;
+}
+.cssMenu{
+    float:right;
+    height: 50px;
+    line-height: 50px;
+    margin: 0;
+}
+.cssMenu li{
+    float:left;
+    list-style:none;
+    margin: 0;
+}
+/*-------------------Header-------------------*/
+.cssHeaderAdmin, .cssHeader{
+    background:#e7f7f8;
+    height:100px;
+    border-bottom:1px solid #fcfcfc;
+}
+.cssHeaderClient{
+    background:#ece7d3;
+    height:100px;
+    border-bottom:1px solid #fcfcfc;    
+}
+.cssLogo{
+    text-decoration:none;
+    position:relative;
+}
+.cssLogo a{
+    font-size:25px;
+    text-decoration:none; 
+    color:#3e3d3b;
+    font-weight:400;
+    position:absolute;
+    top:19px;
+    left:0;
+}
+.cssLogo a span{
+    position:absolute;
+    left:120px;
+    top:0;
+}
+/*-------------------Dashboard-------------------*/
+.cssDashboardBox, .cssDashboardBoxLast{
+    height:auto;
+    width:20.8%;
+    float:left;
+    background: #807c6b url('../img/bg_dashboard_button.jpg') repeat-x scroll;
+    border: 0 solid #AAA8A8;
+    border-radius: 5px 5px 5px 5px;
+    box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.6);
+}
+.cssDashboardBox{
+    margin-right:5.5%;    
+}
+.cssDashboardBox a, .cssDashboardBoxLast a{
+    color:#135969;
+    text-align:center;
+    float: left;
+    position:relative;
+    width:90%;
+    margin:5.5%;
+}
+.cssDashboardBox img, .cssDashboardBoxLast img{
+    display: block;
+    float:left;
+    padding-right: 20px;
+}
+.cssDashboardBox span, .cssDashboardBoxLast span{
+    float:left;
+    display:block;
+}
+.cssDashboardBox span.cssDashboardBoxHead, .cssDashboardBoxLast span.cssDashboardBoxHead{
+    text-transform:uppercase;
+    width:110px;
+    height: 26px;
+    text-align:left;
+    color:#1AA8C9;
+    overflow: hidden;
+}
+.cssDashboardStatistics{
+    margin-top:10px;
+}
+.cssDashboardLogs, .cssDashboard, .cssDashboardModule, .cssDashboardNews{
+    margin:20px 0 0 0;
+    font-family:arial, helvetica;
+    font-size:12px;
+}
+.cssDashboardLogs ul{
+    list-style:none;
+}
+.cssDashboardLogs .cssToolBoxAdminDiff ul li:hover{
+    background:#e7f7f8;
+    cursor:pointer;
+}
+.cssDashboardLogs ul li{
+    height:25px;
+    line-height:25px;
+}
+.cssDashboardNews .cssClipped{
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+}
+.cssDashboardModule ul.cssToolBoxContent li div .ui-progressbar .ui-progressbar-value,
+.cssDashboardModule ul.cssToolBoxContent li div .ui-progressbar .cssProgressbarRight{
+    text-indent:5px;
+    line-height: 24px;
+}
+.cssLogTxtAlert .ui-icon{
+    background:url("js/images/ui-icons_cd0a0a_256x240.png");
+    float: left;
+    margin:4px 5px 0 0;
+}
+.cssLogTxtAlert .ui-icon-alert{
+    background-position:0 -144px;
+}
+.cssLogTxtInfo .ui-icon{
+    background:url("js/images/ui-icons_2e8d07_256x240.png");
+    float: left;
+    margin:4px 5px 0 0;
+}
+.cssLogTxtInfo .ui-icon-info{
+    background-position:-16px -144px;    
+}
+.cssLogUser span{
+    padding-right:10px;
+}
+.cssToolBox, .cssToolBoxLeft, .cssToolBoxRight{
+    background: url('../img/bg_toolbox_head.jpg') repeat-x scroll;
+    border: 1px solid #AAA8A8;
+    border-radius:5px;
+    float: left;
+    padding-bottom:3px;
+}
+.cssToolBoxAdmin{
+    background: #fff url('../img/bg_dashboard_button.jpg') repeat-x scroll;
+    border: 0 solid #AAA8A8;
+    border-radius: 5px;
+    box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.6);
+    float: left;
+    padding-bottom:3px;
+}
+.cssToolBoxAdminDiff{
+    background: #fff url('../img/bg_toolbox_head_red.jpg') repeat-x scroll;
+    border: 0 solid #AAA8A8;
+    border-radius: 5px;
+    box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.6);
+    float: left;
+    padding-bottom:3px;
+}
+.cssToolBox{
+    width:100%;
+}
+.cssToolBoxLeft{
+    margin:0 20px 0px 0;
+    width:96%;
+}
+.cssToolBoxRight{
+    margin:0 0 0px 20px;
+    width:96%;
+}
+.cssToolBox h4, .cssToolBoxLeft h4, .cssToolBoxRight h4{
+    text-transform:uppercase;
+    font-size:19px;
+    text-align:left;
+    color:#1AA8C9;
+    text-indent:20px;
+}
+.cssToolboxHead {
+    color:#135969;
+    float: none;
+    display: block;
+    height:25px;
+    line-height:25px;
+    padding:10px 0 5px 10px;
+    text-align:left;
+    color:#1AA8C9;
+}
+.cssToolboxHead img{
+    display: block;
+    float:left;
+    padding-right: 20px;
+    width: 24px;
+    height:24px;
+}
+.cssToolBoxContent{
+    background:#fff;
+    padding:3px 0;
+    list-style:none;
+    float:left;
+    width:100%;
+}
+.cssDashboardModule ul.cssToolBoxContent li{
+    min-height:30px;
+    text-indent:10px;
+    height:auto;
+} 
+ul.cssToolBoxContent li{
+    height:25px;
+    text-indent:10px;
+    line-height: 25px;
+}                         
+.cssLine.Two{
+    background: #f5f4ed;    
+}
+.cssLine.One{
+    background: #fbfaf6;
+}
+.cssDiffContent dl.del{
+    background:#fbc4c6;
+}
+.cssDiffContent dl.add,
+.cssLine.Two.add,
+.cssLine.One.add{
+    background:#caffc9;
+}
+ul.cssToolBoxContent .cssIconState{
+    float: right;
+    margin:0 10px 0 0;
+    cursor:default;
+}
+ul.cssToolBoxContent span.cssIconState.ui-state-hover{
+    background:url('js/images/ui-bg_highlight-soft_55_589844_1x100.png')repeat-x 50% 50% #589844;
+    border:1px solid #589844;
+}
+ul.cssToolBoxContent span.cssIconState.inactive.ui-state-hover{
+    background:url('js/images/ui-bg_highlight-soft_55_ffb73a_1x100.png')repeat-x 50% 50% #ffb73a;
+    border:1px solid #ffb73a;
+}
+ul.cssToolBoxContent span.cssIconState.ui-state-hover .ui-icon{
+    background-image:url('js/images/ui-icons_ffffff_256x240.png');
+}
+ul.cssToolBoxContent .ui-widget{
+    font-size:12px;
+}
+ul.cssToolBoxContent .ui-widget-content{
+    border:1px solid #589844;
+    background:url("js/images/ui-bg_highlight-hard_75_f1f1f0_1x100.png") repeat-x scroll 50% 50% #305781;
+    border-radius:5px;
+}
+ul.cssToolBoxContent .ui-widget-content.unlimited{
+    border-color:#ABA797;
+    border-radius:4.99px
+}
+ul.cssToolBoxContent .ui-widget-header{
+    background:url("js/images/ui-bg_highlight-soft_55_589844_1x100.png") repeat-x scroll 50% 50% #305781;
+}
+ul.cssToolBoxContent .ui-widget-header.unlimited{
+    background:url("js/images/overlay.png") repeat-x scroll 0 0 transparent;
+    text-align: center;
+    width:100%;
+    opacity: 0.6;
+}
+ul.cssToolBoxContent .ui-progressbar-value, ul.cssToolBoxContent .cssProgressbarRight{
+    float: left;
+}
+.cssToolboxContent p{
+    padding:10px;
+    background:#fff;
+}
+.cssDashboardLogs h6{
+    font-family:'Helvetica Neue';
+}
+.cssToolBoxContent a.cssLink{
+    display:block;
+    float:left;
+    text-indent:10px;
+    width:100%;
+    height: 25px;
+    line-height:25px;
+}
+.cssToolBoxSorting{
+    text-indent: 10px;
+    background: #fff;
+}
+.cssToolBoxSorting span {
+    float: left;
+    padding-right: 25px;
+}
+.cssSortIcon.cssUp{
+    border-right:1px solid #fff;
+}
+a.cssSortIcon.ui-icon{
+    float: left;
+}
+dl.cssLimiter{
+    float: right;
+    padding-right:10px;
+    text-align:right;
+}
+dl.cssLimiter dt{
+    padding-right:10px;
+}
+/*-------------------Selectbox Limit------------------*/
+.cssForm .cssDashboardLogs dl dd a.ui-selectmenu.ui-widget.ui-state-default.ui-corner-all.ui-selectmenu-dropdown,
+.cssForm .cssDashboardLogs dl dd a.ui-state-active,
+.cssForm .cssDashboardLogs dl dd a.ui-selectmenu-dropdown.ui-state-active,
+.cssForm .cssDashboardLogs dl dd a.ui-selectmenu.ui-widget{
+    background: none repeat scroll 0 0 #FFFFFF;
+    border: 1px solid #CCCCCC;
+    border-radius: 2px 2px 2px 2px;
+    font-family: arial,helvetica;
+    font-size: 12px;
+    height: 20px;
+    color:#000;
+}
+.cssForm .cssDashboardLogs dl dd .ui-selectmenu-menu li a, .ui-selectmenu-status {
+    text-align:left;
+}
+.cssForm .cssDashboardLogs .ui-selectmenu-menu li,
+.cssForm .cssDashboardLogs .ui-selectmenu-menu li a,
+.cssForm .cssDashboardLogs .ui-selectmenu-status,
+.cssForm .cssDashboardLogs .ui-selectmenu-menu li.ui-state-hover {
+    border: medium none;
+    font-family: arial,helvetica;
+    font-size: 12px;
+    line-height: 14px;
+    text-align: left;
+}
+.cssForm .cssDashboardLogs span.ui-selectmenu-icon{
+    border-left:0;
+    padding-left:0;
+}
+.cssForm .cssDashboardLogs .ui-state-default .ui-icon{
+    background-image:  url('js/images/ui-icons_3e3d3b_256x240.png');
+}
+/*-------------------Lightbox-------------------*/
+.cssLightbox .ui-dialog-content{
+    background: url('../img/bg.jpg');
+}
+.cssContentLigthbox{
+    padding:2% 5%;
+    width:90%;
+    float: left;
+    height: auto;
+}
+.cssContentLigthboxList .cssToolBar{
+    width:99%;
+}
+/*-------------------Content Liste-------------------*/
+.cssContent{
+    min-height:780px;
+}
+.cssContentMiddle{
+    margin: 30px 0;
+    position:relative;
+ }
+.cssListing,
+.cssDetailPadding30{
+  padding-top:1em;   
+}
+.cssListing h4{
+    float:left;
+    width:100%;
+    margin: 20px 0 5px;
+    color: #1AA8C9;
+}
+.cssListing ul{
+    width:100%;
+}
+.cssListing ul li{
+    border-bottom:1px dashed #807c6b;
+    margin:0px;
+    list-style:none;
+    height: auto;
+    vertical-align:middle;
+    padding:5px 0;
+}
+.cssListing ul li div{
+    line-height: 50px;
+    vertical-align:middle;
+}
+.cssListing ul li div a {
+    color:#3e3d3b;
+    font-weight:600;
+    vertical-align: middle;
+}
+.cssListing ul li div p{
+    color:#3e3d3b;
+    vertical-align: middle;    
+}
+.cssListing ul li div a:hover{
+    color:#1AA8C9;
+}
+.cssListing ul li div a.cssIconEmail.ui-state-default,
+.cssListing ul li div a.cssIconDiff.ui-state-default,
+.cssListing ul li div a.cssIconKey.ui-state-default,
+.cssListing ul li div a.cssIconForwarder.ui-state-default,
+.cssListing ul li div a.cssIconSpecials.ui-state-default{
+    color:#fff;
+    font-weight:400;
+    vertical-align: middle;
+    font-size:10px;
+    background-image:  url('js/images/ui-bg_highlight-soft_40_1aa8c9_1x100.png');
+    border:1px solid #1AA8C9;
+}
+.cssListing ul li div a.cssIconDiff.ui-state-default,
+.cssListing ul li div a.cssIconKey.ui-state-default{
+    background-image:  url('js/images/ui-bg_highlight-soft_55_ff593a_1x100.png');
+    border:1px solid red;
+}
+.cssListing ul li div a.cssIconDiff.ui-state-default.ui-state-hover,
+.cssListing ul li div a.cssIconKey.ui-state-default.ui-state-hover{
+    background-image:  url('js/images/ui-bg_highlight-soft_70_ff3a26_1x100.png');
+    border:1px solid red;
+}
+span.cssAvatar{
+    float:left;
+    position:relative;
+}
+span.cssAvatar img{
+    width:48px;
+    height:48px;
+    float:left;
+    border: 1px solid #ddd8c2;
+    border-radius: 5px 5px 5px 5px;
+}
+.cssAvatar .cssAvatarText{
+    position:absolute;
+    top:0;
+    left:0;
+    height:50px;
+    width:50px;
+    font-size:10px;
+    font-weight: bold;
+    text-align:center;
+    text-shadow:#838071 1px 1px 2px;
+    color:#fff;
+    overflow: hidden;
+}
+.cssListing ul li div.cssAction{
+    line-height:50px;
+    height: 50px;
+}
+ .cssAction{
+    text-align:right;
+    border:0;
+}
+div.cssAction h3{
+    margin-bottom:0;
+}
+.cssHeaderList{
+    border-bottom:1px dashed #807c6b;
+    min-height: 40px;
+}
+/*-------------------Login-------------------*/
+.cssLoginContent{
+    text-align:center;
+    position:relative;
+}
+.cssLoginContent .cssLogo{
+    margin-top:30px;
+}
+.cssLoginContent .cssLogo img{
+    float:left;
+}
+.cssLogo span{
+    padding-top:30px;
+    font-size:25px;
+    text-decoration:none; 
+    color:#3e3d3b;
+    font-weight:400;
+}
+.cssLoginBox{
+    margin-top:30px;
+    text-align:left;
+    height:auto;
+    background: #fff url('../img/bg_login_box.jpg') repeat-x scroll;
+    border: 0 solid #AAA8A8;
+    border-radius: 5px 5px 5px 5px;
+    box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.6);
+}
+.cssLoginBoxHead{
+    height: 50px;
+    line-height: 50px;
+}
+.cssLoginBoxHead h1, .cssLoginBoxHead img, .cssLoginBoxHead a{
+    float: left;
+}
+.cssLoginBoxHead img{
+    padding-right:20px;
+}
+.cssLoginBoxHead h1{
+    color:#1AA8C9;
+    text-transform:uppercase;
+    font-size:16px;
+}
+.cssLoginBoxHead a{
+    float:right;
+    text-align:right;
+    line-height: 53px;
+    color:#1AA8C9;
+}
+.cssLoginBox form{
+    float: left;
+    width:90%;
+    padding: 5%;
+    font-size:14px;
+}
+.cssLoginBox form p{
+    font-size:14px;
+}
+.cssLoginBox form dl{
+    float:left;
+    width: 100%;
+    padding:5px 0 0 0;
+}
+.cssLoginBox form dt, .cssLoginBox form dd{
+    width:50%;
+    padding-left:68px;
+    position:relative;
+}
+.cssLoginBox.cssForgotPasswort form dt, .cssLoginBox.cssForgotPasswort form dd{
+    padding-left:0px;
+}
+.cssLoginBox form dd{
+    min-height:30px;
+}
+.cssLoginBox form dd input{
+    height:20px;
+    width: 100%;
+}
+.cssLoginBox form span{
+    font-size:12px;
+}
+.cssPasswordResetList{
+    list-style: decimal inside;
+    color:#1AA8C9;
+    font-size:14px;
+    font-weight: bold;
+    padding:10px 0;
+}
+/*-------------------Footer-------------------*/
+.cssFooter{
+    padding:20px 0;
+    float: left;
+    width:100%;
+    color:#3E3D3B;
+    font-size:14px;
+}
+.cssLoginFooter, .cssLoginFooter .cssCopyright a{
+    color:#EBE8DB;
+}
+.cssFooterContent{
+    text-align:center;
+}
+.cssFooterContent a{
+    color:#3E3D3B;
+    text-align:center;
+}
+.cssFooterContent a:hover{
+    text-decoration:underline;    
+}
+.cssFooterContent ul{
+    list-style:none;
+     margin-top:30px;
+}
+.cssFooterContent ul li{
+    display:inline;
+     padding-left:10px;
+}
+/*-------------------Messages-------------------*/
+.qtip-content .ui-state-error .ui-icon, .qtip-content .ui-state-error-text .ui-icon,
+.qtip-content .ui-state-highlight .ui-icon, .qtip-content .ui-state-highlight-text .ui-icon{
+    float:left;
+    margin:3px 3px 0 0;    
+}
+.cssErrorMessage, .cssSuccessMessage, .cssNotification{
+    margin-top:30px;
+}
+.cssErrorMessage li, .cssSuccessMessage li, .cssNotification li{
+    margin:0 0 0 20px;
+    padding:5px 0;
+    list-style:outside;
+}
+.cssErrorMessage span, .cssSuccessMessage span, .cssNotification span{
+    float:left;
+    margin:1px 3px 0 0;
+}
+.cssErrorMessage .ui-state-error, .qtip-content .ui-state-error,
+.qtip-content .ui-state-highlight,
+.qtip-content .ui-state-neutral,
+.cssSuccessMessage .ui-state-highlight,
+.cssNotification .ui-state-highlight{
+    padding:10px;
+}
+.qtip-content .ui-state-error,
+.qtip-content .ui-state-neutral,
+.qtip-content .ui-state-highlight{
+    font-size:14px;
+}
+.cssNotification .ui-state-highlight{
+    border:1px #1aa8c9 solid;
+    background:#e7f7f8;
+    color:#3e3d3b;
+}
+.cssNotification .ui-state-highlight .ui-icon {
+    background-image:url("js/images/ui-icons_3e3d3b_256x240.png");
+}
+.cssMultiTypes.ui-state-neutral {
+    background: url("js/images/ui-bg_highlight-hard_75_f1f1f0_1x100.png") repeat-x 50% 50% #FEF1EC;
+    border: 1px solid #BEBEBE;
+    color: #5F5F5F;
+}
+.cssErrorMessages ul, .cssErrorMessage ul, .cssSuccessMessage ul, .cssNotification ul{
+    list-style-position:inside;
+}
+ul.errors{
+    position:relative;
+    font-size:13px;
+    background: url("js/images/ui-bg_glass_95_fef1ec_1x400.png") repeat-x scroll 50% 50% #FEF1EC;
+    color:#CD0A0A;
+    border:1px solid #CD0A0A;
+    border-radius:4px;
+    margin: 0 0 15px 0;
+    padding:5px;
+    display:block;
+    clear:both;
+    list-style-position:inside;
+}
+.cssMessagebox p{    
+    padding:10px 0;
+}
+/*-------------------AVATAR-------------------*/
+.cssUserImage img{
+    height:100%;
+    width:100%;
+    text-align:center;
+    position: relative;
+}
+.cssUserImage{
+    height:100px;
+    width:100px;
+    text-align:center;
+    position: relative;
+    border:1px solid #ccc;
+    background:#fff;
+    padding:4px;
+    float: left;
+}
+.cssUserImage a{
+    position:absolute;
+    bottom:3px;
+    left:0;
+    font-size:12px;
+    background: url('../img/bg_opacity_50.png');
+    font-family:arial, helvetica;
+    color:#fff;
+    width:100%;
+    height:30px;
+    line-height: 30px;
+}
+.cssWidth20Pr{
+    width:20%;
+    float:left;
+}
+.cssWidth80Pr{
+    width:80%;
+    float:left;
+}
+/*-------------------Selectboxen im Formular-------------------*/
+.cssFormSelectbox a{
+    width:25%;
+}
+.cssForm .cssFormBoxLong dd span.ui-selectmenu-status{
+    width:200px;
+}
+.cssForm .cssFormBoxLong dd span.ui-selectmenu-icon{
+    width:16px;
+    min-width:0;
+    border:0;
+}
+.cssForm .cssFormBoxLong dl dd a.ui-selectmenu.ui-widget.ui-state-default.ui-corner-all.ui-selectmenu-dropdown,
+.cssForm .cssFormBoxLong dl dd a.ui-state-active,
+.cssForm .cssFormBoxLong dl dd a.ui-selectmenu-dropdown.ui-state-active{
+    height:20px;
+    font-family: arial, helvetica;
+    font-size:12px;
+    border-radius:2px;
+    border: 1px solid #ccc;;
+    background:#fff;;
+}
+.cssForm .cssFormBoxLong dl dd a.ui-selectmenu.ui-widget.ui-state-default .ui-icon{
+    background-image:  url('js/images/ui-icons_3e3d3b_256x240.png');
+    background-position: -64px -16px;
+}
+.cssForm .cssFormBoxLong .ui-selectmenu-menu li,
+.cssForm .cssFormBoxLong .ui-selectmenu-menu li a,
+.cssForm .cssFormBoxLong .ui-selectmenu-status,
+.cssForm .cssFormBoxLong .ui-selectmenu-menu li.ui-state-hover{
+    border:none;
+    font-size:12px;
+    line-height:14px;
+    font-family: arial, helvetica;
+    text-align:left;
+    padding-left:2px;
+}
+.cssForm .cssFormBoxLong dl dd .ui-selectmenu-menu li a,
+.cssForm .cssFormBoxLong dl dd .ui-selectmenu-status{
+    font-size:12px;
+    text-align:left;
+    padding-left:2px;
+    color:#666;
+    font-family: arial, helvetica;
+}
+.cssForm .cssFormBoxLong .ui-widget-content{
+    border-top:0;
+    border-bottom:1px solid #ccc;
+    border-left:1px solid #ccc;
+    border-right:1px solid #ccc;
+}
+.cssLink{
+    text-decoration:underline;
+    font-family:arial, helvetica;
+    font-size:12px;
+    color:#135969;
+    cursor:pointer;
+}
+/*-------------------Icon Button-------------------*/
+.cssForm .cssFormBoxLong dl dd span.jsEditable:hover{
+    cursor:pointer;
+}
+.cssForm .cssFormBoxLong dl dd span form.cssFormEditable button.ui-icon{
+    float: left;
+    margin-left:1%;
+    background:url("js/images/ui-bg_highlight-soft_75_807c6b_1x100.png")repeat-x scroll 50% 50% #305781;
+    overflow: hidden;
+    border:1px solid #807c6b;
+    height:20px;
+    width:20px;
+}
+.cssForm .cssFormBoxLong dl dd form.cssFormEditable button.ui-icon:hover{
+    background:url("js/images/ui-bg_highlight-soft_75_535043_1x100.png")repeat-x scroll 50% 50% #305781;
+    border:1px solid #807c6b;
+}
+.cssForm .cssFormBoxLong dl dd span form.cssFormEditable button.ui-icon.ui-icon-check span,
+.cssForm .cssFormBoxLong dl dd span form.cssFormEditable button.ui-icon.ui-icon-close span{
+    background-image:url("js/images/ui-icons_ffffff_256x240.png");
+    width:16px;
+    height: 16px;
+    position: absolute;
+    top:0;
+    left:0;
+}
+.cssForm .cssFormBoxLong dl dd span form.cssFormEditable button.ui-icon.ui-icon-check span{
+    background-position: -64px -144px;
+}
+.cssForm .cssFormBoxLong dl dd span form.cssFormEditable button.ui-icon.ui-icon-close span{
+    background-position: -80px -128px;
+}
+.ui-button-icon-only, button.ui-button-icon-only{
+    width:20px;
+    height: 20px;
+}
+.cssIconTrash{
+    float: left;
+    background-image:url("js/images/ui-icons_dfdac4_256x240.png");
+}
+.cssIconTrash:hover{
+    background-image:url("js/images/ui-icons_3e3d3b_256x240.png");
+    cursor: pointer;
+}
+.cssIconState.ui-state-default{
+    background:url('js/images/ui-bg_highlight-soft_55_589844_1x100.png')repeat-x 50% 50% #589844;
+    border:1px solid #589844;
+}
+.cssIconState.ui-state-hover{
+    background:url('js/images/ui-bg_highlight-soft_55_1b7200_1x100.png')repeat-x 50% 50% #1b7200;
+    border:1px solid #1b7200;
+}
+.cssIconState.ui-state-default.inactive{
+    background:url('js/images/ui-bg_highlight-soft_55_ffb73a_1x100.png')repeat-x 50% 50% #ffb73a;
+    border:1px solid #ffb73a;
+}
+.cssIconState.ui-state-hover.inactive{
+    background:url('js/images/ui-bg_highlight-soft_70_ff7e1b_1x100.png')repeat-x 50% 50% #ff7e1b;
+    border:1px solid #ff7e1b;
+}
+.cssIconDelete.ui-state-default{
+    background:url('js/images/ui-bg_highlight-soft_55_ff593a_1x100.png')repeat-x 50% 50% #ff593a;
+    border:1px solid #bd2b1c;
+}
+.cssIconDelete.ui-state-hover{
+    background:url('js/images/ui-bg_highlight-soft_70_ff3a26_1x100.png')repeat-x 50% 50% #ff3a26;
+    border:1px solid #ff3a26;
+}
+.cssIconSearch.ui-state-default{
+    background:url('js/images/ui-bg_highlight-soft_50_4d351c_braun_1x100.png')repeat-x 50% 50% #ff593a;
+    border:1px solid #875d31;
+}
+.cssIcon, .cssIconLast{
+    margin-top:4%;
+    margin-bottom:4%;
+}
+.cssIcon{
+    margin-right: 10%;    
+}
+.cssListing ul li div.cssAction a{
+    vertical-align:middle;
+    line-height: 50px;
+}
+.ui-button-icon-only .ui-button-text, .ui-button-icons-only .ui-button-text{
+    padding:0;
+}
+.cssListing ul li div a.cssAdditionalLink{
+    font-size:12px;
+    color:#666;
+    font-family:arial, helvetica;
+    font-weight:normal;
+    padding:2px;
+    float: left;
+}
+.cssForm .cssFormBoxLong dl dd input{
+    width:25%;
+}
+.cssForm .cssFormBoxLong dl input.cssButtonForm{
+    width:5%;
+    height:22px;
+    font-size:12px;
+    padding: 0 ;
+    float: left;
+}
+.cssColumn20Prozent, .cssFormColumn3 dt{
+    width:20%;
+    float:left;
+}
+.cssColumn40Prozent, .cssFormColumn3 dd{
+    width:40%;
+    float:left;
+}
+/*-------------------Button-------------------*/
+form .cssButtonSpace input.cssButton.ui-widget{
+    font-size:12px;
+}
+.cssFormBoxLong .cssButtonSpace.cssButtonNew{
+    text-align:left;
+    padding-top:20px;
+    float: left;
+    margin-left:20%;
+    width: 80%;
+}
+.cssFormBoxLong .cssButtonSpaceLeft.cssButtonNew{
+    text-align:left;
+    padding-top:20px;
+    float: left;
+    margin-left:0;    
+}
+.cssFormBoxLong .cssButtonSpace.cssButtonNew input{
+    font-size:12px;
+    font-family:'Helvetica';
+}
+.cssLoginButton{
+   text-align:right;
+    float: left;
+    width: 100%;
+}
+.cssLoginButton input{
+    margin-top: 30px;
+    float: right;
+}
+.cssLoginButton input:hover{
+    background: #837f6e;
+    color:#fff;
+}
+.cssButtonNew{
+    text-align:left;
+}
+.cssButton .ui-widget span,
+input.cssButton.ui-widget{
+    font-size:18px;
+    font-family: 'Helvetica Neue';
+}
+/*-------------------Content Detail + Formulare-------------------*/
+.cssFormBoxLong form div.cssButtonSpace:hover{
+    background:none;
+}
+.cssFormBoxLong form {
+    width:100%;
+    position:relative;
+    float: left;
+}
+.cssFormBoxLong form.cssFormLigthbox{
+    padding:0;
+}
+.cssFormBoxLong form.cssFormEditable {
+    padding:0px;
+}
+.cssFormBoxLong form.cssFormEditable textarea {
+    min-height:44px;
+}
+.cssFormBoxLong .cssAdditionalFields form.cssFormEditable textarea{
+    height: 44px;
+}
+.cssFormBoxLong form.cssFormEditable dl.cssTextareaLong dd span form textarea{
+    height: 400px;
+}
+.cssForm dl,
+.cssForm p{
+    line-height:25px;
+    float: left;
+    font-size: 12px;
+    font-family:arial, helvetica;
+    color:#807C6B;
+}
+.cssForm dl{
+    position:relative;
+}
+.cssForm dl.cssHideItem{
+    margin-right: 10px;    
+}
+.cssFormBoxLong form dl.cssCompanyItem{
+    font-size:22px;
+}
+.cssHideItem label{
+    display:none;
+}
+.cssHide{
+    display:none;
+    width:100%;
+}
+.cssForm h6{
+    float:left;
+    width:100%;
+    margin: 20px 0 5px;
+    padding-top: 5px;
+    border-top:1px dashed #ccc;
+    color: #1AA8C9;
+}
+.cssForm h7{
+    text-indent:20%;
+    color: #1AA8C9;
+    font-size:12px;
+    margin: 20px 0 5px;
+    padding-top: 5px;
+}
+.cssForm h5{
+    float:left;
+    width:100%;
+    margin: 20px 0 5px;
+    padding-top: 5px;
+    border-top:2px solid #666;
+    color: #1AA8C9;
+    font-size:22px;
+}
+.cssForm .cssFormBoxLong dt, .cssForm dt{
+    float:left;
+    color:#807C6B;
+}
+.cssForm .cssFormBoxLong dt{
+    width:20%;    
+}
+.cssForm dd{
+    float:left;
+}
+.cssForm .cssFormBoxLong dl.cssButton dd{
+    width:auto;
+}
+.cssForm .cssFormBoxLong dl.cssButton dd input{
+    min-width:196px;
+    margin-right:2px;
+    border:1px solid #ccc;
+}   
+.cssForm .cssFormBoxLong dd{
+    width:80%;
+}
+.cssForm .cssFormBoxLong dl dd span.jsEditable form.cssFormEditable input{
+    width:80%;
+}
+.cssForm .cssFormBoxLong dl.cssHideItem dd{
+    width:105%;
+}
+.cssForm .cssFormBoxLong dl.cssHideItem dd span{
+    min-width:0px;
+    width:100%;
+}
+.cssForm .cssFormBoxLong dl.cssHideItem dd span.jsEditable form.cssFormEditable input{
+    width:69%;
+}
+.cssForm .cssFormBoxLong dd span{
+    min-width:300px;
+    float: left;
+}
+.cssForm .cssFormBoxLong dd span.jsEditable:hover,
+.cssForm .cssFormBoxLong dd span.jsEditableAdditionalFields:hover{
+    background:#fff;
+    box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.6);
+}
+.cssForm .cssFormBoxLong dd span input{
+    float: left;
+    height: 22px;
+    font-size:12px;
+    font-family:helvetica;
+    float: left;
+}
+.cssForm .cssFormBoxLong dd span textarea{
+    float: left;
+    min-width:700px;
+}
+.cssAddItem input, .cssAddItem textarea{
+    vertical-align:top;
+}
+.cssAddItem input{
+    width:14.5%;
+    margin-right:5%;
+    float:left;
+}
+.cssAddItem input.cssButton{
+    width:auto;
+    margin-right:10px;
+    float:left;
+}
+.cssForm .cssFormBoxLong .cssAddItem textarea{
+    width:79%;
+    float:left;
+    padding:0;
+    height: 44px;
+}
+.cssForm .cssFormBoxLong textarea{
+    width:55%;
+    float:left;
+    padding:0; 
+    height: 200px;
+}
+.cssForm .cssFormBoxLong dd span.cssColorGray{
+    color:#ccc;
+    font-style: oblique;
+}
+span.ui-inline{
+    float: left;
+    height: 28px;
+    line-height: 25px;
+}
+.cssPassword{
+    float:left;
+    width:100%;
+    font-size:11px;
+    font-family:arial, helvetica;  
+}
+.cssPasswordTitle{
+    width:100%;
+    float: left;
+}
+.cssPasswordStrength{
+    width:100%;
+    height:10px;
+    float: left;
+    border:1px solid #ccc;
+    background:#ccc;
+}
+.cssPasswordSupport{
+    float:left;
+    width:100%;
+    padding-top:10px;
+}
+ul.cssQtip{
+    list-style:decimal inside;
+}
+ul.cssQtip li:hover{
+    background:#fff;
+}
+/*-------------------2Columns-------------------*/
+.cssFormTwoColums{
+    border-top: 1px dashed #ccc;
+    margin-top:20px;
+}
+.cssForm .cssFormBoxLong.cssFormTwoColums dl dd input{
+    width:70%;
+}
+.cssColumnLeftForm, .cssColumnRightForm{
+    float:left;
+    padding-bottom:20px;
+}
+.cssForm .cssFormBoxLong.cssFormTwoColums .cssColumnLeft .cssColumnLeftForm{
+    padding-right:5%;
+    border-right:1px dashed #ccc;
+    width: 95%;
+}
+.cssForm .cssFormBoxLong.cssFormTwoColums .cssColumnRight .cssColumnRightForm{
+    padding-left:5%;
+    width: 95%;
+}
+.cssForm .cssFormBoxLong.cssFormTwoColums .cssColumnLeft .cssColumnLeftForm h6,
+.cssForm .cssFormBoxLong.cssFormTwoColums .cssColumnRight .cssColumnRightForm h6{
+    border:none;
+    margin:10px 0;
+}
+.cssForm .cssFormBoxLong.cssFormTwoColums dt{
+    width:40%;
+}
+.cssFormBoxLong.cssFormTwoColums .cssButtonSpace.cssButtonNew{
+    margin-left:30%;
+    width: 70%;
+}
+.cssForm .cssFormBoxLong.cssFormTwoColums dd{
+    width:60%;
+}
+.cssForm .cssFormBoxLong.cssFormOneColum{
+    border-top:1px dashed #ccc;
+}
+.cssInfoText{
+    position:absolute;
+    top:0;
+    left:15.5%;
+}
+.cssDetailToolbar{
+    border-top:2px solid #ccc;
+    margin:60px 0 0 0;
+    padding:10px 0;
+}
+.cssIconPassword, .cssPasswordContainer{
+    margin-top:20px;
+}
+.cssPasswordContainer{
+    background: #fff url('../img/bg_login_box.jpg') repeat-x scroll;
+    padding:20px;
+    box-shadow:rgba(0, 0, 0, 0.6) 0 1px 4px 0;
+}
+.cssForm .cssFormBoxLong .cssPasswordContainer dl dt{
+    width:40%;
+}
+.cssForm .cssFormBoxLong .cssPasswordContainer dl dd{
+    width:60%;
+}
+.cssForm .cssFormBoxLong .cssPasswordContainer dl dd input{
+    width:90%;
+}
+.cssFormBoxLong .cssPasswordContainer .cssButtonSpace.cssButtonNew{
+    margin-left: 40%;
+    width:60%;
+}
+.ui-progressbar-value{
+    text-align: right;
+}
+.ui-progressbar-value span{
+    padding-right: 10px;
+    color: #fff;
+}
+.ui-progressbar-value.unlimited span{
+    padding:0;
+    color: #fff;
+}
+/*-------------------Differences-------------------*/
+input.cssDisabled, .cssDisabled{
+    border:1px solid #eee;
+    background:#eee;
+}
+.cssDifferences,
+.cssDashboardDiff,
+.cssListing .cssDifferences ul li div a{
+    color:#cc0a0c;
+}
+/*-------------------Install-Step Design-------------------*/
+ul.cssInstallStep{
+    height:40px;
+    line-height:40px;
+    list-style-type:decimal;
+    padding:0;
+    margin:0;
+    display: inline;
+}
+ul.cssInstallStep li{
+    padding-left:0px;
+    margin-left:0px;
+    list-style-type:decimal;
+    text-align:center;
+    list-style-position: inside;
+}
+li.cssInstallStep1{
+    border-radius:16px  0 0 16px;
+    background: #e7f7f8;    
+}
+li.cssInstallStep2, li.cssInstallStep3{
+    background: #e7f7f8;   
+}
+li.cssInstallStep4{
+    background: #e7f7f8;
+    border-radius:0 16px 16px 0;
+}
+li.cssInstallStep1.active{
+    background: #807c6b;      
+    border-radius:16px  0 0 16px;
+    color:#fff;
+}
+li.cssInstallStep2.active, li.cssInstallStep3.active{
+    background: #807c6b;
+    color:#fff;
+    background: #807c6b;    
+}
+li.cssInstallStep4.active{
+    background: #807c6b;
+    border-radius:0 16px 16px 0;
+    color:#fff;
+    background: #807c6b;      
+}
+li.active.cssStepComplete{
+    background: #807c6b url('../img/step_active.png') no-repeat 95% 50%; 
+}
+/*-------------------Element status-------------------*/
+.cssStatusIconPending{
+    opacity:.5;
+	display:inline-block;
+	margin:-4px 0px 0px 0px;
+}
+.cssStatusConflicted {
+    background:#F9F0F0;
+}
+.cssStatusConflicted:hover {
+	background:#fce4e4;
+}
+.cssStatusConflicted,.cssStatusConflicted a {
+    color:#de8485 !important;
+}
+.cssStatusPending {
+	background:#f8f9c3;
+}
+.cssStatusPending:hover {
+	background:#f4f9ae;
+}
+.cssStatusDelete {
+    background:#f5f5f5;
+}
+.cssStatusDelete, .cssStatusDelete a {
+    color:#848181 !important;
+	cursor:default;
+}

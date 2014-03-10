@@ -1,0 +1,56 @@
+<? $this->headLink()->prependStylesheet($this->baseUrl() . '/css/passwordstrength.css') ?>
+<div class="cssContentMiddle grid_16">
+    <ul class="grid_16 cssInstallStep">
+        <li class="grid_4 cssInstallStep1 active cssStepComplete">
+            <?= $this->translate('create database') ?>
+        </li>
+        <li class="grid_4 cssInstallStep2 active">
+            <?= $this->translate('Create administrator') ?>
+        </li>
+        <li class="grid_4 cssInstallStep3">
+            <?= $this->translate('start the installation') ?>
+        </li>
+        <li class="grid_4 cssInstallStep4">
+            <?= $this->translate('completion') ?>
+        </li>
+    </ul>
+    <div class="cssDetailPadding30 cssForm grid_16">
+        <h1>
+            <?= $this->translate('Create administrator') ?>
+        </h1>
+        <div class="cssFormBoxLong grid_16">
+            <form method="post" action="<?= $this->url(array(), 'installAdminuser') ?>">
+                <dl class="grid_16">
+                    <?= $this->form->email ?>
+                </dl>
+                <dl class="grid_16">
+                    <?= $this->form->username ?>
+                </dl>
+                <dl class="grid_16">
+                    <?= $this->form->password ?>
+                </dl>
+                <dl class="grid_16">
+                    <?= $this->form->passwordRepeat ?>
+                </dl>
+                <dl class="grid_16">
+                    <?= $this->form->company ?>
+                </dl>
+                <div class="grid_16 cssButtonSpace cssButtonNew">
+                    <input class="cssButton jsButton" type="submit" value="<?= $this->translate('more') ?>" />
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<?= $this->render('shared/passwordStrength.phtml'); ?>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('.jsButton').button();
+        
+        $("#password").keyup(function() {
+            passwordStrength(this.value);
+        });
+    });
+</script>

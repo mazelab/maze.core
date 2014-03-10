@@ -1,0 +1,66 @@
+    <div class="cssDiffbox alert row-fluid">
+        <div class="row-fluid">
+            <div class="cssToolboxHead span12">
+                <span class="cssToolboxHeadLink span12" id="showDiffs">
+                    <span>
+                        <strong>
+                            <?= $this->translate('Attention') ?>
+                        </strong><?= $this->translate('differences') ?>
+                    </span>
+                </span>
+            </div>
+        </div>
+        <ul class="row-fluid cssToolboxList unstyled">
+        <? foreach($this->conflicts as $conflict): ?>
+        <? if($conflict->tobool('client')): ?>
+            <li class="row-fluid">
+                <a href="<?= $this->url(array(), 'switchToClient') ?>?clientId=<?= $conflict->html('client/id') ?>"
+                   class="cssDashboardDiff row-fluid">
+                    <div class="span2">
+                        <small>
+                            <?= $conflict->html('module/label') ?>
+                        </small>
+                    </div>
+                    <div class="span10">
+                        <small>
+                            <?= ($conflict->html('count') <= 1)
+                                ? $this->translate('Client %1$s has a conflict', $conflict->html('client/label'))
+                                : $this->translate('Client %1$s has %2$s conflicts', $conflict->html('client/label'), $conflict->html('count')) ?>
+                        </small>
+                    </div>
+                </a>
+            </li>
+        <? else: ?>
+            <li class="row-fluid">
+            <? if($conflict->html('url') != ''): ?>
+                <a href="<?= $conflict->html('url') ?>" class="cssDashboardDiff row-fluid">
+            <? else: ?>
+                <a href="#" class="cssDifferences row-fluid">
+            <? endif; ?>
+                    <div class="span2">
+                        <small>
+                            <?= $conflict->html('module/label') ?>
+                        </small>
+                    </div>
+                    <div class="span10">
+                        <small>
+                            <? $translateVars = array(); ?>
+                            <? foreach($conflict->html('messageVars') as $messageVar): ?>
+                                <? array_push($translateVars, $messageVar); ?>
+                            <? endforeach; ?>
+                            <?= $this->translate((string) $conflict->html('message'), $translateVars) ?>
+                        </small>
+                    </div>
+                </a>
+            </li>
+        <?endif; ?>
+        <? endforeach; ?>
+        </ul>
+    </div>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('ul.jsLineColor li:even').addClass('One');
+        $('ul.jsLineColor li:odd').addClass('Two'); 
+    });
+</script>

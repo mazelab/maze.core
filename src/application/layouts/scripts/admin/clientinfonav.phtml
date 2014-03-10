@@ -1,0 +1,92 @@
+<div class="cssUserInfo grid_16">
+    <ul class="cssUserInfo">
+        
+        <li class="cssClientLevel">
+            <span>
+                <?= $this->translate('Client') ?> :
+                <b>
+                    <?=  $this->html('identity/label') ?>
+                </b>
+            </span>
+        </li>
+        
+        <li class="cssRightLevel">
+            <div class="cssRightLevel">
+                <a href="<?= $this->url(array(), 'switchToAdmin') ?>"
+                   title="<?= $this->translate('switch to administrator') ?>">
+                    <span>
+                        <?= $this->translate('switch to administrator') ?>
+                    </span>
+                </a>
+            </div>
+        </li>
+        
+        <li>
+            <a title="<?= $this->translate('My profile') ?>"
+               class="cssUserName jsUserName">
+                
+                <? if($this->toBool('identity/adminUser/avatar')): ?>
+                    <img id="jsAvatar" name="avatar" 
+                         src="<?= $this->urlAvatar($this->html('identity/adminUser/_id'), 50); ?>" />
+                <? else: ?>
+                    <img id="jsAvatar" name="avatar" 
+                         src="<?= $this->baseUrl() ?>/img/dummy_admin_50.png" 
+                         alt="<?= $this->translate('avatar') ?>" />
+                <? endif; ?>
+                
+                <?= $this->html('identity/adminUser/username') ?>
+            </a>
+            
+            <span>
+                <a class="cssUserInfoButton">
+                    <span class="cssUserInfoButton jsClientNavButton">
+                        <?= $this->translate('options') ?>
+                    </span>
+                </a>
+            </span>
+        </li>
+        
+    </ul>
+    
+    <div class="jsClientNav" style="display:none;">
+        <ul class="cssUserNav">
+            <li>
+                <a href="<?= $this->url(array(), 'logout') ?>" 
+                   class="clientNav" title="<?= $this->translate('logout') ?>">
+                    <?= $this->translate('logout') ?>
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('.jsClientNavButton').qtip({
+            content: $('.jsClientNav').html(),
+            position: {
+                adjust: {
+                        x: 3,
+                        y: 5
+                    },
+                corner: {
+                    target: 'bottomRight',
+                    tooltip: 'topRight'
+                }
+            },
+            style: {
+                width: 225,
+                padding: 0,
+                background: '#fff',
+                color: '#fff',
+                textAlign: 'left',
+                border: {
+                    width: 2,
+                    radius:5,
+                    color:'#fff'
+                }
+            },
+            show: 'click',
+            hide: 'click'
+        });
+    });
+</script>

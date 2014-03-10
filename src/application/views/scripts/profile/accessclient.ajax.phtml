@@ -1,0 +1,103 @@
+<div class="container_16">
+    <div class="cssForm grid_16">
+        <div class="cssContentLigthbox">
+            <h1>
+                <?= $this->translate('Change password') ?>
+            </h1>
+            <div class="cssDetailPadding30 cssFormBoxLong grid_16">
+                <div class="cssFormBoxLong grid_16">
+                    <? if ($this->result == '1'): ?>
+                        <?= $this->translate('The password has been changed') ?> 
+                    <? elseif ($this->result == '0'): ?>
+                        <?= $this->translate('The password could not be set') ?>
+                    <? endif; ?>
+                    <form class="" action="<?= $this->url(array(), 'profileAccess')?>" method="post">
+                        <dl class="grid_16">
+                            <dt>
+                                <?= $this->form->username->getLabel(); ?>
+                            </dt>
+                            <dd><?= $this->form->username; ?></dd>
+                        </dl>
+                        <dl class="grid_16">
+                            <dt>
+                                <?= $this->form->oldPassword->getLabel(); ?>
+                            </dt>
+                            <dd><?= $this->form->oldPassword; ?></dd>
+                        </dl>
+                        <dl class="grid_16">
+                            <dt>
+                                <?= $this->form->newPassword->getLabel(); ?>
+                            </dt>
+                            <dd><?= $this->form->newPassword; ?></dd>
+                        </dl>
+                        <dl class="grid_16">
+                            <dt>
+                                <?= $this->form->confirmPassword->getLabel(); ?>
+                            </dt>
+                            <dd><?= $this->form->confirmPassword; ?></dd>
+                        </dl>
+                        <div class="grid_16 cssButtonSpace cssButtonNew">
+                            <input id="jsCancelButtonColorbox" class="cssButton jsButton" type="reset" value="<?= $this->translate('cancel') ?>" />
+                            <input class="cssButton jsButton" type="submit" value="<?= $this->translate('save') ?>" />
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<?= $this->render('shared/passwordStrength.phtml'); ?>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('.jsButton').button();
+        $('#jsCancelButtonColorbox').click(function() {
+            $('#colorbox').colorbox.close();
+        });
+
+        $("#newPassword").keyup(function() {
+            passwordStrength(this.value);
+        }).qtip({
+            content: $('#jsPassword').html(),
+            show: 'focus',
+            hide: 'unfocus',
+            style: {
+                tip: {
+                    corner: 'leftBottom',
+                    color: '#cccccc'
+                }
+            },
+            position: {
+                adjust: {y: 13},
+                corner: {
+                    target: 'rightMiddle',
+                    tooltip: 'leftBottom'
+                }
+            },
+            api: {
+                onRender: function(){
+                    $self = this;
+                    $self.elements.target.keydown(function(event) {
+                        keyCode = (event.keyCode || event.which); 
+                        if (keyCode === 9) $self.hide();
+                    });
+                }
+            }
+        });
+
+        $('form').submit(function(){
+            $.ajax({
+                url: $(this).attr('action')+ '?format=json',
+                data: $(this).serialize(),
+                type: 'post',
+                success: function(data){
+                    setTooltips(data, '#colorbox #newPassword');
+                }
+            });
+            return false;
+        });
+		
+    });
+</script>

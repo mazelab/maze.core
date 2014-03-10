@@ -1,0 +1,43 @@
+<div class="row-fluid">
+    <div class="span12">
+        <ul class="nav nav-tabs" id="jsTabsModules">
+            <li class="active">
+                <a href="#jsInstalledModule" data-toggle="tab"><?= $this->translate("Installed"); ?> (<?= count($this->installedModules) ?>)</a>
+            </li>
+            <li>
+                <a href="#jsAvailableModule" data-toggle="tab"><?= $this->translate("Available"); ?> (<?= count($this->availableModules) ?>)</a>
+            </li>
+            <li>
+                <a href="#jsUpdateModule" data-toggle="tab"><?= $this->translate("Latest Updates"); ?> (<?= count($this->updateableModules) ?>)</a>
+            </li>
+            <li>
+                <a href="#jsUploadModule" data-toggle="tab"><?= $this->translate("Module Upload"); ?></a>
+            </li>
+        </ul>
+
+        <div class="tab-content">
+            <div class="tab-pane active" id="jsInstalledModule">
+                <?= $this->render('modules/tabs/installedModules.phtml'); ?>
+            </div>
+            
+            <div class="tab-pane" id="jsAvailableModule">
+                <?= $this->render('modules/tabs/availableModules.phtml'); ?>
+            </div>
+            
+            <div class="tab-pane" id="jsUpdateModule">
+                <?= $this->render('modules/tabs/updateableModules.phtml'); ?>
+            </div>
+            <div class="tab-pane" id="jsUploadModule">
+                <div class="span12">
+                    @TODO Formular Upload
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        $("#jsTabsModules a").filter("[href='"+ location.hash +"']").click();
+    });
+</script>

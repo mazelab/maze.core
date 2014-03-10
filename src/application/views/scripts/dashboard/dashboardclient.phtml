@@ -1,0 +1,215 @@
+<div class="cssContentMiddle grid_16">
+    <div class="cssDetail cssForm grid_16">
+        <div class="cssDashboard grid_16">
+            <div class="grid_8">
+                <div class="cssToolBoxLeft">
+                    <div class="cssToolboxHead">
+                        <img src="<?= $this->baseUrl() ?>/img/icon_domain_25.png" alt="<?= $this->translate('image') ?>">
+                        <span class="cssDashboardBoxHead">
+                            <?= $this->translate('total domains') ?> <?= count($this->domains) ?>
+                        </span>
+                    </div>
+                    <ul class="cssToolBoxContent jsLineColor">
+                        <? foreach ($this->domains as $domain): ?>
+                            <li class="cssLine">
+                                <div class="grid_12">
+                                    <?= $domain->html('name') ?>
+                                </div>
+                            </li>
+                        <? endforeach; ?>
+                    </ul>
+                </div>
+            </div>
+            <div class="grid_8">
+                <div class="cssToolBoxRight">
+                    <div class="cssToolboxHead">
+                        <img src="<?= $this->baseUrl() ?>/img/icon_quicklink_25.png" alt="<?= $this->translate('image') ?>">
+                        <span class="cssDashboardBoxHead">
+                            <?= $this->translate('quick links') ?>
+                        </span>
+                    </div>
+                    <div class="cssToolBoxContent">
+                        <? foreach ($this->html('modules') as $module): ?>
+                            <? foreach ($module->html('routes/dashboard/links/routes') as $route): ?>
+                            <a href="<?= $this->url(array(), (string) $route->html('route')) ?>"
+                               title="<?= $this->translate((string) $route->html('label')) ?>" class="cssLink">
+                                <?= $this->translate((string) $route->html('label')) ?>
+                            </a>
+                            <? endforeach; ?>
+                        <? endforeach; ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <? if (sizeof($this->lastNews)): ?>
+        <div class="cssDashboardNews grid_16">
+            <div class="cssToolBox grid_16">
+                <div class="cssToolboxHead">
+                    <img alt="<?= $this->translate("image"); ?>" src="/img/icon_log_25.png">
+                    <span class="cssDashboardBoxHead"><?= $this->translate("Latest news"); ?></span>
+                </div>
+                <ul class="grid_16 cssToolBoxContent jsLineColor">
+                    <? foreach ($this->lastNews as $news): ?>
+                    <li class="cssLine grdi_16">
+                        <a href="<?= $this->url(array($news->html("_id")), "newsDetail"); ?>">
+                        <div class="grid_3 cssClipped cssLink" title="<?= $news->html("title"); ?>"><?= $news->html("title"); ?></div>
+                            <p class="grid_13 cssClipped"><?= $news->toBool("teaser") ? $news->html("teaser") : $news->html("content"); ?></p>
+                        </a>
+                    </li>
+                    <? endforeach; ?>
+                </ul>
+            </div>
+        </div>
+        <? endif; ?>
+
+        <? if(count($this->conflicts)): ?>
+            <?= $this->render('dashboard/conflicts.phtml'); ?>
+        <? endif; ?>
+        
+        <div class="cssDashboardLogs grid_16">
+            <div class="cssToolBox grid_16">
+                <div class="cssToolboxHead">
+                    <img src="<?= $this->baseUrl() ?>/img/icon_log_25.png" alt="<?= $this->translate('image') ?>">
+                    <span class="cssDashboardBoxHead">
+                        <?= $this->translate('log') ?>
+                    </span>
+                    <dl class="cssLimiter">
+                        <dt><label><?= $this->translate("rows"); ?>:</label></dt>
+                        <dd >
+                            <select class="jsSelectLimiter">
+                                <option selected="selected">10</option>
+                                <option>50</option>
+                                <option>100</option>
+                                <option>150</option>
+                            </select>
+                        </dd>
+                    </dl>
+                </div>
+                <div class="cssToolBoxSorting grid_16">
+                    <div class="grid_2 cssSort">
+                        <span><?= $this->translate('Date') ?></span>
+                        <a href="#" class="cssSortIcon cssUp ui-icon ui-icon-triangle-1-n" title="in absteigender Reihenfolge"></a>
+                        <a href="#" class="cssSortIcon cssDown ui-icon ui-icon-triangle-1-s" title="in aufsteigender Reihenfolge"></a>
+                    </div>
+                    <div class="grid_3 cssSort">
+                        <span><?= $this->translate('Module') ?></span>
+                        <a href="#" class="cssSortIcon cssUp ui-icon ui-icon-triangle-1-n"></a>
+                        <a href="#" class="cssSortIcon cssDown ui-icon ui-icon-triangle-1-s"></a>
+                    </div>
+                    <div class="grid_8 cssSort">
+                        <span><?= $this->translate('Message') ?></span>
+                        <a href="#" class="cssSortIcon cssUp ui-icon ui-icon-triangle-1-n"></a>
+                        <a href="#" class="cssSortIcon cssDown ui-icon ui-icon-triangle-1-s"></a>
+                    </div>
+                    <div class="grid_3 cssSort">
+                        <span><?= $this->translate('User') ?></span>
+                        <a href="#" class="cssSortIcon cssUp ui-icon ui-icon-triangle-1-n"></a>
+                        <a href="#" class="cssSortIcon cssDown ui-icon ui-icon-triangle-1-s"></a>
+                    </div>
+                </div>
+                <ul class="grid_16 cssToolBoxContent jsLineColor">
+                    <? foreach ($this->html('log') as $log): ?>
+                    <li id="jsLog-<?= $log->html('_id') ?>" class="cssLine grid_16">
+                        <div class="grid_2 cssLogDate">
+                            <span>
+                                <?= $log->html('datetime') ?>
+                            </span>
+                        </div>
+                        <div class="grid_3 cssLogModule">
+                            <span>
+                                <?= $log->html('module/label') ?>
+                            </span>
+                        </div>
+                        <? if ($log->html('type') == 'warning' 
+                                || $log->html('type') == 'conflict'): ?>
+                        <div class="grid_8 cssLogTxtAlert">
+                            <span class="ui-icon ui-icon-alert">ico</span>
+                        <? elseif ($log->html('type') == 'error'): ?>
+                        <div class="grid_8 cssLogTxtError">
+                            <span class="ui-icon ui-icon-error">ico</span>
+                        <? elseif ($log->html('type') == 'notify'): ?>
+                        <div class="grid_8 cssLogTxtInfo">
+                            <span class="ui-icon ui-icon-info">ico</span>
+                        <? else: ?>
+                        <div class="grid_8">
+                        <? endif; ?>
+                            <span>
+                                <? $translateVars = array(); ?>
+                                <? foreach($log->html('messageVars') as $messageVar): ?>
+                                    <? array_push($translateVars, $messageVar); ?>
+                                <? endforeach; ?>
+
+                                <? $translation = $this->translate((string) $log->html('message'), $translateVars) ?>
+                                <? if(strlen($translation) > 100): ?>
+                                    <?= substr($translation, 0, 100) ?> ...
+                                <? else: ?>
+                                    <?= $translation ?>
+                                <? endif; ?>
+                            </span>
+                        </div>
+                        <div class="grid_3 cssLogUser">
+                            <span>
+                                <?= $log->html('user') ?>
+                            </span>
+                        </div>
+                    </li>
+                    <? endforeach; ?>
+                </ul>
+            </div>
+        </div>
+        <div class="jsModule grid_16">
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        
+        <? foreach ($this->html('modules') as $module): ?>
+            <? if ($module->toBool('routes/dashboard/client/route')): ?>
+                $.get('<?= $this->url(array(), (string) $module->html('routes/dashboard/client/route')); ?>?format=html',function(data){
+                    $(data).appendTo('.jsModule');
+                });
+            <? endif; ?>
+        <? endforeach; ?>
+        $(".jsSelectLimiter").selectmenu({
+            appendTo: "div.cssDashboardLogs",
+            style:'dropdown',
+            width:'60',
+            maxHeight: '400'
+        });    
+        $('ul.jsLineColor li:even').addClass('One');
+        $('ul.jsLineColor li:odd').addClass('Two'); 
+        $('.jsIconState').button({
+            icons: {
+                primary: 'ui-icon-circle-check'
+            },
+            text: false
+        });
+        $('.jsIconState.inactive').button({
+            icons: {
+                primary: 'ui-icon-circle-minus'
+            },
+            text: false
+        });
+        $('.jsIconEmail').button({
+            icons: {
+                primary: 'ui-icon-mail-closed'
+            },
+            text: true
+        });
+        $('.jsIconForwarder').button({
+            icons: {
+                primary: 'ui-icon-arrowreturnthick-1-e'
+            },
+            text: true
+        });
+        $('.jsIconSpecials').button({
+            icons: {
+                primary: 'ui-icon-gear'
+            },
+            text: true
+        });
+    });
+</script>

@@ -1,0 +1,57 @@
+Composer
+--------
+
+Install and call 'composer install' from the src folder.
+
+Initialization
+--------------
+
+In order to launch the initialization process of Maze.core, you have to call http:/yourMaze/install.
+
+Reset
+-----
+
+If you want to reset your maze installation just delete the server.ini file in the src/data/configs directory and use http:/yourMaze/install again.
+
+Nginx - Vhost
+-------------
+
+Nginx vhost should contain the following lines:
+# change the placeholder pathToMaze according to your file system
+
+index index.php;
+
+location /
+{
+    try_files $uri $uri/ /index.php?$args;
+}
+
+set $sizeImage 200;
+if ($arg_s){
+    set $sizeImage $arg_s;
+}
+
+location ~ ^\/module\/(?<vendor>[^\/]*)\/(?<module>[^\/]*)\/(?<file>.*)$ {
+    alias pathToMaze /src/modules/$vendor/$module/public/$file;
+}
+
+location ~ ^/avatar/(?<hash>.*)$ {
+    error_page 404 403 =404 /img/dummy_user_200.png;
+    access_log off;
+    image_filter resize $sizeImage -;
+    image_filter_jpeg_quality 100;
+    alias pathToMaze /src/data/uploads/avatar/$hash.gif;
+}
+
+location ~* \.(js|css|png|jpg|jpeg|gif|ico)$ {
+    expires max;
+    log_not_found off;
+    access_log off;
+}
+
+location ~ \.php$
+{
+    try_files $uri =404;
+
+    #your php fpm settings
+}

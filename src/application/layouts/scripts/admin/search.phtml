@@ -1,0 +1,261 @@
+<form class="form-search pull-left cssSearchForm">
+    <div class="input-prepend span12 ">
+        <div class="btn-group">
+            <button id="coreSearchCategory" class="btn btn-info dropdown-toggle" data-toggle="dropdown">
+                <span id="coreSearchCategorySelected"><?= $this->translate('All') ?></span>
+                <span class="caret"></span>
+            </button>
+            <ul id="coreSearchCategoryList" class="dropdown-menu unstyled">
+                <li>
+                    <a href="#" checked="checked" id="coreSearchCategoryAll"
+                       source="<?= $this->url(array(), 'search') ?>?format=html" >
+                        <?= $this->translate('All') ?>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" source="<?= $this->url(array(), 'clients') ?>?format=html"
+                       id="coreSearchCategoryClients">
+                        <?= $this->translate('Clients') ?>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" source="<?= $this->url(array(), 'domains') ?>?format=html"
+                       id="coreSearchCategoryDomains">
+                        <?= $this->translate('Domains') ?>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" source="<?= $this->url(array(), 'nodes') ?>?format=html"
+                       id="coreSearchCategoryNodes">
+                        <?= $this->translate('Nodes') ?>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <input id="coreSearchInput" class="span12" 
+               type="text" placeholder="<?= $this->translate('Search'); ?>..."/>
+    </div>
+</form>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('#coreSearchInput').mazeSearch({
+            source: '<?= $this->url(array(), 'search') ?>?format=html',
+            onRender: function() {
+                if($('#coreSearchBreadcrumb').length > 0) {
+                    $('.cssBreadcrumbInner').html($('#coreSearchBreadcrumb').html());
+                }
+            }
+        });
+        
+        $('#coreSearchCategoryList a').click(function() {
+            var source = $(this).attr('source');
+            if(!source) {
+                source = '';
+            }
+            
+            if(!$(this).attr('checked')) {
+                $('#coreSearchInput').mazeSearch('option', 'source', source).mazeSearch('first');
+                
+                $('#coreSearchCategoryList a').removeAttr('checked');
+                $(this).attr('checked', 'checked');
+            }
+        });
+    });
+
+   (function($) {
+        $.fn.mazeSearch = function(param, key, val) {
+            if (methods[param]) {
+                return methods[param].apply(this, [key, val]);
+            } else if (param && typeof param !== 'object') {
+                return false;
+            }
+
+            var options = $.extend({}, $.fn.mazeSearch.defaults, param);
+            if(!options.source || !options.target)
+                return false;
+            
+            return this.each(function() {
+                if(this.tagName.toLowerCase() !== 'input') {
+                    return false;
+                }
+                var self = this;
+                self.options = options;
+
+                $(self).keyup(function(e) {
+                    e.preventDefault();
+                    
+                    if($(self).val() === self.options.term)
+                        return false;
+                    self.options.term = $(self).val();
+                    
+                    if(self.options.minLength && $.isNumeric(self.options.minLength)
+                            && self.options.term.length < parseInt(self.options.minLength)) {
+                        return false;
+                    }
+                    
+                    self.options.page = '1';
+                    self.options.action = 'page';
+                    
+                    if(self.xhr)
+                        self.xhr.abort();
+
+                    if(!self.options.delay || !$.isNumeric(self.options.delay)) {
+                        load(self);
+                    } else {
+                        setTimeout(function() {
+                            load(self);
+                        }, self.options.delay);
+                    }
+                });
+                
+                if(self.options.autoload === true) {
+                    self.options.page = '1';
+                    self.options.action = 'page';
+                    load(self);
+                }
+            });
+        };
+        
+        /**
+         * loads search via ajax
+         * 
+         * @param {object} self
+         * @returns {undefined}
+         **/
+        function load(self) {
+            var data = {};
+            
+            if(self.options.action) {
+                data['pagerAction'] = self.options.action;
+            }
+            if(self.options.term) {
+                data['term'] = self.options.term;
+            }
+            if(self.options.page) {
+                data['page'] = self.options.page;
+            }
+            if(self.options.limit) {
+                data['limit'] = self.options.limit;
+            }
+            
+            self.xhr = $.ajax({
+                url: self.options.source,
+                dataType: "html",
+                data: data,
+                success: function(data) {
+                    if(typeof self.options.onLoad === 'function') {
+                        self.options.onLoad.apply(self, [data]);
+                    }
+                    
+                    render(self, data);
+                },
+                error: function() {
+                    if(typeof self.options.onError === 'function') {
+                        self.options.onError.apply(self);
+                    }
+                }
+            });
+        }
+        
+        /**
+         * renders ajax return
+         *
+         * @param {type} self
+         * @param {type} data
+         * @returns {undefined}         */
+        function render(self, data) {
+            $(self.options.target).html(data);
+            
+            if(typeof self.options.onRender === 'function') {
+                self.options.onRender.apply(self, [data]);
+            }
+        }
+        
+        var methods = {
+            /**
+             * load first page
+             */
+            first: function() {
+                return this.each(function() {
+                    this.options.action = 'page';
+                    this.options.page = '1';
+                    load(this);
+                });
+            },            
+            /**
+             * load last page
+             */
+            last: function() {
+                return this.each(function() {
+                    this.options.action = 'last';
+                    this.options.page = '';
+                    load(this);
+                });
+            },            
+            /**
+             * load next page
+             */
+            next: function() {
+                return this.each(function() {
+                    this.options.action = 'page';
+                    
+                    if(this.options.page) {
+                        this.options.page++;
+                    } else {
+                        this.options.page = 2;
+                    }
+                    load(this);
+                });
+            },            
+            /**
+             * load next page
+             */
+            prev: function() {
+                return this.each(function() {
+                    if(this.options.page && this.options.page > 2) {
+                        this.options.action = 'page';
+                        this.options.page--;
+                    } else {
+                        this.options.action = 'page';
+                        this.options.page = '1';
+                    }
+                    load(this);
+                });
+            },
+            /**
+             * get or set options
+             */
+             option: function(key, val) {
+                return this.each(function() {
+                    if(typeof this.options === 'undefined') {
+                        return null;
+                    }
+                    if(key && typeof val !== 'undefined') {
+                        this.options[key] = val;
+                        return true;
+                    }
+                    if(key) {
+                        return this.options[key];
+                    }
+                    
+                    return this.options;
+                });
+             }
+        };
+        
+        $.fn.mazeSearch.defaults = {
+            action: 'first',
+            delay: '20',
+            minLength: '',
+            source: 'search?format=html',
+            target: '#mainContent',
+            term: '',
+            page: '',
+            limit: '10',
+            autoload: false,
+            onLoad: {},
+            onRender: {},
+            onError: {}
+        };
+    })(jQuery);
+</script>

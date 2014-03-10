@@ -1,0 +1,43 @@
+<div class="cssDashboardLogs grid_16">
+    <div class="cssToolBoxAdminDiff grid_16">
+        <div class="cssToolboxHead">
+            <img src="<?= $this->baseUrl() ?>/img/icon_diff_25.png" alt="<?= $this->translate('image') ?>">
+            <span class="cssDashboardBoxHead cssDifferences">
+                <?= $this->translate('differences') ?>
+            </span>
+        </div>
+        <ul class="grid_16 cssToolBoxContent jsLineColor">
+            <? foreach($this->conflicts as $conflict): ?>
+            <li class="cssLine grid_16">
+                <? if($conflict->html('url') != ''): ?>
+                <a href="<?= $conflict->html('url') ?>" class="cssDashboardDiff grid_16">
+                <? else: ?>
+                <a href="#" class="cssDifferences">
+                <? endif; ?>
+                    <div class="grid_2">
+                        <span>
+                            <?= $conflict->html('module/label') ?>
+                        </span>
+                    </div>
+                    <div class="grid_13 cssLogTxtAlert">
+                        <span class="ui-icon ui-icon-alert">ico</span>
+                        <span>
+                            <? $translateVars = array(); ?>
+                            <? foreach($conflict->html('messageVars') as $messageVar): ?>
+                                <? array_push($translateVars, $messageVar); ?>
+                            <? endforeach; ?>
+                            <?= $this->translate((string) $conflict->html('message'), $translateVars) ?>
+                        </span>
+                    </div>
+                </a>
+            </li>
+            <? endforeach; ?>
+        </ul>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('ul.jsLineColor li:even').addClass('One');
+        $('ul.jsLineColor li:odd').addClass('Two'); 
+    });
+</script>

@@ -1,0 +1,64 @@
+<div class="row-fluid">
+    <div class="span12">
+        <form class="" action="<?= $this->url(array(), 'profileAccess')?>" method="post">
+            <dl class="row-fluid">
+                <dt class="span3">
+                <label>
+                    <?= $this->translate('username') ?>
+                </label>
+                </dt>
+                <dd class="span9"><?= $this->form->username ?></dd>
+            </dl>
+            <dl class="row-fluid">
+                <dt class="span3">
+                <label>
+                    <?= $this->translate('old password') ?>
+                </label>
+                </dt>
+                <dd class="span9"><?= $this->form->oldPassword; ?></dd>
+            </dl>
+            <dl class="row-fluid">
+                <dt class="span3">
+                <label>
+                    <?= $this->translate('new password') ?>
+                </label>
+                </dt>
+                <dd class="span9"><?= $this->form->newPassword; ?></dd>
+            </dl>
+            <dl class="row-fluid">
+                <dt class="span3">
+                <label>
+                    <?= $this->translate('confirm password') ?>
+                </label>
+                </dt>
+                <dd class="span9"><?= $this->form->confirmPassword; ?></dd>
+            </dl>
+            <div class="row-fluid">
+                <input class="btn btn-info" type="reset" value="<?= $this->translate('cancel') ?>" />
+                <input id="ButtonAccessSubmit" class="btn btn-info" type="submit" value="<?= $this->translate('save') ?>" />
+            </div>
+        </form>
+    </div>
+</div>
+<?= $this->render('shared/passwordStrength.phtml'); ?>
+<script type="text/javascript">
+    $(document).ready(function() {
+        setPasswordStrength("#newPassword, #oldPassword");
+        
+        $("form").submit(function(){
+            $.ajax({
+                url: $(this).attr('action')+ '?format=json',
+                data: $(this).serialize(),
+                type: 'post',
+                success: function(data){
+                    setTimeout(function(){
+                          resetTooltips();
+                    }, 4000);
+                      
+                    setTooltips(data, '#ButtonAccessSubmit');
+                }
+            });
+            return false;
+        });
+    });
+</script>

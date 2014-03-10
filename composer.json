@@ -1,0 +1,24 @@
+{
+    "name": "mazelab/maze.core",
+    "description": "server management to provision your cloud applications",
+    "authors": [
+        {
+            "name": "Jens Klose",
+            "email": "jens.klose@googlemail.com"
+        },
+        {
+            "name": "Marcel Kilian",
+            "email": "cdskilian@googlemail.com"
+        }
+    ],
+    "license": "MIT",
+    "include-path": ["library/"],
+    "config": {
+        "vendor-dir": "src/vendor"
+    },
+    "require": {
+        "php": ">=5.3",
+        "zendx/viewautoescape": ">=1.2.1",
+        "mazelab/zendframework1-min": "<2.0.0"
+    }
+}

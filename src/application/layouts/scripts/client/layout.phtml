@@ -1,0 +1,87 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="de" lang="de">
+    <head>
+        <link rel="icon" href="<?= $this->baseUrl() ?>/img/maze.ico" />
+        <?= $this->headMeta()->appendHttpEquiv('expires', '604800') ?>
+        <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1" />
+        <meta charset="utf-8"/>
+        <? $this->headTitle()->setSeparator(' - '); ?>
+        <?= $this->headTitle('Maze.dashboard', 'PREPEND') ?>
+        <? $this->headLink()->prependStylesheet($this->baseUrl() . '/css/default.css') ?>
+        <? $this->headLink()->prependStylesheet($this->baseUrl() . '/css/text.css') ?>
+        <? $this->headLink()->prependStylesheet($this->baseUrl() . '/css/js/jquery-mobile-fluid960.css') ?>
+        <? $this->headLink()->prependStylesheet($this->baseUrl() . '/css/js/jquery.ui.selectmenu.css') ?>
+        <? $this->headLink()->prependStylesheet($this->baseUrl() . '/css/js/jquery-ui-1.9.1.custom.min.css') ?>
+        <? $this->headLink()->prependStylesheet($this->baseUrl() . '/css/js/colorbox.css') ?>
+        <? $this->headLink()->prependStylesheet($this->baseUrl() . '/css/passwordstrength.css') ?>
+        <? $this->headLink()->prependStylesheet($this->baseUrl() . '/css/reset.css') ?>
+        <?= $this->headLink() ?>
+        <? $this->headScript()->prependFile($this->baseUrl() . '/js/min/jquery.colorbox-min.js') ?>
+        <? $this->headScript()->prependFile($this->baseUrl() . '/js/jquery.ui.selectmenu.js') ?>
+        <? $this->headScript()->prependFile($this->baseUrl() . '/js/min/jquery.easing.js') ?>
+        <? $this->headScript()->prependFile($this->baseUrl() . '/js/min/jquery.form.min.js') ?>
+        <? $this->headScript()->prependFile($this->baseUrl() . '/js/min/jquery.qtip.js') ?>
+        <? $this->headScript()->prependFile($this->baseUrl() . '/js/ui/jquery.ui.editable.js') ?>
+        <? $this->headScript()->prependFile($this->baseUrl() . '/js/min/jquery-ui-1.9.1.custom.min.js') ?>
+        <? $this->headScript()->prependFile($this->baseUrl() . '/js/min/jquery-1.8.2.min.js') ?>
+        <?= $this->headScript() ?>
+    </head>
+    <body id="body">
+        <div class="cssWrapper">
+            <div class="cssHeader<?=ucfirst($this->html('identity/adminUser/group')!= ''
+                                          ? $this->html('identity/adminUser/group')
+                                          : $this->html("identity/group"))?>">
+                <div  class="container_16">
+                    <div  class="grid_16 alpha omega">
+                        <div class="grid_6 alpha omega cssLogo">
+                            <a href=" <?= $this->url(array(), 'index')?>" >
+                                <img src="<?= $this->baseUrl() ?>/img/logo_maze_sh.png"  alt="<?= $this->translate('image') ?>" />
+                                <span>
+                                Maze.<b>dashboard</b>
+                            </span>
+                            </a>
+                        </div>
+                        <div class="grid_16 alpha omega cssUserbox">
+                            <? if($this->toBool('identity/adminUser')): ?>
+                                <?= $this->render('admin/clientinfonav.phtml') ?>
+                            <? else: ?>
+                                <?= $this->render('client/clientinfonav.phtml') ?>
+                            <? endif; ?>
+                            
+                            <?= $this->render('client/nav.phtml') ?>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="cssSubNav">
+                <div  class="container_16">
+                    <div  class="grid_16 alpha omega">
+                        <?= $this->navigation()->menu()
+                                               ->setUlClass('cssMenu')
+                                               ->setOnlyActiveBranch(true)
+                                               ->setMinDepth(1)
+                                               ->setMaxDepth(1) ?>
+                    </div>
+                </div>
+            </div>
+            <div class="cssContent">
+                <div  class="container_16">
+                    <?= $this->render('client/messages.phtml') ?>
+                    <?php echo $this->layout()->content; ?>
+                </div>
+            </div>
+            <div class="cssFooter">
+                <?= $this->render('footer.phtml'); ?>
+            </div>
+        </div>
+        <script type="text/javascript">
+            $(document).ready(function() {
+                $('.jsNaviDisabled').click(function() {
+                    return false;
+                }).addClass('cssSubNavDisabled');
+                
+            });
+        </script>
+    </body>
+</html>

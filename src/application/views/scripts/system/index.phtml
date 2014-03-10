@@ -1,0 +1,31 @@
+<div class="row-fluid cssBoxCenter">
+    <div class="span12">
+        <ul class="nav nav-tabs unstyled" id="system">
+            <li class="active"><a id="settings-admins" data-toggle="tab" href="#administrators"><?= $this->translate("Administrators"); ?></a></li>
+            <li><a id="settings-operator" data-toggle="tab" href="#operatordata"><?= $this->translate("Operator Data"); ?></a></li>
+            <li><a id="settings-db" data-toggle="tab" href="#dbsettings"><?= $this->translate("DB Preferences"); ?></a></li>
+            <li><a id="settings-tom" data-toggle="tab" href="#termsOfModule"><?= $this->translate("Terms of module"); ?></a></li>
+            <li><a id="settings-privacy" data-toggle="tab" href="#privacyPolicy"><?= $this->translate("Privacy policy"); ?></a></li>
+          </ul>
+        
+          <div class="tab-content">
+            <div class="tab-pane active" id="administrators">
+                 <?= $this->render("system/tabs/admins.phtml"); ?>
+            </div>
+            <div class="tab-pane" id="operatordata">
+                <?= $this->render("system/tabs/operatordata.phtml"); ?>
+            </div>
+            <div class="tab-pane" id="dbsettings">
+                <?= $this->render("system/tabs/dbsettings.phtml"); ?>
+            </div>
+            <div class="tab-pane" id="termsOfModule">
+                <?= $this->render("system/tabs/agb.phtml"); ?>
+            </div>
+            <div class="tab-pane" id="privacyPolicy">
+                <?= $this->render("system/tabs/agb.phtml"); ?>
+            </div>
+          </div>
+    </div>    
+</div>
+
+

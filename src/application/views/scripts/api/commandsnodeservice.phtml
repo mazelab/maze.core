@@ -1,0 +1,7 @@
+# <?= $this->html('reportHash') . "\n" ?>
+<? foreach($this->raw('commands') as $command): ?>
+<? if(!$command): ?>
+    <? continue; ?>
+<? endif; ?>
+<?= $this->html('service') ?> <?= addcslashes($command, "\\\0..\20") . "\n"  ?>
+<? endforeach; ?>

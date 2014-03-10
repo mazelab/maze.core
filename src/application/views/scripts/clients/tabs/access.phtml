@@ -1,0 +1,53 @@
+<div class="span11">
+    <div class="cssBoxRight" id="tabContentClientAccess">
+        <dl class="row-fluid">
+            <dt class="span3">
+            <label id="username"><?= $this->translate('username'); ?></label>
+            </dt>
+            <dd class="span6">
+                <?= $this->form->username ?>
+            </dd>
+        </dl>
+        <form class="form-horizontal" action="<?= $this->url(array(), 'clientDetail') ?>" id="jsClientForm" method="post">
+            <dl class="row-fluid jsPasswordTrigger jsPasswordContainer">
+                <dt class="span3" id="changePassword-label">
+                <label class="optional">
+                    <?= $this->translate('password') ?>
+                </label>
+                <dd class="span6" id="changePassword-element">
+                    <span class="cssColorGray jsPasswordTrigger cssChangePassword">
+                        <?= $this->translate('Change password') ?>
+                    </span>
+                </dd>
+            </dl>
+            <div class="cssPasswordFields jsPasswordContainer jsChangePassword" style="display:none;">
+                <dl class="row-fluid">
+                    <dt class="span3">
+                    <label id="newpassword">
+                        <?= $this->translate('new password') ?>
+                    </label>
+                    </dt>
+                    <dd class="span6">
+                        <?= $this->form->password ?>
+                    </dd>
+                </dl>
+                <dl class="row-fluid">
+                    <dt class="span3">
+                    <label id="confirmpassword">
+                        <?= $this->translate('confirm password') ?>
+                    </label>
+                    </dt>
+                    <dd class="span6">
+                        <?= $this->form->confirmPassword ?>
+                    </dd>
+                </dl>
+                <div class="row-fluid">
+                    <input class="btn btn-info jsButton jsPasswordCancel"
+                           type="submit" value="<?= $this->translate('cancel') ?>"/>
+                    <input class="btn btn-info jsButton jsPasswordSave"
+                           type="submit" value="<?= $this->translate('save') ?>" />
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

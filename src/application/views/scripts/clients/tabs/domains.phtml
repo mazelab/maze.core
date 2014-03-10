@@ -1,0 +1,49 @@
+<ul id="tabClientDomainsList" class="unstyled jsLineColor cssTab">
+<? foreach ($this->html('domains') as $domainId => $domain): ?>
+    <li id="tabClientDomainsListEntry-<?= $domainId ?>" class="row-fluid cssLine jsLine">
+        <a href="<?= $this->url(array($domain->html('name')), 'domaindetail') ?>" 
+           title="<?= $domain->html('name') ?>" class="span8">
+            <?= $domain->html('name') ?>
+        </a>
+        <a href="#" class="pull-right jsNodesOnDomain">
+            <?= $this->translate('Nodes') ?> (<?= count($domain->html('nodes')) ?>)
+        </a>
+        
+        <div class="jsUserDomainNodes" style="display:none;">
+        <? if($domain->toBool('nodes')): ?>
+            <ul id="tabClientDomainsListNodes-<?= $domainId ?>" class="cssPopoverTabList unstyled pull-left">
+                <? foreach ($domain->html('nodes') as $node): ?>
+                    <li>
+                        <a href="<?= $this->url(array($node->html('name')), 'nodedetail') ?>"
+                           title="<?= $node->html('name') ?>" class="pull-left">
+                            <span>
+                                <?= $node->html('name') ?>
+                            </span>
+                        </a>
+                    </li>
+                <? endforeach; ?>
+            </ul>
+        <? endif; ?>
+        </div>
+    </li>
+<? endforeach; ?>
+</ul>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('.jsNodesOnDomain').each(function() {
+            var parentLi = $(this).closest('li');
+            var content = $.trim($(parentLi).find('.jsUserDomainNodes').html());
+            
+            if(content) {
+                $(this).popover({
+                    placement: 'bottom',
+                    content: content,
+                    html: true,
+                    trigger: 'click'
+                });
+            }
+            
+            $(this).click(function(){return false;});
+        });
+    });
+</script>

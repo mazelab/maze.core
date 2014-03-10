@@ -1,0 +1,114 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
+    ],
+    "hash": "834e8a9737cc9cd7988277a67a50ee86",
+    "packages": [
+        {
+            "name": "mazelab/zendframework1-min",
+            "version": "1.12.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mazelab/zendframework1-min.git",
+                "reference": "e145c052eafe3a73704ffcfe73f2d4e1db1054e7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mazelab/zendframework1-min/zipball/e145c052eafe3a73704ffcfe73f2d4e1db1054e7",
+                "reference": "e145c052eafe3a73704ffcfe73f2d4e1db1054e7",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.2.11"
+            },
+            "conflict": {
+                "zendframework/zendframework1": "<1.12"
+            },
+            "replace": {
+                "zend/zendframework": "1.*",
+                "zendframework/zendframework1": "1.12.*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Zend": "library/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "include-path": [
+                "library/"
+            ],
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "description": "Zend Framework 1 fork with minimum require_once and include_path",
+            "homepage": "https://github.com/mazelab/zendframework1-min",
+            "keywords": [
+                "ZF1",
+                "ZendFramework",
+                "zend"
+            ],
+            "time": "2013-11-26 04:08:21"
+        },
+        {
+            "name": "zendx/viewautoescape",
+            "version": "1.4.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/jensklose/ZendX_View_Autoescaping.git",
+                "reference": "d268d329630dd466cf473e650bd349e3a0e3e04e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/jensklose/ZendX_View_Autoescaping/zipball/d268d329630dd466cf473e650bd349e3a0e3e04e",
+                "reference": "d268d329630dd466cf473e650bd349e3a0e3e04e",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.2.4",
+                "zend/zendframework": "<2"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.2-dev"
+                }
+            },
+            "autoload": {
+                "classmap": [
+                    "ZendX"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "description": "Zend Framework 1 autoescaping",
+            "homepage": "https://github.com/jensklose/ZendX_View_Autoescaping",
+            "keywords": [
+                "ZF1",
+                "ZendFramework",
+                "escaping",
+                "view"
+            ],
+            "time": "2012-12-03 22:48:31"
+        }
+    ],
+    "packages-dev": [
+
+    ],
+    "aliases": [
+
+    ],
+    "minimum-stability": "stable",
+    "stability-flags": [
+
+    ],
+    "platform": {
+        "php": ">=5.3"
+    },
+    "platform-dev": [
+
+    ]
+}

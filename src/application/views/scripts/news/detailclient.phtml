@@ -1,0 +1,17 @@
+<div class="cssContentMiddle cssForm grid_16">
+    <h1><?= $this->html("message/title"); ?></h1>
+    <? if ($this->html("message/onlineSince") != ""): ?>
+    <span class="cssFont">
+        <?= $this->translate("Published on"); ?> : <?= $this->html("message/onlineSinceReadable"); ?>
+    </span>
+    <? endif; ?>
+    <? if ($this->html("message/modifiedDate") != "" && $this->html("message/modifiedDate") != $this->html("message/onlineSince")): ?>
+    <span class="cssFont" style="float:right;">
+        <?= $this->translate("last Updated"); ?> : <?= $this->html("message/modifiedDateReadable"); ?>
+    </span>
+    <? endif; ?>
+
+    <div class="cssDetailPadding30 cssForm grid_16">
+        <?= nl2br($this->html("message/content")); ?>
+    </div>
+</div>

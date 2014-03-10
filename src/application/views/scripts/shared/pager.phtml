@@ -1,0 +1,91 @@
+<div class="cssToolBar row-fluid">
+    <div id="coreSearchBreadcrumb" style="display:none">
+        <?= $this->navigation()->breadcrumbs()->setMinDepth(0)->setMaxDepth(4)->setPartial("breadcrumbs.phtml"); ?>
+    </div>
+    <? if($this->toBool('pager/total')): ?>
+    <div class="cssPager pull-right">
+        <div class="dropdown pull-left">
+            <a class="cssPagerInfo dropdown-toggle" data-toggle="dropdown">
+                <span class="jsPagerPosition">
+                    <?= $this->html('pager/position') ?>
+                </span>
+                <span>
+                    -    
+                </span>
+                <span class="jsPagerLastPosition">
+                    <?= $this->html('pager/lastPosition') ?>
+                </span>
+                <span>
+                    von
+                </span>
+                <? if($this->html('pager/lastPosition') == $this->html('pager/total')): ?>
+                <span>
+                <? else: ?>
+                <? endif; ?>
+                <span class="jsPagerTotal">
+                    <?= $this->html('pager/total') ?>
+                </span>
+            </a>
+            <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="dLabel">
+                <li>
+                    <a href="#" id="pagerFirst" class="jsPagerFirst"><?= $this->translate("to Start"); ?></a>
+                    <a href="#" id="pagerLast" class="jsPagerLast"><?= $this->translate("to End"); ?></a>
+                </li>
+            </ul>
+        </div>
+        <div class="pagination pagination-right jsPagerBar pull-right">
+            <ul>
+                <? if($this->html('pager/position') <= 1): ?>
+                    <li class="disabled">
+                        <a class="jsIconPrev inactive" href="#">
+                            &laquo;
+                        </a>
+                    </li>
+                <? else: ?>
+                    <li>
+                        <a id="jsPagerPrev" class="jsIconPrev" href="#">
+                            &laquo;
+                        </a>
+                    </li>
+                <? endif; ?>
+                <? if($this->html('pager/lastPosition') == $this->html('pager/total')): ?>
+
+                     <li class="disabled">
+                        <a class="jsIconNext" href="#">
+                            &raquo;
+                        </a>
+                    </li>
+
+                <? else: ?>
+                    <li>
+                        <a id="jsPagerNext" class="jsIconNext" href="#">
+                            &raquo;
+                        </a>
+                    </li>
+                <? endif; ?>
+            </ul>
+        </div>
+    </div>
+    <? endif; ?>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('.jsPagerFirst').click(function() {
+            $('#coreSearchInput').mazeSearch('first');
+            return false;
+        });
+        $('.jsPagerLast').click(function() {
+            $('#coreSearchInput').mazeSearch('last');
+            return false;
+        });    
+        $('#jsPagerNext').click(function() {
+            $('#coreSearchInput').mazeSearch('next');
+            return false;
+        });
+        $('#jsPagerPrev').click(function() {
+            $('#coreSearchInput').mazeSearch('prev');
+            return false;
+        });
+    });
+</script>

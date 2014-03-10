@@ -1,0 +1,196 @@
+<div class="row-fluid">
+    <div class="span12">
+        <div class="row-fluid">
+            <div class="span9">
+                <div class="row-fluid">
+                    <div class="cssToolbox span4">
+                        <div class="row-fluid">
+                            <div class="span12 cssToolboxHead">
+                                <a class="span12 cssToolboxHeadLink" 
+                                   href="<?= $this->url(array(), 'clients')?>" 
+                                   title="<?= $this->translate('Clients') ?>"
+                                   id="goToClients">
+                                    <span>
+                                         <?= $this->translate('Clients') ?>
+                                    </span>
+                                    <span>(<?= count($this->clients) ?>)</span>
+                                </a>
+                                <a class="cssAddIcon pull-right" 
+                                   title="<?= $this->translate('Create client') ?>" 
+                                   href="<?= $this->url(array(), 'addClient') ?>">
+                                    <i class="icon-plus icon-white"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <ul class="cssToolboxList row-fluid unstyled">
+                            <? foreach ($this->lastClients as $client): ?>
+                            <li class="row-fluid">
+                                <a class="row-fluid" href="<?= $this->url(array($client->html("_id"), $client->html("label")), "clientDetail"); ?>">
+                                    <small><?= $client->html("label"); ?></small>
+                                    <i class="icon-chevron-right pull-right"></i>
+                                </a>
+                            </li>                            
+                            <? endforeach; ?>
+                        </ul>
+                    </div>
+                    
+                    <div class="cssToolbox span4">
+                        <div class="row-fluid">
+                            <div class="span12 cssToolboxHead">
+                                <a class="span12 cssToolboxHeadLink" 
+                                   href="<?= $this->url(array(), 'domains')?>" 
+                                   title="<?= $this->translate('Domains') ?>"
+                                   id="goToDomains">
+                                    <span>
+                                         <?= $this->translate('Domains') ?>
+                                    </span>
+                                    <span>(<?= count($this->domains) ?>)</span>
+                                </a>
+                                <a class="cssAddIcon pull-right" 
+                                   title="<?= $this->translate('Create domain') ?>"
+                                   href="<?= $this->url(array(), 'addDomain') ?>">
+                                    <i class="icon-plus icon-white"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <ul class="cssToolboxList row-fluid unstyled">
+                            <? foreach ($this->lastDomains as $domain): ?>
+                            <li class="row-fluid">
+                                <a href="<?= $this->url(array($domain->html("name")), "domaindetail"); ?>">
+                                    <small><?= $domain->html("name"); ?></small>
+                                    <i class="icon-chevron-right pull-right"></i>
+                                </a>
+                            </li>
+                            <? endforeach; ?>
+                        </ul>
+                    </div>
+                    
+                    <div class="cssToolbox span4">
+                        <div class="row-fluid ">
+                            <div class="span12 cssToolboxHead">
+                                <a class="span12 cssToolboxHeadLink" 
+                                   href="<?= $this->url(array(), 'nodes')?>" 
+                                   title="<?= $this->translate('Nodes') ?>"
+                                   id="goToNodes">
+                                    <span>
+                                         <?= $this->translate('Nodes') ?>
+                                    </span>
+                                    <span>(<?= count($this->nodes) ?>)</span>
+                                </a>
+                            </div>
+                        </div>
+                        <ul class="cssToolboxList row-fluid unstyled">
+                            <? foreach ($this->lastNodes as $node): ?>
+                            <li class="row-fluid">
+                                <a href="<?= $this->url(array($node->html("name")), "nodedetail"); ?>">
+                                    <small><?= $node->html("name"); ?></small>
+                                    <i class="icon-chevron-right pull-right"></i>
+                                </a>
+                            </li>
+                            <? endforeach; ?>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="row-fluid">
+                    <div class="span12">
+                    <? if(count($this->conflicts)): ?>
+                        <?= $this->render('dashboard/conflicts-admin.phtml'); ?>
+                    <? endif; ?>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="span3 cssBoxRight">
+
+                <? if (sizeof($this->lastNews)): ?>
+                <div class="cssNews cssToolbox row-fluid">
+                    <div class="span12">
+                        <div class=" row-fluid">
+                            <div class="span12 cssToolboxHead">
+                                <a href="<?= $this->url(array(), "news"); ?>"
+                                   title="<?= $this->translate("Latest news"); ?>"
+                                   class="span12 cssToolboxHeadLink"
+                                   id="showLogs">
+                                    <span>
+                                        <?= $this->translate("Latest news"); ?>
+                                    </span>
+                                </a>
+                            </div>
+                        </div>
+                        
+                        <ul class="row-fluid jsLineColor cssNewsListing unstyled">
+                            <? foreach ($this->lastNews as $news): ?>
+                            <li id="jsNews-<?= $news->html('_id') ?>" class="cssLine jsLine">
+                                <a href="<?= $this->url(array($news->html("_id")), "newsDetail"); ?>">
+                                    <h3 title="<?= $news->html("title"); ?>"><?= $news->html("title"); ?></h3>
+                                    <p><small><?= $news->toBool("teaser") ? $news->html("teaser") : $news->html("content"); ?></small></p>
+                                </a>
+                            </li>
+                            <? endforeach; ?>
+                        </ul>
+                    </div>
+                </div>
+                <? endif; ?>
+
+                <div class="cssToolbox cssLogs row-fluid">
+                    <div class="span12">
+                        <div class=" row-fluid">
+                            <div class="span12 cssToolboxHead">
+                                <a href="#"
+                                   title="<?= $this->translate('log') ?>"
+                                   class="span12 cssToolboxHeadLink"
+                                   id="showLogs">
+                                    <span>
+                                        <?= $this->translate('log') ?>
+                                    </span>
+                                </a>
+                            </div>
+                        </div>
+                        
+                        <ul class="row-fluid cssToolboxList jsLineColor unstyled">
+                        <? foreach($this->html('log') as $log): ?>
+                            <li id="jsLog-<?= $log->html('_id') ?>" class="cssLine jsLine row-fluid">
+                            <? if($log->html('type') == 'notify'): ?>
+                                <small class="span12 muted">
+                                    <i class="icon-info-sign"></i>
+                                    <time class="">
+                                        <?= $log->html('datetime') ?>
+                                    </time>
+                            <? else: ?>
+                                <small class="span12 text-error">
+                                    <i class="icon-exclamation-sign"></i>
+                                    <time class="">
+                                        <?= $log->html('datetime') ?>
+                                    </time>                                        
+                            <? endif; ?>
+                                    <span class="row-fluid cssLogTxt">
+                                    <? $translateVars = array(); ?>
+                                    <? foreach($log->html('messageVars') as $messageVar): ?>
+                                        <? array_push($translateVars, $messageVar); ?>
+                                    <? endforeach; ?>
+
+                                    <? $translation = $this->translate((string) $log->html('message'), $translateVars) ?>
+                                    <? if(strlen($translation) > 100): ?>
+                                        <?= substr($translation, 0, 100) ?> ...
+                                    <? else: ?>
+                                        <?= $translation ?>
+                                    <? endif; ?>
+                                    </span>
+                                </small>
+                            </li>
+                        <? endforeach; ?>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('ul.jsLineColor li:even').addClass('One');
+        $('ul.jsLineColor li:odd').addClass('Two'); 
+    });
+</script>        

@@ -1,0 +1,11 @@
+<form method="post" action="<?= $this->url(array(), 'installLanguage') ?>">
+    <div>
+        <label>
+            Sprache wählen:
+        </label>
+        <?= $this->form->language ?>
+    </div>
+    <div>
+        <input type="submit" value="<?= $this->translate('more') ?>" />
+    </div>
+</form>

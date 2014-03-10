@@ -1,0 +1,150 @@
+<div id="additionalFieldsContent" class="row-fluid cssAdditionalFields">
+    <? if($this->form->additionalFields): ?>
+        <? foreach ($this->form->additionalFields as $element): ?>
+            <dl class="row-fluid">
+                <dt class="span3">
+                    <label id="additional-<?= $element->getName() ?>">
+                        <?= $element->getLabel() ?>
+                    </label>
+                </dt>
+                <dd class="span5 cssAdditionalSpan">
+                    <?= $element ?>
+                </dd>
+            </dl>
+        <? endforeach; ?>
+    <? endif; ?>
+</div>
+<div id="additionalFieldsControl" class="row-fluid">
+    <div class="row-fluid">
+        <a href="#" id="jsAdditionalStart" class="muted span12">
+            <?= $this->translate('Add Info') ?>
+        </a>
+    </div>
+    <form class="row-fluid "id="jsAdditionalForm" method="post">
+        <div class="cssAddItem row-fluid jsAdditionalControls" style="display:none;">
+            <div class="span3">
+                <input class="span7" id="additionalKey" name="additionalKey" type="text" value="<?= $this->translate('label') ?>" />
+            </div>
+            <div class="span9">
+               <textarea  class="" id="additionalValue" name="additionalValue"><?= $this->translate('text') ?></textarea> 
+               <button class="jsButton jsAdditionalSave btn btn-info btn-mini"
+                    type="submit" value="<?= $this->translate('save') ?>" >
+                <i class="icon-ok icon-white"></i>
+            </button>
+            <button class="jsButton jsAdditionalCancel btn btn-info btn-mini"
+                    type="button" value="<?= $this->translate('cancel') ?>">
+                <i class="icon-remove icon-white"></i>
+            </button>
+            </div>
+        </div>
+    </form>
+    <div class="jsAdditionalTemplate" style="display:none;">
+        <dl class="row-fluid">
+            <dt class="span3" id="additionalFields-Label-label">
+                <label class="optional">
+                    <?= $this->translate('label') ?>
+                </label>
+            </dt>
+            <dd class="span5 cssFormEditable" id="additionalFields-Label-element">
+                <span class="jsEditableAdditional" />
+            </dd>
+        </dl>
+    </div>
+</div>
+<script type="text/javascript">
+    function mazeEditableFields(editableAddUrl, editableEditUrl){
+        closeAdditionalFormOnEditable();
+
+        $('.jsEditableAdditionalFields').mazeEditableFields(editableEditUrl, mazeEditableOptions);
+        $("#additionalValue").keydown($.fn.mazeEditableFields.defaults.keydown);
+        $(document).on("keydown", ".cssFormEditable textarea", function(event){
+            keyCode = (event.keyCode || event.which);
+            if ((keyCode === 13 || event.key === "enter") && $.trim(this.value) === ""){
+                $(this).attr("disabled", true).submit();
+            }
+        });
+
+        $("#jsAdditionalStart").click(function(){
+            $('.jsAdditionalControls').show();
+            $(this).parent().hide();
+            return false;
+        });
+
+        $('.jsAdditionalCancel').click(function() {
+            $("#jsAdditionalStart").parent().show().closest("#additionalFieldsControl")
+                                   .show().find(".jsAdditionalControls").hide();
+            resetAdditionalFields();
+            $('#additionalFieldsControl').find(".errors").remove();
+            resetTooltips();
+            return false;
+        });
+
+        $('#jsAdditionalForm').submit(function() {
+            resetTooltips();
+
+            if(!$('#additionalKey').val()) {
+                var errorMessage = '<?= $this->translate('field label can not be empty') ?>';
+                setErrorTooltip(errorMessage, '#additionalKey');
+                return false;
+            }
+
+            var existingFields = $('#additionalFieldsContent dl');
+            for (index = 0; index < existingFields.length; index++){
+                if ($.trim($('#additionalKey').val()) === $.trim($(existingFields[index]).find('label').html())){
+                    var errorMessage = '<?= $this->translate('this label allready exists') ?>';
+                    setErrorTooltip(errorMessage, '#additionalKey');
+                    return false;
+                }
+            }
+
+            var prefix = 'additionalFields';
+            var postdata = $(this).serializeArray();
+
+            $.ajax({
+                url: editableAddUrl,
+                data: postdata,
+                type: 'post',
+                success: function(data) {
+                    if(data.result !== false) {
+                        var additionalId = data.result;
+                        var content = $('.jsAdditionalTemplate').clone();
+
+                        $(content).find('label').attr('for', prefix +'-'+ additionalId).html($('#additionalKey').val());
+                        $(content).find('span').removeClass('jsEditableAdditional').addClass('jsEditableAdditionalFields');
+                        $(content).find('span').attr('id', prefix +'-'+ additionalId).attr('name', prefix+ '['+additionalId+']').html($('#additionalValue').val());
+
+                        $('#additionalFieldsContent').append($(content).html());
+
+                        $('#' + prefix +'-'+ additionalId).mazeEditableFields(editableEditUrl, mazeEditableOptions);
+                        $(".jsAdditionalCancel").click();
+                        closeAdditionalFormOnEditable();
+                    }
+                    setTooltips(data, "#additionalKey");
+                }
+            });
+
+            return false;
+        }).find("#additionalKey").click(function(){
+            if ($(this).val() === "Label"){
+                $(this).val(null);
+            }
+        }).andSelf().find("#additionalValue").click(function(){
+            if ($(this).val() === "Text"){
+                $(this).val(null);
+            }
+        });
+
+        function resetAdditionalFields() {
+            $('#additionalKey').val('<?= $this->translate('label') ?>');
+            $('#additionalValue').val('<?= $this->translate('text') ?>');
+        }
+
+        function closeAdditionalFormOnEditable(){
+            $(".jsEditableAdditionalFields").click(function(){
+                if ($("#jsAdditionalForm:visible")){
+                    $('.jsAdditionalCancel').click();
+                }
+            });
+        }
+    }
+</script>

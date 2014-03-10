@@ -1,0 +1,172 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="de" lang="de">
+    <head>
+        <link rel="icon" href="<?= $this->baseUrl() ?>/img/maze.ico" />
+        <?= $this->headMeta()->appendHttpEquiv('expires', '604800') ?>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta charset="utf-8"/>
+        <? $this->headTitle()->setSeparator(' - '); ?>
+        <?= $this->headTitle('Maze.dashboard', 'PREPEND') ?>
+        <? $this->headLink()->prependStylesheet($this->baseUrl() . '/css/admin.css') ?>
+        <? $this->headLink()->prependStylesheet($this->baseUrl() . '/css/bootstrap-select.min.css') ?>
+        <? $this->headLink()->prependStylesheet($this->baseUrl() . '/css/bootstrap-responsive.css') ?>
+        <? $this->headLink()->prependStylesheet($this->baseUrl() . '/css/bootstrap.min.css') ?>
+        <? $this->headLink()->prependStylesheet($this->baseUrl() . '/css/passwordstrength.css') ?>
+        <?= $this->headLink() ?>
+        <? $this->headScript()->prependFile($this->baseUrl() . '/js/min/jquery.form.min.js') ?>
+        <? $this->headScript()->prependFile($this->baseUrl() . '/js/ui/jquery.ui.editable.js') ?>
+        <? $this->headScript()->prependFile($this->baseUrl() . '/js/min/bootstrap-select.min.js') ?>
+        <? $this->headScript()->prependFile($this->baseUrl() . '/js/bootstrap.min.js') ?>
+        <? $this->headScript()->prependFile($this->baseUrl() . '/js/min/jquery-1.8.2.min.js') ?>
+        
+        <!-- jquery versions over 1.8.3 crashes with bootstrap-modal -->
+        <!--<script src="http://code.jquery.com/jquery.js"></script>--> 
+        <?= $this->headScript() ?>
+    </head>
+    <body>
+        <div class="navbar navbar-inverse navbar-fixed-top ">
+            <div class="navbar-inner cssHeader">
+                <div class="container-fluid">
+                    <div class="row-fluid cssHeaderInner">
+                        <button data-target=".nav-collapse" data-toggle="collapse" class="btn btn-navbar" type="button">
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <a class="brand" href="<?= $this->url(array(), 'index') ?>" title="maze.dashboard"
+                           id="home">
+                            <img src="<?= $this->baseUrl() ?>/img/logo_maze_sh.png"  width="40px" height="40px" alt="<?= $this->translate('image') ?>" />
+                        </a>
+                        <div class="pull-left cssSearch">
+                            <?= $this->render('admin/search.phtml'); ?>
+                        </div>
+                        <div class="nav-collapse collapse pull-right">
+                            <ul class="nav nav-pills pull-right">
+                                <li class="dropdown">
+                                    <a class="dropdown-toggle"
+                                       data-toggle="dropdown"
+                                       alt="<?= $this->translate('system') ?>"
+                                       href="#"
+                                       id="settings">
+                                        
+                                        <img class="cssSettings" src="<?= $this->baseUrl() ?>/img/trans.png"  />
+                                        <b class="caret"></b>
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li>
+                                            <a href="<?= $this->url(array(), "news")?>" 
+                                               id="news" 
+                                               title="<?= $this->translate("Messages") ?>">
+                                                <?= $this->translate("Messages") ?>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="<?= $this->url(array(), 'system')?>" 
+                                               id="system"
+                                               title="<?= $this->translate('System') ?>">
+                                                <?= $this->translate('System') ?>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="<?= $this->url(array(), 'modules') ?>" 
+                                               id="modules" 
+                                               title=" <?= $this->translate('Modules') ?>">
+                                                <?= $this->translate('Modules') ?>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li class="dropdown">
+                                    <a class="dropdown-toggle cssUserName"
+                                       data-toggle="dropdown"
+                                       href="#">
+                                           <? if ($this->html('identity/avatar') != ''): ?>
+                                            <img id="jsAvatar" name="avatar" 
+                                                 src="<?= $this->urlAvatar($this->html('identity/_id'), 50); ?>"
+                                                 alt="<?= $this->translate('avatar') ?>"/>
+                                             <? else: ?>
+                                                <img id="jsAvatar" name="avatar"
+                                                     src="<?= $this->baseUrl() ?>/img/dummy_admin_50.png" 
+                                                     alt="<?= $this->translate('avatar') ?>" />
+                                            <? endif; ?>
+                                        <span class="jsUserName"><?= $this->html('identity/username')?></span>
+                                        <b class="caret"></b>
+                                    </a>
+                                    <ul class="dropdown-menu pull-right">
+                                        <li><a href="<?= $this->url(array(), 'profile') ?>" 
+                                               title="<?= $this->translate('My profile') ?>" 
+                                               id="myprofil">
+                                                <?= $this->translate('My profile') ?>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="<?= $this->url(array(), 'profileAccess') ?>" 
+                                               title="<?= $this->translate('Change password') ?>" 
+                                               id="changepassword">
+                                                <?= $this->translate('Change password') ?>
+                                            </a>
+                                        </li>
+                                        <li class="divider"></li>
+                                        <li>
+                                            <a href="<?= $this->url(array(), 'logout') ?>" 
+                                               title="<?= $this->translate('logout') ?>" 
+                                               id="logout">
+                                                <?= $this->translate('logout') ?>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="wrapper">
+            <div class="proper-content">
+                <div class="cssBreadcrumb">
+                    <div class="container-fluid">
+                        <div class="row-fluid cssBreadcrumbInner">
+                            <?= $this->navigation()->breadcrumbs()->setMinDepth(0)->setMaxDepth(4)->setPartial("breadcrumbs.phtml"); ?>
+                        </div>
+                    </div>
+                </div>
+                <div class="cssContent">
+                    <div id="mainContent" class="container-fluid">
+                        <?= $this->render('admin/messages.phtml') ?>
+                        <?php echo $this->layout()->content; ?>
+                    </div>
+                    <div class="push"></div>
+                </div>
+            </div>
+        </div>
+        <div class="cssFooter muted">
+            <?= $this->render('footer.phtml'); ?>
+        </div>
+        
+        <script type="text/javascript">
+            $(document).ready(function() {
+                $('.selectpicker').selectpicker();
+                $('ul.jsLineColor .jsLine:even').addClass('One');
+                $('ul.jsLineColor .jsLine:odd').addClass('Two'); 
+                $("#coreSearchCategoryList li a").click(function(){
+                    $("#coreSearchCategory").html($(this).text()+' <span class="caret"></span>');
+                    $("#coreSearchCategory").val($(this).text());
+
+                });
+            });
+            var mazeEditableOptions = {
+                cancel: '<button class="btn btn-info btn-mini" type="submit" title="<?= $this->translate('cancel') ?>"><i class="icon-remove icon-white"></i></button>',
+                submit: '<button class="btn btn-info btn-mini" type="submit" title="<?= $this->translate('save') ?>"><i class="icon-ok icon-white"></i></button>',
+                onclick: function(){
+                    $(this).addClass($.fn.mazeEditable.defaults.activeClass);
+                    if (typeof $(this).data("loadonclick") === "function") {
+                        $(this).data("loadonclick").apply(this);
+                    }
+                }
+            };
+        </script>
+
+    </body>
+</html>

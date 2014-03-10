@@ -1,0 +1,91 @@
+<div class="row-fluid">
+    <div class="span12">
+        
+    <? if(count($this->unregisteredApis)): ?>        
+        <div class="row-fluid cssListingDiff">
+            <div class="alert jsUnregisteredApiContent">
+                <div class=" row-fluid">
+                    <strong><?= $this->translate('Attention') ?></strong>
+                    <?= $this->translate('New or unregistered nodes found') ?>
+                </div>
+                <ul class="row-fluid unstyled jsUnregisteredApiContent">
+                    <? foreach($this->unregisteredApis as $apiRequest): ?>
+                    <li class="row-fluid api-<?= $apiRequest->html('apiKey') ?>">
+                        <div class="span10">
+                            <a href="<?= $this->url(array($apiRequest->html('contextId')), 'registerApi') ?>" 
+                                    class="cssListItem span12" 
+                                    title="unregisred Api Request">
+                                <span class="cssAvatar">
+                                    <img src="<?= $this->baseUrl() ?>/img/dummy_node_50_red.png" alt="<?= $this->translate('avatar') ?>"/>
+                                </span>
+                                <span>
+                                    <? if($apiRequest->html('data/name') != ''
+                                            || $apiRequest->html('data/ipAddress') != ''): ?>
+                                        <?= $apiRequest->html('data/name') ?> /
+                                        <?= $apiRequest->html('data/ipAddress') ?>
+                                    <? else: ?>
+                                        Api key: <?= $apiRequest->html('contextId') ?>
+                                    <? endif; ?>
+                                </span>
+                            </a>
+
+                        </div>
+                        <div class="span2 cssAction">
+                            <a href="<?= $this->url(array($apiRequest->html('contextId')), 'registerApi') ?>" 
+                            class="btn btn-mini btn-danger" title="<?= $this->translate('edit') ?>">
+                                <i class="icon-wrench icon-white"></i>
+                                <?= $this->translate('Register') ?>
+                            </a>
+                        </div>
+                    </li>
+                    <? endforeach; ?>
+                </ul>
+            </div>
+        </div>
+    <? endif; ?>
+        
+        <?= $this->render('shared/pager.phtml') ?>
+        
+        <div class="row-fluid cssListing">
+            <ul class="span12 unstyled">
+                <li class="row-fluid">
+                    <div class="offset10 span2 cssAction"></div>
+                </li>
+                
+            <? foreach($this->html('pager/data') as $node): ?>
+               <li class="row-fluid">
+                   <div class="span10">
+                       <a class="cssListItem span12" title="<?= $this->translate('detail') ?>"
+                           href="<?= $this->url(array($node->html('name')), 'nodedetail')?>" title="Nodedetail">
+                           <span class="cssAvatar">
+                            <? if ($node->html('nodetype') == Core_Form_Node::SERVER_VIRTUAL): ?>
+                               <img src="<?= $this->baseUrl(). "/img/dummy_vm_50.png"; ?>" alt="<?= $this->translate('avatar') ?>"/>
+                            <? elseif ($node->html('nodetype') == Core_Form_Node::SERVER_CLOUD): ?>
+                               <img src="<?= $this->baseUrl(). "/img/dummy_cloud_50.png"; ?>" alt="<?= $this->translate('avatar') ?>"/>
+                            <? elseif ($node->html('nodetype') == Core_Form_Node::SERVER_DEDICATED): ?>
+                               <img src="<?= $this->baseUrl(). "/img/dummy_server_50.png"; ?>" alt="<?= $this->translate('avatar') ?>"/>
+                            <? else : ?>
+                               <img src="<?= $this->baseUrl(). "/img/dummy_node_50.png"; ?>" alt="<?= $this->translate('avatar') ?>"/>
+                            <? endif; ?>
+                           </span>
+                           <span><?= $node->html('name') ?></span>
+                       </a>
+                   </div>
+                   <div class="span2 cssAction"></div>
+               </li>
+           <? endforeach; ?>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('#coreSearchCategorySelected').html($('#coreSearchCategoryNodes').html());
+        $('#coreSearchCategoryList a').removeAttr('checked');
+        $('#coreSearchCategoryNodes').attr('checked', 'checked');
+
+        $('#coreSearchInput').mazeSearch('option', 'source', '<?= $this->url(array(), 'nodes') ?>?format=html');
+        $('#coreSearchInput').mazeSearch('option', 'page', '<?= $this->html('pager/page') ?>');
+    });
+</script>

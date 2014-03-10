@@ -1,0 +1,41 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="de" lang="de">
+    <head>
+        <? $this->headTitle()->setSeparator(' - '); ?>
+        <?= $this->headTitle('Maze.dashboard', 'PREPEND') ?>
+        <? $this->headLink()->prependStylesheet($this->baseUrl() . '/css/default.css') ?>
+        <? $this->headLink()->prependStylesheet($this->baseUrl() . '/css/text.css') ?>
+        <? $this->headLink()->prependStylesheet($this->baseUrl() . '/css/js/jquery-mobile-fluid960.css') ?>
+        <? $this->headLink()->prependStylesheet($this->baseUrl() . '/css/js/jquery-ui-1.9.1.custom.min.css') ?>
+        <? $this->headLink()->prependStylesheet($this->baseUrl() . '/css/reset.css') ?>
+        <?= $this->headLink() ?>
+        <? $this->headScript()->prependFile($this->baseUrl() . '/js/min/jquery.easing.js') ?>
+        <? $this->headScript()->prependFile($this->baseUrl() . '/js/min/jquery-ui-1.9.1.custom.min.js') ?>
+        <? $this->headScript()->prependFile($this->baseUrl() . '/js/min/jquery-1.8.2.min.js') ?>
+        <?= $this->headScript() ?>
+        <meta charset="utf-8"/>
+    </head>
+    <body id="body">
+        <div  class="container_16">
+            <div class="grid_8 prefix_4 suffix_4 alpha omega cssLoginContent">
+                <div class="cssLogo grid_10 suffix_3 prefix_3">
+                    <img src="<?= $this->baseUrl() ?>/img/logo_maze_sh.png"  alt="<?= $this->translate('image') ?>" />
+                <span class="grid_10">
+                    Maze.<b>dashboard</b>
+                </span>
+                </div>
+                <?php echo $this->layout()->content; ?>
+            </div>
+        </div>
+        <div class="cssFooter">
+            <?= $this->render('footer.phtml'); ?>
+        </div>
+        
+        <script type="text/javascript">
+            $(document).ready(function() {
+                $('.jsButton').button();
+            });
+        </script>
+    </body>
+</html>

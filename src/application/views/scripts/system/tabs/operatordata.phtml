@@ -1,0 +1,310 @@
+<div class="row-fluid">
+    <div class="span12">
+        <div class="row-fluid">
+            <dl class="row-fluid cssBoxCenter">
+                <dt class="span3">
+                    <label>
+                        <?= $this->translate('company') ?>
+                    </label>
+                </dt>
+                <dd class="span3">
+                    <?= $this->form->company ?>
+                </dd>
+            </dl>
+
+            <div id="jsMailConfiguration">
+
+                <div class="row-fluid cssBoxCenter">
+                    <dt class="span3">
+                        <label>
+                            <?= $this->translate($this->form->mail->from->name->getLabel()); ?>
+                        </label>
+                    </dt>
+                    <dd class="pull-left cssItemWithoutLabel" style="margin-left:2.5641%;">
+                        <?= $this->form->mail->from->email; ?>
+                    </dd>
+                    <dd class="pull-left cssItemWithoutLabel">
+                        <?= $this->form->mail->from->name; ?>
+                    </dd>
+                </div>
+
+                <dl class="row-fluid cssBoxCenter">
+                    <dt class="span3">
+                        <label>
+                            <?= $this->translate("Send test email"); ?>
+                        </label>
+                    </dt>
+                    <dd class="span9">
+                        <button class="btn btn-small" id="jsMailSendTestEmail">
+                            <?= $this->translate("E-mail address:"). " : ".  $this->html("identity/email"); ?>
+                        </button>
+                    </dd>
+                </dl>
+
+                <dl class="row-fluid cssBoxCenter">
+                    <dt class="span3">
+                        <label>
+                            <?= $this->translate($this->form->mail->smtpEnabled->getLabel()); ?>
+                        </label>
+                    </dt>
+                    <dd class="span9">
+                        <? $smtpEnabled = $this->form->mail->smtpEnabled; ?>
+                        <div id="jsMailToggleSmtp" class="btn-group" data-toggle="buttons-radio" >
+                            <? foreach ($smtpEnabled->getMultiOptions() as $key => $value): ?>
+                            <button name="<?= $smtpEnabled->getName(); ?>"
+                                    class="btn btn-small <?= $smtpEnabled->getValue() == $key ? "active" : null; ?>"
+                                    value="<?= $key; ?>"><?= $value; ?>
+                            </button>
+                            <? endforeach; ?>
+                        </div>
+                    </dd>
+                </dl>
+
+                <div id="jsMailSmtpContainer">
+                    <h6><?= $this->translate("SMTP Configure authentication"); ?></h6>
+                    <div class="row-fluid cssBoxCenter">
+                        <dt class="span3">
+                            <label>
+                                <?= $this->translate($this->form->mail->smtp->host->getLabel()); ?>
+                            </label>
+                        </dt>
+                        <dd class="pull-left cssItemWithoutLabel" style="margin-left:2.5641%;">
+                            <?= $this->form->mail->smtp->host; ?>
+                        </dd>
+                        <dd class="pull-left cssItemWithoutLabel">
+                            <?= $this->form->mail->smtp->port; ?>
+                        </dd>
+                    </div>
+
+                    <dl class="row-fluid cssBoxCenter">
+                        <dt class="span3">
+                            <label>
+                                <?= $this->translate($this->form->mail->smtp->username->getLabel()); ?>
+                            </label>
+                        </dt>
+                        <dd class="span3">
+                            <?= $this->form->mail->smtp->username; ?>
+                        </dd>
+                    </dl>
+                    
+                    <form class="form-horizontal cssBoxCenter" action="" id="jsMailPassword" method="post">
+                        <dl class="row-fluid jsPasswordTrigger jsPasswordContainer">
+                            <dt class="span3" id="changePassword-label">
+                            <label class="optional">
+                                <?= $this->translate('password') ?>
+                            </label>
+                            <dd class="span6" id="changePassword-element">
+                                <span class="muted cssColorGray jsPasswordTrigger cssChangePassword">
+                                    <?= $this->translate('Change password') ?>
+                                </span>
+                            </dd>
+                        </dl>
+                        <div class="jsPasswordContainer jsChangePassword" style="display:none;">
+                            <dl class="row-fluid">
+                                <dt class="span3">
+                                <label id="newpassword">
+                                    <?= $this->translate("password") ?>
+                                </label>
+                                </dt>
+                                <dd class="span2">
+                                    <?= $this->form->mail->smtp->password; ?>
+                                </dd>
+                                <div class="row-fluid span2">
+                                    <input class="btn btn-info jsButton" id="jsPasswordCancel"
+                                           type="submit" value="<?= $this->translate("cancel") ?>"/>
+                                    <input class="btn btn-info jsButton jsPasswordSave"
+                                           type="submit" value="<?= $this->translate("save") ?>" />
+                                </div>
+                            </dl>
+                        </div>
+                    </form>
+
+                    <dl class="row-fluid cssBoxCenter">
+                        <dt class="span3">
+                            <label>
+                                <?= $this->translate($this->form->mail->smtp->auth->getLabel()); ?>
+                            </label>
+                        </dt>
+                        <dd class="span9">
+                            <div id="jsMailSmtpAuth" class="btn-group" data-toggle="buttons-radio" >
+                                <? $authOptions = $this->form->mail->smtp->auth; ?>
+                                <? foreach ($authOptions->getMultiOptions() as $key => $value): ?>
+                                <button name="<?= $authOptions->getName(); ?>"
+                                        class="btn btn-small <?= $authOptions->getValue() == $key ? "active" : null; ?>"
+                                        value="<?= $key; ?>"><?= $value; ?>
+                                </button>
+                                <? endforeach; ?>
+                            </div>
+                        </dd>
+                    </dl>
+
+                    <dl class="row-fluid cssBoxCenter">
+                        <dt class="span3">
+                            <label>
+                                <?= $this->translate($this->form->mail->smtp->ssl->getLabel()); ?>
+                            </label>
+                        </dt>
+                        <dd class="span9">
+                            <? $sslOptions = $this->form->mail->smtp->ssl; ?>
+                            <div id="jsMailSmtpSSL" class="btn-group" data-toggle="buttons-radio" >
+                                <? foreach ($sslOptions->getMultiOptions() as $key => $value): ?>
+                                <button name="<?= $sslOptions->getName(); ?>"
+                                        class="btn btn-small <?= $sslOptions->getValue() == $key ? "active" : null; ?>"
+                                        value="<?= $key; ?>"><?= $value; ?>
+                                </button>
+                                <? endforeach; ?>
+                            </div>
+                        </dd>
+                    </dl>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+
+    $(".jsEditable").mazeEditable("<?= $this->url(array(), "system") ?>?format=json",  $.extend({
+        onsuccess: function(data, self) {
+            if (data.result && typeof data.update === "object"){
+                if ($("#company:visible").length >= 1){
+                    $("#jsFooterProvider").text(data.update.company);
+                }
+            }
+            if (!$.isEmptyObject(data.formErrors)){
+                if (data.formErrors.mail.from && data.formErrors.mail.from.email){
+                    setErrorTooltip(data.formErrors.mail.from.email, $("[name='" +self.name+ "']").eq(0));
+                }else if (data.formErrors.mail.smtp) {
+                    setErrorTooltip(data.formErrors.mail.smtp, $("[name='" +self.name+ "']").eq(0));
+                }
+            }
+        }
+    }, mazeEditableOptions));
+
+    $("#jsMailConfiguration div.cssBoxCenter").click(function(){
+        if ($(this).find(".jsEditable").length <= 1){
+            $(this).find(".jsEditable").first().triggerHandler("click");
+        }
+    });
+
+    $("select#mail-smtpEnable").val(function(index, value){
+        return value;
+    }).change(function(event){
+        submitChanges.apply(event.target);
+    });
+
+    $("#jsMailConfiguration button, #jsStickyStatus input").click(function(event){
+        submitChanges.apply(event.target || this);
+        return event.preventDefault();
+    });
+
+    $("#jsMailSendTestEmail").click(function(){
+        self = $(this);
+        self.blur();
+        this.disabled = true;
+        $.ajax({
+            url : "<?= $this->url(array(), "sendTestMail") ?>?format=json",
+            success: function(data){
+                if (typeof data === "object"){
+                    if (data.result === true){
+                        self.addClass("btn-success").html("<span class='icon-ok'></span> &nbsp; " +self.html());
+                    }else {
+                        self.addClass("btn-warning").html("<span class='icon-warning-sign'></span> &nbsp; " +self.html());
+                    }
+                    if (data.exception){
+                        // split array and read lines of the exception
+                        errmail= data.exception.split('\n');
+                        errors = {};
+                        for(var i = 0;i < errmail.length;i++){
+                            if (errmail[i] === "" || typeof errmail[i] === "undefined"){
+                                continue;
+                            }
+                            errors[i] = errmail[i];
+                        }
+                        setErrorTooltip({errors: errors}, self);
+                        setTimeout(function(){
+                            self.hover(function(){
+                                if ($(".popover:visible").length){
+                                    resetTooltips();
+                                }
+                            });
+                        }, 4000);
+                    }
+                }
+                self.attr("disabled", false);
+            },
+            beforeSend: function(){
+                resetTooltips();
+                self.removeClass("btn-warning , btn-success").find("span").remove();
+            }
+        });
+
+        return false;
+    });
+
+    $(".jsPasswordTrigger, #jsPasswordCancel, #changePassword-element").click(function(event){
+        $(".jsPasswordContainer").toggle();
+        event.preventDefault();
+    });
+    $(".jsPasswordContainer").keypress(function(event){
+        if (event.keyCode === 13 || event.which === 13){
+            $("form#jsMailPassword").triggerHandler("submit");
+            event.preventDefault();
+        }
+    });
+
+    $(".jsEditable").click(function(){
+        if ($("#smtp-password").is(':visible')){
+            $("#jsPasswordCancel").click();
+        }
+    });
+
+    $("form#jsMailPassword").submit(function(){
+        submitChanges.apply($("[type='password']")[0],[function(result){
+            if (result){
+                $(".jsPasswordTrigger, #jsPasswordCancel").click();
+            }
+        }]);
+        return false;
+    });
+
+    function submitChanges(element){
+        self = (this || element);
+        argv = arguments;
+
+        if ($(self).hasClass("active") || self.name === "" || typeof self.name === "undefined"){
+            return true;
+        }
+
+        elements = $(self).closest("#jsMailConfiguration").find("button,input");
+        elements.each(function(){
+            this.disabled = true;
+        });
+
+        postdata = {};
+        postdata[self.name] = self.type === "checkbox" ? (self.checked ? 1 : 0) : self.value;
+
+        $.ajax({
+            url : "<?= $this->url(array(), "system") ?>?format=json",
+            data: postdata,
+            type: "post",
+            success: function(data){
+                setComboTooltip(data);
+                if (typeof argv[0] === "function"){
+                    result = !$.isEmptyObject(data) && data.result ? true : false;
+                    argv[0].apply(self, [result, data]);
+                }
+            },
+            complete: function(){
+                elements.each(function(){
+                    this.disabled = false;
+                });
+            }
+        });
+    }
+});
+</script>

@@ -1,0 +1,35 @@
+<div class="cssContentMiddle grid_16">
+    <ul class="grid_16 cssInstallStep">
+        <li class="grid_4 cssInstallStep1 active cssStepComplete">
+            <?= $this->translate('create database') ?>
+        </li>
+        <li class="grid_4 cssInstallStep2 active cssStepComplete">
+            <?= $this->translate('Create administrator') ?>
+        </li>
+        <li class="grid_4 cssInstallStep3 active cssStepComplete">
+            <?= $this->translate('start the installation') ?>
+        </li>
+        <li class="grid_4 cssInstallStep4 active cssStepComplete">
+            <?= $this->translate('completion') ?>
+        </li>
+    </ul>
+    <div class="cssDetailPadding30 cssForm grid_16">
+        <h1>
+            <?= $this->translate('Attention') ?>
+        </h1>
+        <div class="cssFormBoxLong grid_16">
+            <p class="cssFont">
+                <?= $this->translate('you have already performed an installation of Maze.dashboard and are already connected to a database') ?>
+            </p>
+            <p class="cssFont">
+                 <?= $this->translate('if you want to start with a new empty database, then you must delete the following file') ?>
+            </p>
+            <h3 class="grid_16">
+                data/configs/server.ini
+            </h3>
+            <p class="cssFont">
+                <?= $this->translate('do this only if you know exactly what you do') ?>
+            </p>              
+        </div>
+    </div>
+</div>

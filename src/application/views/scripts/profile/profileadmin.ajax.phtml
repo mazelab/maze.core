@@ -1,0 +1,104 @@
+<div class="row-fluid">
+    <div class="span10">
+        <form class="cssUserImage span2" id="jsMyAvatarUpload" enctype="multipart/form-data" method="post">
+            <a href="#" title="<?= $this->translate('change profile image') ?>">
+            <? if ($this->admin->html('avatar') != ''): ?>
+                <img class="img-polaroid" name="avatar" src="<?= $this->urlAvatar($this->html("admin/_id")); ?>" alt="<?= $this->translate('avatar') ?>" />
+            <? else: ?>
+                <img class="img-polaroid" name="avatar" src="<?= $this->baseUrl() ?>/img/dummy_admin_200.png"  width="100px" alt="<?= $this->translate('avatar') ?>" />
+            <? endif; ?>
+            </a>
+            <?= $this->form->avatar; ?>
+        </form>
+
+        <div class="span9 offset1">
+            <form id="jsMyAvatarUpload" enctype="multipart/form-data" method="post">
+                <dl class="row-fluid">
+                    <dt class="span3">
+                        <label><?= $this->translate('username') ?></label>
+                    </dt>
+                    <dd class="span5">
+                        <?= $this->form->username ?>
+                    </dd>
+                </dl>
+                <dl class="row-fluid">
+                    <dt class="span3">
+                        <label>
+                            <?= $this->translate('E-mail address:') ?>
+                        </label>
+                    </dt>
+                    <dd class="span5">
+                        <?= $this->form->email ?>
+                    </dd>
+                </dl>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+$(document).ready(function(){
+
+    var mazeEditableOptions = (mazeEditableOptions ||{
+        cancel: '<button class="btn btn-info btn-mini" type="submit" title="<?= $this->translate('cancel') ?>"><i class="icon-remove icon-white"></i></button>',
+        submit: '<button class="btn btn-info btn-mini" type="submit" title="<?= $this->translate('save') ?>"><i class="icon-ok icon-white"></i></button>',
+        onclick: function(){
+            $(this).addClass($.fn.mazeEditable.defaults.activeClass);
+        }
+    });
+            
+    $('.jsEditable').mazeEditable('<?= $this->url(array(), 'profile') ?>?format=json', $.extend({
+            onsuccess: function(data) {
+                if (data.result && !$.isEmptyObject(data.identity.username)){
+                        $('.jsUserName').text(data.identity.username);
+                }        
+            }
+        }, mazeEditableOptions)
+    );
+
+    $("#jsMyAvatarUpload.cssUserImage img").click(function(){
+        resetTooltips();
+        $("#jsMyAvatarUpload").find(".jsUserAvatar[type=file]").click();
+        return false;
+    });
+    $("#jsMyAvatarUpload .jsUserAvatar").change(function(){
+        $("#jsMyAvatarUpload").submit();
+    });
+
+    $("#jsMyAvatarUpload").ajaxForm({
+        url: "<?= $this->url(array(), 'profile') ?>?format=json",
+        type: "post",
+        success: function(data) {
+            if (typeof data === "string")  data = eval('(' + data + ')');
+            if (!$.isEmptyObject(data.identity) && data.identity.avatar){
+                image = '<?= $this->url(array($this->html("admin/_id")), "avatar"); ?>';
+                $("#jsMyAvatarUpload img[name=avatar], #jsAvatar").attr('src', image +'?'+new Date().getTime());
+            }else if (!$.isEmptyObject(data.formErrors) && !$.isEmptyObject(data.formErrors.avatar)){
+                setErrorTooltip(data.formErrors.avatar, "#jsMyProfileForm .cssUserImage");
+            }
+        },
+        beforeSubmit: function(arr, $form, options) {
+            $.each(arr, function(index, element){
+                if (element.type === "file" && element.value === ""){
+                    arr[index] = [];
+                }
+            });
+        }
+    });
+    
+    $(document).bind("cbox_complete", function(){
+        if ($.browser.msie){
+            cbox = $("#cboxContent");
+            cbox.find("#avatar").show().css({
+                borderColor: "transparent",
+                borderStyle: "solid",
+                borderWidth: "35px 0 0",
+                width : cbox.find(".cssUserImage a").width(),
+                height: cbox.find(".cssUserImage a").height()
+            }).offset(cbox.find(".cssUserImage a").offset());
+            cbox.find(".cssUserImage a").unbind("click");
+        }
+    });
+
+});
+</script>

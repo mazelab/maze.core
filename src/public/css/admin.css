@@ -1,0 +1,878 @@
+a:focus, focus {
+    outline: none;
+}
+h1, h2, h3, h4, h5, h6{
+    color: inherit;
+    font-family: inherit;
+    font-weight: bold;
+    line-height: 20px;
+    margin: 0;padding:0;
+}
+h6{
+    color:#ff9900;
+    font-size:18px;
+    font-weight: normal;
+    margin:10px 0;
+}
+form{
+    margin:0;
+}
+input[type="radio"], input[type="checkbox"] {
+    line-height: normal;
+    margin: -3px 10px 0 0;
+}
+select, textarea, input[type="text"], input[type="password"], input[type="datetime"], input[type="datetime-local"], input[type="date"], input[type="month"], input[type="time"], input[type="week"], input[type="number"], input[type="email"], input[type="url"], input[type="search"], input[type="tel"], input[type="color"], .uneditable-input{
+    margin:0;
+}
+.cssContent dl dd input{
+    margin-bottom:2px;
+}
+dl,dt,dd,select{
+    margin:0;
+    padding: 0;
+}
+label{
+    vertical-align: middle;
+    padding:1px 0 0;
+    margin:0;
+}
+.btn-mini{
+    padding:2px;
+}
+.btn-mini.cssButtonMarginRight{
+    margin-right:30%;
+}
+.cssBoxCenter .btn-mini{
+    margin-left:5px;
+}
+/*-------------------Footer bottom-------------------*/
+html, body, .container-fluid, .cssContent {
+    height: 100%;
+}
+.container-fluid, .content {
+    position: relative;
+}
+.proper-content {
+    padding-top: 50px; 
+}
+@media (max-width: 1024px) {
+  .proper-content{
+      padding-top: 0; 
+  }
+}
+.wrapper {
+    min-height: 100%;
+    height: auto !important;
+    height: 100%;
+    margin: 0 auto -50px; 
+}
+.push {
+    height: 50px; 
+}
+.cssFooter {
+    position: relative;
+    height: 50px;
+    background: #f5f5f5;
+    line-height: 50px;
+}
+.cssFooterContent{
+    text-align:center;
+}
+/*-------------------Editable Details-------------------*/
+.cssContent dl dd span.jsEditable input{
+    margin-bottom:0px;
+}
+label, span.jsEditable, span.jsEditableAdditionalFields{
+    word-wrap: break-word;    
+}
+span.cssColorGray{
+    color:#ccc;
+    font-style: oblique;
+}
+.cssBoxCenter.cssAdditionalSpan span textarea,
+.cssBoxCenter span.jsEditable form.cssFormEditable input,
+.cssAddItem textarea, .cssAdditionalFields .cssFormEditable textarea,
+.cssBoxRight span.jsEditable form.cssFormEditable input{
+    min-width: 70%;
+    position: relative;
+}
+.cssBoxCenter .cssWithoutLabel span.jsEditable form.cssFormEditable input,
+.cssBoxRight span.jsEditable form.cssFormEditable input{
+    width: auto;
+    float: left;
+}
+.cssBoxRight .btn-mini{
+    margin-left:1px;
+}
+.cssBoxRight span.jsEditable form.cssFormEditable input{  
+    width:60%;
+}
+.cssAdditionalFields .cssFormEditable textarea{
+    min-height:18px;
+}
+.cssAddItem textarea, .cssAdditionalFields .cssFormEditable textarea,
+span.jsEditable form.cssFormEditable input,
+dl dt label{
+    line-height: 18px;
+}
+.cssBigItem span, .cssBigItem span.jsEditable{
+    margin:0 0 20px 0;
+    font-size:22px;
+    float: left;
+}
+.cssBigItem span.jsEditable:hover{
+    margin:0 0 20px 0;
+}
+.cssBigItem span.jsEditable input{
+    font-size:22px;
+}
+.cssBigItem span.jsEditable.active:hover{
+    margin:0 0 20px 0;
+}
+.cssItemWithoutLabel{
+    margin-right: 10px;
+    min-height: 30px;
+}
+.cssItemWithoutLabel span{
+    padding-right:10px;
+}
+span.jsEditable, span.jsEditableAdditionalFields{
+    width: 100%;
+    float:left;
+    position: relative;
+    min-height: 28px;
+}
+span.jsEditableAdditionalFields{
+    white-space: pre;
+}
+span.jsEditable:hover,
+span.jsEditableTextareas:hover,
+span.jsEditableAdditionalFields:hover{
+    background: #fff url("../img/edit.png") top right no-repeat;
+    cursor:pointer;
+    color:#0088CC;
+    border-radius:4px;
+    border-color: rgba(82, 168, 236, 0.8);
+    outline: 0;
+    outline: thin dotted \9;
+   IE6-9 
+  -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(82,168,236,.6);
+  -moz-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(82,168,236,.6);
+  box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(82,168,236,.6);
+}
+span.jsEditable.active:hover,
+span.jsEditableTextareas.active:hover,
+span.jsEditableAdditionalFields.active:hover{
+    background:none;
+    box-shadow: none;
+    cursor:pointer;
+    min-width:70%;
+    padding:0;
+    min-height: 28px;
+}
+span.jsEditableTextareas.whiteSpace {
+    white-space:pre;
+}
+.cssPasswordFields dl dd input[type="password"]{
+    float: left;
+    width: 50%;
+}
+/*-------------------AVATAR-------------------*/
+.cssUserImage{
+    position: relative;
+}
+.cssUserImage img{
+    margin-bottom:20px;
+}
+.cssUserImage a:hover{
+    font-size:12px;
+    background: url('../img/bg_opacity_50.png');
+    font-family:arial, helvetica;
+    color:#fff;
+    opacity: 0.2;
+    -moz-opacity: 0.2;
+    filter: Alpha(opacity=20);
+}
+/*-------------------Statustext Right-------------------*/
+.cssStatusText {
+    position:absolute;
+}
+.cssStatusText .stat {
+    cursor:default;
+    text-transform:uppercase;
+    font-weight:bold;
+}
+.cssStatusText .stat.online {
+    color:#ccfea5;
+}
+.cssStatusText .stat.offline {
+    color:#ffbcbc;
+}
+/*-------------------Selectbox-------------------*/
+.bootstrap-select.btn-group, .bootstrap-select.btn-group[class*="span"] {
+    display: inline-block;
+    float: none;
+    margin-bottom: 2px;
+    margin-left: 0;
+}
+/*-------------------Header-------------------*/
+.navbar-inverse .navbar-inner {
+    background-color: #4a4a4a;
+    background-image: linear-gradient(to bottom, #4a4a4a, #6d6d6d);
+    background-repeat: repeat-x;
+    border-color: #252525;
+}
+.cssHeaderInner .nav-tabs, .cssHeaderInner .nav-tabs > li > a{
+    border:0;
+    padding:0;
+    margin:4px 0 0 0;
+}
+.navbar-inverse .nav li.dropdown.open > .dropdown-toggle,
+.navbar-inverse .nav li.dropdown.active > .dropdown-toggle,
+.navbar-inverse .nav li.dropdown.open.active > .dropdown-toggle{
+    background-color: #e1e1e1;
+    color: #111;
+    border-radius:4px;
+}
+.navbar .nav-tabs > li > a{
+    border-radius:4px;
+}
+.navbar-inverse .nav > li > a:focus, .navbar-inverse .nav > li > a:hover {
+    background-color: #00abe1;
+    
+}
+.nav-pills li a img.cssSettings{
+    background: url('../img/icon-cog_48.png') no-repeat;
+    background-size:24px 24px;
+}
+.nav-pills li a:hover img.cssSettings, .nav-pills li.dropdown.open a img.cssSettings,
+.nav-pills li a:focus img.cssSettings{
+    background: url('../img/icon-cog_48_hover.png') no-repeat;
+    background-size:24px 24px;
+}
+.cssUserName img{
+    border-radius: 5px 5px 5px 5px;
+    height: 25px;
+    margin-right: 15px;
+    width: 25px;
+}
+.navbar .brand{
+    padding:5px 0;
+    margin-left:0px;
+}
+@media (max-width: 768px) {
+  .navbar .brand{
+      padding:5px 0 5px 20px;
+  }
+}
+.navbar .nav.cssSearchButton{
+    margin-left: 10px;
+}
+.breadcrumb{
+    background-color: #F5F5F5;
+    border-radius: 0;
+    padding:15px 80px;
+    margin:0;   
+}
+@media (max-width: 1400px) {
+  .breadcrumb{
+      padding:15px 0px;
+  }
+}
+.cssSearch{
+    padding-top:10px;
+    padding-left:40px;
+    width:40%;
+    float:left;
+}
+@media (max-width: 768px) {
+  .cssSearch{
+      padding-left: 20px;
+  }
+}
+.cssSearchForm{
+    width:100%;
+}
+.cssBreadcrumb{
+    background:#f5f5f5;
+    height:50px;
+}
+/*-------------------Content-------------------*/
+.cssContent{
+    padding:18px 14.5299% 0;
+}
+@media (max-width: 1400px) {
+  .cssContent{
+      padding:25px 0px 0 0px;
+  }
+}
+.cssHeader{
+    padding:0 80px;
+}
+@media (max-width: 1400px) {
+  .navbar-inner.cssHeader{
+      padding:0;
+  }
+}
+.cssBoxCenter, .cssBoxRight{
+    margin-bottom:20px;
+}
+.cssBoxCenter h6, .cssBoxRight h6{
+    border-bottom:1px solid #ddd;    
+    color:#ff9900;
+    font-size:18px;
+    font-weight: normal;
+    margin:0 0 20px;
+}
+.cssAddModule dl{
+    padding:10px 0;
+    background:#f5f5f5;
+    border-radius:6px;
+}
+.cssChangePassword:hover{
+    cursor: pointer;
+}
+/*-------------------Dashboard-------------------*/
+.cssToolbox{
+    height:auto;
+    border: 1px solid #ccc;
+    border-radius:6px;
+    padding:0px;
+    margin-bottom:5px;
+    background: url('../img/bg_toolbox.png') right top no-repeat;
+}
+.cssToolboxHead{
+    text-transform:uppercase;
+    padding:15px 5%;
+    position: relative;
+}
+.cssToolboxHead a:first-child{
+     padding-left: 40px;
+}
+.cssToolboxHeadLink{
+    min-height: 25px;
+    line-height: 33px;
+}
+.cssToolboxHeadLink:hover{
+    text-decoration:none;
+}
+.cssToolboxHead #goToClients{
+    background: url('../img/icon_mandanten_black.png') top left no-repeat;
+}
+.cssToolboxHead #goToClients:hover{
+    background: url('../img/icon_mandanten.png') top left no-repeat; 
+}
+.cssToolboxHead #goToDomains{
+    background: url('../img/icon_domain_black.png') top left no-repeat; 
+}
+.cssToolboxHead #goToDomains:hover{
+    background: url('../img/icon_domain1.png') top left no-repeat; 
+}
+.cssToolboxHead #goToNodes{
+    background: url('../img/icon_node_black.png') top left no-repeat; 
+}
+.cssToolboxHead #goToNodes:hover{
+    background: url('../img/icon_node.png') top left no-repeat; 
+}
+.cssToolboxHead #showDiffs{
+    background: url('../img/icon_diff.png') top left no-repeat; 
+}
+.cssToolboxHead #showLogs{
+    background: url('../img/icon_log1_black.png') top left no-repeat; 
+}
+.cssToolboxHead #showLogs:hover{
+    background: url('../img/icon_log1.png') top left no-repeat; 
+}
+.cssToolboxHead #goToClients, .cssToolboxHead #goToClients:hover,
+.cssToolboxHead #goToDomains, .cssToolboxHead #goToDomains:hover,
+.cssToolboxHead #goToNodes, .cssToolboxHead #goToNodes:hover,
+.cssToolboxHead #showLogs, .cssToolboxHead #showLogs:hover,
+.cssToolboxHead #showDiffs{
+    background-size: 24px 24px;
+}
+.cssToolboxHead .cssAddIcon{
+    padding: 0 15px;
+    position: absolute;
+    right: 5px;
+    top: 5px;
+}
+.cssToolboxList ul{
+    padding:0 5px;
+}
+.cssToolboxList{
+    margin:0 0 20px 0;
+    padding:0;
+    min-height: 140px;
+}
+.cssDiffbox .cssToolboxList{
+    min-height: 20px;
+}
+.cssToolboxList li{
+    line-height: 2em;
+}
+.cssToolboxList li a{
+    width:90%;
+    float: left;
+    text-decoration:none;
+    color:#3E3D3B;
+    padding:0 5%;
+}
+.cssToolboxList li a small{
+    word-wrap: break-word;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 95%;
+    float: left;
+}
+.cssToolboxList li a:hover{
+    background:#eee;
+    color:#005580;
+}
+.cssToolboxList li a:focus{
+    background:#005580;
+    color:#fff;
+}
+.cssToolboxList li a i{
+    float: right;
+    width: 5%;
+    margin-top: 6px;
+    opacity: 0.25;
+}
+.cssToolboxList li a:hover i{
+    opacity: 0.5;
+}
+.cssToolboxList li a:focus i{
+    opacity: 1.0;
+}
+.cssToolboxFooter{
+    min-height:30px;
+    line-height: 30px;
+}
+.cssToolboxFooter a{
+    margin-right:10px;
+}
+.cssToolboxLog{
+    font-size: 11px;
+}
+.cssNews a{
+    display:block;
+    margin-bottom:10px;
+}
+.cssNews a h3{
+    font-size:85%;
+}
+.cssNews a h3, .cssNews p{
+    line-height: 20px;
+    margin:0;
+    padding:0;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+}
+.cssNews .cssNewsListing li {
+    float: left;
+    padding: 0 5%;
+    width: 90%;
+}
+.cssDiffbox.alert{
+    padding:0;
+    border-radius: 6px;
+}
+.cssDiffbox .cssToolboxList li a:hover{
+    background:#FBEED5;
+    color:#005580;
+}
+.cssDiffbox .cssToolboxHead{
+    padding:15px 1.55%;
+}
+.cssDiffbox .cssToolboxHead span{
+     padding-left: 20px;
+}
+.cssDiffbox .cssToolboxList li a {
+    padding: 0 1.55%;
+    width: 96.9%;
+}
+.cssToolbox.cssLogs, .cssToolbox.cssNews{
+    background:#fff;
+}
+.cssLogs .cssToolboxList .text-error i {
+    background-image: url("../img/glyphicons-halflings_red.png");
+}
+.cssLogs .cssToolboxList .muted i{
+    background-image: url("../img/glyphicons-halflings_green.png");    
+}
+.cssLogs .cssToolboxList {
+    margin:0;
+}
+.cssLogs .cssToolboxList li{
+    line-height: 12px;
+}
+.cssLogs .cssToolboxList small.span12{
+    margin:0;
+    padding: 10px 6%;
+    min-height: 1px;
+}
+.cssLogTxt.span12{
+    min-height: 1px;
+}
+/*-------------------Listing-------------------*/
+span.cssAvatar{
+    padding:2px 5px 2px 0;    
+}
+span.cssAvatar img {
+    border: 1px solid #DDD8C2;
+    border-radius: 5px 5px 5px 5px;
+    height: 25px;
+    width: 25px;
+}
+.cssAction{
+    text-align:right;
+}
+.cssAction h6{
+    margin-right:30px;
+    font-size: 14px;
+    color: #333;
+    font-weight: bold;
+}
+.cssListing ul li {
+    border-bottom: 1px solid #f5f5f5;
+    height: auto;
+    margin: 0;
+    padding: 0;
+    vertical-align: middle;
+    line-height: 30px;
+}
+.cssListing ul li a.cssListItem, .cssListingDiff ul li a.cssListItem{
+    text-decoration:none;
+}
+.cssListing ul li:hover{
+    background:#f5f5f5;
+}
+.cssLine.Two{
+    background: #f5f4ed;    
+}
+.cssLine.One{
+    background: #fbfaf6;
+}
+.cssListingDiff{
+    margin:20px 0;
+}
+.cssListingDiff ul{
+    padding-top:20px;
+}
+.cssListingDiff ul li{
+    height: auto;
+    margin: 0;
+    padding: 0;
+    vertical-align: middle;
+    line-height: 30px;    
+}
+.cssListingDiff ul li:hover{
+    background:#FBEED5;
+}
+.cssEllipsis{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;    
+}
+.cssModuleDescription{
+    padding-left:20px;
+}
+/*-------------------Tabdesign-------------------*/
+.cssBoxCenter .nav-tabs:first-child{
+    padding-left:20px;
+}
+.cssTabContentAll{
+    margin:20px 0 0 0;
+        height:auto;
+}
+.cssTabContentOuter{
+    height:auto;
+    overflow:visible;
+}
+.cssTabContent {
+    overflow:visible;
+}
+.cssTabMenuLeft, .cssTabContent{
+        height:auto;
+}
+.cssTabMenuLeft{
+    -webkit-border-radius: 6px;
+    -moz-border-radius: 6px;
+    border-radius: 6px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.067);
+    padding:0;
+}
+.cssTabMenuLeft li{
+    padding:0;
+}
+.cssTabMenuLeft li a{
+    
+    border: 1px solid #E5E5E5;
+    display: block;
+    margin: 0 0 -1px;
+    padding: 8px 14px;
+}
+.cssTabMenuLeft > li:first-child > a {
+    -webkit-border-radius: 6px 6px 0 0;
+    -moz-border-radius:  6px 6px 0 0;
+    border-radius:  6px 6px 0 0;
+}
+.cssTabMenuLeft > li:last-child > a {
+    -webkit-border-radius: 0 0 6px 6px;
+    -moz-border-radius: 0 0 6px 6px;
+    border-radius: 0 0 6px 6px;
+}
+.cssTabMenuLeft .icon-chevron-right, .cssTabMenuLeft .icon-trash{
+    float: right;
+    margin-right: -6px;
+    margin-top: 2px;
+    opacity: 0.25;
+}
+.cssTabMenuLeft a:hover .icon-chevron-right{
+    opacity: 0.5;     
+}
+.cssTabMenuLeft .active .icon-chevron-right, .cssTabMenuLeft .active a:hover .icon-chevron-right{
+    opacity: 1;    
+}
+.cssTabMenuLeft i.icon-trash.text-right:hover{
+    opacity: 1;     
+}
+.cssTabMenuLeft i.icon-trash.text-right{
+    margin-right:0;
+    opacity:0.5;
+}
+.cssTabSection{
+    border-bottom:1px solid #FF9900;
+    margin-bottom:10px;
+}
+.cssTabSection.inactive {
+    color:#ccc;
+}
+h7{
+    color: #FF9900;
+    font-size: 12px;
+    font-style:oblique;
+    padding-bottom:10px;
+}
+.cssTabAccordion li{
+    margin-bottom: 30px;
+}
+.cssTabAccordionHead{
+    background-color: #F5F5F5;
+    background-image: linear-gradient(to top, #f5f5f5, #E6E6E6);
+    background-repeat: repeat-x;
+    border-radius:6px 6px 0 0;
+    color: #333333;
+    font-size: 14px;
+    text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);
+    padding:5px 0;
+    line-height: 30px;
+}
+.cssTabAccordionContent{
+    margin-top:20px;
+}
+.cssTabAccordionSection{
+    border-bottom:1px solid #FF9900;
+    margin:10px 0;
+    padding:0 0 20px 0;
+}
+.cssTabAccordionSectionLast{
+    border-bottom:0px solid #FF9900;
+}
+@media (max-width: 1200px) {
+  .navbar-fixed-top{
+      margin-bottom:0; 
+  }
+}
+
+.cssListColumn4Content{
+    padding:10px;
+    background:#fff;
+    border:1px solid #ccc;
+    border-radius: 6px;
+    margin-bottom:11%;
+}
+.cssUserItemSpan{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 95%;
+}
+.cssListColumn4Content small.span9{
+    line-height: 1px;
+    min-height: 14px;
+}
+img.cssAvatar{
+    width:80px;
+}
+.cssAssignedDomainsList li{
+    line-height: 20px;
+}
+/*-------------------Diffdesign-------------------*/
+.cssColumn2 {
+    border-top: 1px dashed #ccc;
+    margin:20px 0;
+
+}
+.cssColumn2 .cssColumnLeft, .cssColumn2 .cssColumnRight{
+    position: relative;    
+}
+.cssColumnLeft .cssDiffContent, .cssColumnRight .cssDiffContent{
+    min-height:300px;
+}
+.cssColumnLeftForm{
+    border-right:1px dashed #ccc;
+}
+.cssColumn2 input.btn{
+    position: absolute;
+    left:0;
+    bottom:0;
+    margin:10px 0;
+}
+.cssColumnLeftForm{
+    padding-right: 2.5641%;
+}
+.table th, .table td{
+    text-align: center;
+}
+.table th{
+    word-wrap: break-word;
+}
+.table td:first-child{
+    text-align: left;
+}
+/*-------------------Pager-------------------*/
+.cssPager{
+    width:auto;
+    padding:10px 0;
+}
+.pagination{
+    margin:0;
+}
+.pagination ul > li > a, .pagination ul > li > span 
+a{
+    float:none;
+}
+a.cssPagerInfo{
+    border:1px solid #fff;
+    border-radius:4px;
+    margin-right: 10px;
+    line-height:20px;
+    padding: 4px 12px;
+    text-decoration: none;
+}    
+a.cssPagerInfo:hover{
+    border:1px solid #ddd;
+    background-color: rgb(245, 245, 245);
+}
+/*-------------------PopoverTab-------------------*/
+
+.cssTab .popover-content{
+    padding:9px 0;
+    float: left;
+}
+.cssPopoverTabList li a{
+    width:100%;
+    display: inline;
+    text-decoration:none;
+    line-height: 25px;
+}
+.cssPopoverTabList li a:hover{
+    background:#0081c2;
+    color:#fff;
+    text-decoration:none;    
+}
+.cssPopoverTabList li a:hover{
+    color:#fff;
+    text-decoration:none;    
+}
+.cssPopoverTabList li a span{
+    padding:5px 10px;
+}
+.cssSearchHeader a.span12{
+    margin:0 0 4px 0;
+    font-size:16px;
+    text-decoration:underline;
+    min-height: 1px;
+}
+.cssThumbnail{
+    border: 1px solid #DDD8C2;
+    border-radius: 5px 5px 5px 5px;
+    width:7%;
+    margin:4px 8px 0 0;
+}
+.cssThumbnail img{
+    width:100%;
+}
+.cssSearchContent{
+    width:90%;
+}
+.cssSearchListing ul li {
+    height: auto;
+    margin: 0 0 20px 0;
+    padding: 0;
+    vertical-align: middle;
+}
+.cssSearchListing p{
+    margin:0;
+    width:100%;
+}
+/*-------------------Tags for News-------------------*/
+.cssTagsContainer {
+    border-radius:4px;
+    display:inline-block;
+    width:100%;
+}
+.cssTagsContainer .label {
+    float:left;
+    margin:0 4px 3px 0;
+}
+.cssTagsContainer .label .cssTagButtonDelete {
+    cursor:pointer;
+    margin-left:11px;
+    opacity:.6;
+}
+.cssTagsContainer .cssTagsInput {
+    margin:-2px 0 0;
+}
+.cssTagsContainer .cssTagsInput .cssTagName {
+    padding:0 0 0 1px;
+    width:96px;
+}
+.cssTagsContainer .cssTagsInput .cssTagName:focus {
+    box-shadow:none;
+}
+.cssTagsContainer .cssTagsInput .cssTagName,
+.cssTagsContainer .cssTagsInput .cssTagButtonAdd{
+    min-height:20px;
+}
+.cssTagsContainer .cssTagsInput .cssTagButtonAdd {
+    height:20px;
+    padding:0 9px 0 7px;
+}
+/*-------------------Element status-------------------*/
+.cssStatusIconPending{
+    opacity:.4;
+}
+.cssStatusConflicted {
+    background:#ffe0e0;
+}
+.cssStatusConflicted span {
+	color:#c06263;
+}
+.cssStatusConflicted:hover {
+    background:#fecece;
+}
+.cssStatusPending {
+	background:#fff7cd;
+}
+.cssStatusPending:hover {
+	background:#fef4c1;
+}
+.cssStatusDelete {
+    background:#f5f5f5;
+    color:#cbcbcb;
+	cursor:default;
+}

@@ -1,0 +1,45 @@
+<?= $this->render('shared/pager.phtml') ?>
+
+<div class="row-fluid cssSearchListing">
+    <ul class="span6 unstyled">
+        <? foreach($this->html('pager/data') as $entry): ?>
+        <li class="row-fluid">
+            <span class="row-fluid cssSearchHeader">
+                <a class="span12" href="<?= $entry->html('link') ?>">
+                    <?= $entry->html('headline') ?>
+                </a>
+            </span>
+            <div class="row-fluid">
+                <? if($entry->toBool('pictureLeft')): ?>
+                <span class="cssThumbnail pull-left">
+                    <img src="<?= $entry->html('pictureLeft') ?>"/>
+                </span>
+                <? endif; ?>
+                <div class="pull-left cssSearchContent">
+                    <p>
+                        <?= $this->translate($entry->html('teaser'), $entry->html('teaserVars')) ?>
+                    </p>
+                    <small class="muted">
+                        <?= $this->translate('Category') ?>:
+                        <? if($entry->toBool('categoryLink')): ?>
+                        <a href="<?= $entry->html('categoryLink') ?>">
+                            <?= $this->translate($entry->html('category')) ?>
+                        </a>
+                        <? else: ?>
+                        <span>
+                            <?= $this->translate($entry->html('category')) ?>
+                        </span>
+                        <? endif; ?>
+                    </small>
+                </div>
+            </div>
+        </li>
+        <? endforeach; ?>
+    </ul>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('#coreSearchInput').mazeSearch('option', 'page', '<?= $this->html('pager/page') ?>');
+    });
+</script>

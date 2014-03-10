@@ -1,0 +1,81 @@
+<div class="row-fluid cssListing">
+    <ul id="availableModules" class="span12 unstyled">
+        <li class="row-fluid">
+            <div class="offset10 span2 cssAction">
+                <h6>
+                    <?= $this->translate('actions') ?>
+                </h6>
+            </div>
+        </li>
+        <? foreach($this->availableModules as $id => $module): ?>
+        <li class="cssListRow row-fluid jsModuleEntry">
+            <div class="span10">
+                <a class="cssListItem cssEllipsis span12" title="<?= $this->translate('detail') ?>"
+                href="<?= $this->url(array($module->html('name')), 'moduleDetail')?>">
+                    <span class="cssAvatar">
+                        <img src="<?= $this->baseUrl() ?>/img/dummy_module_50.png"
+                             alt="<?= $this->translate('avatar') ?>"/>
+                    </span>
+                    <span>
+                        <?= $module->html('label'); ?>
+                    </span>
+                    <small class="muted">
+                        <span class="badge">
+                            <?= $module->html('repository/version') ?>
+                        </span>
+                    </small>
+                    <small class="cssModuleDescription muted">
+                        <strong><?= $this->translate('description') ?></strong>
+                        <?= $module->html('description') ?>
+                    </small>
+                </a>
+            </div>
+
+            <div class="span2 text-right">
+                <a href="<?= $this->url(array($module->html('name')), 'moduleInstall')?>"
+                   title="<?= $this->translate('install') ?>" class="btn btn-mini btn-info jsInstallModule">
+                    <i class="icon-download-alt icon-white"></i>
+                    <?= $this->translate('install') ?>
+                </a>
+                <img class="jsModuleLoading offset8 pull-left" src="<?= $this->baseUrl() ?>/img/js/loading.gif" style="display:none;">
+            </div>
+
+        </li>
+        <? endforeach; ?>
+    </ul>
+</div>
+<script type="text/javascript">
+    $(document).ready(function(){
+
+        $(".jsInstallModule:hidden").click(function(){
+            var button = $(this);
+            var module = button.closest(".jsModuleEntry");
+
+            if (module.length && this.href){
+                button.hide();
+                module.find(".jsModuleLoading").show();
+
+                $.ajax({
+                    url : button.attr("href"),
+                    data: {format: "json"},
+                    success: function(data){
+                        if (data.result && data.result === true && data.route){
+                            window.location = data.route;
+                        }
+                        button.show();
+                        module.find(".jsModuleLoading").hide();
+                        setMessages(data, true);
+                    },
+                    error: function(){
+                        module.name = $.trim(button.closest(".jsModuleEntry").find("[title='Detail'] span").eq(1).text());
+                        module.find(".jsModuleLoading").hide().andSelf().find(".jsInstallModule").show();
+                        setErrorMessages({0: "<?= $this->translate('Couldn\'t install module %1$s') ?>".replace("%1$s", module.name)}, true);
+                    }
+                });
+            }
+
+            return false;
+        });
+
+    });
+</script>

@@ -1,0 +1,518 @@
+<div id="messageContainer" class="jsMessageContainer">
+    
+     <div id="errorMessageTemplate" class="jsErrorMessage" style="display:none;">
+         <div class="alert alert-error">
+            <strong>
+                <?= $this->translate('Attention! Following errors occurred:') ?>
+            </strong>
+            <ul>
+            </ul>
+        </div>
+     </div>
+     <div id="successMessageTemplate" class="jsSuccessMessage" style="display:none;">
+        <div class="alert alert-success">
+            <strong>
+                <?= $this->translate('Well done') ?>
+            </strong>
+            <ul>
+            </ul>
+        </div>
+     </div>
+     <div id="notificationMessageTemplate" class="jsNotificationMessage" style="display:none;">
+         <div class="alert alert-success">
+            <strong>
+                <?= $this->translate('Notice') ?>
+            </strong>
+            <ul>
+            </ul>
+        </div>
+     </div>
+
+    <div id='templateErrorTooltipHead' style='display:none;'>
+        <strong class="text-error"><?= $this->translate('Attention') ?></strong>
+    </div>
+    <div id='templateErrorTooltip' style='display:none;'>
+        <ul class="text-error"></ul>
+    </div>
+    <div id='templateSuccessTooltipHead' style='display:none;'>
+        <strong class="text-success"><?= $this->translate('Well done') ?></strong>
+    </div>
+    <div id='templateSuccessTooltip' style='display:none;'>
+        <ul class="text-success"></ul>
+    </div>
+    <div id='templateNotificationTooltipHead' style='display:none;'>
+        <strong class="text-info"><?= $this->translate('Notice') ?></strong>
+    </div>
+    <div id='templateNotificationTooltip' style='display:none;'>
+        <ul class="text-info"></ul>
+    </div>
+    <div id='templateComboTooltip' style='display:none;'>
+        <div class="jsComboTooltip">
+            <div class="jsComboEntry errors" style="display:none;">
+                <strong class="jsTrigger"><?= $this->translate("Error") ?> (<span class="jsCount"></span>)</strong>
+                <ul class="jsComboTooltipList text-error"></ul>
+            </div>       
+            <div class="jsComboEntry notifications" style="display:none;">
+                <strong class="jsTrigger"><?= $this->translate("Notices") ?> (<span class="jsCount"></span>)</strong>
+                <ul class="jsComboTooltipList text-info"></ul>
+            </div>
+            <div class="jsComboEntry successes" style="display:none;">
+                <strong class="jsTrigger"><?= $this->translate("Success") ?> (<span class="jsCount"></span>)</strong>
+                <ul class="jsComboTooltipList text-success"></ul>
+            </div>
+        </div>
+    </div>
+    
+    <? if (count($this->errors)): ?>
+    <div class="alert alert-error">
+        <strong>
+            <?= $this->translate('Attention! Following errors occurred:') ?>
+        </strong>
+        
+        <ul>
+        <? foreach ($this->errors as $message): ?>
+            <li>
+                <?= $message ?>
+            </li>
+        <? endforeach; ?>
+        </ul>
+    </div>
+    <? endif; ?>
+    
+    <? if (count($this->successes)): ?>
+    <div class="alert alert-success">
+        <strong>
+            <?= $this->translate('Well done') ?>
+        </strong>
+        <ul>
+        <? foreach ($this->successes as $message): ?>
+            <li>
+                <?= $message ?>
+            </li>
+        <? endforeach; ?>
+        </ul>
+    </div>
+    <? endif; ?>
+    
+    <? if (count($this->notifications)): ?>
+    <div class="alert alert-info">
+        <strong>
+            <?= $this->translate('Notice') ?>
+        </strong>
+        <ul >
+        <? foreach ($this->notifications as $message): ?>
+            <li>
+                <?= $message ?>
+            </li>
+        <? endforeach; ?>
+        </ul>
+    </div>
+    <? endif; ?>
+    
+</div>
+<script type="text/javascript">
+
+    /**
+     * destroy all qmail instances of messages
+     * 
+     * @returns {undefined}
+     */
+    function resetTooltips(){
+        $('.jsTooltip').popover('destroy');
+    }
+    
+    /**
+     * removes all simple message instances
+     * 
+     * @returns {undefined}
+     */
+    function resetMessages() {
+        $(".jsErrorMessage:visible").remove();
+        $(".jsNotificationMessage:visible").remove();
+        $(".jsSuccessMessage:visible").remove();
+    }
+    
+    /**
+     * removes every message instance
+     * 
+     * @returns {undefined}
+     */
+    function resetAllMessages() {
+        resetMessages();
+        resetTooltips();
+    }
+
+    /**
+     * sets simple error messages
+     * 
+     * @param {object|array} messages
+     * @returns {undefined}
+     */
+    function setErrorMessages(messages){
+        var template = $("#errorMessageTemplate").clone(false);
+
+        if ($.isEmptyObject(messages)){
+            return false;
+        }
+        
+        for(var message in messages){
+            $(template).find('ul').append("<li>" + messages[message] + "</li>");
+        }
+        $(".jsMessageContainer").append($(template).show());
+    }
+    
+    /**
+     * sets simple success messages
+     * 
+     * @param {object|array} messages
+     * @returns {undefined}
+     */
+    function setSuccessMessages(messages){
+        var template = $("#successMessageTemplate").clone(false);
+
+        if ($.isEmptyObject(messages)){
+            return false;
+        }
+
+        for(var message in messages){
+            $(template).find('ul').append("<li>" + messages[message] + "</li>");
+        }
+        $(".jsMessageContainer").append($(template).show());
+    }
+    
+    /**
+     * sets simple notification messages
+     * 
+     * @param {object|array} messages
+     * @returns {undefined}
+     */
+    function setNotificationMessages(messages){
+        var template = $("#notificationMessageTemplate").clone(false);
+
+        if ($.isEmptyObject(messages)){
+            return false;
+        }
+
+        for(var message in messages){
+            $(template).find('ul').append("<li>" + messages[message] + "</li>");
+        }
+        $(".jsMessageContainer").append($(template).show());
+    }
+
+    /**
+     * sets all message types identified by key in given context
+     * 
+     * @param {object|array} data
+     * @param {boolean} reset
+     * @returns {undefined}
+     */
+    function setMessages (data, reset) {
+        if (reset === true){
+            resetMessages();
+        }
+        if (!$.isEmptyObject(data.errors)) {
+            setErrorMessages(data.errors);
+        }
+        if (!$.isEmptyObject(data.notifications)) {
+            setNotificationMessages(data.notifications);
+        }
+        if (!$.isEmptyObject(data.successes)) {
+            setSuccessMessages(data.successes);
+        }
+    }
+
+    /**
+     * builds new tooltip for error messages
+     * 
+     * @param {string|object} selector
+     * @param {string} content
+     * @param {boolean} strict
+     * @returns {undefined}
+     */
+    function buildErrorTooltip(selector, content, strict){
+        if(strict === true && typeof elementTarget[0] === "object") {
+           var elementTarget = $(selector).find('input,select,textarea');
+        } else {
+           var elementTarget = selector;
+        }
+        
+        $(elementTarget).addClass('jsTooltip jsTooltipError').popover({
+            html : true,
+            placement: 'bottom',
+            title: $('#templateErrorTooltipHead').html(),
+            content: $(content).html(),
+            trigger: 'manual'
+        }).popover('show');
+        
+        return false;
+    }
+    
+    /**
+     * builds new tooltip for success messages
+     * 
+     * @param {object} selector
+     * @param {string|object} content
+     * @param {boolean} strict
+     * @returns {undefined}
+     */
+    function buildSuccessTooltip(selector, content, strict){
+        if(strict === true && typeof elementTarget[0] === "object") {
+           var elementTarget = $(selector).find('input,select,textarea');
+        } else {
+           var elementTarget = selector;
+        }
+        
+        $(elementTarget).addClass('jsTooltip jsTooltipSuccess').popover({
+            html : true,
+            placement: 'bottom',
+            title: $('#templateSuccessTooltipHead').html(),
+            content: $(content).html(),
+            trigger: 'manual'
+        }).popover('show');
+        
+        return false;
+    }
+    
+    /**
+     * builds new tooltip for notification messages
+     * 
+     * @param {object} selector
+     * @param {string|object} content
+     * @param {boolean} strict
+     * @returns {undefined}
+     */
+    function buildNotificationTooltip(selector, content, strict){
+        if(strict === true && typeof elementTarget[0] === "object") {
+           var elementTarget = $(selector).find('input,select,textarea');
+        } else {
+           var elementTarget = selector;
+        }
+        
+        $(elementTarget).addClass('jsTooltip jsTooltipNotification').popover({
+            html : true,
+            placement: 'bottom',
+            title: $('#templateNotificationTooltipHead').html(),
+            content: $(content).html(),
+            trigger: 'manual'
+        }).popover('show');
+        
+        return false;
+    }
+    
+    /**
+     * builds new tooltip for combo messages
+     * 
+     * @param {object} selector
+     * @param {string|object} content
+     * @param {boolean} strict
+     * @returns {undefined}
+     */
+    function buildComboTooltip(selector, content, strict){
+        if(strict === true && typeof elementTarget[0] === "object") {
+           var elementTarget = $(selector).find('input,select,textarea');
+        } else {
+           var elementTarget = selector;
+        }
+
+        elementTarget.addClass('jsTooltip jsTooltipNotification').popover({
+            html : true,
+            placement: 'bottom',
+            content: content.html(),
+            trigger: 'manual'
+        }).popover('show');
+
+        $(".jsComboTooltip:visible .jsTrigger").click(function(){
+            $(this).next(".jsComboTooltipList").toggle();
+        });
+
+        return false;
+    }
+
+    /**
+     * set Qtip Error messages
+     * 
+     * @param {object|array} jsonObject
+     * @param {string|object} selector
+     * @returns {undefined}
+     */
+    function setErrorTooltip(jsonObject, selector){
+        if (typeof jsonObject !== 'object'){
+            jsonObject = new Array(jsonObject);
+        }
+        $.each(jsonObject, function(element, messages) {
+            var template = $('#templateErrorTooltip').clone(false);
+
+            if (typeof messages === 'string') {
+                messages = new Array(messages);
+            }
+
+            $.each(messages, function(index, value) {
+                $(template).find('ul').append("<li>" + value + "</li>");
+            });
+
+            if (selector === true){
+                buildErrorTooltip($(selector), template, true);
+            }else if (typeof selector === "undefined" && typeof $('#' + element)[0] === "object"){
+                selector = '#' + element;
+                if ($("#colorbox:visible").length){
+                    selector = "#colorbox " +selector;
+                }
+                buildErrorTooltip($(selector), template);
+            }else{
+                buildErrorTooltip($(selector), template, selector);
+            }
+        });
+    };
+    
+    /**
+     * set Qtip Success messages
+     * 
+     * @param {object|array} jsonObject
+     * @param {string|object} selector
+     * @returns {undefined}
+     */
+    function setSuccessTooltip(jsonObject, selector){
+        if (typeof jsonObject !== 'object'){
+            jsonObject = new Array(jsonObject);
+        }
+        var template = $('#templateSuccessTooltip').clone(false);
+        $.each(jsonObject, function(element, messages) {
+
+            if (typeof messages === 'string') {
+                messages = new Array(messages);
+            }
+
+            $.each(messages, function(index, value) {
+                $(template).find('ul').append("<li>" + value + "</li>");
+            });
+
+            if (selector === true){
+                buildSuccessTooltip($(selector), template, true);
+            }else if (typeof selector === "undefined" && typeof $('#' + element)[0] === "object"){
+                selector = '#' + element;
+                if ($("#colorbox:visible").length){
+                    selector = "#colorbox " +selector;
+                }
+                buildSuccessTooltip($(selector), template);
+            }else{
+                buildSuccessTooltip($(selector), template, selector);
+            }
+        });
+    };
+    
+    /**
+     * set Qtip Notification messages
+     * 
+     * @param {object|array} jsonObject
+     * @param {string|object} selector
+     * @returns {undefined}
+     */
+    function setNotificationTooltip(jsonObject, selector){
+        if (typeof jsonObject !== 'object'){
+            jsonObject = new Array(jsonObject);
+        }
+        var template = $('#templateNotificationTooltip').clone(false);
+        $.each(jsonObject, function(element, messages) {
+
+            if (typeof messages === 'string') {
+                messages = new Array(messages);
+            }
+
+            $.each(messages, function(index, value) {
+                $(template).find('ul').append("<li>" + value + "</li>");
+            });
+
+            if (selector === true){
+                buildNotificationTooltip($(selector), template, true);
+            }else if (typeof selector === "undefined" && typeof $('#' + element)[0] === "object"){
+                selector = '#' + element;
+                if ($("#colorbox:visible").length){
+                    selector = "#colorbox " +selector;
+                }
+                buildNotificationTooltip($(selector), template);
+            }else{
+                buildNotificationTooltip($(selector), template, selector);
+            }
+        });
+    };
+
+    /**
+     * set Default Qtip with multiple types of messages
+     * 
+     * @param {object} messages
+     * @param {string|object} selector
+     * @returns {void}
+     */
+    function setComboTooltip(messages, selector){
+        var template = $("#templateComboTooltip").clone(false);
+        var makeComboListing = function(message){
+            var countListing = 0;
+            for (type in message){
+                child = template.find(".jsComboEntry." +type);
+                child.count = 0;
+                
+                if (typeof message[type] === "string"){
+                     message[type] = new Array(message[type]);
+                }
+
+                if (child.length){
+                    for (entry in message[type]){
+                         child.find(".jsComboTooltipList").append("<li>"+ message[type][entry] +"</li>");
+                         child.count++;countListing++;
+                    }
+                    if (child.count >= 1){
+                        child.show().find(".jsCount").html(child.count);
+                        if (child.count > 3){
+                            child.find(".jsComboTooltipList").hide();
+                        }
+                    }
+                }
+            }
+
+            return countListing;
+        };
+
+        if (makeComboListing(messages) >= 1){
+            buildComboTooltip($(selector), template, selector);
+        }
+    };
+
+    /**
+     * sets all message types identified by key in given context
+     * 
+     * @param {string|object} messages
+     * @param {string|object} selector
+     * @return {void}
+     */
+    function setTooltips(messages, selector){
+        if ($(messages.formErrors).length){
+            if (!$(messages.errors).length){
+                messages.errors = [];
+            }
+
+            if (typeof selector === "object" || typeof selector === "string"){
+                $.each(messages.formErrors, function(name, element){
+                    $.each(element, function(key, message){
+                        messages.errors.push(message)
+                    });
+                });
+            }else {
+                messages.errors = $.merge(messages.formErrors, messages.errors);
+            }
+            
+        }
+
+        resetTooltips();
+
+        if ($(messages.errors).length && !$(messages.successes).length && !$(messages.notifications).length){
+            return setErrorTooltip(messages.errors, selector);
+        }else if ($(messages.successes).length && !$(messages.errors).length && !$(messages.notifications).length){
+            return setSuccessTooltip(messages.successes, selector);
+        }else if ($(messages.notifications).length && !$(messages.successes).length && !$(messages.errors).length){
+            return setNotificationTooltip(messages.notifications, selector);
+        }
+
+        setComboTooltip(messages, selector);
+    };
+    
+</script>

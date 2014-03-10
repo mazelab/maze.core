@@ -1,0 +1,143 @@
+<div class="row-fluid">
+    <div class="span12">
+        <div class="row-fluid text-left cssBoxCenter">
+            <a href="<?= $this->url(array($this->html("domain/name")), "deleteDomain") ?>"
+               class="jsIconDeleteTxt btn" title="<?= $this->translate("delete domain"); ?>">
+                <i class="icon-trash"></i> <?= $this->translate("delete"); ?>
+            </a>
+        </div>
+        <div class="row-fluid cssBoxCenter">
+            <div class="span10">
+                <div class="row-fluid">
+                    <div class="cssUserImage span2">
+                        <img name="avatar" class="img-polaroid"
+                             src="<?= $this->baseUrl() ?>/img/dummy_domain_200.png"
+                             alt="<?= $this->translate('avatar') ?>">
+                    </div>
+
+                    <div class="span9 offset1">
+                        <form action="<?= $this->url(array(), 'domaindetail') ?>" method="post">
+                            <dl class="row-fluid cssBigItem">
+                                <span class="span9">
+                                    <?= $this->form->name ?>
+                                </span>
+                            </dl>
+                            <dl class="row-fluid">
+                                <dt class="span3">
+                                <label>
+                                    <?= $this->translate('Client') ?>
+                                </label>
+                                </dt>
+                                <dd class="span6">
+                                    <a href="<?= $this->url(array($this->html('owner/_id'), $this->html('owner/label')), 'clientDetail') ?>">
+                                        <?= $this->html('owner/label') ?>
+                                    </a>
+                                </dd>
+                            </dl>
+                            <dl class="row-fluid">
+                                <dt class="span3">
+                                <label>
+                                    <?= $this->translate('procurement place') ?>
+                                </label>
+                                </dt>
+                                <dd class="span6">
+                                    <?= $this->form->procurement ?>
+                                </dd>
+                            </dl>
+                        </form>
+                    </div>
+                </div>
+                <?= $this->render('shared/additionalFields.phtml'); ?>
+            </div>
+        </div>
+        <div class="row-fluid cssBoxCenter">
+            <div class="span12">
+                <ul class="nav nav-tabs unstyled" id="tabsDomain">
+                    <li id="tabTitleDomainServices" class="active">
+                        <a data-toggle="tab" href="#tabDomainServices">
+                            <?= $this->translate("Services"); ?> (<span class="jsTabServiceCount"><?= count($this->html('services')) ?></span>)
+                        </a>
+                    </li>
+                    <li id="tabTitleDomainClients">
+                        <a data-toggle="tab" href="#tabDomainNodes">
+                            <?= $this->translate("Nodes"); ?> (<span class="jsTabNodeCount"><?= count($this->nodes) ?></span>)
+                        </a>
+                    </li>
+                    <li id="tabTitleDomainLogs">
+                        <a data-toggle="tab" href="#tabDomainLogs">
+                            <?= $this->translate("log"); ?>
+                        </a>
+                    </li>
+                </ul>
+
+                <div class="tab-content cssTabContentOuter row-fluid">
+                    <div class="active tab-pane" id="tabDomainServices">
+                        <?= $this->render('domains/tabs/services.phtml'); ?>
+                    </div>
+                    <div class="tab-pane cssTabContentAll" id="tabDomainNodes">
+                        <?= $this->render('domains/tabs/nodes.phtml'); ?>
+                    </div>
+                    <div class="tab-pane cssTabContentAll" id="tabDomainLogs">
+                        <?= $this->render('domains/tabs/logs.phtml'); ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="jsConfirmDeleteDoamin" class="modal hide fade">
+    <div class="modal-body">
+        <p><?= $this->translate('Shall the domain really be deleted?') ?></p>
+    </div>
+    <div class="modal-footer">
+        <a class="btn jsButtonCancel" data-dismiss="modal"><?= $this->translate('cancel') ?></a>
+        <a class="btn btn-primary jsButtonDelete" data-dismiss="modal"><?= $this->translate('ok') ?></a>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function() {
+
+        $('#jsCancelButton').click(function() {
+            location.href = '<?= $this->url(array(), 'domains'); ?>';
+        });
+        
+        $('.jsEditable').mazeEditable('<?= $this->url(array(), 'domaindetail') ?>?format=json', mazeEditableOptions);
+
+        $(".jsIconDeleteTxt").click(function(){
+            var self = $(this);
+            var dialog = $("#jsConfirmDeleteDoamin").modal({backdrop:"static", show:true});
+            self.attr("disabled", true);
+            dialog.find(".jsButtonDelete").unbind("click").click(function(){
+                $.ajax({
+                    url: self.attr("href"),
+                    data: {format: "json"},
+                    success:function(data){
+                        if (data.status === true){
+                            location.href = "<?= $this->url(array(), "domains") ?>";
+                        }
+                        setMessages(data);
+                    },
+                    complete:function(){
+                        self.attr("disabled", false);
+                    }
+                });
+                dialog.modal("hide");
+            }).andSelf().find(".jsButtonCancel").click(function(){
+                self.attr("disabled", false);
+                dialog.modal("hide");
+            });
+            return false;
+        });
+
+        mazeEditableFields("<?= $this->url(array($this->html('domain/name')), 'addAdditionalFieldDomain') ?>?format=json","<?= $this->url(array(), 'domaindetail') ?>?format=json");
+
+<? foreach ($this->html("services") as $service): ?>
+    <? if ($service->html("route/config/domain") != ""): ?>
+        $.post("<?= $this->url(array($this->html("domainId")), (string) $service->html("route/config/domain")); ?>", {format: "html"}, function(data){
+            $(data).appendTo(".jsService");
+        });
+    <? endif; ?>
+<? endforeach; ?>
+
+    });
+</script>
