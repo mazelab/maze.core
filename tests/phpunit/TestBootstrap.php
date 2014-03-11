@@ -14,7 +14,7 @@ defined('APPLICATION_TEST_PATH')
     || define('APPLICATION_TEST_PATH', realpath(dirname(__FILE__)));
 
 /** Zend_Application */
-require_once APPLICATION_TEST_PATH . '../../src/vendor/autoload.php';
+require_once APPLICATION_TEST_PATH . '/../../src/vendor/autoload.php';
 
 set_include_path(implode(PATH_SEPARATOR, array(
     APPLICATION_TEST_PATH . '/library',
