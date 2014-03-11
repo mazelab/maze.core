@@ -1,4 +1,6 @@
-Maze.core
+# Maze.core
+
+[![Build Status](https://travis-ci.org/mazelab/maze.core.png?branch=master)](https://travis-ci.org/mazelab/maze.core)
 
 INSTALLATION
 ------------
