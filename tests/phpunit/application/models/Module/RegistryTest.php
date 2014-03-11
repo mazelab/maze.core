@@ -32,11 +32,6 @@ class Core_Model_Module_RegistryTest extends PHPUnit_Framework_TestCase
      */
     protected $_samplePath4 = '/samples/modules/configs/sample4.ini';
     
-    /**
-     * @var string
-     */
-    protected $_samplePath5 = '/samples/modules/configs/sample5.ini';
-    
     public function setUp() {
         parent::setUp();
 
@@ -78,14 +73,6 @@ class Core_Model_Module_RegistryTest extends PHPUnit_Framework_TestCase
     public function testRegisterInvalidConfigPathShouldThrowException()
     {
         Core_Model_DiFactory::getModuleRegistry()->registerModule('notExistingPath');
-    }
-    
-    /**
-     * @expectedException Zend_Config_Exception
-     */
-    public function testRegisterInvalidConfigPathFormatShouldThrowException()
-    {
-        Core_Model_DiFactory::getModuleRegistry()->registerModule(APPLICATION_TEST_PATH . $this->_samplePath5);
     }
     
     /**

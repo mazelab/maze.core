@@ -477,14 +477,6 @@ class MazeLib_BeanCoreTest extends PHPUnit_Framework_TestCase
         $this->bean->setBean($data);
     }
     
-    /**
-     * @expectedException PHPUnit_Framework_Error
-     */
-    public function testSetBeanWithStringShouldThrowException()
-    {
-        $this->bean->setBean('justAString');
-    }
-    
     public function testGetPropertyWithPathIntoMazeValueShouldReturnThatValue()
     {
         $data = array(
