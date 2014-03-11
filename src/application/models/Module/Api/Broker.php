@@ -10,7 +10,7 @@
  *
  * @license http://opensource.org/licenses/MIT MIT
  */
-class Core_Model_Module_Api_Broker extends Core_Model_Module_Api_Abstract
+class Core_Model_Module_Api_Broker
 {
 
     CONST EXCEPTION_MODULE_IMPLEMENTATION = 'Module %1$s has a invalid api implementation in class %2$s';
