@@ -280,6 +280,12 @@
         'Couldn\'t deinstall module %1$s' => 'Couldn\'t deinstall module %1$s',
         'Couldn\'t install module %1$s' => 'Couldn\'t install module %1$s',
         'Couldn\'t update module %1$s' => 'Couldn\'t update module %1$s',
+        
+        'Update' => 'Update',
+        'Update (%1$s)' => 'Update (%1$s)',
+        'Request failed' => 'Request failed',
+        'Invalid module declaration' => 'Invalid module declaration',
+        'No target provided for module sync' => 'No target provided for module sync',
 
         'Invalid context for domain import' => 'Invalid context for domain import',
 

@@ -281,6 +281,12 @@
         'Couldn\'t install module %1$s' => 'Modul %1$s konnte nicht installiert werden',
         'Couldn\'t update module %1$s' => 'Modul %1$s konnte nicht aktualisiert werden',
 
+        'Update' => 'Aktualisierung',
+        'Update (%1$s)' => 'Aktualisierung (%1$s)',
+        'Request failed' => 'Anfrage fehlgeschlagen',
+        'Invalid module declaration' => 'Ungültige Modul Deklaration',
+        'No target provided for module sync' => 'Kein Ziel für die Modul Synchronisierung angegeben',
+        
         'Invalid context for domain import' => 'Kontext für Domain import ungültig',
 
         'Your search did not return any results' => 'Ihre Suche hat keine passenden Treffer erzielt.',

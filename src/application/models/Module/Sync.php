@@ -14,6 +14,16 @@ class Core_Model_Module_Sync
 {
 
     /**
+     * error message if module declaration is invalid
+     */
+    CONST ERROR_INVALID_DECLARATION = 'Invalid module declaration';
+
+    /**
+     * error message if no sync target is provided
+     */
+    CONST ERROR_NO_TARGET = 'No target provided for module sync';
+
+    /**
      * file path that contains the module data
      * 
      * @var string
@@ -42,6 +52,7 @@ class Core_Model_Module_Sync
         try{
             $modules = Zend_Json::decode($modulesJson);
         } catch (Exception $e) {
+            Core_Model_DiFactory::getMessageManager()->addError(self::ERROR_INVALID_DECLARATION);
             return array();
         }
         
@@ -61,12 +72,12 @@ class Core_Model_Module_Sync
     {
         $json = '';
         
-        if(Zend_Uri::check($this->getModuleSyncUrl())) {
-            $zendHttp = new Zend_Http_Client($this->getModuleSyncUrl());
+        if(Zend_Uri::check($this->getModuleSyncTarget())) {
+            $zendHttp = new Zend_Http_Client($this->getModuleSyncTarget());
             $response = $zendHttp->request();
             $json = $response->getBody();
-        } elseif (file_exists($this->getModuleSyncUrl())) {
-            $configJson = new Zend_Config_Json($this->getModuleSyncUrl());
+        } elseif (file_exists($this->getModuleSyncTarget())) {
+            $configJson = new Zend_Config_Json($this->getModuleSyncTarget());
             $jsonWriter = new Zend_Config_Writer_Json();
             
             $jsonWriter->setConfig($configJson);
@@ -105,7 +116,7 @@ class Core_Model_Module_Sync
      * 
      * @return string
      */
-    public function getModuleSyncUrl()
+    public function getModuleSyncTarget()
     {
         return $this->_moduleSyncUrl;
     }
@@ -128,14 +139,17 @@ class Core_Model_Module_Sync
      */
     public function sync()
     {
-        $modules = $this->_getModuleUpdates();
-        if(empty($modules) || !$this->getModuleSyncUrl()) {
+        if(!$this->getModuleSyncTarget()) {
+            Core_Model_DiFactory::getMessageManager()->addError(self::ERROR_NO_TARGET);
             return false;
         }
-        
+        if(!($modules = $this->_getModuleUpdates())) {
+            return false;
+        }
+
         $moduleManager = Core_Model_DiFactory::getModuleManager();
         foreach($modules as $moduleData) {
-            if(!key_exists('name', $moduleData)) {
+            if(!array_key_exists('name', $moduleData)) {
                 continue;
             }
             
@@ -145,7 +159,9 @@ class Core_Model_Module_Sync
                 $module->syncModuleUpdate($moduleData);
             }
         }
-        
+
+        Core_Model_DiFactory::getConfig()->setData(array('lastModuleSync' => time()))->save();
+
         return true;
     }
     

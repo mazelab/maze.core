@@ -46,6 +46,7 @@ class ModulesController extends Zend_Controller_Action
                     ->addActionContext("install", "json")
                     ->addActionContext("deinstall", "json")
                     ->addActionContext("update", "json")
+                    ->addActionContext("sync", "json")
                     ->initContext();
 
         // set view messages from MessageManager
@@ -59,10 +60,12 @@ class ModulesController extends Zend_Controller_Action
     public function indexAction()
     {
         $moduleManager = Core_Model_DiFactory::getModuleManager();
-        
+
         $this->view->updateableModules = $moduleManager->getUpdateableModules();
         $this->view->availableModules = $moduleManager->getAvailableModules();
         $this->view->installedModules = $moduleManager->getInstalledModules();
+
+        $this->view->lastModuleSync = Core_Model_DiFactory::getConfig()->getLastModuleSync(true);
     }
     
     public function installAction()
@@ -159,6 +162,13 @@ class ModulesController extends Zend_Controller_Action
                 $this->view->formErrors = $form->getMessages(null, true);
             }
         }
+    }
+
+    public function syncAction()
+    {
+        $moduleSync = Core_Model_DiFactory::getModuleSync();
+
+        $this->view->result = $moduleSync->sync();
     }
 
     public function updateadditionalfieldAction()

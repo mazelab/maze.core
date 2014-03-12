@@ -9,24 +9,21 @@
 defined('APPLICATION_PATH')
     || define('APPLICATION_PATH', realpath(dirname(__FILE__) . '/../../application'));
 
-$runtimeContex = isset($argv[1])? $argv[1] : 'production';
+$runtimeContext = isset($argv[1])? $argv[1] : 'production';
 
 /** Zend_Application */
 require_once APPLICATION_PATH . '/../vendor/autoload.php';
 
 // Create application, bootstrap, and run
 $application = new Zend_Application(
-    $runtimeContex,
+    $runtimeContext,
     APPLICATION_PATH . '/configs/application.ini'
 );
 $application->bootstrap();
 
-$mazeConfig = Core_Model_DiFactory::getConfig();
-$pluginSync = Core_Model_DiFactory::getModuleSync();
 $logger = Core_Model_DiFactory::getLogger();
 
-$result = $pluginSync->sync();
-if($result) {
+if(Core_Model_DiFactory::getModuleSync()->sync()) {
     echo "plugin update successful";
     $logger->setMessage('maze module update successful!');
 } else {
@@ -35,7 +32,3 @@ if($result) {
 }
 
 $logger->setType(Core_Model_Logger::TYPE_NOTIFICATION)->save();
-
-if($result) {
-    $mazeConfig->setData(array('lastModuleSync' => time()))->save();
-}

@@ -56,6 +56,26 @@ class Core_Model_ValueObject_Config extends Core_Model_ValueObject
     }
 
     /**
+     * gets time of the last module sync
+     *
+     * @param boolean $humanReadable return date formatted in human readable form
+     * @return null|string
+     */
+    public function getLastModuleSync($humanReadable = false)
+    {
+        if(!($lastModuleSync = $this->getData('lastModuleSync'))) {
+            return null;
+        }
+
+        if($humanReadable) {
+            $date = new Zend_Date($lastModuleSync);
+            return $date->toString();
+        }
+
+        return $lastModuleSync;
+    }
+
+    /**
      * loads and sets returned context from data backend into the valueBean 
      * 
      * @return boolean

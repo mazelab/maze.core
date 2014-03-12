@@ -1,5 +1,17 @@
 <div class="row-fluid">
     <div class="span12">
+        <div class="row-fluid text-left cssBoxCenter">
+            <button id="buttonListUpdate" title="<?= $this->translate('Update') ?>" class="btn">
+                <span>
+                    <? if($this->toBool('lastModuleSync')): ?>
+                        <?= $this->translate('Update (%1$s)', $this->html('lastModuleSync')) ?>
+                    <? else: ?>
+                        <?= $this->translate('Update') ?>
+                    <? endif; ?>
+                </span>
+            </button>
+        </div>
+
         <ul class="nav nav-tabs" id="jsTabsModules">
             <li class="active">
                 <a href="#jsInstalledModule" data-toggle="tab"><?= $this->translate("Installed"); ?> (<?= count($this->installedModules) ?>)</a>
@@ -9,9 +21,6 @@
             </li>
             <li>
                 <a href="#jsUpdateModule" data-toggle="tab"><?= $this->translate("Latest Updates"); ?> (<?= count($this->updateableModules) ?>)</a>
-            </li>
-            <li>
-                <a href="#jsUploadModule" data-toggle="tab"><?= $this->translate("Module Upload"); ?></a>
             </li>
         </ul>
 
@@ -27,11 +36,6 @@
             <div class="tab-pane" id="jsUpdateModule">
                 <?= $this->render('modules/tabs/updateableModules.phtml'); ?>
             </div>
-            <div class="tab-pane" id="jsUploadModule">
-                <div class="span12">
-                    @TODO Formular Upload
-                </div>
-            </div>
         </div>
     </div>
 </div>
@@ -39,5 +43,32 @@
 <script type="text/javascript">
     $(document).ready(function() {
         $("#jsTabsModules a").filter("[href='"+ location.hash +"']").click();
+
+        $('#buttonListUpdate').click(function() {
+            resetMessages();
+            self = $(this);
+            if (self.prop("disabled")){
+                return false;
+            }
+
+            self.prop("disabled", true);
+            $.ajax('<?= $this->url(array(), 'moduleSync') ?>?format=json', {
+                type: 'POST',
+                success: function(data) {
+                    if(data.result === true) {
+                        location.href = '<?= $this->url(array(), 'modules'); ?>';
+                    }
+                    setMessages(data);
+                },
+                error: function() {
+                    setErrorMessages(['<?= $this->translate('Request failed') ?>']);
+                },
+                complete: function() {
+                    self.prop("disabled", false);
+                }
+            });
+
+            return false;
+        });
     });
 </script>
