@@ -173,6 +173,14 @@
         
         var methods = {
             /**
+             * load current page
+             */
+            current: function() {
+                return this.each(function() {
+                    load(this);
+                });
+            },
+            /**
              * load first page
              */
             first: function() {
