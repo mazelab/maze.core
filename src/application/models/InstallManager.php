@@ -163,14 +163,16 @@ class Core_Model_InstallManager
     /**
      * returns a mapped Zend_Config Object of the server config
      * 
-     * @var Zend_Config 
+     * @return Zend_Config
      */
     protected function _getServerConfig()
     {
         $serverConfigData = array(
             'mongodb' => array(
                 'database' => $this->getConfig()->dbName,
-                'collectionPrefix' => $this->getConfig()->dbCollectionPrefix
+                'collectionPrefix' => $this->getConfig()->dbCollectionPrefix,
+                'host' => $this->getConfig()->host,
+                'port' => $this->getConfig()->port
             ),
             'security' => array(
                 'hash' => $this->getConfig()->securekey

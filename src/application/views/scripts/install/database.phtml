@@ -25,6 +25,15 @@
                 <dl class="grid_16">
                     <?= $this->form->dbCollectionPrefix ?>
                 </dl>
+                <dl class="grid_16">
+                    <dt id="connection-label">
+                        <label><?= $this->form->host->getLabel(); ?></label>
+                    </dt>
+                    <dd id="connection-element">
+                        <?= $this->form->host->renderViewHelper(); ?>
+                        <?= $this->form->port->renderViewHelper(); ?>
+                    </dd>
+                </dl>
                 <div class="grid_16 cssButtonSpace cssButtonNew">
                     <input class="cssButton jsButton" type="submit" value="<?= $this->translate('more') ?>" />
                 </div>
