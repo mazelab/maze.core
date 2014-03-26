@@ -124,10 +124,10 @@ class MongoDb_Mongo
     public function check()
     {
         if(!$this->getDbName())
-            return false;        
+            return false;
 
         try {
-            new Mongo;
+            new Mongo("mongodb://{$this->_host}:{$this->_port}", array("timeout" => 1000));
         } catch (Exception $exception) {
             return false;
         }

@@ -62,9 +62,15 @@ class InstallController extends Zend_Controller_Action
         if ($this->_request->getPost()) {
             $form->setDefaults($this->_request->getPost());
             if ($installManager->validateAndAddToConfig($form)) {
-                $this->_redirector->gotoRoute(array(), "installAdminuser");
-                $this->_redirector->redirect();
-                return;
+
+                if (!$installManager->isDbConnection()) {
+                    Core_Model_DiFactory::getMessageManager()
+                        ->addError("Error establishing a database connection");
+                } else {
+                    $this->_redirector->gotoRoute(array(), "installAdminuser");
+                    $this->_redirector->redirect();
+                    return;
+                }
             }
         }
         

@@ -280,6 +280,18 @@ class Core_Model_InstallManager
     }
 
     /**
+     * returns db connection status
+     *
+     * @return boolean
+     */
+    public function isDbConnection()
+    {
+        Core_Model_DiFactory::reset();
+
+        return Core_Model_Dataprovider_DiFactory::getConnection()->status($this->_getServerConfig());
+    }
+
+    /**
      * checks that mmaze was correctly installed
      * -> config.ini
      * -> admin user
@@ -380,7 +392,7 @@ class Core_Model_InstallManager
     {
         $this->_config = $config;
     }
-    
+
     /**
      * validates given Zend_Form and deploys config data to session and internal
      * config object

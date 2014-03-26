@@ -534,4 +534,5 @@
         'Admin already exists in the database!' => 'Admin already exists in the database!',
         'The installation wizard detected that already a Maze.dashboard installation has been performed on the given database' => 'The installation wizard detected that already a Maze.dashboard installation has been performed on the given database',
         'no write permissions in %1$s' => 'no write permissions in %1$s',
+        'Error establishing a database connection' => 'Error establishing a database connection'
     );
