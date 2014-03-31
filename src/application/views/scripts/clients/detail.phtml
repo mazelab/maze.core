@@ -259,11 +259,11 @@
             type: this.method,
             success: function(data) {
                 if (typeof data === "string") data = eval('(' + data + ')');
-                if (!$.isEmptyObject(data.client) && data.client.avatar){
+                if (!$.isEmptyObject(data.formErrors) && !$.isEmptyObject(data.formErrors.avatar)){
+                    setErrorTooltip(data.formErrors.avatar, "#jsAvatarUpload");
+                } else if (!$.isEmptyObject(data.client) && data.client.avatar){
                     image = '<?= $this->url(array($this->clientId), "avatar"); ?>';
                     $("#jsAvatarUpload img[name=avatar]").attr('src', image +'?'+new Date().getTime());
-                }else if (!$.isEmptyObject(data.formErrors) && !$.isEmptyObject(data.formErrors.avatar)){
-                    setErrorTooltip(data.formErrors.avatar, "#avatarChange");
                 }
                 
                 setMessages(data);

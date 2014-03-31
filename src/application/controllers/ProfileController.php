@@ -160,7 +160,7 @@ class ProfileController extends Zend_Controller_Action
             $this->view->formErrors = $form->getMessages();
         }
 
-        if ($this->getParam("avatar")){
+        if ($this->getParam("avatar") && !key_exists("avatar", $form->getMessages())){
             $this->_helper->json->sendJson(array("client" => $clientData));
         }
         

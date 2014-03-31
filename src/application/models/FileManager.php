@@ -250,7 +250,7 @@ class Core_Model_FileManager
 
         $functionCreate = "imagecreatefrom". $extension;
         $functionOutput = "image". $extension;
-
+        
         if (!function_exists($functionCreate) || !function_exists($functionOutput) || !extension_loaded('gd')) {
             return false;
         }
@@ -265,15 +265,7 @@ class Core_Model_FileManager
         $source = call_user_func($functionCreate, $file);
 
         // set transparency
-        if (imagecolortransparent($source) != (-1)) {
-            $transparentColor = imagecolorsforindex($source, imagecolortransparent($source));
-        }
-        
-        if (!empty($transparentColor)) {
-            $transparent = imagecolorallocate($image, $transparentColor["red"], $transparentColor["green"], $transparentColor["blue"]);
-            imagefill($image, 0, 0, imagecolortransparent($image, $transparent));
-        }
-        
+        imagefill($image, 0, 0, imagecolortransparent($image, imagecolorallocate($image, 0, 0, 0)));        
         imagealphablending($image, false);
         imagesavealpha($image,true);
         

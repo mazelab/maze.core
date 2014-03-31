@@ -49,7 +49,7 @@ class Core_Form_User extends Core_Form_AdditionalInfo
         ));
         $this->addElement('file', 'avatar', array(
             'class' => 'jsUserAvatar',
-            'style' => 'display:none;',
+            'style' => 'visibility:hidden;',
             'validators' => array(
                 array('Size', false, '500kb'),
                 array('Count', false, 1),

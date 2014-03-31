@@ -74,7 +74,7 @@ $(document).ready(function(){
                 image = '<?= $this->url(array($this->html("admin/_id")), "avatar"); ?>';
                 $("#jsMyAvatarUpload img[name=avatar], #jsAvatar").attr('src', image +'?'+new Date().getTime());
             }else if (!$.isEmptyObject(data.formErrors) && !$.isEmptyObject(data.formErrors.avatar)){
-                setErrorTooltip(data.formErrors.avatar, "#jsMyProfileForm .cssUserImage");
+                setErrorTooltip(data.formErrors.avatar, "#jsMyAvatarUpload");
             }
         },
         beforeSubmit: function(arr, $form, options) {

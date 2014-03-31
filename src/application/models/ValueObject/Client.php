@@ -369,6 +369,10 @@ class Core_Model_ValueObject_Client
         $destination = APPLICATION_PATH . "/.." . self::UPLOADS_DIR;
         $formatImage = "%s.%s";
         $upload = false;
+        
+        if (!is_dir($destination) && !$fileManager->createFolder($destination, true)) {
+            return null;
+        }
 
         if (preg_match("/.+base64\,/", $filename) !== 0) {
             $upload = sprintf($formatImage, $this->getId(), "gif");

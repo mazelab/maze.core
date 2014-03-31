@@ -104,11 +104,11 @@
         type: "post",
         success: function(data) {
             if (typeof data === "string")  data = eval('(' + data + ')');
-            if (!$.isEmptyObject(data.client) && data.client.avatar){
+            if (!$.isEmptyObject(data.formErrors) && !$.isEmptyObject(data.formErrors.avatar)){
+                setErrorTooltip(data.formErrors.avatar, "#jsMyAvatarUpload .cssUserImage");
+            } else if (!$.isEmptyObject(data.client) && data.client.avatar){
                 image = '<?= $this->url(array($this->html("client/_id")), "avatar"); ?>';
                 $("#jsMyAvatarUpload img[name=avatar], #jsAvatar").attr('src', image +'?'+new Date().getTime());
-            }else if (!$.isEmptyObject(data.formErrors) && !$.isEmptyObject(data.formErrors.avatar)){
-                setErrorTooltip(data.formErrors.avatar, "#jsMyProfileForm .cssUserImage");
             }
         },
         beforeSubmit: function(arr, $form, options) {
