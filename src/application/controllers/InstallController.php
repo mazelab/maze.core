@@ -129,7 +129,7 @@ class InstallController extends Zend_Controller_Action
             "password"      => $identity["password"],
             "passwordRepeat"=> $identity["password"],
             "company"       => $mazeconfig->getData("company"),
-            "language"      => Zend_Locale::findLocale()
+            "language"      => Zend_Locale::getLocaleToTerritory(Zend_Locale::findLocale())
         ), $installManager->getConfig()->toArray());
 
         if ($installManager->validateAndAddToConfig($formConfig->setDefaults($reconfigure))){

@@ -68,6 +68,23 @@ class Core_Form_System extends Zend_Form
             )
         ));
 
+        $database->addElement("text", "host", array(
+            "label" => "Server",
+            "validators" => array(
+                new Zend_Validate_Hostname(
+                    array(
+                        "allow" => Zend_Validate_Hostname::ALLOW_ALL
+                    )
+                )
+            )
+        ));
+
+        $database->addElement("text", "port", array(
+            "validators" => array(
+                array("Digits")
+            )
+        ));
+
         $this->addSubForm($database, "dbSetting");
 
         return $this;
@@ -193,6 +210,12 @@ class Core_Form_System extends Zend_Form
             }
             if (key_exists("collectionPrefix", $defaults["mongodb"])){
                 $defaults["dbSetting"]["dbCollectionPrefix"] = $defaults["mongodb"]["collectionPrefix"];
+            }
+            if (key_exists("host", $defaults["mongodb"])){
+                $defaults["dbSetting"]["host"] = $defaults["mongodb"]["host"];
+            }
+            if (key_exists("port", $defaults["mongodb"])){
+                $defaults["dbSetting"]["port"] = $defaults["mongodb"]["port"];
             }
         }
 
