@@ -1463,3 +1463,8 @@ li.active.cssStepComplete{
     color:#848181 !important;
 	cursor:default;
 }
+/*------------------------News------------------------*/
+.cssClientNews {
+    cursor:default;
+    white-space:pre;
+}
