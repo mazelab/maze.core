@@ -222,11 +222,12 @@ class Core_Model_NewsManagerTest extends PHPUnit_Framework_TestCase
 
     public function testCreateMessageWithContextIdShouldIgnoresThisContext()
     {
-        $data = array(
+        $dataset = array(
             "_id"           => "4456781",
             "title"         => "createdMessage",
             "content"       => "...",
             "teaser"        => "...",
+            'onlineSince'   => time(),
             "status"        => "public",
             "tags"          => array(
                 "13bde19ebbf62413cb61ca5b71d1f39c" => "new one",
@@ -234,11 +235,17 @@ class Core_Model_NewsManagerTest extends PHPUnit_Framework_TestCase
             )
         );
 
-        $messageId = $this->_newsManager->createMessage($data);
-        $data["_id"] = $messageId;
+        $created = $this->_newsManager->createMessage($dataset);
+        $message = $this->_newsManager->getMessage($created);
+        $dataset["_id"] = $created;
 
-        $this->assertNotNull($messageId);
-        $this->assertEquals($this->_newsManager->getMessage($messageId), $data);
+        /**
+         * delete the converted readable data
+         */
+        unset($message["onlineSinceReadable"]);
+
+        $this->assertNotNull($created);
+        $this->assertEquals($message, $dataset);
     }
 
     public function testGetAllMessagesShouldReturnManyArrays()
