@@ -163,14 +163,16 @@ class Core_Model_InstallManager
     /**
      * returns a mapped Zend_Config Object of the server config
      * 
-     * @var Zend_Config 
+     * @return Zend_Config
      */
     protected function _getServerConfig()
     {
         $serverConfigData = array(
             'mongodb' => array(
                 'database' => $this->getConfig()->dbName,
-                'collectionPrefix' => $this->getConfig()->dbCollectionPrefix
+                'collectionPrefix' => $this->getConfig()->dbCollectionPrefix,
+                'host' => $this->getConfig()->host,
+                'port' => $this->getConfig()->port
             ),
             'security' => array(
                 'hash' => $this->getConfig()->securekey
@@ -278,6 +280,18 @@ class Core_Model_InstallManager
     }
 
     /**
+     * returns db connection status
+     *
+     * @return boolean
+     */
+    public function isDbConnection()
+    {
+        Core_Model_DiFactory::reset();
+
+        return Core_Model_Dataprovider_DiFactory::getConnection()->status($this->_getServerConfig());
+    }
+
+    /**
      * checks that mmaze was correctly installed
      * -> config.ini
      * -> admin user
@@ -378,7 +392,7 @@ class Core_Model_InstallManager
     {
         $this->_config = $config;
     }
-    
+
     /**
      * validates given Zend_Form and deploys config data to session and internal
      * config object

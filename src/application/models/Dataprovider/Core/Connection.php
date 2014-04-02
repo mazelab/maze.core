@@ -16,15 +16,16 @@ class Core_Model_Dataprovider_Core_Connection
     
     /**
      * returns the connection status of the database
-     * 
+     *
+     * @param  Zend_Config $config
      * @return boolean connection status
      */
-    public function status()
+    public function status(Zend_Config $config = null)
     {
-        if(!($mongo = Core_Model_DiFactory::getMongoDb())) {
+        if(!($mongo = Core_Model_DiFactory::getMongoDb($config))) {
             return false;
         }
-        
+
         return $mongo->check();
     }
     

@@ -13,19 +13,45 @@
 class MongoDb_Mongo
 {
     CONST PREFIX_SEPERATOR = '_';
+
+    /**
+     * default mongo host
+     *
+     * @var string
+     */
+    CONST DEFAULT_HOST = "127.0.0.1";
+
+    /**
+     * default port for mongod and mongos instances
+     *
+     * @var integer
+     */
+    CONST DEFAULT_PORT = 27017;
     
     /**
      * @var Mongo
      */
     protected $_db;
+
     /**
      * @var string
      */
     protected $_dbName;
+
     /**
      * @var string
      */
     protected $_collectionPrefix;
+
+    /**
+     * @var integer
+     */
+    protected $_port = self::DEFAULT_PORT;
+
+    /**
+     * @var string
+     */
+    protected $_host = self::DEFAULT_HOST;
 
     /**
      * @param Zend_Config $config 
@@ -38,6 +64,13 @@ class MongoDb_Mongo
         if($config->mongodb){
             $this->setDbName($config->mongodb->database)
                  ->setCollectionPrefix($config->mongodb->collectionPrefix);
+
+            if (!empty($config->mongodb->host)) {
+                $this->_host = $config->mongodb->host;
+            }
+            if (!empty($config->mongodb->port)) {
+                $this->_port = $config->mongodb->port;
+            }
         }
     }
 
@@ -91,10 +124,10 @@ class MongoDb_Mongo
     public function check()
     {
         if(!$this->getDbName())
-            return false;        
+            return false;
 
         try {
-            new Mongo;
+            new Mongo("mongodb://{$this->_host}:{$this->_port}", array("timeout" => 1000));
         } catch (Exception $exception) {
             return false;
         }
@@ -168,7 +201,7 @@ class MongoDb_Mongo
     {
         if (!$this->_db && $this->check()){
             $database = $this->getDbName();
-            $mongo = new Mongo;
+            $mongo = new Mongo("mongodb://{$this->_host}:{$this->_port}");
             $this->setDatabase($mongo->$database);
         }
 
@@ -176,7 +209,7 @@ class MongoDb_Mongo
     }
 
     /**
-     * @param string $collectionName 
+     * @param string $collection
      * @return MongoCollection
      */
     public function getCollection($collection)

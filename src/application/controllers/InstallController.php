@@ -62,9 +62,15 @@ class InstallController extends Zend_Controller_Action
         if ($this->_request->getPost()) {
             $form->setDefaults($this->_request->getPost());
             if ($installManager->validateAndAddToConfig($form)) {
-                $this->_redirector->gotoRoute(array(), "installAdminuser");
-                $this->_redirector->redirect();
-                return;
+
+                if (!$installManager->isDbConnection()) {
+                    Core_Model_DiFactory::getMessageManager()
+                        ->addError("Error establishing a database connection");
+                } else {
+                    $this->_redirector->gotoRoute(array(), "installAdminuser");
+                    $this->_redirector->redirect();
+                    return;
+                }
             }
         }
         
@@ -123,7 +129,7 @@ class InstallController extends Zend_Controller_Action
             "password"      => $identity["password"],
             "passwordRepeat"=> $identity["password"],
             "company"       => $mazeconfig->getData("company"),
-            "language"      => Zend_Locale::findLocale()
+            "language"      => Zend_Locale::getLocaleToTerritory(Zend_Locale::findLocale())
         ), $installManager->getConfig()->toArray());
 
         if ($installManager->validateAndAddToConfig($formConfig->setDefaults($reconfigure))){

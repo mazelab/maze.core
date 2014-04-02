@@ -534,4 +534,5 @@
         'Admin already exists in the database!' => 'Administrator bereits in der Dadenbank vorhanden!',
         'The installation wizard detected that already a Maze.dashboard installation has been performed on the given database' => 'Der Installationsassistent erkannte das auf der gegebenen Datenbank bereits eine Maze.dashboard Installation durchgeführt wurde',
         'no write permissions in %1$s' => 'Keine Schreibrechte für %1$s',
+        'Error establishing a database connection' => 'Fehler beim Erstellen einer Datenbankverbindung'
     );

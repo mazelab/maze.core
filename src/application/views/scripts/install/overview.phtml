@@ -81,6 +81,19 @@
             <dl class="grid_16">
                 <dt>
                     <label>
+                        <?= $this->translate('Server'); ?>
+                    </label>
+                </dt>
+                <dd>
+                    <span>
+                        <?= $this->toBool('config/host') ? $this->html('config/host') : MongoDb_Mongo::DEFAULT_HOST; ?> :
+                        <?= $this->toBool('config/port') ? $this->html('config/port') : MongoDb_Mongo::DEFAULT_PORT; ?>
+                    </span>
+                </dd>
+            </dl>
+            <dl class="grid_16">
+                <dt>
+                    <label>
                         <?= $this->translate('Security Key') ?>
                     </label>
                 </dt>

@@ -25,6 +25,25 @@ class Core_Form_Database extends Zend_Form
                 array("Alnum")
             )
         ));
+        $this->addElement("text", "host", array(
+            "label" => "Server",
+            "value" => MongoDb_Mongo::DEFAULT_HOST,
+            "style" => "width:15%;",
+            "validators" => array(
+                new Zend_Validate_Hostname(
+                    array(
+                        "allow" => Zend_Validate_Hostname::ALLOW_ALL
+                    )
+                )
+            )
+        ));
+        $this->addElement("text", "port", array(
+            "style" => "width:8.88%;",
+            "validators" => array(
+                array("Digits")
+            ),
+            "value" => MongoDb_Mongo::DEFAULT_PORT
+        ));
     }
 }
 

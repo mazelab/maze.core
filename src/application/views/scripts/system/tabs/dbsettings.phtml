@@ -12,7 +12,7 @@
                         <?= $this->form->dbSetting->dbName ?>
                     </dd>
                 </dl>
-                <dl class="row-fluid">
+                <dl class="row-fluid cssBoxCenter">
                     <dt class="span3">
                         <label>
                             <?= $this->translate('db collection prefix') ?>
@@ -20,6 +20,17 @@
                     </dt>
                     <dd class="span9">
                         <?= $this->form->dbSetting->dbCollectionPrefix ?>
+                    </dd>
+                </dl>
+                <dl class="row-fluid">
+                    <dt class="span3">
+                        <label>
+                            <?= $this->form->dbSetting->host->getLabel(); ?>
+                        </label>
+                    </dt>
+                    <dd class="span9">
+                        <?= $this->form->dbSetting->host->renderViewHelper(); ?>
+                        <?= $this->form->dbSetting->port->renderViewHelper(); ?>
                     </dd>
                 </dl>
                 <a class="btn btn-danger jsReConfigure" href="<?= $this->url(array(), "updateDatabaseConfig") ?>">
@@ -77,5 +88,7 @@
             return false;
         });
 
+        $("#dbSetting-host").width("22%");
+        $("#dbSetting-port").width("9%");
     });
 </script>
