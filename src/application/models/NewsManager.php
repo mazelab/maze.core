@@ -144,6 +144,10 @@ class Core_Model_NewsManager
             $data[self::KEY_TAGS] = $tags;
         }
 
+        if (isset($data[self::KEY_STATUS]) && $data[self::KEY_STATUS] == self::STATUS_PUBLIC){
+            $data[self::KEY_ONSINCE] = time();
+        }
+
         return $this->getProvider()->saveMessage($data);
     }
 
