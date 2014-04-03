@@ -50,10 +50,12 @@
         $(".jsInstallModule:hidden").click(function(){
             var button = $(this);
             var module = button.closest(".jsModuleEntry");
-
-            if (module.length && this.href){
+            var action = $("#availableModules, #jsUpdateModule").find(".btn");
+            
+            if (module.length && this.href && typeof working === "undefined"){
                 button.hide();
                 module.find(".jsModuleLoading").show();
+                action.attr("disabled", true);
 
                 $.ajax({
                     url : button.attr("href"),
@@ -70,8 +72,13 @@
                         module.name = $.trim(button.closest(".jsModuleEntry").find("[title='Detail'] span").eq(1).text());
                         module.find(".jsModuleLoading").hide().andSelf().find(".jsInstallModule").show();
                         setErrorMessages({0: "<?= $this->translate('Couldn\'t install module %1$s') ?>".replace("%1$s", module.name)}, true);
+                    },
+                    complete: function() {
+                        action.attr("disabled", false);
+                        delete(working);
                     }
                 });
+                working = true;
             }
 
             return false;

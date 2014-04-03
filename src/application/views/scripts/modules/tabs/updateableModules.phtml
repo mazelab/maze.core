@@ -50,8 +50,14 @@
         $(".jsUpdateModule").click(function(){
             var button = $(this);
             var module = button.closest(".jsModuleEntry");
+            var action = $("#availableModules, #jsUpdateModule").find(".btn");
+
+            if (typeof working !== "undefined") {
+                return false;
+            }
 
             button.hide();
+            action.attr("disabled", true);
             module.find(".jsModuleLoading").show();
 
             $.ajax({
@@ -66,8 +72,13 @@
                     module.name = $.trim(button.closest(".jsModuleEntry").find("[title='Detail'] span").eq(1).text());
                     module.find(".jsModuleLoading").hide().andSelf().find(".jsUpdateModule").show();
                     setErrorMessages({0: "<?= $this->translate('Couldn\'t update module %1$s') ?>".replace("%1$s", module.name)}, true);
+                },
+                complete: function() {
+                    action.attr("disabled", false);
+                    delete(working);
                 }
             });
+            working = true;
             
             return false;
         });
