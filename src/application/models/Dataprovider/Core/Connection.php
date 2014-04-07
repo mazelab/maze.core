@@ -22,7 +22,7 @@ class Core_Model_Dataprovider_Core_Connection
      */
     public function status(Zend_Config $config = null)
     {
-        if(!($mongo = Core_Model_DiFactory::getMongoDb($config))) {
+        if(!($mongo = Core_Model_DiFactory::newMongoDb($config))) {
             return false;
         }
 

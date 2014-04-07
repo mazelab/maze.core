@@ -224,8 +224,11 @@
         'fax' => 'Fax',
         'fax *' => 'Fax *',
 
-        'database name' => 'Database name',
-        'db collection prefix' => 'DB Collection Prefix',
+        'Database Name' => 'Database Name',
+        'Database Server' => 'Datenbank Server',
+        'Database Prefix' => 'Database Prefix',
+        'Database User' => 'Datenbank User',
+        'Database Password' => 'Datenbank Password',
         
         'password strength' => 'Password strength',
         'very weakly' => 'Very weakly',

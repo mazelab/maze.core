@@ -21,7 +21,7 @@
             <dl class="grid_16">
                 <dt>
                     <label>
-                        <?= $this->translate('database name') ?>
+                        <?= $this->translate('Database Name'); ?>
                     </label>
                 </dt>
                 <dd>
@@ -30,17 +30,52 @@
                     </span>
                 </dd>
             </dl>
-             <dl class="grid_16">
-                 <dt>
+            <dl class="grid_16">
+                <dt>
                     <label>
-                        <?= $this->translate('db collection prefix') ?>
+                        <?= $this->translate('Database Server'); ?>
+                    </label>
+                </dt>
+                <dd>
+                    <span>
+                        <?= $this->toBool('config/host') ? $this->html('config/host') : MongoDb_Mongo::DEFAULT_HOST; ?> :
+                        <?= $this->toBool('config/port') ? $this->html('config/port') : MongoDb_Mongo::DEFAULT_PORT; ?>
+                    </span>
+                </dd>
+            </dl>
+            <dl class="grid_16">
+                <dt>
+                    <label>
+                        <?= $this->translate('Database Prefix'); ?>
                     </label>
                 </dt>
                 <dd>
                     <span>
                         <?= $this->html('config/dbCollectionPrefix'); ?>
                     </span>
-                </dd> 
+                </dd>
+            </dl>
+            <dl class="grid_16">
+                <dt>
+                    <label>
+                        <?= $this->translate('Database User'); ?>
+                    </label>
+                </dt>
+                <dd>
+                    <span>
+                        <?= $this->html('config/dbUsername'); ?>
+                    </span>
+                </dd>
+            </dl>
+            <dl class="grid_16">
+                <dt>
+                    <label>
+                        <?= $this->translate('Database Password'); ?>
+                    </label>
+                </dt>
+                <dd>
+                    <span>******</span>
+                </dd>
             </dl>
              <dl class="grid_16">
                  <dt>
@@ -75,19 +110,6 @@
                 <dd>
                     <span>
                         <?= $this->html('config/company'); ?>
-                    </span>
-                </dd>
-            </dl>
-            <dl class="grid_16">
-                <dt>
-                    <label>
-                        <?= $this->translate('Server'); ?>
-                    </label>
-                </dt>
-                <dd>
-                    <span>
-                        <?= $this->toBool('config/host') ? $this->html('config/host') : MongoDb_Mongo::DEFAULT_HOST; ?> :
-                        <?= $this->toBool('config/port') ? $this->html('config/port') : MongoDb_Mongo::DEFAULT_PORT; ?>
                     </span>
                 </dd>
             </dl>

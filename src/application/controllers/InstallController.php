@@ -123,12 +123,19 @@ class InstallController extends Zend_Controller_Action
         $identity    = Zend_Auth::getInstance()->getIdentity();
         $formConfig  = new Core_Form_Reconfigure();
         $mazeconfig  = Core_Model_DiFactory::getConfig();
+
+        if (Zend_Registry::get('config')->mongodb instanceof Zend_Config){
+            $mazeconfig->setData(array("mongodb" => Zend_Registry::get('config')->mongodb->toArray()));
+        }
+
         $reconfigure = array_merge(array(
             "email"         => $identity["email"],
             "username"      => $identity["username"],
             "password"      => $identity["password"],
             "passwordRepeat"=> $identity["password"],
             "company"       => $mazeconfig->getData("company"),
+            "dbUsername"    => $mazeconfig->getData("mongodb/username"),
+            "dbPassword"    => $mazeconfig->getData("mongodb/password"),
             "language"      => Zend_Locale::getLocaleToTerritory(Zend_Locale::findLocale())
         ), $installManager->getConfig()->toArray());
 

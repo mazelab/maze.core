@@ -46,12 +46,22 @@ class MongoDb_Mongo
     /**
      * @var integer
      */
-    protected $_port = self::DEFAULT_PORT;
+    protected $_port = null;
 
     /**
      * @var string
      */
-    protected $_host = self::DEFAULT_HOST;
+    protected $_host = null;
+
+    /**
+     * @var null|mixed
+     */
+    protected $_username = null;
+
+    /**
+     * @var null|mixed
+     */
+    protected $_userpass = null;
 
     /**
      * @param Zend_Config $config 
@@ -63,15 +73,43 @@ class MongoDb_Mongo
 
         if($config->mongodb){
             $this->setDbName($config->mongodb->database)
-                 ->setCollectionPrefix($config->mongodb->collectionPrefix);
+                 ->setCollectionPrefix($config->mongodb->collectionPrefix)
+                 ->setPort($config->mongodb->port)
+                 ->setHost($config->mongodb->host)
+                 ->setUsername($config->mongodb->username)
+                 ->setPassword($config->mongodb->password);
+        }
+    }
 
-            if (!empty($config->mongodb->host)) {
-                $this->_host = $config->mongodb->host;
-            }
-            if (!empty($config->mongodb->port)) {
-                $this->_port = $config->mongodb->port;
+    /**
+     * build and returns the mongo server option
+     *
+     * @return null|string
+     */
+    protected function _options()
+    {
+        $args = "mongodb://";
+        $auth = null;
+
+        if ($this->getUsername()) {
+            $auth .= $this->getUsername()
+                  . ($this->getPassword() ? ":" : null);
+            $auth .= $this->getPassword() . "@";
+        }
+
+        if ($auth == null && !$this->getHost() && !$this->getHost()) {
+            $args = null;
+        } else {
+            $port  = $this->getPort() ? $this->getPort() : self::DEFAULT_PORT;
+            $host  = $this->getHost() ? $this->getHost() : self::DEFAULT_HOST;
+            $args .= "{$auth}{$host}:{$port}";
+
+            if ($this->getDbName()) {
+                $args .= "/{$this->getDbName()}";
             }
         }
+
+        return $args;
     }
 
     /**
@@ -123,11 +161,12 @@ class MongoDb_Mongo
      */
     public function check()
     {
-        if(!$this->getDbName())
+        if(!$this->getDbName()) {
             return false;
+        }
 
         try {
-            new Mongo("mongodb://{$this->_host}:{$this->_port}", array("timeout" => 1000));
+            @new Mongo($this->_options(), array("timeout" => 1000));
         } catch (Exception $exception) {
             return false;
         }
@@ -173,6 +212,58 @@ class MongoDb_Mongo
     }
 
     /**
+     * set database host
+     *
+     * @param  null|string $host
+     * @return MongoDb_Mongo
+     */
+    public function setHost($host = null)
+    {
+        $this->_host = $host;
+
+        return $this;
+    }
+
+    /**
+     * set user password for auth
+     *
+     * @param  mixed $password
+     * @return MongoDb_Mongo
+     */
+    public function setPassword($password)
+    {
+        $this->_userpass = $password;
+
+        return $this;
+    }
+
+    /**
+     * set database port number
+     *
+     * @param  null|integer $port
+     * @return MongoDb_Mongo
+     */
+    public function setPort($port = null)
+    {
+        $this->_port = $port;
+
+        return $this;
+    }
+
+    /**
+     * set username for database auth
+     *
+     * @param  mixed $name
+     * @return MongoDb_Mongo
+     */
+    public function setUsername($name)
+    {
+        $this->_username = $name;
+
+        return $this;
+    }
+
+    /**
      * get the database name
      * 
      * @return null|string
@@ -180,6 +271,46 @@ class MongoDb_Mongo
     public function getDbName()
     {
         return $this->_dbName;
+    }
+
+    /**
+     * get database hostname
+     *
+     * @return null|string
+     */
+    public function getHost()
+    {
+        return $this->_host;
+    }
+
+    /**
+     * get password of user
+     *
+     * @return null|mixed
+     */
+    public function getPassword()
+    {
+        return $this->_userpass;
+    }
+
+    /**
+     * get database port
+     *
+     * @return null|integer
+     */
+    public function getPort()
+    {
+        return $this->_port;
+    }
+
+    /**
+     * get name of user
+     *
+     * @return null|mixed
+     */
+    public function getUsername()
+    {
+        return $this->_username;
     }
 
     /**
@@ -193,7 +324,7 @@ class MongoDb_Mongo
 
         return $this;
     }
-    
+
     /**
      * @return Mongo
      */
@@ -201,7 +332,7 @@ class MongoDb_Mongo
     {
         if (!$this->_db && $this->check()){
             $database = $this->getDbName();
-            $mongo = new Mongo("mongodb://{$this->_host}:{$this->_port}");
+            $mongo = new Mongo($this->_options());
             $this->setDatabase($mongo->$database);
         }
 

@@ -5,24 +5,14 @@
                 <dl class="row-fluid cssBoxCenter">
                     <dt class="span3">
                         <label>
-                            <?= $this->translate('database name') ?>
+                            <?= $this->form->dbSetting->dbName->getLabel(); ?>
                         </label>
                     </dt>
                     <dd class="span9">
-                        <?= $this->form->dbSetting->dbName ?>
+                        <?= $this->form->dbSetting->dbName; ?>
                     </dd>
                 </dl>
                 <dl class="row-fluid cssBoxCenter">
-                    <dt class="span3">
-                        <label>
-                            <?= $this->translate('db collection prefix') ?>
-                        </label>
-                    </dt>
-                    <dd class="span9">
-                        <?= $this->form->dbSetting->dbCollectionPrefix ?>
-                    </dd>
-                </dl>
-                <dl class="row-fluid">
                     <dt class="span3">
                         <label>
                             <?= $this->form->dbSetting->host->getLabel(); ?>
@@ -31,6 +21,37 @@
                     <dd class="span9">
                         <?= $this->form->dbSetting->host->renderViewHelper(); ?>
                         <?= $this->form->dbSetting->port->renderViewHelper(); ?>
+                    </dd>
+                </dl>
+                <dl class="row-fluid cssBoxCenter">
+                    <dt class="span3">
+                        <label>
+                            <?= $this->form->dbSetting->collectionPrefix->getLabel(); ?>
+                        </label>
+                    </dt>
+                    <dd class="span9">
+                        <?= $this->form->dbSetting->collectionPrefix; ?>
+                    </dd>
+                </dl>
+                <h6><?= $this->translate("Authentication"); ?></h6>
+                <dl class="row-fluid cssBoxCenter">
+                    <dt class="span3">
+                        <label>
+                            <?= $this->form->dbSetting->username->getLabel(); ?>
+                        </label>
+                    </dt>
+                    <dd class="span9">
+                        <?= $this->form->dbSetting->username; ?>
+                    </dd>
+                </dl>
+                <dl class="row-fluid cssBoxCenter">
+                    <dt class="span3">
+                        <label>
+                            <?= $this->form->dbSetting->password->getLabel(); ?>
+                        </label>
+                    </dt>
+                    <dd class="span9">
+                        <?= $this->form->dbSetting->password; ?>
                     </dd>
                 </dl>
                 <a class="btn btn-danger jsReConfigure" href="<?= $this->url(array(), "updateDatabaseConfig") ?>">
@@ -87,8 +108,5 @@
             });
             return false;
         });
-
-        $("#dbSetting-host").width("22%");
-        $("#dbSetting-port").width("9%");
     });
 </script>

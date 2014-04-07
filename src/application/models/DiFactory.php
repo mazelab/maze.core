@@ -531,13 +531,12 @@ class Core_Model_DiFactory
     /**
      * returns isntance of mongodb
      *
-     * @param  Zend_Config $config
      * @return MongoDb_Mongo
      */
-    static public function getMongoDb(Zend_Config $config = null)
+    static public function getMongoDb()
     {
         if (!self::$_mongoDb instanceof MongoDb_Mongo) {
-            self::$_mongoDb = self::newMongoDb($config);
+            self::$_mongoDb = self::newMongoDb();
         }
 
         return self::$_mongoDb;
@@ -1025,19 +1024,10 @@ class Core_Model_DiFactory
     
     /**
      * @param Zend_Config $config
-     * @param boolean $catchExceptions
-     * @return null|MongoDb_Mongo 
+     * @return MongoDb_Mongo
      */
-    static public function newMongoDb(Zend_Config $config = null, $catchExceptions = false)
+    static public function newMongoDb(Zend_Config $config = null)
     {
-        if ($catchExceptions) {
-            try {
-                return new MongoDb_Mongo($config);
-            } catch (Exception $e) {
-                return null;
-            }
-        }
-        
         return new MongoDb_Mongo($config);
     }
     

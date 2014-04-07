@@ -58,18 +58,19 @@ class Core_Form_System extends Zend_Form
                 ->setElementsBelongTo("dbSetting");
 
         $database->addElement("text", "dbName", array(
-            "label" => "database name"
+            "label" => "Database Name"
         ));
 
-        $database->addElement("text", "dbCollectionPrefix", array(
-            "label" => "db collection prefix",
+        $database->addElement("text", "collectionPrefix", array(
+            "label" => "Database Prefix",
             "validators" => array(
                 array("Alnum")
             )
         ));
 
         $database->addElement("text", "host", array(
-            "label" => "Server",
+            "label" => "Database Server",
+            "class" => "cssSystemDatabaseHost",
             "validators" => array(
                 new Zend_Validate_Hostname(
                     array(
@@ -80,9 +81,18 @@ class Core_Form_System extends Zend_Form
         ));
 
         $database->addElement("text", "port", array(
+            "class" => "cssSystemDatabasePort",
             "validators" => array(
                 array("Digits")
             )
+        ));
+
+        $database->addElement("text", "username", array(
+            "label" => "username",
+        ));
+
+        $database->addElement("password", "password", array(
+            "label" => "password",
         ));
 
         $this->addSubForm($database, "dbSetting");
@@ -205,17 +215,10 @@ class Core_Form_System extends Zend_Form
     public function setDefaults(array $defaults)
     {
         if (key_exists("mongodb", $defaults)){
+
+            $defaults["dbSetting"] = $defaults["mongodb"];
             if (key_exists("database", $defaults["mongodb"])){
                 $defaults["dbSetting"]["dbName"] = $defaults["mongodb"]["database"];
-            }
-            if (key_exists("collectionPrefix", $defaults["mongodb"])){
-                $defaults["dbSetting"]["dbCollectionPrefix"] = $defaults["mongodb"]["collectionPrefix"];
-            }
-            if (key_exists("host", $defaults["mongodb"])){
-                $defaults["dbSetting"]["host"] = $defaults["mongodb"]["host"];
-            }
-            if (key_exists("port", $defaults["mongodb"])){
-                $defaults["dbSetting"]["port"] = $defaults["mongodb"]["port"];
             }
         }
 

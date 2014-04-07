@@ -171,6 +171,8 @@ class Core_Model_InstallManager
             'mongodb' => array(
                 'database' => $this->getConfig()->dbName,
                 'collectionPrefix' => $this->getConfig()->dbCollectionPrefix,
+                'username' => $this->getConfig()->dbUsername,
+                'password' => $this->getConfig()->dbPassword,
                 'host' => $this->getConfig()->host,
                 'port' => $this->getConfig()->port
             ),

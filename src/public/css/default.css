@@ -1389,6 +1389,10 @@ input.cssDisabled, .cssDisabled{
 .cssListing .cssDifferences ul li div a{
     color:#cc0a0c;
 }
+/*-------------------------Install-------------------------*/
+.cssForm .cssFormBoxLong .cssInstallDatabaseHost {
+    width:100%;
+}
 /*-------------------Install-Step Design-------------------*/
 ul.cssInstallStep{
     height:40px;

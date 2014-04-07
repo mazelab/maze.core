@@ -17,18 +17,18 @@ class Core_Form_Database extends Zend_Form
     {
         $this->addElement("text", "dbName", array(
             "required" => "true",
-            "label" => "database name"
+            "label" => "Database Name"
         ));
         $this->addElement("text", "dbCollectionPrefix", array(
-            "label" => "db collection prefix",
+            "label" => "Database Prefix",
             "validators" => array(
                 array("Alnum")
             )
         ));
         $this->addElement("text", "host", array(
-            "label" => "Server",
+            "label" => "Database Server",
             "value" => MongoDb_Mongo::DEFAULT_HOST,
-            "style" => "width:15%;",
+            "class" => "cssInstallDatabaseHost",
             "validators" => array(
                 new Zend_Validate_Hostname(
                     array(
@@ -38,12 +38,31 @@ class Core_Form_Database extends Zend_Form
             )
         ));
         $this->addElement("text", "port", array(
-            "style" => "width:8.88%;",
+            "class" => "cssInstallDatabasePort",
             "validators" => array(
                 array("Digits")
             ),
             "value" => MongoDb_Mongo::DEFAULT_PORT
         ));
+        $this->addElement("text", "dbUsername", array(
+            "label" => "username",
+        ));
+        $this->addElement("password", "dbPassword", array(
+            "label" => "password",
+        ));
+    }
+
+    /**
+     * @param  mixed $value
+     * @return boolean
+     */
+    public function isValid($value)
+    {
+        if (array_key_exists("dbUsername", $value) && !empty($value["dbUsername"])) {
+            $this->dbPassword->setRequired(true);
+        }
+
+        return parent::isValid($value);
     }
 }
 
