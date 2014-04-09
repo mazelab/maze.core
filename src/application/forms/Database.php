@@ -15,7 +15,7 @@ class Core_Form_Database extends Zend_Form
 
     public function init()
     {
-        $this->addElement("text", "dbName", array(
+        $this->addElement("text", "database", array(
             "required" => "true",
             "label" => "Database Name"
         ));
@@ -44,11 +44,13 @@ class Core_Form_Database extends Zend_Form
             ),
             "value" => MongoDb_Mongo::DEFAULT_PORT
         ));
-        $this->addElement("text", "dbUsername", array(
+        $this->addElement("text", "username", array(
             "label" => "username",
+            "required" => "true"
         ));
-        $this->addElement("password", "dbPassword", array(
+        $this->addElement("password", "password", array(
             "label" => "password",
+            "required" => "true"
         ));
     }
 
@@ -58,8 +60,9 @@ class Core_Form_Database extends Zend_Form
      */
     public function isValid($value)
     {
-        if (array_key_exists("dbUsername", $value) && !empty($value["dbUsername"])) {
-            $this->dbPassword->setRequired(true);
+        if (empty($value["password"]) && empty($value["username"])) {
+            $this->password->setRequired(false);
+            $this->username->setRequired(false);
         }
 
         return parent::isValid($value);

@@ -5,53 +5,53 @@
                 <dl class="row-fluid cssBoxCenter">
                     <dt class="span3">
                         <label>
-                            <?= $this->form->dbSetting->dbName->getLabel(); ?>
+                            <?= $this->form->database->database->getLabel(); ?>
                         </label>
                     </dt>
                     <dd class="span9">
-                        <?= $this->form->dbSetting->dbName; ?>
+                        <?= $this->form->database->database; ?>
                     </dd>
                 </dl>
                 <dl class="row-fluid cssBoxCenter">
                     <dt class="span3">
                         <label>
-                            <?= $this->form->dbSetting->host->getLabel(); ?>
+                            <?= $this->form->database->host->getLabel(); ?>
                         </label>
                     </dt>
                     <dd class="span9">
-                        <?= $this->form->dbSetting->host->renderViewHelper(); ?>
-                        <?= $this->form->dbSetting->port->renderViewHelper(); ?>
+                        <?= $this->form->database->host->renderViewHelper(); ?>
+                        <?= $this->form->database->port->renderViewHelper(); ?>
                     </dd>
                 </dl>
                 <dl class="row-fluid cssBoxCenter">
                     <dt class="span3">
                         <label>
-                            <?= $this->form->dbSetting->collectionPrefix->getLabel(); ?>
+                            <?= $this->form->database->collectionPrefix->getLabel(); ?>
                         </label>
                     </dt>
                     <dd class="span9">
-                        <?= $this->form->dbSetting->collectionPrefix; ?>
+                        <?= $this->form->database->collectionPrefix; ?>
                     </dd>
                 </dl>
                 <h6><?= $this->translate("Authentication"); ?></h6>
                 <dl class="row-fluid cssBoxCenter">
                     <dt class="span3">
                         <label>
-                            <?= $this->form->dbSetting->username->getLabel(); ?>
+                            <?= $this->form->database->username->getLabel(); ?>
                         </label>
                     </dt>
                     <dd class="span9">
-                        <?= $this->form->dbSetting->username; ?>
+                        <?= $this->form->database->username; ?>
                     </dd>
                 </dl>
                 <dl class="row-fluid cssBoxCenter">
                     <dt class="span3">
                         <label>
-                            <?= $this->form->dbSetting->password->getLabel(); ?>
+                            <?= $this->form->database->password->getLabel(); ?>
                         </label>
                     </dt>
                     <dd class="span9">
-                        <?= $this->form->dbSetting->password; ?>
+                        <?= $this->form->database->password; ?>
                     </dd>
                 </dl>
                 <a class="btn btn-danger jsReConfigure" href="<?= $this->url(array(), "updateDatabaseConfig") ?>">
@@ -97,7 +97,7 @@
                             location = "<?= $this->url(array(), "installReconfigure"); ?>";
                         }else if (!$.isEmptyObject(data.formErrors)){
                             for (name in data.formErrors){
-                                setErrorTooltip(data.formErrors[name], $("#dbSetting-"+ name));
+                                setErrorTooltip(data.formErrors[name], $("#database-"+ name));
                             }
                         }
                     }

@@ -15,12 +15,11 @@ class Core_Form_Reconfigure extends Zend_Form
 
     public function init()
     {
-        $formDatabase  = new Core_Form_Database;
         $forLanguages  = new Core_Form_Languages;
         $formAdminuser = new Core_Form_Adminuser;
 
-        $this->addElements($formDatabase->getElements())
-             ->addElements($forLanguages->getElements())
+        $this->addSubForm(new Core_Form_Database, "db");
+        $this->addElements($forLanguages->getElements())
              ->addElements($formAdminuser->getElements());
     }
 }

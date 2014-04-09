@@ -20,7 +20,7 @@
         <div class="cssFormBoxLong grid_16">
             <form method="post" action="<?= $this->url(array(), 'installDatabase') ?>">
                 <dl class="grid_16">
-                    <?= $this->form->dbName ?>
+                    <?= $this->form->database ?>
                 </dl>
                 <dl class="grid_16">
                     <?= $this->form->collectionPrefix ?>
@@ -37,10 +37,10 @@
                     </dd>
                 </dl>
                 <dl class="grid_16">
-                    <?= $this->form->dbUsername; ?>
+                    <?= $this->form->username; ?>
                 </dl>
                 <dl class="grid_16">
-                    <?= $this->form->dbPassword; ?>
+                    <?= $this->form->password; ?>
                 </dl>
                 <div class="grid_16 cssButtonSpace cssButtonNew">
                     <input class="cssButton jsButton" type="submit" value="<?= $this->translate('more') ?>" />

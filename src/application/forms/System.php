@@ -54,10 +54,10 @@ class Core_Form_System extends Zend_Form
     {
         $database = new Zend_Form;
         $database->addPrefixPath("MazeLib_Form_Decorator_", "MazeLib/Form/Decorator/", "decorator")
-                ->setElementDecorators($this->_elementDecorators)
-                ->setElementsBelongTo("dbSetting");
+                 ->setElementDecorators($this->_elementDecorators)
+                 ->setElementsBelongTo("database");
 
-        $database->addElement("text", "dbName", array(
+        $database->addElement("text", "database", array(
             "label" => "Database Name"
         ));
 
@@ -95,7 +95,7 @@ class Core_Form_System extends Zend_Form
             "label" => "password",
         ));
 
-        $this->addSubForm($database, "dbSetting");
+        $this->addSubForm($database, "database");
 
         return $this;
     }
@@ -215,11 +215,7 @@ class Core_Form_System extends Zend_Form
     public function setDefaults(array $defaults)
     {
         if (key_exists("mongodb", $defaults)){
-
-            $defaults["dbSetting"] = $defaults["mongodb"];
-            if (key_exists("database", $defaults["mongodb"])){
-                $defaults["dbSetting"]["dbName"] = $defaults["mongodb"]["database"];
-            }
+            $defaults["database"] = $defaults["mongodb"];
         }
 
         parent::setDefaults($defaults);

@@ -169,7 +169,7 @@ class Core_Model_InstallManager
     {
         $serverConfigData = array(
             'mongodb' => array(
-                'database' => $this->getConfig()->dbName,
+                'database' => $this->getConfig()->database,
                 'collectionPrefix' => $this->getConfig()->collectionPrefix,
                 'username' => $this->getConfig()->dbUsername,
                 'password' => $this->getConfig()->dbPassword,
@@ -405,7 +405,7 @@ class Core_Model_InstallManager
     public function validateAndAddToConfig(Zend_Form $form)
     {
         if (!$form->isValid($form->getValues())) {
-                return false;
+            return false;
         }
 
         $this->_addDataToConfig($form->getValues());
