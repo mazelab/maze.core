@@ -121,19 +121,18 @@ class InstallController extends Zend_Controller_Action
     {
         $installManager = Core_Model_DiFactory::getInstallManager();
         $identity    = Zend_Auth::getInstance()->getIdentity();
-        $formConfig  = new Core_Form_Reconfigure();
-        $mazeconfig  = Core_Model_DiFactory::getConfig();
-        $reconfigure = array_merge(array(
+        $formReconf  = new Core_Form_Reconfigure();
+        $reconfigure = array(
             "email"         => $identity["email"],
             "username"      => $identity["username"],
             "password"      => $identity["password"],
             "passwordRepeat"=> $identity["password"],
-            "company"       => $mazeconfig->getData("company"),
+            "db"            => $formReconf->db->getValidValues($installManager->getConfig()->toArray()),
+            "company"       => Core_Model_DiFactory::getConfig()->getData("company"),
             "language"      => Zend_Locale::getLocaleToTerritory(Zend_Locale::findLocale())
-        ), $installManager->getConfig()->toArray());
+        );
 
-        if ($installManager->validateAndAddToConfig($formConfig->setDefaults($reconfigure))){
-            $this->view->config = $installManager->getConfig()->toArray();
+        if ($installManager->validateAndAddToConfig($formReconf->setDefaults($reconfigure))){
             $this->view->routeComplete = $this->view->url(array(), 'reinstallComplete');
         }else {
             Core_Model_DiFactory::getMessageManager()->addError(self::MESSAGE_INSTALLATION_FAILED);

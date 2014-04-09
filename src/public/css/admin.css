@@ -876,3 +876,10 @@ a.cssPagerInfo:hover{
     color:#cbcbcb;
 	cursor:default;
 }
+/*-----------------System Settings------------------*/
+.cssContent .cssSystemDatabaseHost {
+    width:141px;
+}
+.cssContent .cssSystemDatabasePort {
+    width:47px;
+}

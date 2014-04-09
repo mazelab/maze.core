@@ -57,11 +57,11 @@ class SystemController extends Zend_Controller_Action
 
     public function databaseAction()
     {
-        $dbSetting = $this->getRequest()->getPost("dbSetting");
+        $database = $this->getRequest()->getPost("database");
         $installManager = Core_Model_DiFactory::getInstallManager();
         $formDatabase = new Core_Form_Database;
 
-        if ($formDatabase->setDefaults($dbSetting) && $installManager->validateAndAddToConfig($formDatabase)) {
+        if ($formDatabase->setDefaults($database) && $installManager->validateAndAddToConfig($formDatabase)) {
             $this->view->result = true;
         }
 
