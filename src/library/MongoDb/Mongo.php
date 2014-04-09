@@ -82,13 +82,12 @@ class MongoDb_Mongo
     }
 
     /**
-     * build and returns the mongo server option
+     * build and returns the mongo server connection
      *
-     * @return null|string
+     * @return string
      */
-    protected function _options()
+    protected function _getConnectionString()
     {
-        $args = "mongodb://";
         $auth = null;
 
         if ($this->getUsername()) {
@@ -97,17 +96,9 @@ class MongoDb_Mongo
             $auth .= $this->getPassword() . "@";
         }
 
-        if ($auth == null && !$this->getHost() && !$this->getHost()) {
-            $args = null;
-        } else {
-            $port  = $this->getPort() ? $this->getPort() : self::DEFAULT_PORT;
-            $host  = $this->getHost() ? $this->getHost() : self::DEFAULT_HOST;
-            $args .= "{$auth}{$host}:{$port}";
-
-            if ($this->getDbName()) {
-                $args .= "/{$this->getDbName()}";
-            }
-        }
+        $port = $this->getPort() ? $this->getPort() : self::DEFAULT_PORT;
+        $host = $this->getHost() ? $this->getHost() : self::DEFAULT_HOST;
+        $args = "mongodb://{$auth}{$host}:{$port}/{$this->getDbName()}";
 
         return $args;
     }
@@ -147,13 +138,6 @@ class MongoDb_Mongo
         return $return;
     }
 
-    public function resetDatabase()
-    {
-        $this->_collectionPrefix = $this->_dbName = $this->_db = null;
-
-        return $this;
-    }
-
     /**
      * checks mongo db connection and returns the connection status
      * 
@@ -166,7 +150,7 @@ class MongoDb_Mongo
         }
 
         try {
-            @new Mongo($this->_options(), array("timeout" => 1000));
+            @new Mongo($this->_getConnectionString(), array("timeout" => 1000));
         } catch (Exception $exception) {
             return false;
         }
@@ -199,13 +183,12 @@ class MongoDb_Mongo
 
     /**
      * set database name
-     * 
+     *
      * @param  string $name
      * @return MongoDb_Mongo
      */
     public function setDbName($name)
     {
-        $this->resetDatabase();
         $this->_dbName = $name;
 
         return $this;
@@ -314,26 +297,13 @@ class MongoDb_Mongo
     }
 
     /**
-     * 
-     * @param MongoDB $db
-     * @return MongoDb_Mongo
-     */
-    public function setDatabase(MongoDB $db)
-    {
-        $this->_db = $db;
-
-        return $this;
-    }
-
-    /**
-     * @return Mongo
+     * @return MongoDB
      */
     public function getDatabase()
     {
-        if (!$this->_db && $this->check()){
-            $database = $this->getDbName();
-            $mongo = new Mongo($this->_options());
-            $this->setDatabase($mongo->$database);
+        if (!$this->_db){
+            $mongo = new Mongo($this->_getConnectionString());
+            $this->_db = $mongo->{$this->getDbName()};
         }
 
         return $this->_db;
