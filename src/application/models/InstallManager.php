@@ -170,7 +170,7 @@ class Core_Model_InstallManager
         $serverConfigData = array(
             'mongodb' => array(
                 'database' => $this->getConfig()->dbName,
-                'collectionPrefix' => $this->getConfig()->dbCollectionPrefix,
+                'collectionPrefix' => $this->getConfig()->collectionPrefix,
                 'username' => $this->getConfig()->dbUsername,
                 'password' => $this->getConfig()->dbPassword,
                 'host' => $this->getConfig()->host,

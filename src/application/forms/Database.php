@@ -19,7 +19,7 @@ class Core_Form_Database extends Zend_Form
             "required" => "true",
             "label" => "Database Name"
         ));
-        $this->addElement("text", "dbCollectionPrefix", array(
+        $this->addElement("text", "collectionPrefix", array(
             "label" => "Database Prefix",
             "validators" => array(
                 array("Alnum")

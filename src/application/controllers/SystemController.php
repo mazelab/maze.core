@@ -67,9 +67,6 @@ class SystemController extends Zend_Controller_Action
         if (array_key_exists("username", $dbSetting)) {
             $dbSetting["dbUsername"] = $dbSetting["username"];
         }
-        if (array_key_exists("collectionPrefix", $dbSetting)) {
-            $dbSetting["dbCollectionPrefix"] = $dbSetting["collectionPrefix"];
-        }
 
         if ($formDatabase->setDefaults($dbSetting) && $installManager->validateAndAddToConfig($formDatabase)) {
             $this->view->result = true;
