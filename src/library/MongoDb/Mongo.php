@@ -301,7 +301,7 @@ class MongoDb_Mongo
      */
     public function getDatabase()
     {
-        if (!$this->_db){
+        if (!$this->_db && $this->getDbName()){
             $mongo = new Mongo($this->_getConnectionString());
             $this->_db = $mongo->{$this->getDbName()};
         }
