@@ -61,7 +61,7 @@ class MazeLib_View_Facade_Iterator
      */
     public function setProperty($key, $value)
     {
-        $this->_beanContext->setLocalProperty($key, $value);
+        $this->_beanContext->setProperty($key, $value);
         $this->_arrayContext[$key] = $value;
     }
 
