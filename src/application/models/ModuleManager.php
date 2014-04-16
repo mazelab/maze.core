@@ -105,7 +105,7 @@ class Core_Model_ModuleManager
     public function addAdditionalField($moduleName, $data)
     {
         if(!($module = $this->getModule($moduleName))
-                || !key_exists("additionalKey", $data) || !key_exists("additionalValue", $data)) {
+                || !array_key_exists("additionalKey", $data) || !array_key_exists("additionalValue", $data)) {
             return false;
         }
 

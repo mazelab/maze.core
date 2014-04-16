@@ -177,7 +177,7 @@ class Core_Model_Module_Listings
             $module = Core_Model_DiFactory::getModuleRegistry()->getModule($moduleName);
             
             foreach($nodes as $nodeId => $node) {
-                if(!key_exists($nodeId, $result)) {
+                if(!array_key_exists($nodeId, $result)) {
                     $result[$nodeId] = $node->getData();
                 }
                 

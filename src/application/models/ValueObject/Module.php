@@ -197,7 +197,7 @@ class Core_Model_ValueObject_Module
     public function getLabel()
     {
         $config = $this->getModuleConfig();
-        if(!is_array($config) || !key_exists('label', $config)) {
+        if(!is_array($config) || !array_key_exists('label', $config)) {
             return null;
         }
         
@@ -304,7 +304,7 @@ class Core_Model_ValueObject_Module
         }
         
         $unmappedData = $this->getBean()->asDeepArray(true);
-        if(key_exists('_id', $unmappedData)) {
+        if(array_key_exists('_id', $unmappedData)) {
             unset($unmappedData['_id']);
         }
 

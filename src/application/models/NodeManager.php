@@ -104,7 +104,7 @@ class Core_Model_NodeManager
         }
         
         $data = $this->getProvider()->getNodeByApiKey($apiKey);
-        if(empty($data) || !key_exists('_id', $data))  {
+        if(empty($data) || !array_key_exists('_id', $data))  {
             return null;
         }
         
@@ -128,7 +128,7 @@ class Core_Model_NodeManager
         }
         
         $data = $this->getProvider()->getNodeByName($nodeName);
-        if(empty($data) || !key_exists('_id', $data))  {
+        if(empty($data) || !array_key_exists('_id', $data))  {
             return null;
         }
         
@@ -152,7 +152,7 @@ class Core_Model_NodeManager
             return false;
         }
 
-        if (!key_exists("additionalKey", $data) || !key_exists("additionalValue", $data)
+        if (!array_key_exists("additionalKey", $data) || !array_key_exists("additionalValue", $data)
                 || !($additionalId = $node->addAdditionalField($data['additionalKey'], $data['additionalValue']))){
             return false;
         }

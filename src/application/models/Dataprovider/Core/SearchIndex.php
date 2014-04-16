@@ -48,7 +48,7 @@ class Core_Model_Dataprovider_Core_SearchIndex
     public function clear()
     {
         $result = $this->_getSearchCollection()->drop();
-        if(!is_array($result) || !key_exists('ok', $result) || $result['ok'] != true) {
+        if(!is_array($result) || !array_key_exists('ok', $result) || $result['ok'] != true) {
             return false;
         }
         

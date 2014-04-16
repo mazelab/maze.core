@@ -23,7 +23,7 @@ class Core_Model_LogManager
      */
     protected function _convertLogDateTime(array $entries)
     {
-        if(key_exists(Core_Model_Logger::KEY_DATETIME, $entries)) {
+        if(array_key_exists(Core_Model_Logger::KEY_DATETIME, $entries)) {
             $date = new Zend_Date($entries[Core_Model_Logger::KEY_DATETIME]);
             $entries[Core_Model_Logger::KEY_DATETIME] = $date->get(Zend_Date::DATETIME_SHORT);
         } else {

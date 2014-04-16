@@ -259,12 +259,12 @@ class Core_Model_SearchManager
         if($this->getLimit() && $this->_getProvider()) {
             $result = $this->_getProvider()->last($this->getLimit(), $this->getSearchTerm());
             
-            if(key_exists('data', $result)) {
+            if(array_key_exists('data', $result)) {
                 $this->_setData($result['data']);
                 $this->_setCount(count($result['data']));
             }
             
-            if(key_exists('total', $result)) {
+            if(array_key_exists('total', $result)) {
                 $this->_setTotal($result['total']);
             }
             
@@ -292,12 +292,12 @@ class Core_Model_SearchManager
         if($this->getPage() && $this->getLimit() && $this->_getProvider()) {
             $result = $this->_getProvider()->page($this->getLimit(), $this->getPage(), $this->getSearchTerm());
 
-            if(key_exists('data', $result)) {
+            if(array_key_exists('data', $result)) {
                 $this->_setData($result['data']);
                 $this->_setCount(count($result['data']));
             }
             
-            if(key_exists('total', $result)) {
+            if(array_key_exists('total', $result)) {
                 $this->_setTotal($result['total']);
             }
             

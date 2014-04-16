@@ -70,17 +70,17 @@ class Core_Model_NewsManager
      */
     protected function _timestampToReadable($message)
     {
-        if (key_exists(self::KEY_CREATED, $message)){
+        if (array_key_exists(self::KEY_CREATED, $message)){
             $creation = new Zend_Date($message[self::KEY_CREATED]);
             $message[self::KEY_CREATED. "Readable"] = $creation->get(Zend_Date::DATE_LONG);
         }
 
-        if (key_exists(self::KEY_MODIFED, $message)){
+        if (array_key_exists(self::KEY_MODIFED, $message)){
             $modified = new Zend_Date($message[self::KEY_MODIFED]);
             $message[self::KEY_MODIFED. "Readable"] = $modified->get("M. MMMM yyyy HH:mm:ss");
         }
 
-        if (key_exists(self::KEY_ONSINCE, $message)){
+        if (array_key_exists(self::KEY_ONSINCE, $message)){
             $onSince  = new Zend_Date($message[self::KEY_ONSINCE]);
             $message[self::KEY_ONSINCE. "Readable"] = $onSince->get(Zend_Date::DATE_LONG);
         }
@@ -97,12 +97,12 @@ class Core_Model_NewsManager
      */
     public function addTags($messageId, array $tags)
     {
-        if (key_exists(self::KEY_TAGS, $tags)){
+        if (array_key_exists(self::KEY_TAGS, $tags)){
             $tags = $tags[self::KEY_TAGS];
         }
 
         if (($message = $this->getMessage($messageId)) && !empty($tags)){
-            if (!key_exists(self::KEY_TAGS, $message)){
+            if (!array_key_exists(self::KEY_TAGS, $message)){
                 $message[self::KEY_TAGS] = array();
             }
 
@@ -132,7 +132,7 @@ class Core_Model_NewsManager
      */
     public function createMessage(array $data)
     {
-        if (key_exists(self::KEY_TAGS, $data)){
+        if (array_key_exists(self::KEY_TAGS, $data)){
             $tags = array();
 
             foreach ($data[self::KEY_TAGS] as $tag){
@@ -176,7 +176,7 @@ class Core_Model_NewsManager
     public function getMessage($messageId, $filter = null)
     {
         $message = $this->getProvider()->getMessage($messageId, $filter);
-        if(empty($message) || !key_exists(self::KEY_ID, $message)) {
+        if(empty($message) || !array_key_exists(self::KEY_ID, $message)) {
             return null;
         }
 
@@ -263,19 +263,19 @@ class Core_Model_NewsManager
         }
 
         $timenow = time();
-        if (key_exists("title", $data) || key_exists("content", $data)){
+        if (array_key_exists("title", $data) || array_key_exists("content", $data)){
             $data[self::KEY_MODIFED] = $timenow;
         }
 
-        if (key_exists(self::KEY_ID, $data)){
+        if (array_key_exists(self::KEY_ID, $data)){
             unset($data[self::KEY_ID]);
         }
 
-        if (key_exists(self::TYPE_STICKY, $data)){
+        if (array_key_exists(self::TYPE_STICKY, $data)){
             $data[self::TYPE_STICKY] = (boolean) $data[self::TYPE_STICKY];
         }
 
-        if (!key_exists(self::KEY_CREATED, $message)){
+        if (!array_key_exists(self::KEY_CREATED, $message)){
             $data[self::KEY_CREATED] = $timenow;
         }
 

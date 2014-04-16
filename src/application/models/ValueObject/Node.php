@@ -224,7 +224,7 @@ class Core_Model_ValueObject_Node extends Core_Model_ServiceObject
     {
         parent::setData($data);
 
-        if (key_exists('name', $data) || key_exists('ipAddress', $data)) {
+        if (array_key_exists('name', $data) || array_key_exists('ipAddress', $data)) {
             $this->_rebuildSearchIndex = true;
         }
         

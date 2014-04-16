@@ -202,7 +202,7 @@ class Core_Model_Dataprovider_Demo_Log
     {
         $backend = $this->_getCollection(self::COLLECTION);
         
-        if(key_exists($contextId, $backend)) {
+        if(array_key_exists($contextId, $backend)) {
             $context = $backend[$contextId];
         } else {
             $context = array();
@@ -245,7 +245,7 @@ class Core_Model_Dataprovider_Demo_Log
     {
         $backend = $this->_getCollection(self::COLLECTION);
         
-        if(!key_exists($logId, $backend)) {
+        if(!array_key_exists($logId, $backend)) {
             return false;
         }
         

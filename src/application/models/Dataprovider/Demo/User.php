@@ -45,11 +45,11 @@ class Core_Model_Dataprovider_Demo_User
     public function checkAccess($username, $password)
     {
         $user = $this->getUserByUsername($username);
-        if (!key_exists('status', $user) || $user['status'] == false) {
+        if (!array_key_exists('status', $user) || $user['status'] == false) {
             return false;
         }
         
-        if ($user && key_exists(self::KEY_PASSWORD, $user) && $password == $user[self::KEY_PASSWORD]) {
+        if ($user && array_key_exists(self::KEY_PASSWORD, $user) && $password == $user[self::KEY_PASSWORD]) {
             return true;
         }
 

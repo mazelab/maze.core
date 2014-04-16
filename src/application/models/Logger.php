@@ -351,7 +351,7 @@ class Core_Model_Logger
     {
         $identity = Zend_Auth::getInstance()->getIdentity();
         
-        if(empty($identity) || !key_exists('_id', $identity)) {
+        if(empty($identity) || !array_key_exists('_id', $identity)) {
             return null;
         }
         
@@ -373,11 +373,11 @@ class Core_Model_Logger
         $identity = Zend_Auth::getInstance()->getIdentity();
         $default = self::SYSTEM_USER;
         
-        if(empty($identity) || !key_exists('_id', $identity)) {
+        if(empty($identity) || !array_key_exists('_id', $identity)) {
             return $default;
         }
         
-        if(key_exists('adminUser', $identity) && key_exists('_id', $identity['adminUser'])) {
+        if(array_key_exists('adminUser', $identity) && array_key_exists('_id', $identity['adminUser'])) {
             $user = Core_Model_DiFactory::getUserManager()->getUser($identity['adminUser']['_id']);
         } else {
             $user = Core_Model_DiFactory::getUserManager()->getUser($identity['_id']);

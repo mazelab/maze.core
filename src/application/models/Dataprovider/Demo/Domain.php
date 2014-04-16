@@ -143,7 +143,7 @@ class Core_Model_Dataprovider_Demo_Domain
             $domainId = $this->_generateId();
         }
         
-        if (!key_exists($domainId, $collection)) {
+        if (!array_key_exists($domainId, $collection)) {
             $domainId = $data['_id'] = $domainId;
             $collection[$domainId] = array();
         }

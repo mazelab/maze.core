@@ -250,7 +250,7 @@ class Core_Model_EmailManager
             return $this->_sender;
         }
 
-        if (key_exists($property, $this->_sender)){
+        if (array_key_exists($property, $this->_sender)){
             return $this->_sender[$property];
         }
 
@@ -269,7 +269,7 @@ class Core_Model_EmailManager
             return $this->_smtpOption;
         }
 
-        if (key_exists($property, $this->_smtpOption)){
+        if (array_key_exists($property, $this->_smtpOption)){
             return $this->_smtpOption[$property];
         }
 
@@ -309,7 +309,7 @@ class Core_Model_EmailManager
                 $transport = new Zend_Mail_Transport_Sendmail();
             }else {
                 $smtp = $this->getSmtpOptions("config");
-                if (key_exists("password", $smtp)){
+                if (array_key_exists("password", $smtp)){
                     $cryptManager = Core_Model_DiFactory::getCryptManager();
                     $smtp["password"] = $cryptManager->decrypt($smtp["password"]);
                 }
@@ -487,7 +487,7 @@ class Core_Model_EmailManager
      */
     public function setSmtpOptions(array $config = array())
     {
-        if (key_exists("host", $config)){
+        if (array_key_exists("host", $config)){
             $host = $config["host"];
             unset($config["host"]);
 

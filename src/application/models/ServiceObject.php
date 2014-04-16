@@ -74,7 +74,7 @@ class Core_Model_ServiceObject extends Core_Model_ValueObject
     {
         $services = $this->getServices();
 
-        if (key_exists($service, $services)) {
+        if (array_key_exists($service, $services)) {
             return true;
         }
 

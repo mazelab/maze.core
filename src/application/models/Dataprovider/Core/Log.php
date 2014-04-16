@@ -183,11 +183,11 @@ class Core_Model_Dataprovider_Core_Log
         }
 
         foreach($aggregate["result"] as $result){
-            if (key_exists("client", $result) && !empty($result["client"])){
+            if (array_key_exists("client", $result) && !empty($result["client"])){
                 unset($result["logs"]);
                 $conflicts[]  = $result;
             } else {
-                if(!key_exists("logs", $result)){
+                if(!array_key_exists("logs", $result)){
                     continue;
                 }
                 
@@ -568,7 +568,7 @@ class Core_Model_Dataprovider_Core_Log
      */
     public function update($logId, array $data)
     {
-        if(key_exists(self::KEY_ID, $data)) {
+        if(array_key_exists(self::KEY_ID, $data)) {
             unset($data[self::KEY_ID]);
         }
         

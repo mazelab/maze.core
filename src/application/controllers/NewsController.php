@@ -114,7 +114,7 @@ class NewsController extends Zend_Controller_Action
             if ($form->isValidPartial($postdata) && $newsManager->updateMessage($newsId, $postdata)){
                 $this->view->result = true;
 
-                if (key_exists("sentEmail", $postdata) && isset($postdata["status"]) &
+                if (array_key_exists("sentEmail", $postdata) && isset($postdata["status"]) &
                         $postdata["status"] == Core_Model_NewsManager::STATUS_PUBLIC){
                     if ($this->emailSendMessage($newsId)){
                         Core_Model_DiFactory::getMessageManager()

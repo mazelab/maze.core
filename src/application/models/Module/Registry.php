@@ -115,7 +115,7 @@ class Core_Model_Module_Registry
      */
     public function getModule($moduleName)
     {
-        if(!is_array($this->_modules) || !key_exists($moduleName, $this->_modules)) {
+        if(!is_array($this->_modules) || !array_key_exists($moduleName, $this->_modules)) {
             return null;
         }
         
@@ -195,7 +195,7 @@ class Core_Model_Module_Registry
      */
     public function unregisterModule($module)
     {
-        if(!is_array($this->_modules) || !key_exists($module, $this->_modules)) {
+        if(!is_array($this->_modules) || !array_key_exists($module, $this->_modules)) {
             return false;
         }
         

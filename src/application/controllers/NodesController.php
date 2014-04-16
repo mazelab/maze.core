@@ -175,7 +175,7 @@ class NodesController extends Zend_Controller_Action
     {
         $apiManager = Core_Model_DiFactory::getApiManager();
         if(!($request = $apiManager->getUnregisteredApiRequest($this->getParam('nodeName'))) ||
-                !key_exists('data', $request)) {
+                !array_key_exists('data', $request)) {
             Core_Model_DiFactory::getMessageManager()
                     ->addError(self::MESSAGE_API_REQUEST_NOT_FOUND, $this->getParam('nodeName'));
             return $this->_forward('index');

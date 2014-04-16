@@ -214,7 +214,7 @@ class Core_Form_System extends Zend_Form
      */
     public function setDefaults(array $defaults)
     {
-        if (key_exists("mongodb", $defaults)){
+        if (array_key_exists("mongodb", $defaults)){
             $defaults["database"] = $defaults["mongodb"];
         }
 

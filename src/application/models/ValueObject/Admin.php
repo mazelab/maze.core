@@ -151,11 +151,11 @@ class Core_Model_ValueObject_Admin
      */
     public function setData(array $data, $skipUpload = false, $skipPasswordEncrypt = false)
     {
-        if (key_exists('password', $data) && !$skipPasswordEncrypt) {
+        if (array_key_exists('password', $data) && !$skipPasswordEncrypt) {
                 $data['password'] = md5($data['password']);
         }
         
-        if (key_exists('avatar', $data) && !$skipUpload) {
+        if (array_key_exists('avatar', $data) && !$skipUpload) {
                 $data['avatar'] = $this->uploadAvatar($data['avatar']);
         }
         

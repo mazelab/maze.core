@@ -124,7 +124,7 @@ class Core_Model_DomainManager
         }
         
         $data = $this->getProvider()->getDomainByName($domainName);
-        if(empty($data) || !key_exists('_id', $data)) {
+        if(empty($data) || !array_key_exists('_id', $data)) {
             return false;
         }
         
@@ -146,7 +146,7 @@ class Core_Model_DomainManager
             return false;
         }
 
-        if (!key_exists("additionalKey", $data) || !key_exists("additionalValue", $data)
+        if (!array_key_exists("additionalKey", $data) || !array_key_exists("additionalValue", $data)
                 || !($additionalId = $domain->addAdditionalField($data['additionalKey'], $data['additionalValue']))){
             return false;
         }

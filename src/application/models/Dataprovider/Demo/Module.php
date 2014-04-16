@@ -32,7 +32,7 @@ class Core_Model_Dataprovider_Demo_Module
         $found = false;
         
         foreach($backend as $key => $module) {
-            if(key_exists('name', $module) && $module['name'] == $moduleName) {
+            if(array_key_exists('name', $module) && $module['name'] == $moduleName) {
                 $found = true;
                 break;
             }
@@ -59,7 +59,7 @@ class Core_Model_Dataprovider_Demo_Module
         $modules = array();
         
         foreach($this->_getCollection(self::COLLECTION) as $moduleName => $module) {
-            if(!key_exists('installed', $module) || $module['installed'] !== true) {
+            if(!array_key_exists('installed', $module) || $module['installed'] !== true) {
                 $modules[$moduleName] = $module;
             }
         }
@@ -78,7 +78,7 @@ class Core_Model_Dataprovider_Demo_Module
         $backend = $this->_getCollection(self::COLLECTION);
         
         foreach($backend as $module) {
-            if(key_exists('name', $module) && $module['name'] == $moduleName) {
+            if(array_key_exists('name', $module) && $module['name'] == $moduleName) {
                 return $module;
             }
         }
@@ -96,8 +96,8 @@ class Core_Model_Dataprovider_Demo_Module
         $modules = array();
         
         foreach($this->_getCollection(self::COLLECTION) as $moduleName => $module) {
-            if(key_exists('installed', $module) && $module['installed'] === true
-                    && key_exists('updateable', $module) && $module['updateable'] === true) {
+            if(array_key_exists('installed', $module) && $module['installed'] === true
+                    && array_key_exists('updateable', $module) && $module['updateable'] === true) {
                 $modules[$moduleName] = $module;
             }
         }
@@ -122,7 +122,7 @@ class Core_Model_Dataprovider_Demo_Module
         }
         
         foreach ($backend as $module) {
-            if(key_exists('name', $module) && $module['name'] == $moduleName) {
+            if(array_key_exists('name', $module) && $module['name'] == $moduleName) {
                 $data = array_merge_recursive($module, $data);
                 
                 $seted = true;

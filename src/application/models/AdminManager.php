@@ -105,7 +105,7 @@ class Core_Model_AdminManager
         }
         
         $data = $this->getProvider()->getAdminByEmail($email);
-        if(empty($data) || !key_exists('_id', $data)) {
+        if(empty($data) || !array_key_exists('_id', $data)) {
             return null;
         }
         
@@ -129,7 +129,7 @@ class Core_Model_AdminManager
         }
         
         $data = $this->getProvider()->getAdminByUserName($userName);
-        if(empty($data) || !key_exists('_id', $data)) {
+        if(empty($data) || !array_key_exists('_id', $data)) {
             return null;
         }
         

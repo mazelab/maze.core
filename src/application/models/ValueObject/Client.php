@@ -176,19 +176,19 @@ class Core_Model_ValueObject_Client
      */
     public function setData(array $data, $skipUpload = false, $skipPasswordEncrypt = false)
     {
-        if (key_exists('password', $data) && !$skipPasswordEncrypt) {
+        if (array_key_exists('password', $data) && !$skipPasswordEncrypt) {
             $data['password'] = md5($data['password']);
         }
         
-        if (key_exists('avatar', $data) && !empty($data['avatar']) && !$skipUpload) {
+        if (array_key_exists('avatar', $data) && !empty($data['avatar']) && !$skipUpload) {
             $data['avatar'] = $this->uploadAvatar($data['avatar']);
         }
 
         parent::setData($data);
         
         // build label if there were changes
-        if (key_exists('company', $data) || key_exists('prename', $data) ||
-                key_exists('surname', $data)) {
+        if (array_key_exists('company', $data) || array_key_exists('prename', $data) ||
+                array_key_exists('surname', $data)) {
             if($this->getData('company')) {
                 $label = $this->getData('company');
             } else {
@@ -198,9 +198,9 @@ class Core_Model_ValueObject_Client
             $this->getBean()->setProperty('label', $label);
         }
         
-        if (key_exists('company', $data) || key_exists('prename', $data) ||
-                key_exists('surname', $data) || key_exists('status', $data) || 
-                key_exists('avatar', $data)) {
+        if (array_key_exists('company', $data) || array_key_exists('prename', $data) ||
+                array_key_exists('surname', $data) || array_key_exists('status', $data) ||
+                array_key_exists('avatar', $data)) {
             $this->_rebuildSearchIndex = true;
         }
         

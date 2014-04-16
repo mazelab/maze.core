@@ -75,7 +75,7 @@ class Core_Model_UserManager
             return null;
         }
         
-        if(!key_exists('group', $user) || !key_exists('_id', $user)) {
+        if(!array_key_exists('group', $user) || !array_key_exists('_id', $user)) {
             return null;
         }
         
@@ -134,7 +134,7 @@ class Core_Model_UserManager
             return null;
         }
         
-        if(!key_exists('group', $user) || !key_exists('_id', $user)) {
+        if(!array_key_exists('group', $user) || !array_key_exists('_id', $user)) {
             return null;
         }
         
@@ -185,7 +185,7 @@ class Core_Model_UserManager
             return null;
         }
         
-        if(!key_exists('group', $user) || !key_exists('_id', $user)) {
+        if(!array_key_exists('group', $user) || !array_key_exists('_id', $user)) {
             return null;
         }
         
@@ -228,7 +228,7 @@ class Core_Model_UserManager
     public function getUserByResetPasswordTocken($token)
     {
         if (!($user = $this->getProvider()->getUserByResetPasswordToken($token)) 
-                || !key_exists('_id', $user)) {
+                || !array_key_exists('_id', $user)) {
             return "";
         }
         
@@ -244,7 +244,7 @@ class Core_Model_UserManager
      */
     public function resetPassword($userId, $data)
     {
-        if (!key_exists("password", $data) || !($user = $this->getUser($userId))){
+        if (!array_key_exists("password", $data) || !($user = $this->getUser($userId))){
             return false;
         }
 
@@ -319,7 +319,7 @@ class Core_Model_UserManager
             return false;
         }
 
-        if(key_exists('newPassword', $data)) {
+        if(array_key_exists('newPassword', $data)) {
             if($user->setData(array('password' => $data['newPassword']))->save()) {
                 if($user instanceof Core_Model_ValueObject_Admin) {
                     $this->_getLogger()->setMessage(Core_Model_AdminManager::MESSAGE_ADMIN_UPDATED_PASSWORD);

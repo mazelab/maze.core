@@ -93,7 +93,7 @@ class Core_Model_Dataprovider_Demo_News
      */
     public function createMessage(array $data)
     {
-        if (key_exists(self::KEY_ID, $data)){
+        if (array_key_exists(self::KEY_ID, $data)){
             unset($data[self::KEY_ID]);
         }
 

@@ -114,7 +114,7 @@ class Core_Model_ClientManager
         }
         
         $data = $this->getProvider()->getClientByEmail($email);
-        if(empty($data) || !key_exists('_id', $data)) {
+        if(empty($data) || !array_key_exists('_id', $data)) {
             return null;
         }
         
@@ -138,7 +138,7 @@ class Core_Model_ClientManager
         }
         
         $data = $this->getProvider()->getClientByLabel($label);
-        if(empty($data) || !key_exists('_id', $data)) {
+        if(empty($data) || !array_key_exists('_id', $data)) {
             return null;
         }
         
@@ -162,7 +162,7 @@ class Core_Model_ClientManager
         }
         
         $data = $this->getProvider()->getClientByUserName($userName);
-        if(empty($data) || !key_exists('_id', $data)) {
+        if(empty($data) || !array_key_exists('_id', $data)) {
             return null;
         }
         
@@ -186,7 +186,7 @@ class Core_Model_ClientManager
             return false;
         }
 
-        if (!key_exists("additionalKey", $data) || !key_exists("additionalValue", $data)){
+        if (!array_key_exists("additionalKey", $data) || !array_key_exists("additionalValue", $data)){
             return false;
         }
 

@@ -76,7 +76,7 @@ class ClientsController extends Zend_Controller_Action
             if(!empty($values)) {
                 $this->view->result = $clientManager->updateClient($client->getId(), $values);
             }
-            if ($this->getParam("avatar") && !key_exists("avatar", $form->getMessages())){
+            if ($this->getParam("avatar") && !array_key_exists("avatar", $form->getMessages())){
                 $this->_helper->json->sendJson(array("client" => $client->getData()));
             }
             

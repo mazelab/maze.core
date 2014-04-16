@@ -90,7 +90,7 @@ class MazeLib_View_Helper_SelectAttribs extends Zend_View_Helper_FormSelect
         $translator = $this->getTranslator();
         foreach ((array) $options as $opt_value => $opt_label) {
             
-            if (is_array($opt_label) && key_exists('attribs', $opt_label)
+            if (is_array($opt_label) && array_key_exists('attribs', $opt_label)
                     && is_array($opt_label['attribs'])) {
                 $list[] = $this->_build($opt_value, $opt_label['label'], $value, $disable, $opt_label['attribs']);
             } else if (is_array($opt_label)) {

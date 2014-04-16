@@ -215,7 +215,7 @@ class Core_Model_Module_Composer
             return true;
         }
 
-        if(!key_exists($name, $require)) {
+        if(!array_key_exists($name, $require)) {
             return true;
         }
         

@@ -246,7 +246,7 @@ class Core_Model_ValueObject
         ));
         
         $unmappedData = $this->getBean()->asDeepArray(true);
-        if(key_exists('_id', $unmappedData)) {
+        if(array_key_exists('_id', $unmappedData)) {
             unset($unmappedData['_id']);
         }
 

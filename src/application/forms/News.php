@@ -105,7 +105,7 @@ class Core_Form_News extends Zend_Form
      */
     public function setTagFields($data)
     {
-        if (is_array($data) && key_exists("tags", $data)){
+        if (is_array($data) && array_key_exists("tags", $data)){
             $this->addTagsFields($data["tags"]);
         }
 

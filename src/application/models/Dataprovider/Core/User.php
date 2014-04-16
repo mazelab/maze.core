@@ -83,11 +83,11 @@ class Core_Model_Dataprovider_Core_User
             return false;
         }
         
-        if(!key_exists('status', $user) || $user['status'] == false) {
+        if(!array_key_exists('status', $user) || $user['status'] == false) {
             return false;
         }
         
-        if (key_exists(self::KEY_PASSWORD, $user) && $password == $user[self::KEY_PASSWORD]) {
+        if (array_key_exists(self::KEY_PASSWORD, $user) && $password == $user[self::KEY_PASSWORD]) {
             return true;
         }
         

@@ -104,7 +104,7 @@ class Core_Model_ValueObject_Domain extends Core_Model_ServiceObject
     {
         parent::setData($data);
 
-        if (key_exists('name', $data)) {
+        if (array_key_exists('name', $data)) {
             $this->_rebuildSearchIndex = true;
         }
         

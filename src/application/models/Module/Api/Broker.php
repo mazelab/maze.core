@@ -159,7 +159,7 @@ class Core_Model_Module_Api_Broker
         } else {
             foreach($this->getModules() as $moduleName => $module) {
                 foreach($module->getNodesByDomain($domainId) as $id => $node) {
-                    if(!key_exists($id, $nodes)) {
+                    if(!array_key_exists($id, $nodes)) {
                         if($byModule) {
                             $nodes[$moduleName][$id] = $node;    
                         } else {
@@ -192,7 +192,7 @@ class Core_Model_Module_Api_Broker
         } else {
             foreach($this->getModules() as $module) {
                 foreach($module->getNodes() as $id => $node) {
-                    if(!key_exists($id, $nodes)) {
+                    if(!array_key_exists($id, $nodes)) {
                         $nodes[$id] = $node;
                     }
                 }
@@ -222,7 +222,7 @@ class Core_Model_Module_Api_Broker
         } else {
             foreach($this->getModules() as $module) {
                 foreach($module->getNodesByClient($clientId) as $id => $node) {
-                    if(!key_exists($id, $nodes)) {
+                    if(!array_key_exists($id, $nodes)) {
                         $nodes[$id] = $node;
                     }
                 }
@@ -253,7 +253,7 @@ class Core_Model_Module_Api_Broker
         } else {
             foreach($this->getModules() as $module) {
                 foreach($module->getDomainsByNode($nodeId, $clientId) as $id => $domain) {
-                    if(!key_exists($id, $domains)) {
+                    if(!array_key_exists($id, $domains)) {
                         $domains[$id] = $domain;
                     }
                 }
@@ -283,7 +283,7 @@ class Core_Model_Module_Api_Broker
         } else {
             foreach($this->getModules() as $module) {
                 foreach($module->getClientsByNode($nodeId) as $id => $client) {
-                    if(!key_exists($id, $clients)) {
+                    if(!array_key_exists($id, $clients)) {
                         $clients[$id] = $client;
                     }
                 }

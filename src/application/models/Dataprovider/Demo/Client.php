@@ -182,7 +182,7 @@ class Core_Model_Dataprovider_Demo_Client
             $clientId = $this->_generateId();
         }
         
-        if (!key_exists($clientId, $collection)) {
+        if (!array_key_exists($clientId, $collection)) {
             $clientId = $data['_id'] = $clientId;
             $collection[$clientId] = array();
         }
