@@ -11,7 +11,7 @@
  * @license http://opensource.org/licenses/MIT MIT
  */
 class Core_Model_ValueObject_Client 
-    extends Core_Model_ValueObject
+    extends Core_Model_ServiceObject
     implements Core_Model_ValueObject_Interface_User
 {
 
@@ -97,60 +97,6 @@ class Core_Model_ValueObject_Client
     }
     
     /**
-     * adds a additional field
-     * 
-     * @param string $key
-     * @param string $value
-     * @return boolean|string id of additional field
-     */
-    public function addAdditionalField($key, $value)
-    {
-        if (!$this->getId() || !is_string($key) || !is_string($value)) {
-            return false;
-        }
-
-        $additionalField = array(
-            "label" => $key,
-            "value" => $value
-        );
-
-        $this->setData(array('additionalFields' => array(md5($key) => $additionalField)));
-        if (!$this->save()){
-            return false;
-        }
-
-        return md5($key);
-    }
-    
-    /**
-     * adds a certain service in data backend
-     * 
-     * @param string $service name of the service
-     * @return boolean
-     */
-    public function addService($service)
-    {
-        if (!$this->getId()) {
-            return false;
-        }
-        
-        if(!($service = Core_Model_DiFactory::getModuleRegistry()->getModule($service))) {
-            return false;
-        }
-        
-        $dataSet = array(
-            'services' => array(
-                $service->getName() => array(
-                    'name' => $service->getName(),
-                    'label' => $service->getLabel()
-                )
-            )
-        );
-        
-        return $this->setData($dataSet)->save();
-    }
-    
-    /**
      * deactivates this instance
      * 
      * @return boolean
@@ -163,26 +109,7 @@ class Core_Model_ValueObject_Client
 
         return true;
     }
-    
-    /**
-     * deletes a certain additional field from this client in the data backend
-     * 
-     * @param mixed $key
-     * @return boolean
-     */
-    public function deleteAdditionalField($key)
-    {
-        if (!$this->getId() || !is_string($key)) {
-            return false;
-        }
-        
-        if(!$this->getData('additionalFields/' . $key)) {
-            return true;
-        }
-        
-        return $this->unsetProperty('additionalFields/' . $key)->save();
-    }
-    
+
     /**
      * returns all domains of this client
      * 
@@ -216,31 +143,7 @@ class Core_Model_ValueObject_Client
     {
         return $this->getData('label');
     }
-    
-    /**
-     * returns all client services
-     * 
-     * @return array
-     */
-    public function getServices()
-    {
-        $services = array();
         
-        if(!is_array($this->getData('services'))) {
-            return array();
-        }
-        
-        foreach(array_keys($this->getData('services')) as $serviceName) {
-            if(!($service = Core_Model_DiFactory::getModuleRegistry()->getModule($serviceName))) {
-                continue;
-            }
-            
-            $services[$service->getName()] = $service->getModuleConfig();
-        }
-        
-        return $services;
-    }
-    
     /**
      * returns status flag if set
      * 
@@ -260,24 +163,7 @@ class Core_Model_ValueObject_Client
     {
         return $this->getData('username');
     }
-    
-    /**
-     * checks if the given service is allready registered
-     * 
-     * @param string $service name of the service
-     * @return boolean
-     */
-    public function hasService($service)
-    {
-        $services = $this->getServices();
-
-        if (key_exists($service, $services)) {
-            return true;
-        }
-
-        return false;
-    }
-    
+        
     /**
      * sets/adds new data set
      * 
@@ -337,26 +223,7 @@ class Core_Model_ValueObject_Client
 
         return false;
     }
-    
-    /**
-     * removes a certain service in data backend
-     * 
-     * @param string $service name of the service
-     * @return boolean
-     */
-    public function removeService($service)
-    {
-        if(!$this->hasService($service)) {
-            return false;
-        }
-
-        if (count($this->getData("services")) == 1){
-            return $this->unsetProperty("services")->save();
-        }else {
-            return $this->unsetProperty("services/$service")->save();
-        }
-    }
-    
+        
     /**
      * upload a client avatar
      * 

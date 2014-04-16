@@ -138,7 +138,7 @@ class Core_Model_DomainManager
      * 
      * @param string $domainId
      * @param array $data
-     * @return boolean
+     * @return boolean|string id of additional field
      */
     public function addAdditionalField($domainId, $data)
     {
@@ -146,11 +146,16 @@ class Core_Model_DomainManager
             return false;
         }
 
-        if (!key_exists("additionalKey", $data) || !key_exists("additionalValue", $data)){
+        if (!key_exists("additionalKey", $data) || !key_exists("additionalValue", $data)
+                || !($additionalId = $domain->addAdditionalField($data['additionalKey'], $data['additionalValue']))){
             return false;
         }
-
-        return $domain->addAdditionalField($data['additionalKey'], $data['additionalValue']);
+        
+        if (!$domain->save()) {
+            return false;
+        }
+        
+        return $additionalId;
     }
     
     /**
@@ -228,6 +233,30 @@ class Core_Model_DomainManager
                 ->save();
         
         return $domain->getId();
+    }
+    
+    /**
+     * deletes a certain additional field from this domain in the data backend
+     *
+     * @param string $domainId
+     * @param mixed $key
+     * @return boolean
+     */
+    public function deleteAdditionalField($domainId, $key)
+    {
+        if(!($domain = $this->getDomain($domainId))) {
+            return false;
+        }
+
+        if(!$domain->getData('additionalFields/' . $key)) {
+            return true;
+        }
+
+        if (!$domain->deleteAdditionalField($key) || !$domain->save())  {
+            return false;
+        }
+
+        return true;
     }
     
     /**
@@ -671,7 +700,7 @@ class Core_Model_DomainManager
         if(isset($data['additionalFields'])) {
             foreach ($data['additionalFields'] as $id => $value) {
                 if (!$value || trim($value) == "") {
-                    $domain->deleteAdditionalField($id);
+                    $this->deleteAdditionalField($domainId, $id);
                     unset($data['additionalFields']);
                 } else {
                     $data['additionalFields'][$id] = array("value" => $value);

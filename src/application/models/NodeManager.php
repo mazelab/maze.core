@@ -144,7 +144,7 @@ class Core_Model_NodeManager
      * 
      * @param string $nodeId
      * @param array $data
-     * @return boolean
+     * @return boolean|string id of additional field
      */
     public function addAdditionalField($nodeId, $data)
     {
@@ -152,11 +152,16 @@ class Core_Model_NodeManager
             return false;
         }
 
-        if (!key_exists("additionalKey", $data) || !key_exists("additionalValue", $data)){
+        if (!key_exists("additionalKey", $data) || !key_exists("additionalValue", $data)
+                || !($additionalId = $node->addAdditionalField($data['additionalKey'], $data['additionalValue']))){
             return false;
         }
-
-        return $node->addAdditionalField($data['additionalKey'], $data['additionalValue']);
+        
+        if (!$node->save()) {
+            return false;
+        }
+        
+        return $additionalId;
     }
     
     /**
@@ -215,7 +220,27 @@ class Core_Model_NodeManager
         
         return true;
     }
-    
+
+    /**
+     * deletes a certain additional field from this node in the data backend
+     *
+     * @param string $nodeId
+     * @param mixed $key
+     * @return boolean
+     */
+    public function deleteAdditionalField($nodeId, $key)
+    {
+        if(!($node = $this->getNode($nodeId))) {
+            return false;
+        }
+
+        if (!$node->deleteAdditionalField($key) || !$node->save())  {
+            return false;
+        }
+
+        return true;
+    }
+
     /**
      * deletes a certain node
      * 
@@ -580,7 +605,7 @@ class Core_Model_NodeManager
         if(isset($data['additionalFields'])) {
             foreach ($data['additionalFields'] as $id => $value) {
                 if (!$value || trim($value) == "") {
-                    $node->deleteAdditionalField($id);
+                    $this->deleteAdditionalField($nodeId, $id);
                     unset($data['additionalFields']);
                 } else {
                     $data['additionalFields'][$id] = array("value" => $value);

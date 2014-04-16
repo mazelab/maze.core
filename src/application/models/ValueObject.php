@@ -96,6 +96,44 @@ class Core_Model_ValueObject
     }
 
     /**
+     * adds a additional field
+     *
+     * @param string $key
+     * @param string $value
+     * @return boolean|string id of additional field
+     */
+    public function addAdditionalField($key, $value)
+    {
+        if (!is_string($key) || !is_string($value)) {
+            return false;
+        }
+
+        $additionalField = array(
+            "label" => $key,
+            "value" => $value
+        );
+
+        $this->setData(array('additionalFields' => array(md5($key) => $additionalField)));
+
+        return md5($key);
+    }
+
+    /**
+     * deletes a additional field
+     *
+     * @param mixed $key
+     * @return boolean
+     */
+    public function deleteAdditionalField($key)
+    {
+        if(!is_string($key) || !$this->getData('additionalFields/' . $key)) {
+            return true;
+        }
+
+        return $this->unsetProperty('additionalFields/' . $key);
+    }
+
+    /**
      * returns the valueBean with the loaded data from data backend
      * 
      * override this for custom bean behavior

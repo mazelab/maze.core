@@ -58,32 +58,6 @@ class Core_Model_ValueObject_Module
         
         return $data;
     }
-
-    /**
-     * adds a additional field
-     * 
-     * @param string $key
-     * @param string $value
-     * @return boolean|string id of additional field
-     */
-    public function addAdditionalField($key, $value)
-    {
-        if (!$this->getId() || !is_string($key) || !is_string($value)) {
-            return false;
-        }
-
-        $additionalField = array(
-            "label" => $key,
-            "value" => $value
-        );
-
-        $this->setData(array('additionalFields' => array(md5($key) => $additionalField)));
-        if (!$this->save()){
-            return false;
-        }
-
-        return md5($key);
-    }
     
     /**
      * adds given data set into a certain client configuration

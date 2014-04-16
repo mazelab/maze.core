@@ -157,7 +157,7 @@ class ModulesController extends Zend_Controller_Action
         if ($this->getRequest()->isPost()) {
             if($form->isValid($this->_request->getPost())) {
                 $this->view->result = $moduleManager->addAdditionalField($module->getName()
-                        , $form->getValue("additionalKey") , $form->getValue("additionalValue"));
+                        , $form->getValues() );
             } else {
                 $this->view->formErrors = $form->getMessages(null, true);
             }

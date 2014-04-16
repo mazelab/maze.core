@@ -99,17 +99,22 @@ class Core_Model_ModuleManager
      * adds an additional field to the given installed module
      * 
      * @param string $moduleName
-     * @param string $key
-     * @param string $value
+     * @param array $data
      * @return boolean|string id of additional field
      */
-    public function addAdditionalField($moduleName, $key, $value)
+    public function addAdditionalField($moduleName, $data)
     {
-        if(!($module = $this->getModule($moduleName)) || !is_string($key) || !is_string($value)) {
+        if(!($module = $this->getModule($moduleName))
+                || !key_exists("additionalKey", $data) || !key_exists("additionalValue", $data)) {
             return false;
         }
 
-        return $module->addAdditionalField($key, $value);
+        if (!($additionalId = $module->addAdditionalField($data['additionalKey'], $data['additionalValue'])) ||
+                !$module->save()) {
+            return false;
+        };
+
+        return $additionalId;
     }
     
     /**
@@ -167,6 +172,26 @@ class Core_Model_ModuleManager
         }
                 
         return $module->unsetProperty('update')->unsetProperty('updateable')->unsetProperty('installed')->save();
+    }
+
+    /**
+     * deletes a certain additional field from this module in the data backend
+     *
+     * @param  string $moduleName
+     * @param  mixed $key
+     * @return boolean
+     */
+    public function deleteAdditionalField($moduleName, $key)
+    {
+        if(!($module = $this->getModule($moduleName))) {
+            return false;
+        }
+
+        if (!$module->deleteAdditionalField($key) || !$module->save())  {
+            return false;
+        }
+
+        return true;
     }
 
     /**

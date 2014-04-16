@@ -248,4 +248,97 @@ class Core_Model_ValueObjectTest extends PHPUnit_Framework_TestCase
         $this->assertNull($this->_sample1->getData('key1'));
     }
     
+    public function testAddAdditionalFieldShouldNotSaveTheDataset()
+    {
+        $object = new Core_Model_ValueObject();
+        $this->assertNotNull($object->addAdditionalField('key1', 'val1'));
+        $this->assertEmpty($object->getBean()->getRemoteData());
+    }
+
+    public function testAddAdditionalFieldWithValidDataShouldNotCallSave()
+    {
+        $object = $this->getMock('Core_Model_ValueObject_Client', array('save'), array('valueSample2'));
+        $object->expects($this->never())
+               ->method('save');
+
+        $object->addAdditionalField('uno', 'one');
+    }
+    
+    public function testAddAdditionalFieldShouldReturnFalseWithNonStringKeyOrValue()
+    {
+        $object = new Core_Model_ValueObject();
+        $this->assertFalse($object->addAdditionalField('key1', array()));
+        $this->assertFalse($object->addAdditionalField(new stdClass(), 'val1'));
+    }
+    
+    public function testAddAdditionalFieldShouldReturnMd5edKey()
+    {
+        $object = new Core_Model_ValueObject();
+        $this->assertEquals(md5('foo'), $object->addAdditionalField('foo', 'bar'));
+    }
+    
+    public function testAddAdditionalFieldShouldCreateAdditionalFieldArrayStruct()
+    {
+        $object = new Core_Model_ValueObject();
+        $object->addAdditionalField('foo', 'bar');
+        
+        $this->assertInternalType('array', $object->getData('additionalFields'));
+        $this->assertNotNull($object->getData('additionalFields'));
+    }
+    
+    public function testAddAddionalFieldShouldCreateAdditionalFieldsKeyAsMd5()
+    {
+        $object = new Core_Model_ValueObject();
+        $object->addAdditionalField('foo', 'bar');
+        
+        $this->assertNotNull($object->getData('additionalFields/' . md5('foo')));
+    }
+    
+    public function testAddAdditionalFieldShouldCreateLabelAndValueFields()
+    {
+        $object = new Core_Model_ValueObject();
+        $struct = array(
+            'label' => 'foo',
+            'value' => 'bar'
+        );
+        $object->addAdditionalField('foo', 'bar');
+        
+        $this->assertEquals($struct, $object->getData('additionalFields/' . md5('foo')));
+    }
+    
+    public function testDeleteAdditionalFieldShouldReturnTrue()
+    {
+        $object = new Core_Model_ValueObject();
+        $object->addAdditionalField('foo', 'var');
+        
+        $this->assertTrue($object->deleteAdditionalField('foo'));
+    }
+    
+    public function testDeleteAdditionalFieldWithNonExistentFieldShouldReturnTrue()
+    {
+        $object = new Core_Model_ValueObject();
+        $this->assertTrue($object->deleteAdditionalField('foo'));
+    }
+    
+    public function testDeleteAdditionalFieldShouldRemovePropertyFromData()
+    {
+        $object = new Core_Model_ValueObject();
+        $object->addAdditionalField('foo', 'var');
+        
+        $this->assertNotNull($object->getData('additionalFields/' . md5('foo')));
+        
+        $object->deleteAdditionalField(md5('foo'));
+                
+        $this->assertNull($object->getData('additionalFields/' . md5('foo')));        
+    }
+
+    public function testDeleteAdditionalFieldShouldNoWorkInThisObjectContext()
+    {
+        $object = new Core_Model_ValueObject();
+        $object->addAdditionalField('foo', 'bar');
+        $object->deleteAdditionalField('foo');
+
+        $this->assertInternalType('array', $object->getData('additionalFields'));
+        $this->assertNotEmpty($object->getData('additionalFields'));
+    }
 }

@@ -178,7 +178,7 @@ class Core_Model_ClientManager
      * 
      * @param string $clientId
      * @param array $data
-     * @return boolean
+     * @return boolean|string id of additional field
      */
     public function addAdditionalField($clientId, $data)
     {
@@ -190,7 +190,12 @@ class Core_Model_ClientManager
             return false;
         }
 
-        return $client->addAdditionalField($data['additionalKey'], $data['additionalValue']);
+        if (!($additionalId = $client->addAdditionalField($data['additionalKey'], $data['additionalValue'])) ||
+                !$client->save()) {
+            return false;
+        }
+
+        return $additionalId;
     }
     
     /**
@@ -281,6 +286,26 @@ class Core_Model_ClientManager
             ->setClientRef($client->getId())->setData($client->getData())->save();
         
         return $client;
+    }
+
+    /**
+     * deletes a certain additional field from this client in the data backend
+     *
+     * @param string $clientId
+     * @param mixed $key
+     * @return boolean
+     */
+    public function deleteAdditionalField($clientId, $key)
+    {
+        if(!($client = $this->getClient($clientId))) {
+            return true;
+        }
+
+        if (!$client->deleteAdditionalField($key) || !$client->save())  {
+            return false;
+        }
+        
+        return true;
     }
     
     /**
@@ -793,7 +818,7 @@ class Core_Model_ClientManager
         if(isset($data['additionalFields'])) {
             foreach ($data['additionalFields'] as $id => $value) {
                 if (!$value || trim($value) == "") {
-                    $client->deleteAdditionalField($id);
+                    $this->deleteAdditionalField($clientId, $id);
                     unset($data['additionalFields']);
                 } else {
                     $data['additionalFields'][$id] = array("value" => $value);

@@ -83,6 +83,16 @@ class Core_Model_ModuleManagerTest extends PHPUnit_Framework_TestCase
     );
     
     /**
+     * sample of additional field
+     *
+     * @var array
+     */
+    protected $_additionalField = array(
+        "additionalKey" => "foo",
+        "additionalValue" => "bar"
+    );
+    
+    /**
      * @var string
      */
     protected $_composerPath;
@@ -378,4 +388,51 @@ class Core_Model_ModuleManagerTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($this->_moduleManager->deinstallModule('sampleModule7'));
     }
     
+    public function testAddAdditionalFieldShouldReturnTNotFalse()
+    {
+        $this->assertNotNull($this->_moduleManager->addAdditionalField('sampleModule2', $this->_additionalField));
+    }
+
+    public function testAddAdditionalFieldWithValidDataShouldCallSave()
+    {
+        $module = $this->getMock('Core_Model_ValueObject_Module', array('save'), array('sampleModule3'));
+        $module->expects($this->once())
+               ->method('save')->will($this->returnValue(true));
+
+        Core_Model_DiFactory::registerModule('sampleModule3', $module);
+
+        $this->_moduleManager->addAdditionalField('sampleModule3', $this->_additionalField);
+    }
+
+    public function testAddAdditionalFieldShouldReturnFalseWithNoneExistsParent()
+    {
+        $this->assertFalse($this->_moduleManager->addAdditionalField(null, $this->_additionalField));
+    }
+
+    public function testAddAdditionalFieldWhitValidDatasetShoulNotCallSave()
+    {
+        $object = $this->getMock('Core_Model_ValueObject_Module', array('save'), array('sampleModule4'));
+        $object->expects($this->never())
+               ->method('save');
+
+       $this->_moduleManager->addAdditionalField('sampleModule4', $this->_additionalField);
+    }
+
+    public function testAddAdditionalFieldShouldReturnMd5edKey()
+    {
+        $this->assertEquals(md5('foo'), $this->_moduleManager->addAdditionalField('sampleModule2', $this->_additionalField));
+    }
+
+    public function testDeleteAdditionalFieldShouldReturnTrue()
+    {
+        $this->_moduleManager->addAdditionalField('sampleModule2', $this->_additionalField);
+
+        $this->assertTrue($this->_moduleManager->deleteAdditionalField('sampleModule2', 'foo'));
+    }
+
+    public function testDeleteAdditionalFieldShouldReturnFalseOnNoneExistsField()
+    {
+        $this->_moduleManager->addAdditionalField('sampleModule5', $this->_additionalField);
+        $this->assertTrue($this->_moduleManager->deleteAdditionalField('sampleModule5', 'baz'));
+    }
 }
