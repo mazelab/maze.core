@@ -831,8 +831,12 @@ class MazeLib_Bean extends ZendX_AbstractBean
      * @return void
      * @throws MazeLib_View_Bean_Exception
      */
-    public function setBean(array $data)
+    public function setBean($data)
     {
+        if(!is_array($data)) {
+            return false;
+        }
+
         $this->_reset();
 
         foreach ($this->_dissolveArray($data) as $path => $value) {
