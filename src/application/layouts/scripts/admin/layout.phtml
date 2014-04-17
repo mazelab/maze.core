@@ -14,17 +14,22 @@
         <? $this->headLink()->prependStylesheet($this->baseUrl() . '/css/bootstrap.min.css') ?>
         <? $this->headLink()->prependStylesheet($this->baseUrl() . '/css/passwordstrength.css') ?>
         <?= $this->headLink() ?>
-        <? $this->headScript()->prependFile($this->baseUrl() . '/js/min/jquery.form.min.js') ?>
+        <? $this->headScript()->prependFile($this->baseUrl() . '/js/min/ui-bootstrap-tpls-0.10.0.min.js') ?>
+        <? $this->headScript()->prependFile($this->baseUrl() . '/js/min/angular.min.js') ?>
         <? $this->headScript()->prependFile($this->baseUrl() . '/js/ui/jquery.ui.editable.js') ?>
         <? $this->headScript()->prependFile($this->baseUrl() . '/js/min/bootstrap-select.min.js') ?>
         <? $this->headScript()->prependFile($this->baseUrl() . '/js/bootstrap.min.js') ?>
         <? $this->headScript()->prependFile($this->baseUrl() . '/js/min/jquery-1.8.2.min.js') ?>
-        
+
         <!-- jquery versions over 1.8.3 crashes with bootstrap-modal -->
         <!--<script src="http://code.jquery.com/jquery.js"></script>--> 
         <?= $this->headScript() ?>
+
+        <script type="text/javascript">
+            app = angular.module('maze.core', ['ui.bootstrap']);
+        </script>
     </head>
-    <body>
+    <body ng-app="maze.core">
         <div class="navbar navbar-inverse navbar-fixed-top ">
             <div class="navbar-inner cssHeader">
                 <div class="container-fluid">
