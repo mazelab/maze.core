@@ -1,14 +1,289 @@
 <div class="cssNav">
-    <?= $this->navigation()->menuAsSelect()->setMaxDepth(0)->setUlClass('selectmenu')->render() ?>
+    <?= $this->navigation()->menu()->setMaxDepth(0)->render(); ?>
 </div>
 <script type="text/javascript">
     $(document).ready(function() {
-       $(".selectmenu").selectmenu({
-            style:'dropdown',
-            width:'220',
-            change: function(event, element) {
-                window.location.href = element.value;
+        $(['.cssNav', 'li']).mazeEllipsis({
+            trigger: "<div class='btn'>...</div>",
+            width  : 350,
+            classes: {
+                entry : "btn",
+                popup : "cssSelectmenuPopup"
+            },
+            onLoaded: function(self) {
+                $(self).find(".btn").button();
+            },
+            onClick: function(target, event){
+                if (target.href === document.location.href) {
+                    event.preventDefault();
+                }
             }
-        });
+        }).addClass("cssSelectmenu  cssButtonGroup");
     });
+</script>
+
+<script type="text/javascript">
+    (function($){
+
+        /**
+         * creates ellipsis on a target listing
+         *
+         * @example <pre>
+         ** $([@selector, @target]).mazeEllipsis(@width);
+         * </pre>
+         *
+         * @name   mazeEllipsis
+         * @type   {jQuery}
+         * @param  {Number|Object} options
+         * @param  {Number|Null} options.width [@target width@]
+         * @param  {String|Null} options.position [right]
+         * @param  {String|HTMLElement} options.trigger [~defaults.trigger]
+         * @param  {Function|Callback} options.onLoaded
+         * @param  {Function|Callback} options.onTrigger
+         * @param  {Function|Callback} options.onClick
+         * @return {Object|jQuery}
+         */
+        $.fn.mazeEllipsis = function(options) {
+            if (typeof this === "object"
+            && (typeof this[0] === "undefined" || typeof this[1] === "undefined")) {
+                return($(this));
+            }
+
+            var parent  = $(this[0]);
+            var target  = parent.find($(this[1]).selector);
+            var width   = (options % 1 === 0) === true ? options : null;
+            var setting = $.extend(true,{
+                width   : (width || options.width || parent.width()),
+                selector: $(this[1]).selector
+            }, $.fn.mazeEllipsis.defaults, typeof options === "object" ? options : {});
+
+            /**
+             * available methods
+             *
+             * @type {{open: open, close: close}}
+             */
+            var methods = {
+                open: function(parent){
+                    if (typeof parent[0] === "object" && typeof parent[0].mzTriggerId === "string") {
+                        var popupId = parent[0].mzTriggerId;
+                        var trigger = $("[target-ui='"+ popupId +"']");
+
+                        if ($(popupId).is(":hidden") === true) {
+                            trigger.click();
+                        }
+                    }
+                },
+                close: function(parent){
+                    if (typeof parent[0] === "object" && typeof parent[0].mzTriggerId === "string") {
+                        var popupId = parent[0].mzTriggerId;
+                        var trigger = $("[target-ui='"+ popupId +"']");
+
+                        if ($(popupId).is(":hidden") === false) {
+                            trigger.click();
+                        }
+                    }
+                }
+            };
+
+            if (typeof options === "string" && typeof methods[options] === "function") {
+                methods[options](parent, [arguments]);
+                return(parent);
+            }
+
+            /**
+             * update the position of the 'ulElement'
+             *
+             * @param {Object|jQuery} target
+             * @param {Object|jQuery} ulElement
+             */
+            parent.updatePopupPosition = function(target, ulElement){
+                // posing the 'ulElement' based on trigger offset
+                ulElement.css({top: target.offset()["top"] +target[0].offsetHeight});
+                ulElement.css({position: "absolute"});
+                ulElement.css({left: (target.offset()["left"] -ulElement.outerWidth()) +target[0].offsetWidth});
+            };
+
+            /**
+             * creates and returns the popup element
+             *
+             * @param  {String} elementId
+             * @return {Object|jQuery}
+             */
+            parent.buildPopup = function(elementId){
+                return($("<ul />", {
+                    id   : elementId,
+                    class: setting.classes.popup !== "" ? setting.classes.popup : null,
+                    html : function(){
+                        var list = "";
+                        for (var index in parent.hiddenElems) {
+                            list += "<li>html</li>".replace("html", parent.hiddenElems[index][0].innerHTML);
+                        }
+
+                        return(list);
+                    }
+                }).addClass("mzEllipsisPopup").hide());
+            };
+
+            /**
+             * handle the 'onClick' event
+             *
+             * @param {Event} event
+             */
+            parent.clickEvent = function(event){
+                // execute the callback 'onClick' when exists
+                if (typeof setting.onClick === "function") {
+                    setting.onClick(event.target, event, this);
+                }
+            };
+
+            /**
+             * create the trigger inside the listing
+             *
+             * @param  {String} triggerId
+             * @return {Object|jQuery}
+             */
+            parent.buildTrigger = function(triggerId){
+                // find position of trigger and set it
+                var trigger = (setting.position === "right")
+                            ? target.filter(":visible").last()
+                            : parent.find(setting.selector).filter(":visible").eq(0);
+
+                trigger[(setting.position === "right" ? "after" : "before")](function(){
+                    // creates an jQuery element, if not given
+                    trigger = typeof setting.trigger[0] === "object"
+                            ? setting.trigger
+                            : $(setting.trigger);
+                    trigger.addClass("trigger").css({display: "inline"})
+                           .attr("target-ui", triggerId);
+
+                    // sets click event for the trigger
+                    return(trigger.click(function(){
+                        parent.updatePopupPosition(trigger, $(triggerId));
+                        // execute the callback 'onTrigger' when exists
+                        if (typeof setting.onTrigger === "function") {
+                            setting.onTrigger(triggerId, [trigger, ulElement]);
+                        }
+
+                        /** @type {Object|jQuery} */
+                        var popup = $(triggerId);
+
+                        // open the popup element and apply the custom event
+                        if (popup.toggle().is(":visible") === true) {
+
+                            /**
+                             * @param {Event} event
+                             * @param {EventTarget|Object} target
+                             */
+                            $(document).delegate("body", "myCustomEvent", function(event, target) {
+                                // close the popup when clicking outside the main target
+                                var isSelf = $(target).closest(".mzEllipsis").length ? true : false;
+                                if (isSelf === false && popup.is(":visible")) {
+                                    trigger.triggerHandler("click");
+                                }
+                            });
+
+                            // notifys the custom events on click
+                            $(document).on("click", "body", function(event) {
+                                $(this).trigger("myCustomEvent", [event.target]);
+                            });
+                        }
+
+                        // when closed, removes the custom event handler
+                        if (popup.is(":hidden")) {
+                            $(document).undelegate("body", "myCustomEvent");
+                        }
+
+                        return($(this).toggleClass("open"));
+                    }));
+                });
+
+                return(trigger);
+            };
+
+            return(parent.each(function(){
+                parent.addClass("mzEllipsis");
+                parent.hiddenElems = {};
+                parent.hiddenEntry = 0;
+                parent.targetWidth = 0;
+
+                // moves the activated element to the begin
+                if (typeof setting.activeFirst === "string"
+                && (parent.find("."+ setting.activeFirst).eq(0))) {
+                    active = parent.find("."+ setting.activeFirst).eq(0);
+                    active.addClass((setting.classes.entry || null));
+                    target.eq(0).before(active[0].outerHTML);
+                    active.remove();
+                }
+
+                // calculate maximum entries for the target object
+                target.each(function(index, element){
+                    if (element.offsetWidth % 1 === 0 === true
+                    && (parent.targetWidth +element.offsetWidth < setting.width)) {
+                        parent.targetWidth += element.offsetWidth;
+
+                        if (setting.classes.entry !== "") {
+                            $(this).addClass(setting.classes.entry);
+                        }
+                    // hide when greater than target
+                    } else if (element.innerHTML !== "") {
+                        parent.hiddenElems[index] = $(element);
+                        parent.hiddenElems[index].addClass("hidden").hide();
+                        parent.hiddenEntry++;
+
+                        if (setting.classes.hidden !== "") {
+                            $(this).addClass(setting.classes.hidden);
+                        }
+                    }
+                });
+
+                // create id for this instance
+                this.mzTriggerId = "#mzEllipsis-"+ new Date().getTime();
+                var trigger      = null;
+                var ulElement    = parent.buildPopup(this.mzTriggerId.slice(1));
+
+                // build trigger and apply the click handler
+                if (parent.hiddenEntry && parent.hiddenEntry >= 1) {
+                    trigger = parent.buildTrigger(this.mzTriggerId);
+                    parent.updatePopupPosition(trigger, ulElement);
+                    $("body").append(ulElement).find(".trigger");
+                }
+
+                // execute the callback 'onClick' when exists
+                parent.find(setting.selector).click(parent.clickEvent);
+                ulElement.find(setting.selector).click(parent.clickEvent);
+
+                // execute the callback 'onLoaded' when exists
+                if (typeof setting.onLoaded === "function") {
+                    setting.onLoaded(this, [parent, trigger, ulElement]);
+                }
+
+                // fix the offset of 'ulElement'
+                if ($.browser.msie === true) {
+                    ulElement.css({top : "+="+ 20});
+                    ulElement.css({left: "-="+ 40});
+                }
+
+                return(parent);
+            }));
+        };
+
+        /**
+         * plugin defaults
+         *
+         * @type {PlainObject}
+         */
+        $.fn.mazeEllipsis.defaults = {
+            position   : "right",
+            activeFirst: "active",
+            trigger    : "<div>[...]</div>",
+            classes: {
+                entry : "entry",
+                hidden: "hidden",
+                popup : "popup"
+            },
+            onLoaded  : null,
+            onTrigger : null,
+            onClick   : null
+        };
+    })(jQuery);
 </script>
