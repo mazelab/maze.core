@@ -58,14 +58,11 @@ ul.cssUserInfo li{
     margin:4px 4px 0 0;
     float:left;
 }
-ul.cssUserInfo li.active{
-    background:#fff;
-}
-ul.cssUserInfo li:hover, ul.cssUserInfo li a:hover, ul.cssUserInfo li:active{
+ul.cssUserInfo li:hover, ul.cssUserInfo li a:hover, ul.cssUserInfo li.active{
     background:#fff;
     border-radius:5px;
 }
-ul.cssUserInfo li:hover .cssUserName {
+ul.cssUserInfo li:hover .cssUserName, ul.cssUserInfo li.active a{
     color:#4a4a4a;
 }
 .cssUserName img{
@@ -75,7 +72,7 @@ ul.cssUserInfo li:hover .cssUserName {
     margin-right:15px;
     border-radius:4px;
 }
-.cssUserInfo > ul li a.cssUserName{
+.cssUserInfo li a.cssUserName{
     position:relative;
     padding:0 9px 3px 0;
     overflow:hidden;

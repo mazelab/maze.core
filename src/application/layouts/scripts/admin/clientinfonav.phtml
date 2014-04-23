@@ -65,8 +65,8 @@
             content: $('.jsClientNav').html(),
             position: {
                 adjust: {
-                        x: 3,
-                        y: 5
+                        x: -4,
+                        y: 3
                     },
                 corner: {
                     target: 'bottomRight',
@@ -86,7 +86,15 @@
                 }
             },
             show: 'click',
-            hide: 'click'
+            hide: 'click',
+            api: {
+                onShow: function() {
+                    $('ul.cssUserInfo li').last().addClass('active');
+                },
+                onHide: function() {
+                    $('ul.cssUserInfo li').last().removeClass('active');
+                }
+            }
         });
     });
 </script>
