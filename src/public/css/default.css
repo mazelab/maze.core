@@ -44,10 +44,10 @@ ul.cssUserInfo li.cssClientLevel, .cssFooterContent, .cssQtip, .cssLoginBoxHead 
     position:relative;
 }
 ul.cssUserInfo li.cssClientLevel{
-    color:#15add2;
+    color:#fbf1f1;
     height: 25px;
     line-height: 25px;
-    padding: 4px 15px 0 0;
+    padding:0 15px 0 0;
     position: relative;
 }
 ul.cssUserInfo li.cssClientLevel:hover{
@@ -55,62 +55,55 @@ ul.cssUserInfo li.cssClientLevel:hover{
 }
 ul.cssUserInfo li{
     list-style:none;
-    margin:0;
-    float: left;
-    padding:4px 4px 0 0;
+    margin:4px 4px 0 0;
+    float:left;
 }
-ul.cssUserInfo li.active{
+ul.cssUserInfo li:hover, ul.cssUserInfo li a:hover, ul.cssUserInfo li.active{
     background:#fff;
-}
-ul.cssUserInfo li:hover, ul.cssUserInfo li a:hover, ul.cssUserInfo li:active{
-    background:#fff;
-    color:#15add2;
     border-radius:5px;
+}
+ul.cssUserInfo li:hover .cssUserName, ul.cssUserInfo li.active a{
+    color:#4a4a4a;
 }
 .cssUserName img{
     float:left;
     width:25px;
-    height:25px;
+    height:23px;
     margin-right:15px;
-    border-radius:5px;
+    border-radius:4px;
 }
-.cssUserInfo > ul li a.cssUserName{
+.cssUserInfo li a.cssUserName{
     position:relative;
-    padding: 0 15px 4px 4px;
+    padding:0 9px 3px 0;
     overflow:hidden;
     display:block;
     float: left;
-    height:25px;
-    line-height:25px;
+    height:20px;
+    line-height:23px;
     white-space:nowrap;
-    color:#3e3d3b;
-}
-.cssUserInfo > ul li a.cssUserName:hover{
-    color:#15add2;
+    color:#fbf1f1;
 }
 a.cssUserInfoButton{
-    padding:5px 4px 4px 4px;
+    padding:0;
     float: left;
     overflow: hidden;
-    height: 16px;
+    height:23px;
 }
-ul.cssUserInfo li a.cssUserInfoButton:hover, a.cssUserName:hover{
-    background:#a19d91;
-    border-radius:2px;
+ul.cssUserInfo a.cssUserInfoButton:hover{
+    background:#938f81;
+    border-radius:5px;
 }
 span.cssUserInfoButton{
-    background-image:  url('js/images/ui-icons_3e3d3b_256x240.png');
-    background-position: -64px -16px;
-    border-left-color:#a19d91;
-    border-left-style:dotted;
-    border-left-width:1px;
+    background:url('js/images/ui-icons_dfdac4_256x240.png') -64px -16px;
+    border-left:1px dotted #d0d0d0;
     height:16px;
-    padding:0;
+    padding:0 0 0 4px;
     position:relative;
     text-indent:1000px;
     width:16px;
     overflow:hidden;
     display:block;
+    margin:4px 0;
 }
 .cssUserNav{
     height:auto;
@@ -143,107 +136,93 @@ ul.cssUserInfo li.cssRightLevel:hover{
     background:none;
 }
 .cssRightLevel a{
-    color:#fff;
-    padding:0 10px 4px 10px;
+    color:#4a4a4a;
+    padding:0 10px 4px;
     height:20px;
     line-height:23px;
-    text-align:center;
-    background:#1AA8C9;
-    border:0px solid #fff;
+    background:#dae7ea;
     border-radius:5px;
-    box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.6);
     float:left;
 }
 /*-------------------Navigation-------------------*/
 .cssNav{
     height:40px;
     line-height: 40px;
-    margin-top:27px;
+    margin-top:14px;
     position:relative;
     text-align:right;
     float: right;
     padding-left: 50px;
-    background:url('../img/bg_nav_left.png') no-repeat left top;    
 }
-.cssNav .ui-selectmenu.ui-widget.ui-state-active{
-    background:url('../img/bg_nav.png');
-    height:40px;
-    line-height: 40px;
-    border:0;
-    border-radius:0 15px 0 0;
+.cssSelectmenu .btn.trigger {
+    display:inline-block !important;
+    border-radius:0 4px 4px 0;
 }
-.cssNav .ui-selectmenu.ui-widget{
-    font-family: 'Helvetica';
+.cssSelectmenu .btn.trigger.open {
+    border-radius:0 4px 0 0;
+    background:#edf1ff;
 }
-.ui-selectmenu.ui-widget.ui-state-default.ui-corner-all.ui-selectmenu-dropdown,
-.ui-selectmenu.ui-widget.ui-state-default.ui-corner-all.ui-selectmenu-dropdown.ui-state-active{
-    background:url('../img/bg_nav.png') repeat-x;
-    height:40px;
-    line-height: 40px;
-    color:#fff;
-    font-weight: normal;
-    position: relative;
-    border:0;
-    border-radius:0 15px 0 0;
+.cssSelectmenuPopup {
+    background:#edf1ff;
+    border:1px solid #c9c7c7;
+    border-top: 1px transparent solid;
+    list-style:none;
+    z-index:0;
+    border-radius:0 0 4px 4px;
+    color:#595959;
 }
-span.ui-selectmenu-icon{
-    border-left:1px dotted #A19D91;
-    padding-left: 2px;
+.cssSelectmenuPopup li {
+    border-bottom:1px solid #b5b5b5;
 }
-.ui-selectmenu.ui-widget{
-    font-size:18px;
+.cssSelectmenuPopup li:last-child {
+    border-bottom:none;
 }
-.ui-selectmenu-menu li a, .ui-selectmenu-status{
-    font-size:17px;
-    text-align:right;
-    padding-right:40px;
+.cssSelectmenuPopup li a {
+    color:#595959;
+    font-size:12px;
+    margin:0 14px;
 }
-.ui-selectmenu-menu li{
-    border:0;
-}
-.ui-selectmenu-item-focus.ui-state-hover{
-    border:0;    
-}
-.ui-selectmenu-menu-dropdown{
-    border-top:0;
+.cssSelectmenuPopup li:hover {
+    background:#e2ebf9;
 }
 /*-------------------SubNav-------------------*/
-.cssSubNav{
-    border-top:1px solid #807c6b;
-    background: #807c6b url('../img/bg_subnav.jpg') repeat-x scroll;
-    height:50px;
+.cssSubNav {
+    background:#f3efe0;
+    border-top:1px solid #d0cccc;
+    border-bottom:1px solid #d0cccc;
     font-size:17px;
+    height:34px;
 }
-.cssSubNav li a{
-    color:#fff;
+.cssSubNav li a {
+    color:#545454;
     float:left;
-    height:50px;
-    width:auto;
-    padding:0 15px;
+    margin:0 20px 0 0;
+    padding:0;
     text-align:center;
+    width:auto;
+    height:28px;
 }
-.cssSubNav li a:hover{
-    background: #807c6b url('../img/bg_subnav_active.jpg') repeat-x left top;
-    text-decoration:none;
+.cssSubNav li a:hover {
+    border-bottom:6px solid #e7e7e7;
 }
-.cssSubNav li.active a{
-    background: #807c6b url('../img/bg_subnav_hover_50.jpg') repeat-x left top;
-    text-decoration:none;
+.cssSubNav li.active a {
+    background:transparent;
+    border-bottom:6px solid #d0d0d0;
     cursor:default;
 }
 .cssSubNav li a.cssSubNavDisabled {
-    color: #6E6D6B;
+    color:#a9a9a9;
     cursor:default;
 }
 .cssSubNav li a.cssSubNavDisabled:hover {
-    background: none;
+    border:none;
     cursor:default;
 }
-.cssMenu{
-    float:right;
-    height: 50px;
-    line-height: 50px;
-    margin: 0;
+.cssMenu {
+    float:left;
+    height:34px;
+    line-height:35px;
+    margin:0;
 }
 .cssMenu li{
     float:left;
@@ -251,33 +230,66 @@ span.ui-selectmenu-icon{
     margin: 0;
 }
 /*-------------------Header-------------------*/
-.cssHeaderAdmin, .cssHeader{
-    background:#e7f7f8;
+.cssHeader {
+    background:#ede6d1;
     height:100px;
     border-bottom:1px solid #fcfcfc;
 }
-.cssHeaderClient{
-    background:#ece7d3;
-    height:100px;
-    border-bottom:1px solid #fcfcfc;    
+.cssHeaderStripeTop {
+    background:#b4b0a2;
+    border-bottom:1px solid #a39191;
+    height:34px;
+    position:absolute;
+    width:100%;
 }
 .cssLogo{
     text-decoration:none;
     position:relative;
 }
 .cssLogo a{
-    font-size:25px;
-    text-decoration:none; 
-    color:#3e3d3b;
-    font-weight:400;
     position:absolute;
-    top:19px;
-    left:0;
+    top:3px;
 }
-.cssLogo a span{
+.cssLogo a span {
+    font-size:16px;
     position:absolute;
-    left:120px;
-    top:0;
+    left:73px;
+    top:-29px;
+    color:#fbf1f1;
+}
+.cssLogo a img {
+    height:87px;
+}
+/*-------------------Button Group-------------------*/
+.cssButtonGroup .btn {
+    background:transparent linear-gradient(#ffffff, #eae7e7 120%) left top;
+    border:1px solid #c9c7c7;
+    border-radius:0;
+    color:#aaaaaa;
+    height:25px;
+    margin-left:-7px;
+    padding:0;
+}
+.cssButtonGroup .btn.active {
+    background:transparent linear-gradient(#feffe4, #eaeeb3 120%) left top;
+}
+.cssButtonGroup .btn:first-child {
+    border-radius:4px 0 0 4px;
+    margin:0;
+}
+.cssButtonGroup .btn:last-child {
+    border-radius:0 4px 4px 0;
+}
+.cssButtonGroup .btn:hover{
+    background:#f1f1f1;
+}
+.cssButtonGroup .btn.active a:hover,
+.cssButtonGroup .btn.active:hover{
+    cursor:default;
+    background:#f4f5ce;
+}
+.cssButtonGroup .btn a {
+    color:#595959;
 }
 /*-------------------Dashboard-------------------*/
 .cssDashboardBox, .cssDashboardBoxLast{
