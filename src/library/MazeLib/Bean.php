@@ -227,7 +227,7 @@ class MazeLib_Bean extends ZendX_AbstractBean
      * @param mixed $remote is this value from remote
      * @return array
      */
-    public function _mergeMazeProperty($path, $orig, $update, $remote = false)
+    protected function _mergeMazeProperty($path, $orig, $update, $remote = false)
     {
         if(!($status = $this->getMapping($path))) {
             return $update;
