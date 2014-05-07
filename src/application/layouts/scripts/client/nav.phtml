@@ -4,7 +4,7 @@
 <script type="text/javascript">
     $(document).ready(function() {
         $(['.cssNav', 'li']).mazeEllipsis({
-            trigger: "<div class='btn'>...</div>",
+            trigger: "<div class='btn'><a>...</a></div>",
             width  : 350,
             classes: {
                 entry : "btn",
@@ -18,7 +18,7 @@
                     event.preventDefault();
                 }
             }
-        }).addClass("cssSelectmenu  cssButtonGroup");
+        }).addClass("cssSelectmenu cssButtonGroup");
     });
 </script>
 
@@ -115,8 +115,10 @@
                     class: setting.classes.popup !== "" ? setting.classes.popup : null,
                     html : function(){
                         var list = "";
-                        for (var index in parent.hiddenElems) {
-                            list += "<li>html</li>".replace("html", parent.hiddenElems[index][0].innerHTML);
+                        for(var index in parent.hiddenElems) {
+                            var entry = parent.hiddenElems[index][0].cloneNode(true);
+                            entry.style.display = "";
+                            list += entry.outerHTML;
                         }
 
                         return(list);
@@ -274,7 +276,7 @@
          */
         $.fn.mazeEllipsis.defaults = {
             position   : "right",
-            activeFirst: "active",
+            activeFirst: null,
             trigger    : "<div>[...]</div>",
             classes: {
                 entry : "entry",
