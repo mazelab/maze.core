@@ -162,6 +162,15 @@ ul.cssUserInfo li.cssRightLevel:hover{
     border-radius:0 4px 0 0;
     background:#edf1ff;
 }
+.cssSelectmenu .btn.active,{
+    background:transparent linear-gradient(#feffe4, #eaeeb3 120%) left top;
+}
+.cssSelectmenu .btn.active a:hover,
+.cssSelectmenu .btn.active:hover,
+.cssSelectmenuPopup li.active{
+    cursor:default;
+    background:#f4f5ce;
+}
 .cssSelectmenuPopup {
     background:#edf1ff;
     border:1px solid #c9c7c7;
@@ -180,7 +189,7 @@ ul.cssUserInfo li.cssRightLevel:hover{
 .cssSelectmenuPopup li a {
     color:#595959;
     font-size:12px;
-    margin:0 14px;
+    padding:0 14px;
 }
 .cssSelectmenuPopup li:hover {
     background:#e2ebf9;
@@ -270,9 +279,6 @@ ul.cssUserInfo li.cssRightLevel:hover{
     margin-left:-7px;
     padding:0;
 }
-.cssButtonGroup .btn.active {
-    background:transparent linear-gradient(#feffe4, #eaeeb3 120%) left top;
-}
 .cssButtonGroup .btn:first-child {
     border-radius:4px 0 0 4px;
     margin:0;
@@ -283,13 +289,13 @@ ul.cssUserInfo li.cssRightLevel:hover{
 .cssButtonGroup .btn:hover{
     background:#f1f1f1;
 }
-.cssButtonGroup .btn.active a:hover,
-.cssButtonGroup .btn.active:hover{
-    cursor:default;
-    background:#f4f5ce;
-}
 .cssButtonGroup .btn a {
+    display:block;
+    padding:0.4em 1em;
     color:#595959;
+}
+.cssButtonGroup .btn span.ui-button-text {
+    padding: 0;
 }
 /*-------------------Dashboard-------------------*/
 .cssDashboardBox, .cssDashboardBoxLast{

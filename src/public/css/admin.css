@@ -194,10 +194,8 @@ span.jsEditableTextareas.whiteSpace {
     filter: Alpha(opacity=20);
 }
 /*-------------------Statustext Right-------------------*/
-.cssStatusText {
-    position:absolute;
-}
 .cssStatusText .stat {
+    position:absolute;
     cursor:default;
     text-transform:uppercase;
     font-weight:bold;
