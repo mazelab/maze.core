@@ -13,7 +13,11 @@
         <? $this->headLink()->prependStylesheet($this->baseUrl() . '/css/bootstrap-responsive.css') ?>
         <? $this->headLink()->prependStylesheet($this->baseUrl() . '/css/bootstrap.min.css') ?>
         <? $this->headLink()->prependStylesheet($this->baseUrl() . '/css/passwordstrength.css') ?>
+        <? $this->headLink()->prependStylesheet($this->baseUrl() . '/css/js/xeditable.css') ?>
         <?= $this->headLink() ?>
+        <? $this->headScript()->prependFile($this->baseUrl() . '/js/angular/services.js') ?>
+        <? $this->headScript()->prependFile($this->baseUrl() . '/js/angular/directives.js') ?>
+        <? $this->headScript()->prependFile($this->baseUrl() . '/js/min//xeditable.min.js') ?>
         <? $this->headScript()->prependFile($this->baseUrl() . '/js/min/ui-bootstrap-tpls-0.10.0.min.js') ?>
         <? $this->headScript()->prependFile($this->baseUrl() . '/js/min/angular.min.js') ?>
         <? $this->headScript()->prependFile($this->baseUrl() . '/js/ui/jquery.ui.editable.js') ?>
@@ -26,7 +30,11 @@
         <?= $this->headScript() ?>
 
         <script type="text/javascript">
-            app = angular.module('maze.core', ['ui.bootstrap']);
+            app = angular.module('maze.core', ['ui.bootstrap', 'mazeDirectives', 'mazeServices', 'xeditable']);
+
+            app.run(function(editableOptions) {
+                editableOptions.theme = 'bs2'; // bootstrap3 theme. Can be also 'bs2', 'default'
+            });
         </script>
     </head>
     <body ng-app="maze.core">
