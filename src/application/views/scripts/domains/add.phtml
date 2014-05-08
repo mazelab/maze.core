@@ -4,46 +4,91 @@
             <div class="cssUserImage span2">
                 <img name="avatar" class="img-polaroid" src="<?= $this->baseUrl() ?>/img/dummy_domain_200.png" alt="<?= $this->translate('avatar') ?>">
             </div>
-            <form class="span10" action="<?= $this->url(array(), 'addDomain') ?>" method="post">
+            <div class="span10" ng-controller="DomainController" id="addDomain">
                 <dl class="row-fluid">
                     <dt class="span3">
-                    <label><?= $this->translate('domain name *') ?></label>
+                        <label><?= $this->translate('domain name *') ?></label>
                     </dt>
                     <dd class="span9">
-                        <?= $this->form->name ?>
+                        <input type="text" id="name" ng-model="domain.name;">
+                        <alert ng-repeat="alert in response.errors.name" class="alert-danger" >{{alert}}</alert>
                     </dd>
-                    
                 </dl>
                 <dl class="row-fluid">
                     <dt class="span3">
-                    <label><?= $this->translate('domain of client *') ?></label>
+                        <label><?= $this->translate('domain of client *') ?></label>
                     </dt>
                     <dd class="span9">
-                        <?= $this->form->owner ?>
+                        <a href="#" editable-select="selected" e-ng-options="client.label for (id, client) in clients" id="owner">
+                            {{selected.label || "<?= $this->translate("Choose client"); ?>"}}
+                        </a>
+                        <alert ng-repeat="alert in response.errors.owner" class="alert-danger" >{{alert}}</alert>
                     </dd>
-                    
                 </dl>
                 <dl class="row-fluid">
                     <dt class="span3">
                     <label><?= $this->translate('procurement place') ?></label>
                     </dt>
                     <dd class="span9">
-                        <?= $this->form->procurementplace ?>
+                        <input type="text" id="procurementplace" ng-model="domain.procurementplace;">
                     </dd>
                 </dl>
                 <div class="row-fluid">
-                    <input id="jsCancelButton" class="btn btn-info" type="reset" value="<?= $this->translate('cancel') ?>" />
-                    <input class="btn btn-info jsButton" type="submit" value="<?= $this->translate('save') ?>" />
+                    <input id="jsCancelButton" class="btn btn-info" type="reset" onclick="history.go(-1);" value="<?= $this->translate('cancel') ?>" />
+                    <input class="btn btn-info jsButton" type="submit" ng-click="submit($event);" value="<?= $this->translate('save') ?>" />
                 </div>
-            </form>
+            </div>
         </div>
     </div>
 </div>
 
 <script type="text/javascript">
-    $(document).ready(function() {
-        $('#jsCancelButton').click(function() {
-            location.href = '<?= $this->url(array(), 'domains'); ?>';
-        });
+
+    app.factory('FormElements', function(){
+        return {
+            form: $("#addDomain"),
+            disable: function(disable){
+                angular.element(this.form).find("input, button").each(function(){
+                    $this = angular.element(this);
+                    $this.prop("disabled", disable);
+                    if (disable && $this.hasClass("btn") === true){
+                        $this.addClass("disabled");
+                    } else {
+                        $this.removeClass("disabled");
+                    }
+                });
+
+                return($this);
+            }
+        };
     });
+
+    app.controller('DomainController', ['$scope', 'domainService', 'FormElements', 'clientService', function($scope, domainService, formElements, clientService){
+        $scope.clients  = {};
+        $scope.domain   = {};
+        $scope.selected = {};
+
+        $scope.$watch("selected", function(selection){
+            $scope.domain.owner = selection._id;
+        });
+
+        clientService.list().success(function(clients){
+            $scope.clients = clients || {};
+        });
+
+        $scope.submit = function(event){
+            formElements.disable(true);
+            domainService.create($scope.domain.name, $scope.domain).success(function(response, status){
+                $scope.response = response;
+
+                if (status === 201){
+                    return location.href = $scope.response.uri;
+                }
+
+                formElements.disable(false);
+            });
+
+            event.preventDefault();
+        };
+    }]);
 </script>

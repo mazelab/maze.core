@@ -696,14 +696,18 @@ class Core_Model_DomainManager
         if(!($domain = $this->getDomain($domainId))) {
             return false;
         }
+        
+        if (isset($data['additionalKey']) && isset($data['additionalValue'])) {
+            $domain->addAdditionalField($data['additionalKey'], $data['additionalValue']);
+            unset($data['additionalKey']);
+            unset($data['additionalValue']);
+        }
 
         if(isset($data['additionalFields'])) {
-            foreach ($data['additionalFields'] as $id => $value) {
-                if (!$value || trim($value) == "") {
+            foreach ($data['additionalFields'] as $id => $additionalField) {
+                if (!$additionalField["value"] || trim($additionalField["value"]) == "") {
                     $this->deleteAdditionalField($domainId, $id);
-                    unset($data['additionalFields']);
-                } else {
-                    $data['additionalFields'][$id] = array("value" => $value);
+                    unset($data['additionalFields'][$id]);
                 }
             }
 

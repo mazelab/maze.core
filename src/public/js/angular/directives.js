@@ -35,7 +35,7 @@ directives.directive('mazeAdditional', function() {
                         '<span name="{{field.label}}" editable-textarea="field.value" onbeforesave="_update($data);" e-ng-keydown="_keydown($event);" id="{{id}}" ng-click="_setId($event);_hide();" class="jsEditableAdditionalFields">{{field.value || "empty"}}</span>' +
                     '</dd>' +
                  '</div>' +
-                 '<a id="additional-infotext" class="muted span12" ng-click="_open();">Add Info</a>' +
+                 '<div class="row-fluid"><a id="additional-infotext" class="muted span12" ng-click="_open();">Add Info</a></div>' +
                  '<div id="additional-newfield" style="display:none;" class="cssAddItem">' +
                        '<div class="span3"><input type="text" placeholder="label" ng-model="_created.label;" class="span12"></div>' +
                        '<div class="span5">' +
@@ -53,25 +53,46 @@ directives.directive('mazeAdditional', function() {
             $scope._infotext = angular.element("#additional-infotext");
             $scope._newfield = angular.element("#additional-newfield");
 
+            /**
+             * saves the hash (id) of opened additional field
+             *
+             * @private
+             * @param {Event} event
+             */
             $scope._setId = function(event){
                 this.activeId = event.target.id;
             };
 
+            /**
+             * opens the container for a new field
+             *
+             * @private
+             */
             $scope._open = function(){
                 this._infotext.hide();
                 this._newfield.show();
             };
 
+            /**
+             * closes the new container
+             *
+             * @private
+             */
             $scope._hide = function(){
                 this._infotext.show();
                 this._newfield.hide();
                 $scope._errors   = {};
             };
 
+            /**
+             * creates a new additional field
+             *
+             * @private
+             */
             $scope._create = function(){
                 if ($attrs.update && $attrs.fields && $scope.fields){
                     this.model = angular.copy($scope.fields);
-                    this.model.additionalKey = this._created.label;
+                    this.model.additionalKey   = this._created.label;
                     this.model.additionalValue = this._created.value;
 
                     for (var id in this.model.additionalFields) {
@@ -91,6 +112,12 @@ directives.directive('mazeAdditional', function() {
                 }
             };
 
+            /**
+             * update an existing additional field
+             *
+             * @private
+             * @param {string} data
+             */
             $scope._update = function(data){
                 if (this.activeId && $attrs.update && $attrs.fields) {
                     this.model = angular.copy($scope.fields);
@@ -100,6 +127,12 @@ directives.directive('mazeAdditional', function() {
                 }
             };
 
+            /**
+             * handle the keydown event
+             *
+             * @private
+             * @param {Event} event
+             */
             $scope._keydown = function(event) {
                 // custom behavior on tab press
                 if (9 === (event.keyCode || event.which) && event.target.nodeName.toLowerCase() === "textarea") {
