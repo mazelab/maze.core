@@ -81,6 +81,12 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         return $view->navigation();
     } 
     
+    protected function _initPutHandler()
+    {
+        $front = Zend_Controller_Front::getInstance();
+        $front->registerPlugin(new Zend_Controller_Plugin_PutHandler());
+    }
+
     /**
      * Set the router config
      * If a routes.ini exists in this modul, it will be initialized
