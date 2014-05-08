@@ -5,7 +5,7 @@
  * @license http://opensource.org/licenses/MIT MIT
  */
 
-abstract class MazeLib_Rest_Controller extends Zend_Rest_Controller
+class MazeLib_Rest_Controller extends Zend_Controller_Action
 {
 
     /**
@@ -64,6 +64,25 @@ abstract class MazeLib_Rest_Controller extends Zend_Rest_Controller
         $this->_helper->layout->disableLayout();
         $this->_helper->viewRenderer->setNoRender(TRUE);
         $this->getResponse()->setHeader('Content-Type', 'application/json');
+
+        $requestMethod = strtolower($this->getRequest()->getServer("REQUEST_METHOD"));
+        $requestAction = ucfirst($this->getParam("action"));
+
+        if (method_exists($this, "{$requestMethod}{$requestAction}Action")) {
+            $action = "{$requestMethod}-{$this->getParam("action")}";
+        } else {
+            $action = "method-not-allowed";
+        }
+
+        $this->getRequest()->setActionName($action);
     }
 
+    /**
+     * set method request not supported by that resource
+     */
+    public function methodNotAllowedAction()
+    {
+        $this->_setMethodNotAllowedHeader();
+        $this->_helper->json->sendJson(array());
+    }
 }

@@ -13,7 +13,7 @@
 class ApiNodesController extends MazeLib_Rest_Controller
 {
 
-    public function indexAction()
+    public function getResourcesAction()
     {
         $nodeManager = Core_Model_DiFactory::getNodeManager();
         $jsonNodes = array();
@@ -31,27 +31,27 @@ class ApiNodesController extends MazeLib_Rest_Controller
         $this->_helper->json->sendJson($jsonNodes);
     }
 
-    public function getAction()
+    public function getResourceAction()
     {
         $this->_setMethodNotAllowedHeader();
     }
 
-    public function headAction()
+    public function headResourceAction()
     {
         $this->_setMethodNotAllowedHeader();
     }
 
-    public function postAction()
+    public function postResourcesAction()
     {
         $this->_setMethodNotAllowedHeader();
     }
 
-    public function putAction()
+    public function putResourceAction()
     {
         $this->_setMethodNotAllowedHeader();
     }
 
-    public function deleteAction()
+    public function deleteResourceAction()
     {
         $this->_setMethodNotAllowedHeader();
     }
