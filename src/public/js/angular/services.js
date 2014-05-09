@@ -9,23 +9,41 @@ services.service('nodesService', function($http) {
             params: params
         });
     };
+    this.get = function(id){
+        return($http.get("/api/nodes/"+ id));
+    };
+    this.update = function(id, dataset){
+        return($http.put("/api/nodes/"+ id, $.param(dataset)));
+    };
+    this.delete = function(id){
+        return($http.delete("/api/nodes/"+ id));
+    };
 });
 
 /**
  * service for clients
  */
-services.service('clientService', function($http) {
+services.service('clientsService', function($http) {
     this.list = function(params) {
         return $http.get('/api/clients', {
             params: params
         });
+    };
+    this.get = function(id){
+        return($http.get("/api/clients/"+ id));
+    };
+    this.update = function(id, dataset){
+        return($http.put("/api/clients/"+ id, $.param(dataset)));
+    };
+    this.delete = function(id){
+        return($http.delete("/api/clients/"+ id));
     };
 });
 
 /**
  * service for domain
  */
-services.service('domainService', function($http) {
+services.service('domainsService', function($http) {
     this.list = function(params) {
         return $http.get('/api/domains', {
             params: params
@@ -36,14 +54,14 @@ services.service('domainService', function($http) {
     };
     this.update = function(name, dataset){
         return(
-            $http.post("/api/domains/"+ name, $.param(dataset),
-            {headers: {"Content-Type": "application/x-www-form-urlencoded"}})
+            $http.put("/api/domains/"+ name, $.param(dataset))
         );
     };
     this.delete = function(name){
         return($http.delete("/api/domains/"+ name));
     };
-    this.create = function(name, dataset){
-        return $http.put("/api/domains/"+ name, $.param(dataset));
+    this.create = function(dataset){
+        return $http.post("/api/domains/", $.param(dataset),
+               {headers: {"Content-Type": "application/x-www-form-urlencoded"}});
     };
 });

@@ -33,85 +33,59 @@ class ApiDomainsController extends MazeLib_Rest_Controller
         $this->_helper->json->sendJson($jsonDomains);
     }
 
+    public function postResourcesAction()
+    {
+        $domainManager = Core_Model_DiFactory::getDomainManager();
+        $form = new Core_Form_AddDomain();
+        if ($form->isValid($this->getRequest()->getPost())) {
+            $domainId = $domainManager->createDomain($form->getValue('name'),
+                $form->getValue('owner'), $form->getValue('procurementplace'));
+
+            if($domainId) {
+                $this->getResponse()->setHttpResponseCode(201);
+            }
+        } else {
+            $this->_helper->json->sendJson(array("errors" => $form->getMessages()));
+        }
+    }
+
     public function deleteResourceAction()
     {
         $domainManager = Core_Model_DiFactory::getDomainManager();
-
-        if(($domain = $domainManager->getDomainByName($this->_getParam("domainName")))) {
-            if ($domainManager->deleteDomain($domain->getId())) {
-                $this->getResponse()->setHttpResponseCode(200);
-            } else {
+        if(($domain = $domainManager->getDomain($this->getParam("domainId"))) &&
+            $domainManager->deleteDomain($domain->getId())) {
                 $this->_setAcceptedHeader();
-            }
-        } else {
-            $this->_setNoContentHeader();
         }
     }
 
     public function putResourceAction()
     {
-        $response = new stdClass();
-
         $domainManager = Core_Model_DiFactory::getDomainManager();
-        $domainName = $this->_getParam("domainName");
-        if(($domain = $domainManager->getDomainByName($domainName))) {
-            $this->getResponse()->setHttpResponseCode(202);
-            return;
+        if(!($domain = $domainManager->getDomain($this->getParam("domainId")))) {
+            return $this->_setNotFoundHeader();
         }
 
-        $form = new Core_Form_AddDomain();
-        if ($form->isValid($this->getRequest()->getParams())) {
-            $domainId = $domainManager->createDomain($form->getValue('name'),
-                $form->getValue('owner'), $form->getValue('procurementplace'));
+        $form = new Core_Form_Domain();
+        $form->setAdditionalFields($domain);
 
-            if($domainId) {
-                $response->domainId = $domainId;
-                $response->uri = $this->view->url(array(), 'domains');
-                $this->getResponse()->setHttpResponseCode(201);
+        $values = $form->getValidValues($this->getRequest()->getParams());
+        if(!empty($values)) {
+            if (($result = $domainManager->updateDomain($domain->getId(), $values))) {
+                $this->getResponse()->setHttpResponseCode(202);
+                $this->_helper->json->sendJson($domain->getData());
             }
-            $response->result = $domainId === false ? false : true;
         } else {
-            $response->errors = $form->getMessages();
+            $this->_helper->json->sendJson(array("errors" => $form->getMessages()));
         }
-
-        $this->_helper->json->sendJson($response);
     }
 
     public function getResourceAction()
     {
         $domainManager = Core_Model_DiFactory::getDomainManager();
-        $domainName = $this->_getParam("domainName");
-
-        if(!($domain = $domainManager->getDomainByName($domainName))) {
-            $this->_helper->json->sendJson(Core_Model_DiFactory::getMessageManager()->getMessages());
-            return;
+        if(!($domain = $domainManager->getDomain($this->getParam("domainId")))) {
+            return $this->_setNotFoundHeader();
         }
 
         $this->_helper->json->sendJson($domain->getData());
-    }
-
-    public function postResourceAction()
-    {
-        $response = new stdClass();
-        $domainManager = Core_Model_DiFactory::getDomainManager();
-
-        $domainName = $this->_getParam("domainName");
-        if(($domain = $domainManager->getDomainByName($domainName))) {
-
-            $form = new Core_Form_Domain();
-            $form->setAdditionalFields($domain);
-
-            $values = $form->getValidValues($this->getRequest()->getPost());
-            if(!empty($values)) {
-                if (($result = $domainManager->updateDomain($domain->getId(), $values))) {
-                    $response = (object) $domain->getData();
-                }
-            } else {
-                $response->errors = $form->getMessages();
-            }
-
-        }
-
-        $this->_helper->json->sendJson($response);
     }
 }

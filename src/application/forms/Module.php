@@ -30,6 +30,8 @@ class Core_Form_Module extends Zend_Form
         $this->addElement('text', 'description', array(
             'required' => true,
         ));
+        $this->addElement('text', 'additionalKey');
+        $this->addElement('text', 'additionalValue');
     }
     
     /**

@@ -143,6 +143,8 @@ class Core_Form_User extends Core_Form_AdditionalInfo
             'class' => 'jsEditable',
             'helper' => 'formTextAsSpan'
         ));
+        $this->addElement('text', 'additionalKey');
+        $this->addElement('text', 'additionalValue');
         $this->setElementDecorators($this->_elementDecorators);
         $this->setElementDecorators(array("file"), array("avatar"));
     }

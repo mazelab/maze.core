@@ -103,26 +103,20 @@
 </div>
 <script type="text/javascript">
 
-    app.controller('DomainController', ['$scope', '$modal', 'domainService', function($scope, $modal, domainService){
-        $scope.domain = {name: "<?= $this->html("domain/name"); ?>"};
-
-        domainService.get($scope.domain.name).success(function(response){
-            $scope.domain = response;
-        });
+    app.controller('DomainController', ['$scope', '$modal', 'domainsService', function($scope, $modal, domainsService){
+        $scope.domain = {_id: "<?= $this->html("domain/_id"); ?>"};
 
         $scope.update = function(data){
-            return domainService.update($scope.domain.name, data).success(function(response){
+            return domainsService.update($scope.domain._id, data).success(function(response){
                 $scope.domain = response;
             });
         };
 
         $scope.delete = function(event){
-            modal().result.then(function (selectedItem){
-                domainService.delete($scope.domain.name).success(function(response, status){
-                    if (status === 200) {
+            modal().result.then(function (){
+                domainsService.delete($scope.domain._id).success(function(response, status){
+                    if (status === 202) {
                         return location.href = "<?= $this->url(array(), "domains"); ?>";
-                    } else if (status === 202 || status === 204) {
-                        // @todo display errors
                     }
                 });
             });
@@ -144,6 +138,10 @@
                 }
             }));
         };
+
+        domainsService.get($scope.domain._id).success(function(response){
+            $scope.domain = response;
+        });
     }]);
 
     $(document).ready(function() {

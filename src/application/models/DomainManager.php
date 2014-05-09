@@ -699,8 +699,7 @@ class Core_Model_DomainManager
         
         if (isset($data['additionalKey']) && isset($data['additionalValue'])) {
             $domain->addAdditionalField($data['additionalKey'], $data['additionalValue']);
-            unset($data['additionalKey']);
-            unset($data['additionalValue']);
+            unset($data['additionalKey'], $data['additionalValue']);
         }
 
         if(isset($data['additionalFields'])) {

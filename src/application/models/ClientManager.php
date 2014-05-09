@@ -815,13 +815,16 @@ class Core_Model_ClientManager
             return false;
         }
 
+        if (isset($data['additionalKey']) && isset($data['additionalValue'])) {
+            $client->addAdditionalField($data['additionalKey'], $data['additionalValue']);
+            unset($data['additionalKey'], $data['additionalValue']);
+        }
+
         if(isset($data['additionalFields'])) {
-            foreach ($data['additionalFields'] as $id => $value) {
-                if (!$value || trim($value) == "") {
+            foreach ($data['additionalFields'] as $id => $additionalField) {
+                if (!$additionalField["value"] || trim($additionalField["value"]) == "") {
                     $this->deleteAdditionalField($clientId, $id);
-                    unset($data['additionalFields']);
-                } else {
-                    $data['additionalFields'][$id] = array("value" => $value);
+                    unset($data['additionalFields'][$id]);
                 }
             }
 

@@ -1,9 +1,9 @@
 <? $this->headScript()->appendFile($this->baseUrl() . '/js/min/jquery.form.min.js') ?>
 
-<div class="row-fluid">
+<div class="row-fluid" ng-controller="ClientController">
     <div class="span12">
         <div class="row-fluid text-left cssBoxCenter">
-            <a href="<?= $this->url(array($this->html("client/_id"), $this->html("client/label")), "deleteClient"); ?>"
+            <a ng-click="delete($event);"
                class="jsIconDeleteTxt btn" title="<?= $this->translate("delete"); ?>">
                 <i class="icon-trash"></i> <?= $this->translate("delete"); ?>
             </a>
@@ -121,7 +121,9 @@
                         </dd>
                     </dl>
                 </div>
-                <?= $this->render('shared/additionalFields.phtml'); ?>
+                <div class="row-fluid" id="additionalFieldsContent">
+                    <div maze-additional fields="client" update="update($data)"></div>
+                </div>
             </div>
         </div>
         <div class="row-fluid cssBoxCenter">
@@ -173,19 +175,75 @@
             </div>
         </div>
     </div>
-</div>
-<div id="jsConfirmDeleteClient" class="modal hide fade">
-    <div class="modal-body">
-        <p><?= $this->translate('Shall the client really be deleted?') ?></p>
-    </div>
-    <div class="modal-footer">
-        <a class="btn jsButtonCancel" data-dismiss="modal"><?= $this->translate('cancel') ?></a>
-        <a class="btn btn-primary jsButtonDelete" data-dismiss="modal"><?= $this->translate('ok') ?></a>
+    <div>
+        <script type="text/ng-template" id="ModalDeleteClient.html">
+            <div class="modal-header" ng-if="modal.title;">
+                <h3 class="modal-title">{{modal.title}}</h3>
+            </div>
+            <div class="modal-body" ng-if="modal.body;">
+                <p>{{modal.body}}</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn" ng-click="dismiss();"><?= $this->translate("cancel"); ?></button>
+                <button class="btn btn-primary" ng-click="confirm();"><?= $this->translate("ok"); ?></button>
+            </div>
+        </script>
     </div>
 </div>
 <?= $this->render('shared/passwordStrength.phtml'); ?>
 
 <script type="text/javascript">
+
+    app.controller('ClientController', ['$scope', '$modal', 'clientsService', function($scope, $modal, clientsService){
+        $scope.client = {_id: "<?= $this->html("client/_id"); ?>"};
+
+        $scope.update = function(data){
+            return clientsService.update($scope.client._id, data).success(function(client){
+                $scope.client = client;
+            });
+        };
+
+        $scope.delete = function(event){
+            modal().result.then(function(){
+                clientsService.delete($scope.client._id).success(function(response, status){
+                    if (status === 202) {
+                        return location.href = "<?= $this->url(array(), "clients"); ?>";
+                    }
+                });
+            });
+
+            return event.preventDefault();
+        };
+
+        $scope.changeState = function(event){
+            $scope.client.changeState = true;
+            $scope.update($scope.client);
+            event.preventDefault();
+        };
+
+        var modal = function(){
+            return($modal.open({
+                templateUrl: "ModalDeleteClient.html",
+                controller : function ($scope, $modalInstance){
+                    $scope.modal = {
+                        body: "<?= $this->translate("Shall the client really be deleted?"); ?>"
+                    };
+                    $scope.confirm = $modalInstance.close;
+                    $scope.dismiss = function (){
+                        $modalInstance.dismiss("cancel");
+                    };
+                }
+            }));
+        };
+
+        $scope.client.status = true;
+        clientsService.get($scope.client._id).success(function(client){
+            $scope.client = client;
+            $scope.client.status = false;
+        });
+
+    }]);
+
     $(document).ready(function() {
         $('.selectpicker').selectpicker();
         
@@ -279,53 +337,7 @@
             }
         });
 
-        $(".jsIconStateTxt").click(function(){
-            resetMessages();
-            self = $(this);
-            if (self.prop("disabled")){
-                return false;
-            }
-            self.prop("disabled", true);
-            $.ajax({
-                url: this.href,
-                data: {format: "json"},
-                success:function(data){
-                    if (!$.isEmptyObject(data.client) && self.hasClass("inactive") === data.client.status){
-                        $(".jsIconStateTxt").toggle();
-                        $(".jsClientStatus").toggle();
-                    }
-                    setMessages(data);
-                },
-                complete:function(){
-                    self.prop("disabled", false);
-                }
-            });
-            return false;
-        });
-
-        $(".jsIconDeleteTxt").live('click', function() {
-            var self = $(this);
-            var dialog = $("#jsConfirmDeleteClient").modal({backdrop:"static", show:true});
-            dialog.find(".jsButtonDelete").unbind("click").click(function(){
-                $.ajax({
-                   url: self.attr("href"),
-                   data: {format: "json"},
-                   success:function(data){
-                       if (data.status === true){
-                           location.href = "<?= $this->url(array(), "clients") ?>";
-                       }
-                       setMessages(data);
-                   }
-                });
-                dialog.modal("hide");
-            }).andSelf().find(".jsButtonCancel").click(function(){
-                dialog.modal("hide");
-            });
-            return false;
-        });
-
         setPasswordStrength("#password", {placement: "left"});
-        mazeEditableFields("<?= $this->url(array($this->html('client/_id'), $this->html('client/label')), 'addAdditionalFieldClient') ?>?format=json","<?= $this->url(array(), 'clientDetail') ?>?format=json");
 
         if ($.browser.msie){
             $("#avatar").show().css({

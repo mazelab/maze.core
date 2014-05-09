@@ -104,7 +104,7 @@ directives.directive('mazeAdditional', function() {
 
                     $parse($attrs.update)($scope.$parent, {$data: this.model}).then(function(response){
                         $scope.response = response.data;
-                        if (response.status === 200) {
+                        if (response.status === 202 || response.status === 204) {
                             $scope._hide();
                             $scope._created = {};
                         }

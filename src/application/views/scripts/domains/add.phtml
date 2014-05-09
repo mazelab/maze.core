@@ -63,7 +63,7 @@
         };
     });
 
-    app.controller('DomainController', ['$scope', 'domainService', 'FormElements', 'clientService', function($scope, domainService, formElements, clientService){
+    app.controller('DomainController', ['$scope', 'domainsService', 'FormElements', 'clientsService', function($scope, domainsService, formElements, clientsService){
         $scope.clients  = {};
         $scope.domain   = {};
         $scope.selected = {};
@@ -72,17 +72,17 @@
             $scope.domain.owner = selection._id;
         });
 
-        clientService.list().success(function(clients){
+        clientsService.list().success(function(clients){
             $scope.clients = clients || {};
         });
 
         $scope.submit = function(event){
             formElements.disable(true);
-            domainService.create($scope.domain.name, $scope.domain).success(function(response, status){
+            domainsService.create($scope.domain).success(function(response, status){
                 $scope.response = response;
 
                 if (status === 201){
-                    return location.href = $scope.response.uri;
+                    return location.href = "<?= $this->url(array(), "domains") ?>";
                 }
 
                 formElements.disable(false);

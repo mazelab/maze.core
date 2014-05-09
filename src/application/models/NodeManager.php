@@ -602,13 +602,16 @@ class Core_Model_NodeManager
             return false;
         }
 
+        if (isset($data['additionalKey']) && isset($data['additionalValue'])) {
+            $node->addAdditionalField($data['additionalKey'], $data['additionalValue']);
+            unset($data['additionalKey'], $data['additionalValue']);
+        }
+
         if(isset($data['additionalFields'])) {
-            foreach ($data['additionalFields'] as $id => $value) {
-                if (!$value || trim($value) == "") {
+            foreach ($data['additionalFields'] as $id => $additionalField) {
+                if (!$additionalField["value"] || trim($additionalField["value"]) == "") {
                     $this->deleteAdditionalField($nodeId, $id);
-                    unset($data['additionalFields']);
-                } else {
-                    $data['additionalFields'][$id] = array("value" => $value);
+                    unset($data['additionalFields'][$id]);
                 }
             }
 
