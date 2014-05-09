@@ -14,7 +14,7 @@ class ApiClientsController extends MazeLib_Rest_Controller
 {
 
     /**
-     * get paginated databases
+     * get clients
      */
     public function getResourcesAction()
     {
@@ -32,31 +32,6 @@ class ApiClientsController extends MazeLib_Rest_Controller
         }
 
         $this->_helper->json->sendJson($jsonClients);
-    }
-
-    public function getResourceAction()
-    {
-        $this->_setMethodNotAllowedHeader();
-    }
-
-    public function headResourceAction()
-    {
-        $this->_setMethodNotAllowedHeader();
-    }
-
-    public function postResourcesAction()
-    {
-        $this->_setMethodNotAllowedHeader();
-    }
-
-    public function putResourceAction()
-    {
-        $this->_setMethodNotAllowedHeader();
-    }
-
-    public function deleteResourceAction()
-    {
-        $this->_setMethodNotAllowedHeader();
     }
 
 }

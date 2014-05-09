@@ -5,8 +5,22 @@
  * @license http://opensource.org/licenses/MIT MIT
  */
 
+/**
+ * Controller
+ *
+ * @license http://opensource.org/licenses/MIT MIT
+ */
 class MazeLib_Rest_Controller extends Zend_Controller_Action
 {
+
+    /**
+     * These methods will return http error code 405 when not implemented. Everything else will throw 501.
+     *
+     * @var array
+     */
+    protected $_knownMethods = array(
+        'PUT', 'POST', 'DELETE', 'HEAD', 'GET'
+    );
 
     /**
      * set accepted header and clears body
@@ -36,6 +50,14 @@ class MazeLib_Rest_Controller extends Zend_Controller_Action
     }
 
     /**
+     * sets not implemented header and clears body
+     */
+    protected function _setNotImplementedHeader() {
+        $this->getResponse()->setHttpResponseCode(501);
+        $this->getResponse()->setBody(null);
+    }
+
+    /**
      * set not found header and clears body
      */
     protected function _setNotFoundHeader()
@@ -57,10 +79,6 @@ class MazeLib_Rest_Controller extends Zend_Controller_Action
      */
     public function init()
     {
-//        if(($accept = $this->getRequest()->getHeader('Accept')) && strpos($accept, 'application/json') === false) {
-//            throw new Zend_Controller_Action_Exception('Not Acceptable', 406);
-//        }
-
         $this->_helper->layout->disableLayout();
         $this->_helper->viewRenderer->setNoRender(TRUE);
         $this->getResponse()->setHeader('Content-Type', 'application/json');
@@ -70,19 +88,29 @@ class MazeLib_Rest_Controller extends Zend_Controller_Action
 
         if (method_exists($this, "{$requestMethod}{$requestAction}Action")) {
             $action = "{$requestMethod}-{$this->getParam("action")}";
-        } else {
+        } elseif(in_array(strtoupper($requestMethod), $this->_knownMethods)) {
             $action = "method-not-allowed";
+        } else {
+            $action = "not-implemented";
         }
 
         $this->getRequest()->setActionName($action);
     }
 
     /**
-     * set method request not supported by that resource
+     * sets method not allowed header
      */
     public function methodNotAllowedAction()
     {
         $this->_setMethodNotAllowedHeader();
-        $this->_helper->json->sendJson(array());
     }
+
+    /**
+     * sets not implemented header
+     */
+    public function notImplementedAction()
+    {
+        $this->_setNotImplementedHeader();
+    }
+
 }

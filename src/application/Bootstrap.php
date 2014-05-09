@@ -98,7 +98,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         // Gets a router object from front controller
         $router = Zend_Controller_Front::getInstance()->getRouter();
 
-        // if routes.ini exitsts then use it
+        // if routes.ini exists then use it
         if (file_exists(APPLICATION_PATH . '/configs/routes.ini')) {
             $routingFile = APPLICATION_PATH . '/configs/routes.ini';
             $router->addConfig(new Zend_Config_Ini($routingFile, $this->getEnvironment()), 'routes');

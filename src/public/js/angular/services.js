@@ -4,11 +4,9 @@ var services = angular.module("mazeServices", []);
  * service for nodes
  */
 services.service('nodesService', function($http) {
-    this.get = function(params) {
+    this.list = function(params) {
         return $http.get('/api/nodes', {
-            params: {
-                service: params
-            }
+            params: params
         });
     };
 });
