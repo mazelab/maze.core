@@ -162,10 +162,9 @@ ul.cssUserInfo li.cssRightLevel:hover{
     border-radius:0 4px 0 0;
     background:#edf1ff;
 }
-.cssSelectmenu .btn.active,{
+.cssSelectmenu .btn.active{
     background:transparent linear-gradient(#feffe4, #eaeeb3 120%) left top;
 }
-.cssSelectmenu .btn.active a:hover,
 .cssSelectmenu .btn.active:hover,
 .cssSelectmenuPopup li.active{
     cursor:default;
@@ -185,6 +184,7 @@ ul.cssUserInfo li.cssRightLevel:hover{
 }
 .cssSelectmenuPopup li:last-child {
     border-bottom:none;
+    border-radius:0 0 4px 4px;
 }
 .cssSelectmenuPopup li a {
     color:#595959;
