@@ -41,6 +41,23 @@ services.service('clientsService', function($http) {
 });
 
 /**
+ * service for modules
+ */
+services.service('modulesService', function($http) {
+    this.list = function(params) {
+        return $http.get('/api/modules', {
+            params: params
+        });
+    };
+    this.get = function(name){
+        return($http.get("/api/modules/"+ name));
+    };
+    this.update = function(name, dataset){
+        return($http.put("/api/modules/"+ name, $.param(dataset)));
+    };
+});
+
+/**
  * service for domain
  */
 services.service('domainsService', function($http) {

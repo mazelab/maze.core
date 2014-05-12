@@ -474,11 +474,11 @@ class Core_Model_ModuleManager
             return false;
         }
 
-        foreach ($data as $id => $value) {
-           if (empty($value) || trim($value) == "") {
+        foreach ($data as $id => $additionalField) {
+           if (empty($additionalField["value"]) || trim($additionalField["value"]) == "") {
                $module->unsetProperty('additionalFields/' . $id);
            } else {
-               $module->setProperty("additionalFields/$id/value", $value);
+               $module->setProperty("additionalFields/$id/value", $additionalField["value"]);
            }
         }
         

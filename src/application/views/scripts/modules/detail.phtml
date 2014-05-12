@@ -1,5 +1,5 @@
 <div class="row-fluid">
-    <div class="span12">
+    <div class="span12" ng-controller="ModuleController">
         <? if ($this->toBool("module/installed") == true): ?>
         <div class="row-fluid text-left cssBoxCenter">
             <a href="<?= $this->url(array($this->html('module/name')), 'moduleDeinstall'); ?>" id="jsUninstallModule"
@@ -91,7 +91,9 @@
                         </dd>
                     </dl>
                 </div>
-                <?= $this->render('shared/additionalFields.phtml'); ?>
+                <div class="row-fluid" id="additionalFieldsContent">
+                    <div maze-additional fields="module" update="update($data)"></div>
+                </div>
             </div>
         </div>
         <div class="row-fluid cssBoxCenter">
@@ -163,11 +165,25 @@
     </div>
 </div>
 <script type="text/javascript">
+    app.controller('ModuleController', ['$scope', 'modulesService', function($scope, modulesService){
+        $scope.module = {name: "<?= $this->html("module/name"); ?>"};
+
+        $scope.update = function(data){
+            return modulesService.update($scope.module.name, data).success(function(module, status){
+                if (status === 202) {
+                    $scope.module = module;
+                }
+            });
+        };
+
+        modulesService.get($scope.module.name).success(function(module){
+            $scope.module = module;
+        });
+    }]);
+
     $(document).ready(function() {
         initTabClickEvent();
         $('a[data-toggle="tab"]:visible:first').click();
-
-        mazeEditableFields("<?= $this->url(array($this->html("module/name")), 'addAdditionalFieldModule') ?>?format=json","<?= $this->url(array($this->html("module/name")), 'updateAdditionalFieldModule') ?>?format=json");
 
         $("#jsUninstallModule").click(function(e) {
             e.preventDefault();
