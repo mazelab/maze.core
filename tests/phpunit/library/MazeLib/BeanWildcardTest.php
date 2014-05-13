@@ -182,5 +182,83 @@ class MazeLib_BeanWildcardTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($data, $this->bean->asDeepArray(true));
     }
 
+    public function testGetLocalDataOfNonAssosiativeOnWildcardShouldReturnCorrectArrayArray()
+    {
+        $data = array(
+            'wildcard2' => array(
+                array(
+                    'depth' => 'entry0'
+                ),
+                array(
+                    'depth' => 'entry1'
+                )
+            )
+        );
+
+        $this->bean->setLocalData($data);
+
+        $this->assertEquals($data, $this->bean->getLocalData());
+    }
+
+    public function testGetLocalPropertyOfNonAssosiativeOnWildcardShouldReturnCorrectArrayArray()
+    {
+        $data = array(
+            'wildcard2' => array(
+                array(
+                    'depth' => 'entry0'
+                ),
+                array(
+                    'depth' => 'entry1'
+                ),
+                array(
+                    'depth' => 'entry2'
+                )
+            )
+        );
+
+        $this->bean->setLocalData($data);
+
+        $this->assertEquals($data['wildcard2'], $this->bean->getLocalProperty('wildcard2'));
+    }
+
+    public function testGetRemoteDataOfNonAssosiativeOnWildcardShouldReturnCorrectArrayArray()
+    {
+        $data = array(
+            'wildcard2' => array(
+                array(
+                    'depth' => 'entry0'
+                ),
+                array(
+                    'depth' => 'entry1'
+                )
+            )
+        );
+
+        $this->bean->setRemoteData($data);
+
+        $this->assertEquals($data, $this->bean->getRemoteData());
+    }
+
+    public function testGetRemotePropertyOfNonAssosiativeOnWildcardShouldReturnCorrectArrayArray()
+    {
+        $data = array(
+            'wildcard2' => array(
+                array(
+                    'depth' => 'entry0'
+                ),
+                array(
+                    'depth' => 'entry1'
+                ),
+                array(
+                    'depth' => 'entry2'
+                )
+            )
+        );
+
+        $this->bean->setRemoteData($data);
+
+        $this->assertEquals($data['wildcard2'], $this->bean->getRemoteProperty('wildcard2'));
+    }
+
 }
 

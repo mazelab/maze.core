@@ -141,14 +141,10 @@ class MazeLib_Bean extends ZendX_AbstractBean
         $dissolvedArray = array();
         
         foreach($data as $key => $value){
-            if(!$parent) {
+            if(!$parent || !$buildParent || !$parent) {
                 $path = $key;
             } else {
                 $path = $parent . self::PATH_SEPERATOR . $key;
-            }
-            
-            if(!$buildParent) {
-                $path = $key;
             }
 
             if (is_array($value) && !($this->getMapping($path) || $this->_isMazeProperty($value))) {
@@ -281,50 +277,44 @@ class MazeLib_Bean extends ZendX_AbstractBean
     /**
      * resolves dissolved array
      * 
-     * break up maze path and  unmap maze values
+     * breaks up property path and unwraps only registered maze values
      * 
      * @param array $disArray
      * @param string|null $parent
-     * @param boolean $buildParent shall the parent be build in the return array
      * @param boolean $remote resolve Maze Values as remote
-     * @return type
+     * @return mixed
      */
-    protected function _resolveArray(array $disArray, $parent = null, $buildParent = true, $remote = false)
+    protected function _resolveArray(array $disArray, $parent = null, $remote = false)
     {
+        if($parent && $this->_isMazeProperty($disArray)) {
+            if(($mapping = $this->getMapping($parent)) && $remote) {
+                return $disArray[self::FIELD_REMOTE_VALUE];
+            } elseif ($mapping) {
+                return $disArray[self::FIELD_LOCAL_VALUE];
+            }
+
+            return $disArray;
+        }
+
         $resArray = array();
-        
         foreach($disArray as $key => $value) {
-            if(!$parent) {
+            if($parent === null || $parent === false) {
                 $path = $key;
             } else {
                 $path = $parent . self::PATH_SEPERATOR . $key;
             }
-            
-            $isMapped = $this->getMapping($path);
-            if(!$buildParent) {
-                $path = $key;
-            }
-            
-            if($isMapped && $this->_isMazeProperty($value)) {
+
+            if($this->_isMazeProperty($value) && $this->getMapping($path)) {
                 if($remote) {
                     $value = $value[self::FIELD_REMOTE_VALUE];
                 } else {
                     $value = $value[self::FIELD_LOCAL_VALUE];
                 }
+            } elseif (is_array($value)) {
+                $value = $this->_resolveArray($value, $path, $remote);
             }
-            
-            $subValue = & $resArray;
-            $disArray = $this->_dissolvePropertyPath($path);
-            while(count($disArray) > 0) {
-                $subPath = array_shift($disArray);
-                if(!is_array($subValue)) {
-                    $subValue = array();
-                }
-                
-                $subValue = & $subValue[$subPath];
-            }
-            
-            $subValue = $value;
+
+            $resArray[$key] = $value;
         }
         
         return $resArray;
@@ -650,15 +640,13 @@ class MazeLib_Bean extends ZendX_AbstractBean
      */
     public function getLocalProperty($path)
     {
-        $value = $this->getProperty($path);
-        
-        if($this->getMapping($path) && $this->_isMazeProperty($value)) {
-            return $value[self::FIELD_LOCAL_VALUE];
-        } elseif (is_array($value)) {
-            return $this->_resolveArray($this->_dissolveArray($value, $path, false), $path, false);
+        $value = $result = $this->getProperty($path);
+
+        if (is_array($value)) {
+            $result = $this->_resolveArray($value, $path);
         }
         
-        return $value;
+        return $result;
     }
     
     /**
@@ -724,7 +712,7 @@ class MazeLib_Bean extends ZendX_AbstractBean
     {
         $remoteData = array();
 
-        foreach (array_keys(array_merge($this->mapping, $this->wildcardMapping)) as $path ) {
+        foreach (array_keys(array_merge($this->mapping, $this->wildcardMapping)) as $path) {
             if(($property = $this->getProperty($path))) {
                 
                 $parent = & $remoteData;
@@ -751,15 +739,13 @@ class MazeLib_Bean extends ZendX_AbstractBean
      */
     public function getRemoteProperty($path)
     {
-        $value = $this->getProperty($path);
-        
-        if($this->getMapping($path) && $this->_isMazeProperty($value)) {
-            return $value[self::FIELD_REMOTE_VALUE];
-        } elseif (is_array($value)) {
-            return $this->_resolveArray($this->_dissolveArray($value, $path, false), $path, false, true);
+        $value = $result = $this->getProperty($path);
+
+        if (is_array($value)) {
+            $result = $this->_resolveArray($value, $path, true);
         }
         
-        return $value;
+        return $result;
     }
     
     /**

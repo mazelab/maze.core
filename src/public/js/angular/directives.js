@@ -12,7 +12,7 @@ directives.directive('mazedlwrapper', function() {
             'ddClass': '@'
         },
         transclude: true,
-        template: '<dl class="row-fluid">'+
+        template: '<dl>'+
             '<dt ng-if="label" class="{{dtClass}}">' +
             '<label>' +
             '{{label}}' +
