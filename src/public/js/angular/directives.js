@@ -3,7 +3,7 @@ var directives = angular.module("mazeDirectives", []);
 /**
  * wraps content into dt/dl structure with label
  */
-directives.directive('mazedlwrapper', function() {
+directives.directive('mazeDlWrapper', function() {
     return {
         restrict: 'E',
         scope: {
@@ -25,14 +25,14 @@ directives.directive('mazedlwrapper', function() {
 
 directives.directive('mazeAdditional', function() {
     return {
-        restrict: "AEM",
+        restrict: "E",
         scope: {
             fields: "="
         },
         template: '<div ng-repeat="(id, field) in fields.additionalFields" class="row-fluid" id="additional-{{id}}">' +
                     '<dt class="span3"><label>{{field.label}}</label></dt>' +
                     '<dd class="span5 cssEditable">' +
-                        '<span name="{{field.label}}" editable-textarea="field.value" onbeforesave="_update($data);" e-ng-keydown="_keydown($event);" id="{{id}}" ng-click="_setId($event);_hide();" class="jsEditableAdditionalFields">{{field.value || "empty"}}</span>' +
+                        '<span name="{{field.label}}" editable-textarea="field.value" onbeforesave="_update(id, $data);" e-ng-keydown="_keydown($event);" id="{{id}}" ng-click="_hide();" class="jsEditableAdditionalFields">{{field.value || "empty"}}</span>' +
                     '</dd>' +
                  '</div>' +
                  '<div class="row-fluid"><a id="additional-infotext" class="muted span12" ng-click="_open();">Add Info</a></div>' +
@@ -46,22 +46,10 @@ directives.directive('mazeAdditional', function() {
                        '</div>' +
                  '</div>',
         controller: ['$scope', '$attrs', '$parse', function($scope, $attrs, $parse){
-            $scope._errors   = {};
-            $scope._fields   = {};
-            $scope._created  = {};
+            $scope._errors   = $scope._fields = $scope._created = {};
             $scope._activeId = null;
             $scope._infotext = angular.element("#additional-infotext");
             $scope._newfield = angular.element("#additional-newfield");
-
-            /**
-             * saves the hash (id) of opened additional field
-             *
-             * @private
-             * @param {Event} event
-             */
-            $scope._setId = function(event){
-                this.activeId = event.target.id;
-            };
 
             /**
              * opens the container for a new field
@@ -116,12 +104,13 @@ directives.directive('mazeAdditional', function() {
              * update an existing additional field
              *
              * @private
+             * @param {string} id
              * @param {string} data
              */
-            $scope._update = function(data){
-                if (this.activeId && $attrs.update && $attrs.fields) {
+            $scope._update = function(id, data){
+                if (id && $attrs.update && $attrs.fields) {
                     this.model = angular.copy($scope.fields);
-                    this.model.additionalFields[this.activeId].value = data;
+                    this.model.additionalFields[id].value = data;
 
                     return($parse($attrs.update)($scope.$parent, {$data: this.model}));
                 }
