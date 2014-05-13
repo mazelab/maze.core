@@ -12,6 +12,10 @@
  */
 class ApiNodesController extends MazeLib_Rest_Controller
 {
+    /**
+     * message when api request for node was not found
+     */
+    CONST MESSAGE_API_REQUEST_NOT_FOUND = 'Api request for %1$s not found';
 
     /**
      * get nodes
@@ -34,6 +38,25 @@ class ApiNodesController extends MazeLib_Rest_Controller
         $this->_helper->json->sendJson($jsonNodes);
     }
 
+    public function postResourcesAction()
+    {
+        $apiManager = Core_Model_DiFactory::getApiManager();
+        if(!($request = $apiManager->getUnregisteredApiRequest($this->getParam('name'))) ||
+            !array_key_exists('data', $request)) {
+            $messageManager = Core_Model_DiFactory::getMessageManager();
+            $messageManager->addError(self::MESSAGE_API_REQUEST_NOT_FOUND, $this->getParam('name'));
+            return $this->_helper->json->sendJson($messageManager->getMessages());
+        }
+
+        $form = new Core_Form_AddNode();
+        if($form->isValid($form->getValidValues($this->getRequest()->getPost()))) {
+            $nodeManager = Core_Model_DiFactory::getNodeManager();
+            if($nodeManager->createNode($form->getValues())){
+                $this->getResponse()->setHttpResponseCode(201);
+            }
+        }
+    }
+
     public function getResourceAction()
     {
         $nodeManager = Core_Model_DiFactory::getNodeManager();
@@ -42,16 +65,6 @@ class ApiNodesController extends MazeLib_Rest_Controller
         }
 
         $this->_helper->json->sendJson($node->getData());
-    }
-
-    public function headResourceAction()
-    {
-        $this->_setMethodNotAllowedHeader();
-    }
-
-    public function postResourcesAction()
-    {
-        $this->_setMethodNotAllowedHeader();
     }
 
     public function putResourceAction()

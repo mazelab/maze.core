@@ -70,9 +70,9 @@ class NodesController extends Zend_Controller_Action
     public function detailAction()
     {
         $nodeManager = Core_Model_DiFactory::getNodeManager();
-        if(!($node = $nodeManager->getNodeByName($this->getParam('nodeName')))) {
+        if(!($node = $nodeManager->getNode($this->getParam('nodeId')))) {
             Core_Model_DiFactory::getMessageManager()
-                    ->addError(self::MESSAGE_NODE_NOT_FOUND, $this->getParam('nodeName'));
+                    ->addError(self::MESSAGE_NODE_NOT_FOUND, $this->getParam('nodeId'));
             return $this->_forward('index');
         }
         
@@ -196,7 +196,7 @@ class NodesController extends Zend_Controller_Action
             }
         }
 
-        $this->view->data = $data;
+        $this->view->request = $request;
         $this->view->form = $form->setDefault('apiKey', $data['apiKey']);
 
         $navigation = $this->view->navigation();

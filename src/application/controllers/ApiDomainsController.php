@@ -86,6 +86,24 @@ class ApiDomainsController extends MazeLib_Rest_Controller
             return $this->_setNotFoundHeader();
         }
 
-        $this->_helper->json->sendJson($domain->getData());
+        $domainData = $domain->getData();
+
+        if ($this->getParam("client") == true) {
+            $clientManager = Core_Model_DiFactory::getClientManager();
+            $domainData["client"] = $clientManager->getClientByDomainAsArray($domain->getId());
+            $domainData["client"]["uri"] = $this->view->url(array($domainData["owner"]), "api_client");
+        }
+        if ($this->getParam("nodes") == true) {
+            $moduleListings = Core_Model_DiFactory::getModuleListings();
+            $domainData["nodes"] = $moduleListings->getNodesWithServicesByDomain($domain->getId());
+        }
+        if ($this->getParam("logs") == true) {
+            $domainData["logs"] = Core_Model_DiFactory::getLogManager()->getDomainLogs($domain->getId());
+        }
+        if ($this->getParam("services") == true) {
+            $domainData["services"] = $domain->getServices();
+        }
+
+        $this->_helper->json->sendJson($domainData);
     }
 }

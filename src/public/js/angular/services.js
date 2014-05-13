@@ -18,6 +18,10 @@ services.service('nodesService', function($http) {
     this.delete = function(id){
         return($http.delete("/api/nodes/"+ id));
     };
+    this.create = function(dataset){
+        return($http.post("/api/nodes/", $.param(dataset),
+              {headers: {"Content-Type": "application/x-www-form-urlencoded"}}));
+    };
 });
 
 /**
@@ -66,8 +70,8 @@ services.service('domainsService', function($http) {
             params: params
         });
     };
-    this.get = function(name){
-        return($http.get("/api/domains/"+ name));
+    this.get = function(name, params){
+        return($http.get("/api/domains/"+ name, {params: params}));
     };
     this.update = function(name, dataset){
         return(
@@ -80,5 +84,16 @@ services.service('domainsService', function($http) {
     this.create = function(dataset){
         return $http.post("/api/domains/", $.param(dataset),
                {headers: {"Content-Type": "application/x-www-form-urlencoded"}});
+    };
+});
+
+/**
+ * service for log
+ */
+services.service('logsService', function($http) {
+    this.list = function(params) {
+        return $http.get('/api/logs', {
+            params: params
+        });
     };
 });

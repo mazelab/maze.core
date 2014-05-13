@@ -56,7 +56,7 @@
                <li class="row-fluid">
                    <div class="span10">
                        <a class="cssListItem span12" title="<?= $this->translate('detail') ?>"
-                           href="<?= $this->url(array($node->html('name')), 'nodedetail')?>" title="Nodedetail">
+                           href="<?= $this->url(array($node->html('_id')), 'nodedetail')?>" title="Nodedetail">
                            <span class="cssAvatar">
                             <? if ($node->html('nodetype') == Core_Form_Node::SERVER_VIRTUAL): ?>
                                <img src="<?= $this->baseUrl(). "/img/dummy_vm_50.png"; ?>" alt="<?= $this->translate('avatar') ?>"/>
