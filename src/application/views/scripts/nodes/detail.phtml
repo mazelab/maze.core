@@ -1,7 +1,7 @@
 <div class="row-fluid">
     <div class="span12" ng-controller="NodeController">
         <div class="row-fluid text-left cssBoxCenter">
-            <a ng-click="delete($event);" class="jsIconDeleteTxt btn" title="<?= $this->translate("delete node"); ?>">
+            <a ng-click="delete($event);" class="jsIconDeleteTxt btn" ng-class="{disabled: !node.name}" title="<?= $this->translate("delete node"); ?>">
                 <i class="icon-trash"></i> <?= $this->translate("delete"); ?>
             </a>
         </div>
@@ -9,36 +9,20 @@
             <div class="span10">
                 <div class="row-fluid">
                     <div class="cssUserImage span2">
-                        <img class="img-polaroid" id="jsImageNodeType" name="avatar" src="<?= $this->baseUrl() ?>/img/dummy_node_200.png" alt="<?= $this->translate('avatar') ?>">
+                        <img class="img-polaroid" name="avatar" src="<?= $this->baseUrl() ?>/img/{{selected.image}}" alt="<?= $this->translate('avatar') ?>">
                     </div>
                     <div class="span9 offset1">
-                        <dl class="row-fluid cssBigItem">
-                            <span class="span9">
-                                <?= $this->form->name ?>
-                            </span>
-                        </dl>
-                        <dl class="row-fluid">
-                            <dt class="span3">
-                            <label>
-                                <?= $this->translate('ip address') ?>
-                            </label>
-                            </dt>
-                            <dd class="span7">
-                                <?= $this->form->ipAddress ?>
-                            </dd>
-                        </dl>
-                        <dl class="row-fluid">
-                            <dt class="span3">
-                            <label id="nodetype">
-                                Node Type
-                            </label>
-                            </dt>
-                            <dd class="span9">
-                                <a href="#" editable-select="node.nodetype" e-ng-options="type.value as type.name for type in nodetypes" onaftersave="setNodetype();">
-                                    {{ selectedType || "<?= $this->translate("Assign a server type"); ?>" }}
-                                </a>
-                            </dd>
-                        </dl>
+                        <mazeDlWrapper dt-class="span3" dd-class="span9 cssBigItem">
+                            {{node.name}}
+                        </mazeDlWrapper>
+                        <mazeDlWrapper label="<?= $this->translate('ip address') ?>" dt-class="span3" dd-class="span9">
+                            {{node.ipAddress}}
+                        </mazeDlWrapper>
+                        <mazeDlWrapper label="<?= $this->translate('Node Type') ?>" dt-class="span3" dd-class="span9">
+                            <a href="#" editable-select="node.nodetype" e-ng-options="type.value as type.name for type in nodetypes" e-ng-change="changetype($data);" oncancel="changetype();" onaftersave="update();">
+                                {{selected.name || "<?= $this->translate("Assign a server type"); ?>"}}
+                            </a>
+                        </mazeDlWrapper>
                     </div>
                 </div>
                 <div class="row-fluid" id="additionalFieldsContent">
@@ -105,26 +89,29 @@
 <script type="text/javascript">
     app.controller('NodeController', ['$scope', '$modal', '$filter', 'nodesService', function($scope, $modal, $filter, nodesService){
         $scope.node = {_id: "<?= $this->html("node/_id"); ?>"};
+        $scope.selected  = {image: "dummy_node_200.png"};
         $scope.nodetypes = [
-            {name:"<?= $this->translate("Virtual Server"); ?>", value: "virtual"},
-            {name:"<?= $this->translate("Cloud Server"); ?>‎", value: "cloud"},
-            {name:"<?= $this->translate("Dedicated Server"); ?>‎", value: "dedicated"}
+            {name:"<?= $this->translate("Virtual Server"); ?>", value: "virtual", image: "dummy_vm_200.png"},
+            {name:"<?= $this->translate("Cloud Server"); ?>‎", value: "cloud", image: "dummy_cloud_200.png"},
+            {name:"<?= $this->translate("Dedicated Server"); ?>‎", value: "dedicated", image: "dummy_server_200.png"}
         ];
 
-        $scope.$watch("node.nodetype", function(option){
-            if (option) {
-                $scope.selectedType = $filter('filter')($scope.nodetypes, {value: option})[0].name;
-            }
-        });
-
         $scope.update = function(data){
-            return nodesService.update($scope.node._id, data).success(function(node){
+            return nodesService.update($scope.node._id, data || $scope.node).success(function(node){
                 $scope.node = node;
             });
         };
 
-        $scope.setNodetype = function(){
-            return $scope.update($scope.node);
+        $scope.$watch("node.nodetype", function(option){
+            $scope.changetype(option);
+        });
+
+        $scope.changetype = function(option){
+            option = (option || $scope.node.nodetype);
+            select = $filter("filter")($scope.nodetypes, {value: (option)})[0];
+            if (option && select && select.value) {
+                $scope.selected = select;
+            }
         };
 
         $scope.delete = function(event){
@@ -159,41 +146,4 @@
         });
 
     }]);
-
-    $(document).ready(function() {        
-
-        $("select#nodetype").val(function(){
-            index = this.options.selectedIndex;
-            value = this.options.item(index).value;
-            this.nodetype = {
-                default   : "dummy_node_200.png",
-                virtual   : "dummy_vm_200.png",
-                cloud     : "dummy_cloud_200.png",
-                dedicated : "dummy_server_200.png"
-            };
-            this.setNodetype = function( type ){
-                if (typeof this.nodetype[type] === "undefined")
-                    type = "default";
-                $("#jsImageNodeType").attr("src", "<?= $this->baseUrl() ?>/img/" +this.nodetype[type]);
-                return type;
-            };
-            return this.setNodetype(value);
-        }).change(function(event){
-            event.target.setNodetype(event.target.value);
-        });
-
-        $("#jsChangedNodetype").click(function(event){
-            event.preventDefault();
-            $this = $(this);
-            $.ajax({
-                url: '<?= $this->url(array($this->html('node/name')), 'nodedetail') ?>?format=json',
-                data: $("select#nodetype").serializeArray(),
-                type: "post",
-                success: function(data){
-                    setTooltips(data, $this);
-                }
-            });
-        });
-
-    });
 </script>

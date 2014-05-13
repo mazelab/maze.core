@@ -61,11 +61,10 @@ class DomainsController extends Zend_Controller_Action
     public function detailAction()
     {
         $domainManager = Core_Model_DiFactory::getDomainManager();
-        $domainName = $this->_getParam('domainName');
         
-        if(!($domain = $domainManager->getDomainByName($domainName))) {
+        if(!($domain = $domainManager->getDomain($this->_getParam('domainId')))) {
             Core_Model_DiFactory::getMessageManager()
-                    ->addError(self::MESSAGE_DOMAIN_NOT_FOUND, $domainName);
+                    ->addError(self::MESSAGE_DOMAIN_NOT_FOUND, $this->_getParam('domainId'));
             return $this->_forward('index');
         }
         

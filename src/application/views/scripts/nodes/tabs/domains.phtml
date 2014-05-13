@@ -1,7 +1,7 @@
 <ul id="tabNodeDomainsList" class="unstyled jsLineColor cssTab">
     <? foreach ($this->html('domains') as $domainId => $domain): ?>
         <li id="tabNodeDomainsListEntry-<?= $domainId ?>" class="row-fluid cssLine jsLine">
-            <a href="<?= $this->url(array($domain->html('name')), 'domaindetail') ?>"
+            <a href="<?= $this->url(array($domain->html('_id')), 'domaindetail') ?>"
                title="<?= $domain->html('name') ?>" class="span8">
                 <?= $domain->html('name') ?>
             </a>
