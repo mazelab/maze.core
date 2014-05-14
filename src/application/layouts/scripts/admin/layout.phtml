@@ -16,6 +16,7 @@
         <? $this->headLink()->prependStylesheet($this->baseUrl() . '/css/js/xeditable.css') ?>
         <?= $this->headLink() ?>
         <? $this->headScript()->prependFile($this->baseUrl() . '/js/angular/extensions.js') ?>
+        <? $this->headScript()->prependFile($this->baseUrl() . '/js/angular/filters.js') ?>
         <? $this->headScript()->prependFile($this->baseUrl() . '/js/angular/services.js') ?>
         <? $this->headScript()->prependFile($this->baseUrl() . '/js/angular/directives.js') ?>
         <? $this->headScript()->prependFile($this->baseUrl() . '/js/min//xeditable.min.js') ?>
@@ -31,7 +32,7 @@
         <?= $this->headScript() ?>
 
         <script type="text/javascript">
-            app = angular.module('maze.core', ['ui.bootstrap', 'mazeDirectives', 'mazeServices', 'xeditable', 'angular-md5']);
+            app = angular.module('maze.core', ['ui.bootstrap', 'mazeDirectives', 'mazeServices', 'mazeFilters', 'xeditable', 'angular-md5']);
 
             app.run(function(editableOptions) {
                 editableOptions.theme = 'bs2'; // bootstrap3 theme. Can be also 'bs2', 'default'
