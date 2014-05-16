@@ -321,35 +321,22 @@ class MazeLib_Bean extends ZendX_AbstractBean
     }
 
     /**
-     * searches through the array context and identifies conflicts and returns
-     * them
+     * get all existing conflicting maze values
      *
-     * @param array $context
      * @return array
      */
-    public function _searchConflicts(array $context)
+    public function _getConflicts()
     {
         $conflicts = array();
 
-        foreach (array_keys($context) as $arrayKey) {
-            $arrayVal = $context[$arrayKey];
-            $status = null;
+        foreach (array_keys(array_merge($this->mapping, $this->wildcardMapping)) as $path) {
+            if(!$property = $this->getProperty($path)) {
+                continue;
+            }
 
-            if ($this->_isMazeProperty($arrayVal)) {
-                $status = $arrayVal[self::FIELD_STATUS];
-
-                if (is_numeric($status) && ($status / 1000) < 1) {
-                    $conflicts[$arrayKey] = $arrayVal;
-                }
-            } else if (is_array($arrayVal)) {
-                $inDeep = $this->_searchConflicts($arrayVal);
-                if (!empty($inDeep)) {
-                    foreach ($inDeep as $key => $value) {
-                        $propertyPath = $arrayKey . self::PATH_SEPERATOR . $key;
-
-                        $conflicts[$propertyPath] = $value;
-                    }
-                }
+            $propertyStatus = $property[self::FIELD_STATUS];
+            if((abs($propertyStatus) / 1000) < 1) {
+                $conflicts[$path] = $property;
             }
         }
 
@@ -588,22 +575,27 @@ class MazeLib_Bean extends ZendX_AbstractBean
      */
     public function getConflicts($status = null)
     {
-        $conflicts = array();
-        
-        if(abs($status) / 1000 >= 1) {
-            $status = $status / 1000;
+        if(!$this->searchedConflicts) {
+            $this->conflicts = $this->_getConflicts();
+            $this->searchedConflicts = true;
         }
 
-        foreach (array_keys(array_merge($this->mapping, $this->wildcardMapping)) as $path ) {
-            if(($status && $status != $this->getProperty($path . self::PATH_SEPERATOR . self::FIELD_STATUS)) ||
-                    !$this->hasConflict($path)) {
-                continue;
-            } 
-            
-            $conflicts[$path] = $this->getProperty($path);
+        if($status) {
+            if(abs($status) / 1000 >= 1) {
+                $status = $status / 1000;
+            }
+
+            $statusConflicts = array();
+            foreach ($this->conflicts as $path => $conflict) {
+                if($status === $conflict[self::FIELD_STATUS]) {
+                    $statusConflicts[$path] = $conflict;
+                }
+            }
+
+            return $statusConflicts;
         }
-        
-        return $conflicts;
+
+        return $this->conflicts;
     }
     
     /**
@@ -749,7 +741,7 @@ class MazeLib_Bean extends ZendX_AbstractBean
     }
     
     /**
-     * checks if the given property has a positiv conflict
+     * checks if the given property has a conflict
      * 
      * @param string $propertyPath
      * @param boolean $negative check for negative conflict instead
@@ -757,22 +749,14 @@ class MazeLib_Bean extends ZendX_AbstractBean
      */
     public function hasConflict($propertyPath, $negative = false)
     {
-        if (!$this->getMapping($propertyPath)) {
-            return false;
-        }
-        
-        if(!($status = $this->getProperty($propertyPath . self::PATH_SEPERATOR . self::FIELD_STATUS))) {
+        if(!($conflicts = $this->getConflicts()) || !array_key_exists($propertyPath, $conflicts)) {
             return false;
         }
 
-        if($negative && $status >= 0) {
+        if($negative && $conflicts[$propertyPath][self::FIELD_STATUS] >= 1) {
             return false;
         }
-        
-        if((abs($status) / 1000) >= 1) {
-            return false;
-        }
-        
+
         return true;
     }
     
