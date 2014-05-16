@@ -284,9 +284,9 @@
      * @param {boolean} strict
      * @returns {undefined}
      */
-    function buildErrorTooltip(selector, content, strict){
-        var elementTarget = $(selector).find('input,select,textarea');
-        $(selector).qtip({
+    function buildErrorTooltip(selector, content, strict, userOptions){
+        var target = $(selector).find('input,select,textarea');
+        var option  = $.extend(true, {
             show: { when: false, ready: true, solo: true },
             hide: { when: false, fixed: true, delay: 2500},
             content: content,
@@ -295,13 +295,15 @@
             },
             position: {
                 type: 'absolute',
-                target: (strict === true && typeof elementTarget[0] === "object" ? elementTarget : selector),
+                target: (strict === true && typeof target[0] === "object" ? target : selector),
                 corner: {
                     target: 'rightMiddle',
                     tooltip: 'leftMiddle'
                 }
             }
-        });
+        }, typeof userOptions === "object" ? userOptions : {});
+
+        $(selector).qtip(option);
     }
     
     /**
@@ -367,9 +369,10 @@
      * 
      * @param {object|array} jsonObject
      * @param {string|object} selector
+     * @param {Null|Object} options
      * @returns {undefined}
      */
-    function setErrorTooltip(jsonObject, selector){
+    function setErrorTooltip(jsonObject, selector, options){
         if (typeof jsonObject !== 'object'){
             jsonObject = new Array(jsonObject);
         }
@@ -391,9 +394,9 @@
                 if ($("#colorbox:visible").length){
                     selector = "#colorbox " +selector;
                 }
-                buildErrorTooltip($(selector), template);
+                buildErrorTooltip($(selector), template, null ,options);
             }else{
-                buildErrorTooltip($(selector), template, selector);
+                buildErrorTooltip($(selector), template, selector, options);
             }
         });
     };
