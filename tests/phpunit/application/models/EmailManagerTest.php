@@ -150,7 +150,7 @@ class Core_Model_EmailManagerTest extends PHPUnit_Framework_TestCase
         $this->manager->setBody("...")
                       ->addTo("one@example.com")
                       ->setSmtpOptions(array(
-            "host"     => "example.com",
+            "host"     => "ssl://example.com",
             "auth"     => "plain",
             "username" => "smtp@example.com",
             "password" => "secret",
@@ -158,7 +158,7 @@ class Core_Model_EmailManagerTest extends PHPUnit_Framework_TestCase
             "ssl"      => "tls"
         ));
         $this->manager->send();
-
+        
         $this->assertInstanceOf('Zend_Mail_Transport_Smtp', $this->manager->getTransport());
     }
 
