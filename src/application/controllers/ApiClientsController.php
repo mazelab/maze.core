@@ -41,7 +41,7 @@ class ApiClientsController extends MazeLib_Rest_Controller
             return $this->_setNotFoundHeader();
         }
 
-        $this->_helper->json->sendJson($client->getData());
+        $this->_helper->json->sendJson($client->getDataWithServices());
     }
 
     public function headResourceAction()

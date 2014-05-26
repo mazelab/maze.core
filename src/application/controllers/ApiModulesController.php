@@ -60,7 +60,17 @@ class ApiModulesController extends MazeLib_Rest_Controller
             return $this->_setNotFoundHeader();
         }
 
-        $this->_helper->json->sendJson($module->getData());
+        if($this->getParam('clientConfig')) {
+            $result = $module->getClientConfig($this->getParam('clientConfig'));
+        } elseif($this->getParam('nodeConfig')) {
+            $result = $module->getClientConfig($this->getParam('nodeConfig'));
+        } elseif($this->getParam('domainConfig')) {
+            $result = $module->getClientConfig($this->getParam('domainConfig'));
+        } else {
+            $result = $module->getData();
+        }
+
+        $this->_helper->json->sendJson($result);
     }
 
     public function postResourceAction()

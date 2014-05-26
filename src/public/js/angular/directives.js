@@ -8,11 +8,12 @@ directives.directive('mazeDlWrapper', function() {
         restrict: 'E',
         scope: {
             'label': '@',
+            'dlClass' : '@',
             'dtClass' : '@',
             'ddClass': '@'
         },
         transclude: true,
-        template: '<dl>'+
+        template: '<dl class="{{dlClass}}">'+
             '<dt ng-if="label" class="{{dtClass}}">' +
             '<label>' +
             '{{label}}' +

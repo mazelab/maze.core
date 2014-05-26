@@ -110,6 +110,24 @@ class Core_Model_ValueObject_Client
         return true;
     }
 
+
+    public function getDataWithServices()
+    {
+        $urlHelper = Zend_Controller_Action_HelperBroker::getStaticHelper('Url');
+        $result = $this->getData();
+
+        /** @var Core_Model_ValueObject_Module $service */
+        foreach($this->getServices() as $name => $service) {
+            if(isset($service['routes']['config']['client']['route']) &&
+                    ($clientRoute = $service['routes']['config']['client']['route'])) {
+                $result['services'][$name]['configUrl'] = $urlHelper
+                    ->url(array('clientId' => $this->getId(), 'clientLabel' => $this->getLabel()), $clientRoute);
+            }
+        }
+
+        return $result;
+    }
+
     /**
      * returns all domains of this client
      * 

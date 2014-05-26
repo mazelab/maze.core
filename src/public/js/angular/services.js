@@ -5,12 +5,10 @@ var services = angular.module("mazeServices", []);
  */
 services.service('nodesService', function($http) {
     this.list = function(params) {
-        return $http.get('/api/nodes', {
-            params: params
-        });
+        return $http.get('/api/nodes', {params: params});
     };
-    this.get = function(id){
-        return($http.get("/api/nodes/"+ id));
+    this.get = function(id, params){
+        return($http.get("/api/nodes/"+ id, {params: params}));
     };
     this.update = function(id, dataset){
         return($http.put("/api/nodes/"+ id, $.param(dataset)));
@@ -29,12 +27,10 @@ services.service('nodesService', function($http) {
  */
 services.service('clientsService', function($http) {
     this.list = function(params) {
-        return $http.get('/api/clients', {
-            params: params
-        });
+        return $http.get('/api/clients', {params: params});
     };
-    this.get = function(id){
-        return($http.get("/api/clients/"+ id));
+    this.get = function(id, params){
+        return($http.get("/api/clients/"+ id, {params: params}));
     };
     this.update = function(id, dataset){
         return($http.put("/api/clients/"+ id, $.param(dataset)));
@@ -49,12 +45,10 @@ services.service('clientsService', function($http) {
  */
 services.service('modulesService', function($http) {
     this.list = function(params) {
-        return $http.get('/api/modules', {
-            params: params
-        });
+        return $http.get('/api/modules', {params: params});
     };
-    this.get = function(name){
-        return($http.get("/api/modules/"+ name));
+    this.get = function(name, params){
+        return($http.get("/api/modules/"+ name, {params: params}));
     };
     this.update = function(name, dataset){
         return($http.put("/api/modules/"+ name, $.param(dataset)));
@@ -66,9 +60,7 @@ services.service('modulesService', function($http) {
  */
 services.service('domainsService', function($http) {
     this.list = function(params) {
-        return $http.get('/api/domains', {
-            params: params
-        });
+        return $http.get('/api/domains', {params: params});
     };
     this.get = function(name, params){
         return($http.get("/api/domains/"+ name, {params: params}));
@@ -92,8 +84,6 @@ services.service('domainsService', function($http) {
  */
 services.service('logsService', function($http) {
     this.list = function(params) {
-        return $http.get('/api/logs', {
-            params: params
-        });
+        return $http.get('/api/logs', {params: params});
     };
 });
