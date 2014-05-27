@@ -1,4 +1,4 @@
-var directives = angular.module("mazeDirectives", []);
+var directives = angular.module("maze.directives", []);
 
 /**
  * wraps content into dt/dl structure with label

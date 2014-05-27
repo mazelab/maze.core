@@ -85,6 +85,7 @@
     </script>
 </div>
 <script type="text/javascript">
+    var app = angular.module('maze');
 
     app.controller('DomainController', ['$scope', '$modal', 'domainsService', function($scope, $modal, domainsService){
         $scope.domain = {_id: "<?= $this->domainId; ?>"};

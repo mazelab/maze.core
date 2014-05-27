@@ -1,4 +1,4 @@
-var filters = angular.module("mazeFilters", []);
+var filters = angular.module("maze.filters", []);
 
 filters.filter('filterObject', function () {
     return function (items, search) {

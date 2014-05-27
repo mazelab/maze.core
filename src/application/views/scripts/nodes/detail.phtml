@@ -87,6 +87,8 @@
     </script>
 </div>
 <script type="text/javascript">
+    var app = angular.module('maze');
+
     app.controller('NodeController', ['$scope', '$modal', '$filter', 'nodesService', function($scope, $modal, $filter, nodesService){
         $scope.node = {_id: "<?= $this->html("node/_id"); ?>"};
         $scope.selected  = {image: "dummy_node_200.png"};

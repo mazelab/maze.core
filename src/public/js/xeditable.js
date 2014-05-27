@@ -1422,7 +1422,7 @@ angular.module('xeditable').factory('editableUtils', [function() {
       return value;
     },
 
-    // copy from https://github.com/angular/angular.js/blob/master/src/Angular.js
+    // copy from https://github.com/angular/app.js/blob/master/src/Angular.js
     camelToDash: function(str) {
       var SNAKE_CASE_REGEXP = /[A-Z]/g;
       return str.replace(SNAKE_CASE_REGEXP, function(letter, pos) {
@@ -1445,7 +1445,7 @@ angular.module('xeditable').factory('editableUtils', [function() {
 /**
  * editableNgOptionsParser
  *
- * see: https://github.com/angular/angular.js/blob/master/src/ng/directive/select.js#L131
+ * see: https://github.com/angular/app.js/blob/master/src/ng/directive/select.js#L131
  */
 angular.module('xeditable').factory('editableNgOptionsParser', [
   function() {

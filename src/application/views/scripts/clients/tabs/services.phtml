@@ -8,11 +8,12 @@
                 <?= $this->translate('Loading...') ?>
             </span>
 
-            <select ng-options="service.name as service.label for service in services" ng-init="installService=''"
-                    ng-model="installService" ng-disabled="services.length <= 1" ng-show="!loadServices">
+            <select ng-options="service.name as service.label for service in availableServices"
+                    ng-model="selectedService" ng-disabled="services.length <= 1" ng-show="!loadServices">
             </select>
 
-            <button class="btn btn-info" ng-disabled="!services || services.length <= 1" ng-show="!loadServices">
+            <button class="btn btn-info" ng-disabled="!selectedService" ng-show="!loadServices"
+                    ng-click="addService(selectedService)">
                 <?= $this->translate('ok') ?>
             </button>
 
@@ -27,7 +28,7 @@
             <li ng-repeat="service in client.services" ng-class='{active:$first}'>
                 <a class="link" data-toggle="tab" href="#tabServices-{{service.name}}">
                     <i class="icon-chevron-right text-right"></i>
-                    <i class="icon-trash text-right"></i>
+                    <i class="icon-trash text-right" ng-click="removeService(service.name)"></i>
                     <span>
                         {{service.label}}
                     <span>
@@ -38,10 +39,10 @@
         <div id="tabServiceContent" class="tab-content cssTabContent span9">
             <div ng-repeat="service in client.services" class="tab-pane" id="tabServices-{{service.name}}" ng-class='{active:$first}'>
 
-                <div ng-if="service.configUrl" ng-include="service.configUrl">
+                <ng-include ng-if="service.configUrl" src="service.configUrl">
                     <img src="<?= $this->baseUrl() ?>/img/js/loading.gif" title="<?= $this->translate('Loading...') ?>">
                     <?= $this->translate('Loading...') ?>
-                </div>
+                </ng-include>
 
                 <div ng-if="!service.configUrl">
                     <?= $this->translate('No configuration available'); ?>
@@ -53,37 +54,37 @@
 
 </div>
 <script type='text/javascript'>
-<!--    $(document).ready(function() {-->
-<!---->
-<!--        initServiceTabClickEvent();-->
-<!--        $('#tabClientServices a[data-toggle="tab"]:visible:first').click();-->
-<!--        -->
-<!--        $('#formServices').submit(function() {-->
-<!--            var service = $('#service').selectpicker('val');-->
-<!--            if(!service) {-->
-<!--                return false;-->
-<!--            }-->
-<!---->
-<!--            $.ajax({-->
-<!--                type: 'post',-->
-<!--                url: $(this).attr('action'),-->
-<!--                data: $(this).serialize(),-->
-<!--                success: function(data) {-->
-<!--                    if(data.status === true) {-->
-<!--                        $("#tabServiceList:hidden").show();-->
-<!--                        $("#service").serviceSelect("del", service);-->
-<!--                        if(data.service) {-->
-<!--                            addServiceTabEntry(data.service, data.configClientRoute);-->
-<!--                        }-->
-<!--                    }-->
-<!--                }-->
-<!--            });-->
-<!--        -->
-<!--            return false;-->
-<!--        }).find('#service').attr('disabled', function(index, value){-->
-<!--            $('#jsAddService').attr('disabled', value);-->
-<!--        });-->
-<!--        -->
+    $(document).ready(function() {
+
+//        initServiceTabClickEvent();
+//        $('#tabClientServices a[data-toggle="tab"]:visible:first').click();
+//
+//        $('#formServices').submit(function() {
+//            var service = $('#service').selectpicker('val');
+//            if(!service) {
+//                return false;
+//            }
+//
+//            $.ajax({
+//                type: 'post',
+//                url: $(this).attr('action'),
+//                data: $(this).serialize(),
+//                success: function(data) {
+//                    if(data.status === true) {
+//                        $("#tabServiceList:hidden").show();
+//                        $("#service").serviceSelect("del", service);
+//                        if(data.service) {
+//                            addServiceTabEntry(data.service, data.configClientRoute);
+//                        }
+//                    }
+//                }
+//            });
+//
+//            return false;
+//        }).find('#service').attr('disabled', function(index, value){
+//            $('#jsAddService').attr('disabled', value);
+//        });
+
 <!--        $.fn.serviceSelect = function(action, service) {-->
 <!--            if (action === "add"){-->
 <!--                var option = $("<option />", {-->
@@ -116,96 +117,96 @@
 <!--        if ($("#tabServiceList li:visible").length === 0){-->
 <!--            $("#tabServiceList").hide();-->
 <!--        }-->
-<!--    -->
+<!---->
 <!--        if ($("#tabServiceList li:visible").length === 0){-->
 <!--            $("#tabServiceList").hide();-->
 <!--        }-->
-<!--    });-->
-<!---->
-<!--    function initServiceTabClickEvent() {-->
-<!--        $('#tabClientServices a[data-toggle="tab"]:visible').click(function (e) {-->
-<!--            e.preventDefault();-->
-<!--            var target = $($(this).attr('href'));-->
-<!--            if($(target).length > 0 && $(target).attr('href') && $(target).attr('loaded') !== "true") {-->
-<!--                $('#servicesLoadingIndicator').show();-->
-<!--                $(target).attr('loaded', true);-->
-<!--                -->
-<!--                $(target).load($(target).attr('href'), function(response, status) {-->
-<!--                    if (status === "error") {-->
-<!--                        var msg = "--><?//= $this->translate('Couldn\'t load service configuration') ?><!--";-->
-<!--                        $(target).html(msg);-->
-<!--                      }-->
-<!--                  -->
-<!--                    $('#servicesLoadingIndicator').hide();-->
-<!--                });-->
-<!--            }-->
-<!--        });-->
-<!--        initButtonDeleteEvent();-->
-<!--    }-->
-<!--    -->
-<!--    function initButtonDeleteEvent() {-->
-<!--        $(".jsRemoveService").click(function(e){-->
-<!--            var self = $(this);-->
-<!--            var dialog = $("#jsConfirmDelete").modal({backdrop: "static", show: true});-->
-<!--            var uri = "--><?//= $this->url(array($this->clientId, ""), "removeClientService") ?><!--";-->
-<!--            e.preventDefault();-->
-<!--            dialog.find(".jsButtonDelete").unbind("click").click(function(){-->
-<!--            $.ajax({-->
-<!--                url: uri+ self.attr("service")+ "?format=json",-->
-<!--                success: function(data){-->
-<!--                    if (data && data.result === true) {-->
-<!--                        self.closest("[data-toggle='tab']:visible").fadeOut();-->
-<!--                        $(".jsTabServiceCount").text(parseInt($(".jsTabServiceCount").text()) -1);-->
-<!--                        $("#jsService" +self.attr("service")).fadeOut().remove();-->
-<!--                        $("#service").serviceSelect("add", {name: self.attr("service"), label: self.attr("module")});-->
-<!--                        $("#tabServiceList li[class!='active'] a[data-toggle='tab']:visible:first").click();-->
-<!--                    }-->
-<!---->
-<!--                    resetAllMessages();-->
-<!--                    setMessages(data);-->
-<!--                }-->
-<!--            });dialog.modal("hide");-->
-<!--            }).andSelf().find(".jsButtonCancel").click(function(){-->
-<!--                dialog.modal("hide");-->
-<!--            });dialog.find("p").text('--><?//= $this->translate('Should the service %1$s be removed from the client?'); ?><!--'.replace("%1$s", self.attr("module")));-->
-<!--        });-->
-<!--    }-->
-<!--    -->
-<!--    function addServiceTabEntry(service, url) {-->
-<!--        if($.isEmptyObject(service) || !service.label || !service.name) {-->
-<!--            return false;-->
-<!--        }-->
-<!--        -->
-<!--        var templateTab = $('#templateAddServiceTab').clone();-->
-<!--        var templateTabContent = $('#templateAddServiceTabContent').clone();-->
-<!---->
-<!--        if(service._id) {-->
-<!--            $(templateTab).find('a').attr('href', "#jsService" + service._id);-->
-<!--            $(templateTabContent).attr('id', "jsService" + service._id);-->
-<!--        } else {-->
-<!--            $(templateTab).find('a').attr('href', "#jsService" + service.name);-->
-<!--            $(templateTabContent).attr('id', "jsService" + service.name);-->
-<!--        }-->
-<!--        -->
-<!--        $(templateTab).find('a span').html(service.label.toUpperCase());-->
-<!--        -->
-<!--        if(url) {-->
-<!--            $(templateTabContent).html('').attr('href', url + '?format=html');-->
-<!--        }-->
-<!---->
-<!--        $(templateTab).appendTo('#tabServiceList').removeAttr('style');-->
-<!--        $(templateTabContent).appendTo('#tabServiceContent').removeAttr('style');-->
-<!--        $(".jsTabServiceCount").text(parseInt($(".jsTabServiceCount").text()) +1);-->
-<!--        $('[href="#jsService' +service.name+ '"]').find(".jsRemoveService").attr("module", service.label).attr("service", service.name);-->
-<!--        -->
-<!--        initServiceTabClickEvent();-->
-<!--        -->
-<!--        $('.jsTabServiceCount').html($('#tabClientServices a[data-toggle="tab"]:visible').length);-->
-<!--        -->
-<!--        if($('#tabClientServices a[data-toggle="tab"]:visible').length === 1) {-->
-<!--            $('#tabClientServices a[data-toggle="tab"]:visible:first').click();-->
-<!--        }-->
-<!--        -->
-<!--        return true;-->
-<!--    }-->
+    });
+
+    function initServiceTabClickEvent() {
+        $('#tabClientServices a[data-toggle="tab"]:visible').click(function (e) {
+            e.preventDefault();
+            var target = $($(this).attr('href'));
+            if($(target).length > 0 && $(target).attr('href') && $(target).attr('loaded') !== "true") {
+                $('#servicesLoadingIndicator').show();
+                $(target).attr('loaded', true);
+
+                $(target).load($(target).attr('href'), function(response, status) {
+                    if (status === "error") {
+                        var msg = "<?= $this->translate('Couldn\'t load service configuration') ?>";
+                        $(target).html(msg);
+                      }
+
+                    $('#servicesLoadingIndicator').hide();
+                });
+            }
+        });
+        initButtonDeleteEvent();
+    }
+
+    function initButtonDeleteEvent() {
+        $(".jsRemoveService").click(function(e){
+            var self = $(this);
+            var dialog = $("#jsConfirmDelete").modal({backdrop: "static", show: true});
+            var uri = "<?= $this->url(array($this->clientId, ""), "removeClientService") ?>";
+            e.preventDefault();
+            dialog.find(".jsButtonDelete").unbind("click").click(function(){
+            $.ajax({
+                url: uri+ self.attr("service")+ "?format=json",
+                success: function(data){
+                    if (data && data.result === true) {
+                        self.closest("[data-toggle='tab']:visible").fadeOut();
+                        $(".jsTabServiceCount").text(parseInt($(".jsTabServiceCount").text()) -1);
+                        $("#jsService" +self.attr("service")).fadeOut().remove();
+                        $("#service").serviceSelect("add", {name: self.attr("service"), label: self.attr("module")});
+                        $("#tabServiceList li[class!='active'] a[data-toggle='tab']:visible:first").click();
+                    }
+
+                    resetAllMessages();
+                    setMessages(data);
+                }
+            });dialog.modal("hide");
+            }).andSelf().find(".jsButtonCancel").click(function(){
+                dialog.modal("hide");
+            });dialog.find("p").text('<?= $this->translate('Should the service %1$s be removed from the client?'); ?>'.replace("%1$s", self.attr("module")));
+        });
+    }
+
+    function addServiceTabEntry(service, url) {
+        if($.isEmptyObject(service) || !service.label || !service.name) {
+            return false;
+        }
+
+        var templateTab = $('#templateAddServiceTab').clone();
+        var templateTabContent = $('#templateAddServiceTabContent').clone();
+
+        if(service._id) {
+            $(templateTab).find('a').attr('href', "#jsService" + service._id);
+            $(templateTabContent).attr('id', "jsService" + service._id);
+        } else {
+            $(templateTab).find('a').attr('href', "#jsService" + service.name);
+            $(templateTabContent).attr('id', "jsService" + service.name);
+        }
+
+        $(templateTab).find('a span').html(service.label.toUpperCase());
+
+        if(url) {
+            $(templateTabContent).html('').attr('href', url + '?format=html');
+        }
+
+        $(templateTab).appendTo('#tabServiceList').removeAttr('style');
+        $(templateTabContent).appendTo('#tabServiceContent').removeAttr('style');
+        $(".jsTabServiceCount").text(parseInt($(".jsTabServiceCount").text()) +1);
+        $('[href="#jsService' +service.name+ '"]').find(".jsRemoveService").attr("module", service.label).attr("service", service.name);
+
+        initServiceTabClickEvent();
+
+        $('.jsTabServiceCount').html($('#tabClientServices a[data-toggle="tab"]:visible').length);
+
+        if($('#tabClientServices a[data-toggle="tab"]:visible').length === 1) {
+            $('#tabClientServices a[data-toggle="tab"]:visible:first').click();
+        }
+
+        return true;
+    }
 </script>

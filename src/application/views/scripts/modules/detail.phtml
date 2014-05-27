@@ -165,11 +165,13 @@
     </div>
 </div>
 <script type="text/javascript">
+    var app = angular.module('maze');
+
     app.controller('ModuleController', ['$scope', 'modulesService', function($scope, modulesService){
         $scope.module = {name: "<?= $this->html("module/name"); ?>"};
 
         $scope.update = function(data){
-            return modulesService.update($scope.module.name, data).success(function(module, status){
+            return modulesService.set($scope.module.name, data).success(function(module, status){
                 if (status === 202) {
                     $scope.module = module;
                 }

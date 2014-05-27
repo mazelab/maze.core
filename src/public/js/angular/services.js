@@ -1,4 +1,4 @@
-var services = angular.module("mazeServices", []);
+var services = angular.module("maze.services", []);
 
 /**
  * service for nodes
@@ -32,7 +32,18 @@ services.service('clientsService', function($http) {
     this.get = function(id, params){
         return($http.get("/api/clients/"+ id, {params: params}));
     };
-    this.update = function(id, dataset){
+    this.update = function(id, data){
+        return $http({
+            method: 'POST',
+            url: '/api/clients/' + id,
+            data: data,
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        });
+    };
+    this.set = function(id, dataset){
         return($http.put("/api/clients/"+ id, $.param(dataset)));
     };
     this.delete = function(id){
@@ -50,8 +61,19 @@ services.service('modulesService', function($http) {
     this.get = function(name, params){
         return($http.get("/api/modules/"+ name, {params: params}));
     };
-    this.update = function(name, dataset){
+    this.set = function(name, dataset){
         return($http.put("/api/modules/"+ name, $.param(dataset)));
+    };
+    this.update = function(name, data){
+        return $http({
+            method: 'POST',
+            url: '/api/modules/' + name,
+            data: data,
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        });
     };
 });
 

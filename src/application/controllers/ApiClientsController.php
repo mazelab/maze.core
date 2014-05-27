@@ -44,16 +44,6 @@ class ApiClientsController extends MazeLib_Rest_Controller
         $this->_helper->json->sendJson($client->getDataWithServices());
     }
 
-    public function headResourceAction()
-    {
-        $this->_setMethodNotAllowedHeader();
-    }
-
-    public function postResourcesAction()
-    {
-        $this->_setMethodNotAllowedHeader();
-    }
-
     public function putResourceAction()
     {
         $clientManager = Core_Model_DiFactory::getClientManager();
@@ -74,6 +64,35 @@ class ApiClientsController extends MazeLib_Rest_Controller
         }
 
         $this->_helper->json->sendJson($client->getData());
+    }
+
+    public function postResourceAction()
+    {
+        $clientManager = Core_Model_DiFactory::getClientManager();
+        if(!$clientManager->getClient($this->getParam("clientId"))) {
+            return $this->_setNotFoundHeader();
+        }
+
+        $form = new Core_Form_Client();
+        $params = $this->getAllParams();
+        $response = array(
+            'result' => false
+        );
+
+        $form->initDynamicContent($params);
+        if($params && $form->isValidPartial($params) && ($values = $form->getValidValues($params))) {
+            $response['result'] = $clientManager->updateClient($this->getParam('clientId'), $values);
+            $response['client'] = $clientManager->getClientAsArray($this->getParam('clientId'));
+        } else {
+            $response['params'] = $params;
+            $response['errForm'] = $form->getMessages();
+        }
+
+        if(!$response['result']) {
+            $this->_setServerErrorHeader();
+        }
+
+        $this->_helper->json->sendJson($response);
     }
 
     public function deleteResourceAction()

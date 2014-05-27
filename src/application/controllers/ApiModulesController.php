@@ -43,16 +43,6 @@ class ApiModulesController extends MazeLib_Rest_Controller
         $this->_helper->json->sendJson($jsonModules);
     }
 
-    public function postResourcesAction()
-    {
-        $this->_setNotImplementedHeader();
-    }
-
-    public function headResourcesAction()
-    {
-        $this->_setNotImplementedHeader();
-    }
-
     public function getResourceAction()
     {
         $moduleManager = Core_Model_DiFactory::getModuleRegistry();
@@ -71,16 +61,6 @@ class ApiModulesController extends MazeLib_Rest_Controller
         }
 
         $this->_helper->json->sendJson($result);
-    }
-
-    public function postResourceAction()
-    {
-        $this->_setMethodNotAllowedHeader();
-    }
-
-    public function headResourceAction()
-    {
-        $this->_setNotImplementedHeader();
     }
 
     public function putResourceAction()
@@ -104,11 +84,6 @@ class ApiModulesController extends MazeLib_Rest_Controller
             $this->getResponse()->setHttpResponseCode(202);
             $this->_helper->json->sendJson($module->getData());
         }
-    }
-
-    public function deleteResourceAction()
-    {
-        $this->_setNotImplementedHeader();
     }
 
 }

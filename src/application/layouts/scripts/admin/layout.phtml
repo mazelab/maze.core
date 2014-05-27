@@ -15,6 +15,7 @@
         <? $this->headLink()->prependStylesheet($this->baseUrl() . '/css/passwordstrength.css') ?>
         <? $this->headLink()->prependStylesheet($this->baseUrl() . '/css/js/xeditable.css') ?>
         <?= $this->headLink() ?>
+        <? $this->headScript()->prependFile($this->baseUrl() . '/js/angular/app.js') ?>
         <? $this->headScript()->prependFile($this->baseUrl() . '/js/angular/extensions.js') ?>
         <? $this->headScript()->prependFile($this->baseUrl() . '/js/angular/filters.js') ?>
         <? $this->headScript()->prependFile($this->baseUrl() . '/js/angular/services.js') ?>
@@ -30,65 +31,8 @@
         <!-- jquery versions over 1.8.3 crashes with bootstrap-modal -->
         <!--<script src="http://code.jquery.com/jquery.js"></script>--> 
         <?= $this->headScript() ?>
-
-        <script type="text/javascript">
-            app = angular.module('maze.core', ['ui.bootstrap', 'mazeDirectives', 'mazeServices', 'mazeFilters', 'xeditable', 'angular-md5']);
-
-//            /**
-//             * init lazy components
-//             */
-//            app.config(function( $controllerProvider, $provide, $compileProvider ) {
-//                // Let's keep the older references.
-//                app._controller = app.controller;
-//                app._service = app.service;
-//                app._factory = app.factory;
-//                app._value = app.value;
-//                app._directive = app.directive;
-//                app._filter = app.filter;
-//
-//                // Provider-based controller.
-//                app.controller = function(name, constructor) {
-//                    $controllerProvider.register(name, constructor);
-//                    return(this);
-//                };
-//
-//                // Provider-based service.
-//                app.service = function(name, constructor) {
-//                    $provide.service(name, constructor);
-//                    return(this);
-//                };
-//
-//                // Provider-based factory.
-//                app.factory = function(name, factory) {
-//                    $provide.factory(name, factory);
-//                    return(this);
-//                };
-//
-//                // Provider-based value.
-//                app.value = function(name, value) {
-//                    $provide.value(name, value);
-//                    return(this);
-//                };
-//
-//                // Provider-based directive.
-//                app.directive = function(name, directive) {
-//                    $compileProvider.directive(name, directive);
-//                    return(this);
-//                };
-//
-//                // Provider-based filter.
-//                app.filter = function( name, filter) {
-//                    $compileProvider.directive(name, filter);
-//                    return(this);
-//                };
-//            });
-
-            app.run(function(editableOptions) {
-                editableOptions.theme = 'bs2'; // bootstrap3 theme. Can be also 'bs2', 'default'
-            });
-        </script>
     </head>
-    <body ng-app="maze.core">
+    <body ng-app="maze">
         <div class="navbar navbar-inverse navbar-fixed-top ">
             <div class="navbar-inner cssHeader">
                 <div class="container-fluid">

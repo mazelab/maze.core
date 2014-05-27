@@ -172,7 +172,37 @@ class Core_Model_ClientManager
         
         return $data['_id'];
     }
-    
+
+    /**
+     * updates client services via boolean values
+     *
+     * services schema:
+     * array(
+     *     'service1' => true,          # enables service1
+     *     'service2' => false          # disables service2
+     * )
+     *
+     * @param string $clientId
+     * @param array $services
+     * @return boolean
+     */
+    public function _updateClientServices($clientId, array $services)
+    {
+        foreach($services as $service => $state) {
+            if(!filter_var($state, FILTER_VALIDATE_BOOLEAN)) {
+                if(!$this->removeClientService($clientId, $service)) {
+                    return false;
+                }
+            } else {
+                if(!$this->addService($clientId, $service)) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
     /**
      * adds an additional field to the given client
      * 
@@ -209,6 +239,9 @@ class Core_Model_ClientManager
     {
         if(!($client = $this->getClient($clientId))) {
             return false;
+        }
+        if($client->hasService($serviceName)) {
+            return true;
         }
         
         if(!$client->addService($serviceName)) {
@@ -788,7 +821,7 @@ class Core_Model_ClientManager
     }
 
     /**
-     * unregisters a certain client instance
+     * unregister a certain client instance
      * 
      * @param string $clientId
      * @return boolean
@@ -813,6 +846,13 @@ class Core_Model_ClientManager
     {
         if(!($client = $this->getClient($clientId))) {
             return false;
+        }
+
+        if(array_key_exists('services', $data) && is_array($data['services'])) {
+            if(!$this->_updateClientServices($clientId, $data['services'])) {
+                return false;
+            }
+            unset($data['services']);
         }
 
         if (isset($data['additionalKey']) && isset($data['additionalValue'])) {
