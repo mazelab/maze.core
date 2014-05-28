@@ -406,6 +406,21 @@ class Core_Model_ClientManager
         
         return $client->getData();
     }
+
+    /**
+     * gets client data with services url
+     *
+     * @param string $clientId
+     * @return array
+     */
+    public function getClientAsArrayWithServices($clientId)
+    {
+        if(!$clientId || !($client = $this->getClient($clientId))) {
+            return array();
+        }
+
+        return $client->getDataWithServices();
+    }
     
     /**
      * gets client object by domain

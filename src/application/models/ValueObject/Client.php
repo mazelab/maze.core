@@ -110,7 +110,11 @@ class Core_Model_ValueObject_Client
         return true;
     }
 
-
+    /**
+     * gets client data together with services url
+     *
+     * @return array()
+     */
     public function getDataWithServices()
     {
         $urlHelper = Zend_Controller_Action_HelperBroker::getStaticHelper('Url');

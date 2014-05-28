@@ -197,7 +197,6 @@
 
     app.controller('ClientController', ['$scope', '$modal', '$filter', 'clientsService', 'modulesService', function($scope, $modal, $filter, clientsService, modulesService){
         $scope.clientId = '<?= $this->html("client/_id"); ?>';
-        $scope.loadServices = true;
 
         clientsService.get($scope.clientId).success(function(data) {
             $scope.client = data;
@@ -247,68 +246,79 @@
         };
 
         var initServices = function() {
+            $scope.loadServices = true;
+            $scope.services = {selected: ''};
+
             modulesService.list().success(function(data){
+                $scope.services.all = data;
+                buildAvailableServices();
+                $scope.loadServices = false;
+            }).error(function() {
+                $scope.loadServices = false;
+                buildAvailableServices();
+                $scope.errAddService = ['Failed to load services'];
+            });
+
+            $scope.addService = function(serviceName) {
+                $scope.errAddService = [];
+                var service = $filter('filter')($scope.services.available, {name: serviceName})[0];
+                if(!service || !service._id) {
+                    return false;
+                }
+
+                var updateData = {services: {}};
+                updateData.services[serviceName] = true;
+
+                clientsService.update($scope.client._id, $.param(updateData)).success(function(data) {
+                    $scope.client.services = data.client.services;
+                    $scope.services.selected = '';
+                    buildAvailableServices();
+
+                    setTimeout(function() {
+                        $('#tabServices-' + serviceName).tab('show');
+                    }, 0);
+                }).error(function() {
+                    $scope.errAddService.push('<?= $this->translate('Failed') ?>');
+                });
+            };
+
+            $scope.modalRemoveClientService = function(service) {
+                if(!service) {
+                    return false;
+                }
+
+                var modalInstance = $modal.open({
+                    templateUrl: 'modalRemoveClientService.html',
+                    controller: 'modalRemoveClientService',
+                    resolve: {
+                        service: function () {return service},
+                        client: function () {return $scope.client}
+                    }
+                });
+
+                modalInstance.result.then(function (services) {
+                    $scope.client.services = services;
+                    $('#tabServicesList li a:first').tab('show');
+                    buildAvailableServices();
+                });
+            };
+
+            var buildAvailableServices = function() {
                 var availableServices = [];
-                angular.forEach(data, function(service) {
+                angular.forEach($scope.services.all, function(service) {
                     if(service.name && !$scope.client.services || !$scope.client.services[service.name]) {
                         availableServices.push(service);
                     }
                 });
 
                 if(!availableServices.length) {
-                    $scope.availableServices = [{label: '<?= $this->translate('No services available') ?>', name:''}];
+                    $scope.services.available = [{label: '<?= $this->translate('No services available') ?>', name:''}];
                 } else {
-                    $scope.availableServices = [{label: '<?= $this->translate('Add new service') ?>', name:''}];
+                    $scope.services.available = [{label: '<?= $this->translate('Add new service') ?>', name:''}];
                 }
 
-                $scope.availableServices = $scope.availableServices.concat(availableServices);
-
-                $scope.loadServices = false;
-            }).error(function() {
-                $scope.loadServices = false;
-                $scope.errAddService = ['Failed to load services'];
-            });
-        }
-
-        $scope.selectedService = '';
-        $scope.addService = function(serviceName) {
-            var service = $filter('filter')($scope.availableServices, {name: serviceName})[0];
-            if(!service || !service._id) {
-                return false;
-            }
-
-            var updateData = {services: {}};
-            updateData.services[serviceName] = true;
-
-            $scope.availableServices = $filter('filter')($scope.availableServices, {name: "!"+serviceName});
-            $scope.selectedService = 'mongodb';
-
-
-            return false;
-
-            clientsService.update($scope.client._id, $.param(updateData)).success(function(data) {
-                $scope.client.services = data.client.services;
-                console.log(data);
-                //@todo success behavior
-            }).error(function() {
-                //@todo error message
-            });
-        };
-
-        $scope.removeService = function(serviceName) {
-            if(!serviceName) {
-                return false;
-            }
-
-            var updateData = {services: {}};
-            updateData.services[serviceName] = false;
-
-            clientsService.update($scope.client._id, $.param(updateData)).success(function(data) {
-                $scope.client.services = data.client.services;
-                //@todo success behavior
-            }).error(function() {
-                //@todo error message
-            });
+                $scope.services.available = $scope.services.available.concat(availableServices);
+            };
         }
 
     }]);

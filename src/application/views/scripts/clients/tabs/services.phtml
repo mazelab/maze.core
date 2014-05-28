@@ -8,27 +8,28 @@
                 <?= $this->translate('Loading...') ?>
             </span>
 
-            <select ng-options="service.name as service.label for service in availableServices"
-                    ng-model="selectedService" ng-disabled="services.length <= 1" ng-show="!loadServices">
+            <select ng-options="service.name as service.label for service in services.available"
+                    ng-model="services.selected" ng-disabled="services.available.length <= 1" ng-show="!loadServices">
             </select>
 
-            <button class="btn btn-info" ng-disabled="!selectedService" ng-show="!loadServices"
-                    ng-click="addService(selectedService)">
+            <button class="btn btn-info" ng-disabled="!services.selected" ng-show="!loadServices"
+                    ng-click="addService(services.selected)">
                 <?= $this->translate('ok') ?>
             </button>
 
-            <span ng-repeat="error in errAddService" class="alert alert-danger">
-                {{error}}
-            </span>
+            <div class="row-fluid" ng-show="errAddService.length">
+                <alert ng-repeat="error in errAddService" type="'danger'">{{error}}</alert>
+            </div>
         </maze-dl-wrapper>
     </div>
 
     <div class="row-fluid tabbable tabs-left cssTabContentAll">
         <ul id="tabServicesList" class="nav nav-list unstyled cssTabMenuLeft span3">
             <li ng-repeat="service in client.services" ng-class='{active:$first}'>
-                <a class="link" data-toggle="tab" href="#tabServices-{{service.name}}">
+                <a class="link" data-toggle="tab" id="tabServices-{{service.name}}"
+                   href="#tabServicesContent-{{service.name}}">
                     <i class="icon-chevron-right text-right"></i>
-                    <i class="icon-trash text-right" ng-click="removeService(service.name)"></i>
+                    <i class="icon-trash text-right" ng-click="modalRemoveClientService(service)"></i>
                     <span>
                         {{service.label}}
                     <span>
@@ -37,7 +38,7 @@
         </ul>
 
         <div id="tabServiceContent" class="tab-content cssTabContent span9">
-            <div ng-repeat="service in client.services" class="tab-pane" id="tabServices-{{service.name}}" ng-class='{active:$first}'>
+            <div ng-repeat="service in client.services" class="tab-pane" id="tabServicesContent-{{service.name}}" ng-class='{active:$first}'>
 
                 <ng-include ng-if="service.configUrl" src="service.configUrl">
                     <img src="<?= $this->baseUrl() ?>/img/js/loading.gif" title="<?= $this->translate('Loading...') ?>">
@@ -53,160 +54,23 @@
     </div>
 
 </div>
-<script type='text/javascript'>
-    $(document).ready(function() {
 
-//        initServiceTabClickEvent();
-//        $('#tabClientServices a[data-toggle="tab"]:visible:first').click();
-//
-//        $('#formServices').submit(function() {
-//            var service = $('#service').selectpicker('val');
-//            if(!service) {
-//                return false;
-//            }
-//
-//            $.ajax({
-//                type: 'post',
-//                url: $(this).attr('action'),
-//                data: $(this).serialize(),
-//                success: function(data) {
-//                    if(data.status === true) {
-//                        $("#tabServiceList:hidden").show();
-//                        $("#service").serviceSelect("del", service);
-//                        if(data.service) {
-//                            addServiceTabEntry(data.service, data.configClientRoute);
-//                        }
-//                    }
-//                }
-//            });
-//
-//            return false;
-//        }).find('#service').attr('disabled', function(index, value){
-//            $('#jsAddService').attr('disabled', value);
-//        });
-
-<!--        $.fn.serviceSelect = function(action, service) {-->
-<!--            if (action === "add"){-->
-<!--                var option = $("<option />", {-->
-<!--                    value: (service.name || ""),-->
-<!--                    label: (service.label || null),-->
-<!--                    html : (service.label || null)-->
-<!--                });-->
-<!---->
-<!--                if (this.prop("disabled")){-->
-<!--                    this.attr("disabled", false)-->
-<!--                        .find("option").eq(0).text("--><?//= $this->translate("Add new service"); ?><!--");-->
-<!--                    $("#jsAddService").attr("disabled", false);-->
-<!--                }-->
-<!---->
-<!--                this[0].options.add(option[0], 0);-->
-<!--            }-->
-<!--            else if(action === "del") {-->
-<!--                this.find('option[value="' + service +'"]').remove();-->
-<!--                if(this.find("option").length <= 1) {-->
-<!--                    this.attr("disabled", true)-->
-<!--                        .find("option").eq(0)-->
-<!--                        .text("--><?//= $this->translate("No services available"); ?><!--");-->
-<!--                    $("#jsAddService").attr("disabled", true);-->
-<!--                }-->
-<!--            }-->
-<!---->
-<!--            return this.selectpicker("refresh").selectpicker("val", "");;-->
-<!--        };-->
-<!---->
-<!--        if ($("#tabServiceList li:visible").length === 0){-->
-<!--            $("#tabServiceList").hide();-->
-<!--        }-->
-<!---->
-<!--        if ($("#tabServiceList li:visible").length === 0){-->
-<!--            $("#tabServiceList").hide();-->
-<!--        }-->
-    });
-
-    function initServiceTabClickEvent() {
-        $('#tabClientServices a[data-toggle="tab"]:visible').click(function (e) {
-            e.preventDefault();
-            var target = $($(this).attr('href'));
-            if($(target).length > 0 && $(target).attr('href') && $(target).attr('loaded') !== "true") {
-                $('#servicesLoadingIndicator').show();
-                $(target).attr('loaded', true);
-
-                $(target).load($(target).attr('href'), function(response, status) {
-                    if (status === "error") {
-                        var msg = "<?= $this->translate('Couldn\'t load service configuration') ?>";
-                        $(target).html(msg);
-                      }
-
-                    $('#servicesLoadingIndicator').hide();
-                });
-            }
-        });
-        initButtonDeleteEvent();
-    }
-
-    function initButtonDeleteEvent() {
-        $(".jsRemoveService").click(function(e){
-            var self = $(this);
-            var dialog = $("#jsConfirmDelete").modal({backdrop: "static", show: true});
-            var uri = "<?= $this->url(array($this->clientId, ""), "removeClientService") ?>";
-            e.preventDefault();
-            dialog.find(".jsButtonDelete").unbind("click").click(function(){
-            $.ajax({
-                url: uri+ self.attr("service")+ "?format=json",
-                success: function(data){
-                    if (data && data.result === true) {
-                        self.closest("[data-toggle='tab']:visible").fadeOut();
-                        $(".jsTabServiceCount").text(parseInt($(".jsTabServiceCount").text()) -1);
-                        $("#jsService" +self.attr("service")).fadeOut().remove();
-                        $("#service").serviceSelect("add", {name: self.attr("service"), label: self.attr("module")});
-                        $("#tabServiceList li[class!='active'] a[data-toggle='tab']:visible:first").click();
-                    }
-
-                    resetAllMessages();
-                    setMessages(data);
-                }
-            });dialog.modal("hide");
-            }).andSelf().find(".jsButtonCancel").click(function(){
-                dialog.modal("hide");
-            });dialog.find("p").text('<?= $this->translate('Should the service %1$s be removed from the client?'); ?>'.replace("%1$s", self.attr("module")));
-        });
-    }
-
-    function addServiceTabEntry(service, url) {
-        if($.isEmptyObject(service) || !service.label || !service.name) {
-            return false;
-        }
-
-        var templateTab = $('#templateAddServiceTab').clone();
-        var templateTabContent = $('#templateAddServiceTabContent').clone();
-
-        if(service._id) {
-            $(templateTab).find('a').attr('href', "#jsService" + service._id);
-            $(templateTabContent).attr('id', "jsService" + service._id);
-        } else {
-            $(templateTab).find('a').attr('href', "#jsService" + service.name);
-            $(templateTabContent).attr('id', "jsService" + service.name);
-        }
-
-        $(templateTab).find('a span').html(service.label.toUpperCase());
-
-        if(url) {
-            $(templateTabContent).html('').attr('href', url + '?format=html');
-        }
-
-        $(templateTab).appendTo('#tabServiceList').removeAttr('style');
-        $(templateTabContent).appendTo('#tabServiceContent').removeAttr('style');
-        $(".jsTabServiceCount").text(parseInt($(".jsTabServiceCount").text()) +1);
-        $('[href="#jsService' +service.name+ '"]').find(".jsRemoveService").attr("module", service.label).attr("service", service.name);
-
-        initServiceTabClickEvent();
-
-        $('.jsTabServiceCount').html($('#tabClientServices a[data-toggle="tab"]:visible').length);
-
-        if($('#tabClientServices a[data-toggle="tab"]:visible').length === 1) {
-            $('#tabClientServices a[data-toggle="tab"]:visible:first').click();
-        }
-
-        return true;
-    }
+<script type="text/ng-template" id="modalRemoveClientService.html">
+    <div class="modal-header">
+        <h3 class="modal-title">Remove Service {{service.name}} from client {{client.label}}</h3>
+    </div>
+    <div class="modal-body">
+        <p>
+            Should the service {{service.name}} be removed from the client?
+        </p>
+        <alert ng-repeat="error in errMessages" type="'danger'">{{error}}</alert>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-danger" ng-click="ok()">
+            <?= $this->translate('OK') ?>
+        </button>
+        <button class="btn" ng-click="cancel()">
+            <?= $this->translate('Cancel') ?>
+        </button>
+    </div>
 </script>

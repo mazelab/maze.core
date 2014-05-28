@@ -37,11 +37,11 @@ class ApiClientsController extends MazeLib_Rest_Controller
     public function getResourceAction()
     {
         $clientManager = Core_Model_DiFactory::getClientManager();
-        if(!($client = $clientManager->getClient($this->getParam("clientId")))) {
+        if(!$clientManager->getClient($this->getParam("clientId"))) {
             return $this->_setNotFoundHeader();
         }
 
-        $this->_helper->json->sendJson($client->getDataWithServices());
+        $this->_helper->json->sendJson($clientManager->getClientAsArrayWithServices($this->getParam('clientId')));
     }
 
     public function putResourceAction()
@@ -82,7 +82,7 @@ class ApiClientsController extends MazeLib_Rest_Controller
         $form->initDynamicContent($params);
         if($params && $form->isValidPartial($params) && ($values = $form->getValidValues($params))) {
             $response['result'] = $clientManager->updateClient($this->getParam('clientId'), $values);
-            $response['client'] = $clientManager->getClientAsArray($this->getParam('clientId'));
+            $response['client'] = $clientManager->getClientAsArrayWithServices($this->getParam('clientId'));
         } else {
             $response['params'] = $params;
             $response['errForm'] = $form->getMessages();

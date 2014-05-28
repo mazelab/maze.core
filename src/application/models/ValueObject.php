@@ -166,7 +166,7 @@ class Core_Model_ValueObject
     /**
      * returns property of data backend context
      * 
-     * property in deepth dissolving
+     * property in depth dissolving
      * 
      * @param string $propertyPath
      * @return mixed
