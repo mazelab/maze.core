@@ -128,7 +128,28 @@ class Core_Model_ValueObject_Node extends Core_Model_ServiceObject
         
         return $this->_commands;
     }
-    
+
+    /**
+     * gets complete node data enriched with api dependencies for api use
+     *
+     * @return array()
+     */
+    public function getDataForApi()
+    {
+        $urlHelper = Zend_Controller_Action_HelperBroker::getStaticHelper('Url');
+        $result = $this->getData();
+
+        foreach($this->getServices() as $name => $service) {
+            if(isset($service['routes']['config']['node']['route']) &&
+                    ($nodeRoute = $service['routes']['config']['node']['route'])) {
+                $result['services'][$name]['configUrl'] = $urlHelper
+                    ->url(array('nodeId' => $this->getId(), 'nodeName' => $this->getName()), $nodeRoute);
+            }
+        };
+
+        return $result;
+    }
+
     /**
      * return ip address from data set
      * 

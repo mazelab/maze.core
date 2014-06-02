@@ -408,18 +408,18 @@ class Core_Model_ClientManager
     }
 
     /**
-     * gets client data with services url
+     * gets complete client data enriched with api dependencies for api use
      *
      * @param string $clientId
-     * @return array
+     * @return array|null
      */
-    public function getClientAsArrayWithServices($clientId)
+    public function getClientForApi($clientId)
     {
-        if(!$clientId || !($client = $this->getClient($clientId))) {
-            return array();
+        if(!($client = $this->getClient($clientId))) {
+            return null;
         }
 
-        return $client->getDataWithServices();
+        return $client->getDataForApi();
     }
     
     /**

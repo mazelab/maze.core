@@ -111,16 +111,15 @@ class Core_Model_ValueObject_Client
     }
 
     /**
-     * gets client data together with services url
+     * gets complete node data enriched with api dependencies for api use
      *
      * @return array()
      */
-    public function getDataWithServices()
+    public function getDataForApi()
     {
         $urlHelper = Zend_Controller_Action_HelperBroker::getStaticHelper('Url');
         $result = $this->getData();
 
-        /** @var Core_Model_ValueObject_Module $service */
         foreach($this->getServices() as $name => $service) {
             if(isset($service['routes']['config']['client']['route']) &&
                     ($clientRoute = $service['routes']['config']['client']['route'])) {

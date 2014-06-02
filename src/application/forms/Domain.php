@@ -15,7 +15,30 @@ class Core_Form_Domain extends Core_Form_AdditionalInfo
     protected $_elementDecorators = array(
         'ViewHelper'
     );
-    
+
+    /**
+     * init services sub forms
+     *
+     * @param array $services
+     * @return Core_Form_Domain
+     */
+    protected function _initServices(array $services)
+    {
+        $serviceForm = new Zend_Form_SubForm();
+
+        foreach($services as $service => $state) {
+            $serviceForm->addElement('checkbox', $service, array(
+                'required' => true,
+                'checkedValue' => 'true',
+                'uncheckedValue' => 'false'
+            ));
+        }
+
+        $this->addSubForm($serviceForm, 'services');
+
+        return $this;
+    }
+
     public function init()
     {
         $this->addElement('text', 'name', array(
@@ -44,6 +67,21 @@ class Core_Form_Domain extends Core_Form_AdditionalInfo
 
         $this->setElementDecorators($this->_elementDecorators);
         
+    }
+
+    /**
+     * init dynamical content
+     *
+     * @param array $data
+     * @return Core_Form_Domain
+     */
+    public function initDynamicContent(array $data)
+    {
+        if(array_key_exists('services', $data) && is_array($data['services'])) {
+            $this->_initServices($data['services']);
+        }
+
+        return $this;
     }
 
     /**
@@ -80,6 +118,6 @@ class Core_Form_Domain extends Core_Form_AdditionalInfo
 
         return $this;
     }
-    
+
 }
 

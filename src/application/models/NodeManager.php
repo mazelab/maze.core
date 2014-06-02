@@ -138,7 +138,37 @@ class Core_Model_NodeManager
         
         return $data['_id'];
     }
-    
+
+    /**
+     * updates node services via boolean values
+     *
+     * services schema:
+     * array(
+     *     'service1' => true,          # enables service1
+     *     'service2' => false          # disables service2
+     * )
+     *
+     * @param string $nodeId
+     * @param array $services
+     * @return boolean
+     */
+    public function _updateNodeServices($nodeId, array $services)
+    {
+        foreach($services as $service => $state) {
+            if(!filter_var($state, FILTER_VALIDATE_BOOLEAN)) {
+                if(!$this->removeNodeService($nodeId, $service)) {
+                    return false;
+                }
+            } else {
+                if(!$this->addService($nodeId, $service)) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
     /**
      * adds an additional field to the given node
      * 
@@ -175,6 +205,9 @@ class Core_Model_NodeManager
     {
         if(!($node = $this->getNode($nodeId))) {
             return false;
+        }
+        if($node->hasService($serviceName)) {
+            return true;
         }
         
         if(!$node->addService($serviceName)) {
@@ -385,6 +418,21 @@ class Core_Model_NodeManager
         }
                 
         return $node->getData();
+    }
+
+    /**
+     * gets complete node data enriched with api dependencies for api use
+     *
+     * @param string $nodeId
+     * @return array|null
+     */
+    public function getNodeForApi($nodeId)
+    {
+        if(!($node = $this->getNode($nodeId))) {
+            return null;
+        }
+
+        return $node->getDataForApi();
     }
     
     /**
@@ -600,6 +648,13 @@ class Core_Model_NodeManager
     {
         if(!($node = $this->getNode($nodeId))) {
             return false;
+        }
+
+        if(array_key_exists('services', $data) && is_array($data['services'])) {
+            if(!$this->_updateNodeServices($nodeId, $data['services'])) {
+                return false;
+            }
+            unset($data['services']);
         }
 
         if (isset($data['additionalKey']) && isset($data['additionalValue'])) {

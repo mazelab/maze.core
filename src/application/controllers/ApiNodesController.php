@@ -59,12 +59,11 @@ class ApiNodesController extends MazeLib_Rest_Controller
 
     public function getResourceAction()
     {
-        $nodeManager = Core_Model_DiFactory::getNodeManager();
-        if(!($node = $nodeManager->getNode($this->getParam("nodeId")))) {
+        if(!($node = Core_Model_DiFactory::getNodeManager()->getNodeForApi($this->getParam("nodeId")))) {
             return $this->_setNotFoundHeader();
         }
 
-        $this->_helper->json->sendJson($node->getData());
+        $this->_helper->json->sendJson($node);
     }
 
     public function putResourceAction()
@@ -77,22 +76,52 @@ class ApiNodesController extends MazeLib_Rest_Controller
         $form = new Core_Form_Node();
         $form->setAdditionalFields($node);
 
-        $values = $form->getValidValues($this->getRequest()->getParams());
-        if (!empty($values)) {
+        if (($values = $form->getValidValues($this->getRequest()->getParams()))) {
             if ($nodeManager->updateNode($node->getId(), $values)) {
-                $this->getResponse()->setHttpResponseCode(202);
-                $this->_helper->json->sendJson($node->getData());
+                $this->getResponse()->setHttpResponseCode(200);
+                $this->_helper->json->sendJson($nodeManager->getNodeForApi($this->getParam("nodeId")));
             }
         }
+    }
+
+    public function postResourceAction()
+    {
+        $nodeManager = Core_Model_DiFactory::getNodeManager();
+        if(!$nodeManager->getNode($this->getParam("nodeId"))) {
+            return $this->_setNotFoundHeader();
+        }
+
+        $form = new Core_Form_Node();
+        $params = $this->getAllParams();
+        $response = array(
+            'result' => false
+        );
+
+        $form->initDynamicContent($params);
+
+        if($params && $form->isValidPartial($params) && ($values = $form->getValidValues($params))) {
+            $response['result'] = $nodeManager->updateNode($this->getParam('nodeId'), $values);
+            $response['node'] = $nodeManager->getNodeForApi($this->getParam('nodeId'));
+        } else {
+            $response['params'] = $params;
+            $response['errForm'] = $form->getMessages();
+        }
+
+        if(!$response['result']) {
+            $this->_setServerErrorHeader();
+        }
+
+        $this->_helper->json->sendJson($response);
     }
 
     public function deleteResourceAction()
     {
         $nodeManager = Core_Model_DiFactory::getNodeManager();
-        if(($node = $nodeManager->getNode($this->getParam("nodeId"))) &&
-            $nodeManager->deleteNode($node->getId())) {
-                $this->_setAcceptedHeader();
-        }
+        if(!$nodeManager->deleteNode($this->getParam('nodeId'))) {
+            $this->_setServerErrorHeader();
+        };
+
+        $this->getResponse()->setBody(null);
     }
 
 }

@@ -1,7 +1,16 @@
-<div class="row-fluid">
-    <div class="span12" ng-controller="NodeController">
+<div class="row-fluid" ng-controller="NodeController">
+    <span id="nodeEditLoading" ng-show="loadNode">
+        <img src="<?= $this->baseUrl() ?>/img/js/loading.gif" title="<?= $this->translate('Loading...') ?>">
+        <?= $this->translate('Loading...') ?>
+    </span>
+
+    <span id="nodeEditLoadingFailed" ng-show="!loadNode && !node">
+        <?= $this->translate('Failed to load node') ?>
+    </span>
+
+    <div id="nodeEditContent"  ng-show="node">
         <div class="row-fluid text-left cssBoxCenter">
-            <a ng-click="delete($event);" class="jsIconDeleteTxt btn" ng-class="{disabled: !node.name}" title="<?= $this->translate("delete node"); ?>">
+            <a ng-click="modalDeleteNode();" class="jsIconDeleteTxt btn" ng-class="{disabled: !node}" title="<?= $this->translate("delete node"); ?>">
                 <i class="icon-trash"></i> <?= $this->translate("delete"); ?>
             </a>
         </div>
@@ -19,7 +28,7 @@
                             {{node.ipAddress}}
                         </maze-dl-wrapper>
                         <maze-dl-wrapper label="<?= $this->translate('Node Type') ?>" dt-class="span3" dd-class="span9">
-                            <a href="#" editable-select="node.nodetype" e-ng-options="type.value as type.name for type in nodetypes" e-ng-change="changetype($data);" oncancel="changetype();" onaftersave="update();">
+                            <a href="#" editable-select="node.nodetype" e-ng-options="type.value as type.name for type in nodetypes" e-ng-change="changeNodeType($data);" oncancel="changeNodeType();" onaftersave="update();">
                                 {{selected.name || "<?= $this->translate("Assign a server type"); ?>"}}
                             </a>
                         </maze-dl-wrapper>
@@ -71,81 +80,164 @@
             </div>
         </div>
     </div>
+
 </div>
-<div>
-    <script type="text/ng-template" id="ModalNodeDelete.html">
-        <div class="modal-header" ng-if="modal.title;">
-            <h3 class="modal-title">{{modal.title}}</h3>
-        </div>
-        <div class="modal-body" ng-if="modal.body;">
-            <p>{{modal.body}}</p>
-        </div>
-        <div class="modal-footer">
-            <button class="btn" ng-click="dismiss();"><?= $this->translate("cancel"); ?></button>
-            <button class="btn btn-primary" ng-click="confirm();"><?= $this->translate("ok"); ?></button>
-        </div>
-    </script>
-</div>
+
+<script type="text/ng-template" id="modalDeleteNode.html">
+    <div class="modal-body">
+        <p>
+            <?= $this->translate('Shall the node really be deleted?') ?>
+        </p>
+
+        <alert ng-repeat="error in errMessages" type="'danger'">{{error}}</alert>
+    </div>
+    <div class="modal-footer">
+        <button class="btn" ng-click="cancel();"><?= $this->translate("cancel"); ?></button>
+        <button class="btn btn-primary" ng-click="ok();"><?= $this->translate("ok"); ?></button>
+    </div>
+</script>
+
 <script type="text/javascript">
     var app = angular.module('maze');
 
-    app.controller('NodeController', ['$scope', '$modal', '$filter', 'nodesService', function($scope, $modal, $filter, nodesService){
-        $scope.node = {_id: "<?= $this->html("node/_id"); ?>"};
-        $scope.selected  = {image: "dummy_node_200.png"};
+    app.controller('NodeController', ['$scope', '$modal', '$filter', 'nodesService', 'modulesService', function($scope, $modal, $filter, nodesService, modulesService){
         $scope.nodetypes = [
             {name:"<?= $this->translate("Virtual Server"); ?>", value: "virtual", image: "dummy_vm_200.png"},
             {name:"<?= $this->translate("Cloud Server"); ?>‎", value: "cloud", image: "dummy_cloud_200.png"},
             {name:"<?= $this->translate("Dedicated Server"); ?>‎", value: "dedicated", image: "dummy_server_200.png"}
         ];
+        $scope.nodeId = '<?= $this->html("node/_id"); ?>';
+        $scope.selected  = {image: "dummy_node_200.png"};
 
         $scope.update = function(data){
-            return nodesService.update($scope.node._id, data || $scope.node).success(function(node){
+            return nodesService.set($scope.node._id, data || $scope.node).success(function(node){
                 $scope.node = node;
             });
         };
 
-        $scope.$watch("node.nodetype", function(option){
-            $scope.changetype(option);
+        $scope.loadNode = true;
+        nodesService.get($scope.nodeId).success(function(data) {
+            $scope.node = data;
+            $scope.loadNode = false;
+
+            initNodeTypeSelect();
+            initServices();
+        }).error(function(data, code) {
+            if(code === 404) {
+                window.location = '<?= $this->url(array(), 'nodes') ?>';
+            }
+            $scope.loadNode = false;
         });
 
-        $scope.changetype = function(option){
-            option = (option || $scope.node.nodetype);
-            select = $filter("filter")($scope.nodetypes, {value: (option)})[0];
-            if (option && select && select.value) {
-                $scope.selected = select;
-            }
-        };
-
-        $scope.delete = function(event){
-            modal().result.then(function(){
-                nodesService.delete($scope.node._id).success(function(response, status){
-                    if (status === 202) {
-                        return location.href = "<?= $this->url(array(), "nodes"); ?>";
-                    }
-                });
+        $scope.modalDeleteNode = function() {
+            var modalInstance = $modal.open({
+                templateUrl: 'modalDeleteNode.html',
+                controller: 'modalDeleteNode',
+                resolve: {
+                    nodeId: function () {return $scope.nodeId}
+                }
             });
 
-            return event.preventDefault();
-        };
-
-        var modal = function(){
-            return($modal.open({
-                templateUrl: "ModalNodeDelete.html",
-                controller : function ($scope, $modalInstance){
-                    $scope.modal = {
-                        body: "<?= $this->translate("Shall the node really be deleted?"); ?>"
-                    };
-                    $scope.confirm = $modalInstance.close;
-                    $scope.dismiss = function (){
-                        $modalInstance.dismiss("cancel");
-                    };
+            modalInstance.result.then(function (code) {
+                if (code === 200) {
+                    return location.href = "<?= $this->url(array(), "nodes"); ?>";
                 }
-            }));
+            });
         };
 
-        nodesService.get($scope.node._id).success(function(node){
-            $scope.node = node;
-        });
+        var initNodeTypeSelect = function() {
+            $scope.$watch("node.nodetype", function(option){
+                $scope.changeNodeType(option);
+            });
 
+            $scope.changeNodeType = function(option){
+                option = (option || $scope.node.nodetype);
+                select = $filter("filter")($scope.nodetypes, {value: (option)})[0];
+                if (option && select && select.value) {
+                    $scope.selected = select;
+                }
+            };
+        };
+
+        var initServices = function() {
+            $scope.loadServices = true;
+            $scope.services = {selected: '', all: []};
+
+            modulesService.list().success(function(data){
+                $scope.services.all = data;
+                buildAvailableServices();
+                $scope.loadServices = false;
+            }).error(function() {
+                $scope.loadServices = false;
+                buildAvailableServices();
+                $scope.errAddService = ['Failed to load services'];
+            });
+
+            $scope.addService = function(serviceName) {
+                $scope.errAddService = [];
+                var service = $filter('filter')($scope.services.available, {name: serviceName})[0];
+                if(!service || !service._id) {
+                    return false;
+                }
+
+                var updateData = {services: {}};
+                updateData.services[serviceName] = true;
+
+                nodesService.update($scope.node._id, $.param(updateData)).success(function(data) {
+                    $scope.node.services = data.node.services;
+                    $scope.services.selected = '';
+                    buildAvailableServices();
+
+                    setTimeout(function() {
+                        $('#tabServices-' + serviceName).tab('show');
+                    }, 0);
+                }).error(function() {
+                    $scope.errAddService.push('<?= $this->translate('Failed') ?>');
+                });
+            };
+
+            $scope.modalRemoveNodeService = function(service) {
+                if(!service) {
+                    return false;
+                }
+
+                var modalInstance = $modal.open({
+                    templateUrl: 'modalRemoveNodeService.html',
+                    controller: 'modalRemoveNodeService',
+                    resolve: {
+                        service: function () {return service},
+                        node: function () {return $scope.node}
+                    }
+                });
+
+                modalInstance.result.then(function (services) {
+                    $scope.node.services = services;
+                    $('#tabServicesList li a:first').tab('show');
+                    buildAvailableServices();
+                });
+            };
+
+            var buildAvailableServices = function() {
+                if(!$scope.node) {
+                    $scope.services.available = [{label: '<?= $this->translate('No services available') ?>', name:''}];
+                    return false;
+                }
+
+                var availableServices = [];
+                angular.forEach($scope.services.all, function(service) {
+                    if(service.name && (!$scope.node.services || !$scope.node.services[service.name])) {
+                        availableServices.push(service);
+                    }
+                });
+
+                if(!availableServices.length) {
+                    $scope.services.available = [{label: '<?= $this->translate('No services available') ?>', name:''}];
+                } else {
+                    $scope.services.available = [{label: '<?= $this->translate('Add new service') ?>', name:''}];
+                }
+
+                $scope.services.available = $scope.services.available.concat(availableServices);
+            };
+        };
     }]);
 </script>

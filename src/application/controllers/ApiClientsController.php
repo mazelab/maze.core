@@ -41,7 +41,7 @@ class ApiClientsController extends MazeLib_Rest_Controller
             return $this->_setNotFoundHeader();
         }
 
-        $this->_helper->json->sendJson($clientManager->getClientAsArrayWithServices($this->getParam('clientId')));
+        $this->_helper->json->sendJson($clientManager->getClientForApi($this->getParam('clientId')));
     }
 
     public function putResourceAction()
@@ -82,7 +82,7 @@ class ApiClientsController extends MazeLib_Rest_Controller
         $form->initDynamicContent($params);
         if($params && $form->isValidPartial($params) && ($values = $form->getValidValues($params))) {
             $response['result'] = $clientManager->updateClient($this->getParam('clientId'), $values);
-            $response['client'] = $clientManager->getClientAsArrayWithServices($this->getParam('clientId'));
+            $response['client'] = $clientManager->getClientForApi($this->getParam('clientId'));
         } else {
             $response['params'] = $params;
             $response['errForm'] = $form->getMessages();
@@ -98,10 +98,11 @@ class ApiClientsController extends MazeLib_Rest_Controller
     public function deleteResourceAction()
     {
         $clientManager = Core_Model_DiFactory::getClientManager();
-        if(($client = $clientManager->getClient($this->getParam("clientId"))) &&
-            $clientManager->deleteClient($client->getId())) {
-            $this->_setAcceptedHeader();
-        }
+        if(!$clientManager->deleteClient($this->getParam('clientId'))) {
+            $this->_setServerErrorHeader();
+        };
+
+        $this->getResponse()->setBody(null);
     }
 
 }

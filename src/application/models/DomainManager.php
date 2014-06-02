@@ -132,6 +132,36 @@ class Core_Model_DomainManager
         
         return $data['_id'];
     }
+
+    /**
+     * updates domain services via boolean values
+     *
+     * services schema:
+     * array(
+     *     'service1' => true,          # enables service1
+     *     'service2' => false          # disables service2
+     * )
+     *
+     * @param string $domainId
+     * @param array $services
+     * @return boolean
+     */
+    public function _updateDomainServices($domainId, array $services)
+    {
+        foreach($services as $service => $state) {
+            if(!filter_var($state, FILTER_VALIDATE_BOOLEAN)) {
+                if(!$this->removeDomainService($domainId, $service)) {
+                    return false;
+                }
+            } else {
+                if(!$this->addService($domainId, $service)) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
     
     /**
      * adds an additional field to the given domain
@@ -169,6 +199,9 @@ class Core_Model_DomainManager
     {
         if(!($domain = $this->getDomain($domainId))) {
             return false;
+        }
+        if($domain->hasService($serviceName)) {
+            return true;
         }
         
         $apiBroker = new Core_Model_Module_Api();
@@ -362,6 +395,21 @@ class Core_Model_DomainManager
         }
         
         return $domain->getData();
+    }
+
+    /**
+     * gets complete domain data enriched with api dependencies for api use
+     *
+     * @param string $domainId
+     * @return array|null
+     */
+    public function getDomainForApi($domainId)
+    {
+        if(!($domain = $this->getDomain($domainId))) {
+            return null;
+        }
+
+        return $domain->getDataForApi();
     }
     
     /**
@@ -696,7 +744,14 @@ class Core_Model_DomainManager
         if(!($domain = $this->getDomain($domainId))) {
             return false;
         }
-        
+
+        if(array_key_exists('services', $data) && is_array($data['services'])) {
+            if(!$this->_updateDomainServices($domainId, $data['services'])) {
+                return false;
+            }
+            unset($data['services']);
+        }
+
         if (isset($data['additionalKey']) && isset($data['additionalValue'])) {
             $domain->addAdditionalField($data['additionalKey'], $data['additionalValue']);
             unset($data['additionalKey'], $data['additionalValue']);

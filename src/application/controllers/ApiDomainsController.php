@@ -51,11 +51,40 @@ class ApiDomainsController extends MazeLib_Rest_Controller
 
     public function deleteResourceAction()
     {
+        if(!Core_Model_DiFactory::getDomainManager()->deleteDomain($this->getParam('domainId'))) {
+            $this->_setServerErrorHeader();
+        };
+
+        $this->getResponse()->setBody(null);
+    }
+
+    public function postResourceAction()
+    {
         $domainManager = Core_Model_DiFactory::getDomainManager();
-        if(($domain = $domainManager->getDomain($this->getParam("domainId"))) &&
-            $domainManager->deleteDomain($domain->getId())) {
-                $this->_setAcceptedHeader();
+        if(!$domainManager->getDomain($this->getParam("domainId"))) {
+            return $this->_setNotFoundHeader();
         }
+
+        $form = new Core_Form_Domain();
+        $params = $this->getAllParams();
+        $response = array(
+            'result' => false
+        );
+
+        $form->initDynamicContent($params);
+        if($params && $form->isValidPartial($params) && ($values = $form->getValidValues($params))) {
+            $response['result'] = $domainManager->updateDomain($this->getParam('domainId'), $values);
+            $response['domain'] = $domainManager->getDomainForApi($this->getParam('domainId'));
+        } else {
+            $response['params'] = $params;
+            $response['errForm'] = $form->getMessages();
+        }
+
+        if(!$response['result']) {
+            $this->_setServerErrorHeader();
+        }
+
+        $this->_helper->json->sendJson($response);
     }
 
     public function putResourceAction()
@@ -81,29 +110,10 @@ class ApiDomainsController extends MazeLib_Rest_Controller
 
     public function getResourceAction()
     {
-        $domainManager = Core_Model_DiFactory::getDomainManager();
-        if(!($domain = $domainManager->getDomain($this->getParam("domainId")))) {
+        if(!($domain = Core_Model_DiFactory::getDomainManager()->getDomainForApi($this->getParam("domainId")))) {
             return $this->_setNotFoundHeader();
         }
 
-        $domainData = $domain->getData();
-
-        if ($this->getParam("client") == true) {
-            $clientManager = Core_Model_DiFactory::getClientManager();
-            $domainData["client"] = $clientManager->getClientByDomainAsArray($domain->getId());
-            $domainData["client"]["uri"] = $this->view->url(array($domainData["owner"]), "api_client");
-        }
-        if ($this->getParam("nodes") == true) {
-            $moduleListings = Core_Model_DiFactory::getModuleListings();
-            $domainData["nodes"] = $moduleListings->getNodesWithServicesByDomain($domain->getId());
-        }
-        if ($this->getParam("logs") == true) {
-            $domainData["logs"] = Core_Model_DiFactory::getLogManager()->getDomainLogs($domain->getId());
-        }
-        if ($this->getParam("services") == true) {
-            $domainData["services"] = $domain->getServices();
-        }
-
-        $this->_helper->json->sendJson($domainData);
+        $this->_helper->json->sendJson($domain);
     }
 }

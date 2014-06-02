@@ -69,6 +69,33 @@ class Core_Model_ValueObject_Domain extends Core_Model_ServiceObject
         
         return $id;
     }
+
+    /**
+     * gets complete domain data enriched with api dependencies for api use
+     *
+     * @return array()
+     */
+    public function getDataForApi()
+    {
+        $urlHelper = Zend_Controller_Action_HelperBroker::getStaticHelper('Url');
+        $result = $this->getData();
+
+        foreach($this->getServices() as $name => $service) {
+            if(isset($service['routes']['config']['domain']['route']) &&
+                    ($domainRoute = $service['routes']['config']['domain']['route'])) {
+                $result['services'][$name]['configUrl'] = $urlHelper
+                    ->url(array('domainId' => $this->getId(), 'domainName' => $this->getName()), $domainRoute);
+            }
+        }
+
+        if(($owner = $this->getOwner())) {
+            $result['ownerData']['label'] = $owner->getLabel();
+            $result['ownerData']['url'] = $urlHelper
+                ->url(array('clientId' => $owner->getId(), 'clientLabel' => $owner->getLabel()), 'clientDetail');
+        }
+
+        return $result;
+    }
     
     /**
      * returns node name from data set

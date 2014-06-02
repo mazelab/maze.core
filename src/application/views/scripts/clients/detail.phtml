@@ -1,10 +1,19 @@
 <? $this->headScript()->appendFile($this->baseUrl() . '/js/min/jquery.form.min.js') ?>
 
 <div class="row-fluid" ng-controller="ClientController">
-    <div class="span12">
+    <span ng-show="loadClient">
+        <img src="<?= $this->baseUrl() ?>/img/js/loading.gif" title="<?= $this->translate('Loading...') ?>">
+        <?= $this->translate('Loading...') ?>
+    </span>
+
+    <span ng-show="!loadClient && !client">
+        <?= $this->translate('Failed to load client') ?>
+    </span>
+
+    <div class="span12" id="clientEditContent" ng-show="client">
         <div class="row-fluid text-left cssBoxCenter">
-            <a ng-click="delete($event);"
-               class="jsIconDeleteTxt btn" title="<?= $this->translate("delete"); ?>">
+            <a ng-click="modalDeleteClient();"
+               class="btn" title="<?= $this->translate("delete"); ?>">
                 <i class="icon-trash"></i> <?= $this->translate("delete"); ?>
             </a>
             <a <?= $this->toBool("client/status") ? "style=\"display:none;\"" : null; ?>
@@ -175,21 +184,22 @@
             </div>
         </div>
     </div>
-    <div>
-        <script type="text/ng-template" id="ModalDeleteClient.html">
-            <div class="modal-header" ng-if="modal.title;">
-                <h3 class="modal-title">{{modal.title}}</h3>
-            </div>
-            <div class="modal-body" ng-if="modal.body;">
-                <p>{{modal.body}}</p>
-            </div>
-            <div class="modal-footer">
-                <button class="btn" ng-click="dismiss();"><?= $this->translate("cancel"); ?></button>
-                <button class="btn btn-primary" ng-click="confirm();"><?= $this->translate("ok"); ?></button>
-            </div>
-        </script>
-    </div>
 </div>
+
+<script type="text/ng-template" id="modalDeleteClient.html">
+    <div class="modal-body">
+        <p>
+            <?= $this->translate("Shall the client really be deleted?"); ?>
+        </p>
+
+        <alert ng-repeat="error in errMessages" type="'danger'">{{error}}</alert>
+    </div>
+    <div class="modal-footer">
+        <button class="btn" ng-click="cancel();"><?= $this->translate("cancel"); ?></button>
+        <button class="btn btn-primary" ng-click="ok();"><?= $this->translate("ok"); ?></button>
+    </div>
+</script>
+
 <?= $this->render('shared/passwordStrength.phtml'); ?>
 
 <script type="text/javascript">
@@ -197,13 +207,18 @@
 
     app.controller('ClientController', ['$scope', '$modal', '$filter', 'clientsService', 'modulesService', function($scope, $modal, $filter, clientsService, modulesService){
         $scope.clientId = '<?= $this->html("client/_id"); ?>';
+        $scope.loadClient = true;
 
         clientsService.get($scope.clientId).success(function(data) {
             $scope.client = data;
+            $scope.loadClient = false;
 
-            initServices()
-        }).error(function(data) {
-            //@todo error handling
+            initServices();
+        }).error(function(data, code) {
+            if(code === 404) {
+                window.location = '<?= $this->url(array(), 'clients') ?>';
+            }
+            $scope.loadClient = false;
         });
 
         $scope.update = function(data){
@@ -212,42 +227,25 @@
             });
         };
 
-        $scope.delete = function(event){
-            modal().result.then(function(){
-                clientsService.delete($scope.client._id).success(function(response, status){
-                    if (status === 202) {
-                        return location.href = "<?= $this->url(array(), "clients"); ?>";
-                    }
-                });
+        $scope.modalDeleteClient = function() {
+            var modalInstance = $modal.open({
+                templateUrl: 'modalDeleteClient.html',
+                controller: 'modalDeleteClient',
+                resolve: {
+                    clientId: function () {return $scope.clientId}
+                }
             });
 
-            return event.preventDefault();
-        };
-
-        $scope.changeState = function(event){
-            $scope.client.changeState = true;
-            $scope.update($scope.client);
-            event.preventDefault();
-        };
-
-        var modal = function(){
-            return($modal.open({
-                templateUrl: "ModalDeleteClient.html",
-                controller : function ($scope, $modalInstance){
-                    $scope.modal = {
-                        body: "<?= $this->translate("Shall the client really be deleted?"); ?>"
-                    };
-                    $scope.confirm = $modalInstance.close;
-                    $scope.dismiss = function (){
-                        $modalInstance.dismiss("cancel");
-                    };
+            modalInstance.result.then(function (code) {
+                if (code === 200) {
+                    return location.href = "<?= $this->url(array(), "clients"); ?>";
                 }
-            }));
+            });
         };
 
         var initServices = function() {
             $scope.loadServices = true;
-            $scope.services = {selected: ''};
+            $scope.services = {selected: '', all: []};
 
             modulesService.list().success(function(data){
                 $scope.services.all = data;
@@ -304,9 +302,13 @@
             };
 
             var buildAvailableServices = function() {
+                if(!$scope.client) {
+                    return false;
+                }
+
                 var availableServices = [];
                 angular.forEach($scope.services.all, function(service) {
-                    if(service.name && !$scope.client.services || !$scope.client.services[service.name]) {
+                    if(service.name && (!$scope.client.services || !$scope.client.services[service.name])) {
                         availableServices.push(service);
                     }
                 });
@@ -319,7 +321,7 @@
 
                 $scope.services.available = $scope.services.available.concat(availableServices);
             };
-        }
+        };
 
     }]);
 
@@ -393,7 +395,31 @@
             }
         });
 
-        $("#jsAvatarUpload").ajaxForm({            
+        $(".jsIconStateTxt").click(function(){
+            resetMessages();
+            self = $(this);
+            if (self.prop("disabled")){
+                return false;
+            }
+            self.prop("disabled", true);
+            $.ajax({
+                url: this.href,
+                data: {format: "json"},
+                success:function(data){
+                    if (!$.isEmptyObject(data.client) && self.hasClass("inactive") === data.client.status){
+                        $(".jsIconStateTxt").toggle();
+                        $(".jsClientStatus").toggle();
+                    }
+                    setMessages(data);
+                },
+                complete:function(){
+                    self.prop("disabled", false);
+                }
+            });
+            return false;
+        });
+
+        $("#jsAvatarUpload").ajaxForm({
             url: "<?= $this->url(array(), 'clientDetail') ?>?format=json",
             type: this.method,
             success: function(data) {
