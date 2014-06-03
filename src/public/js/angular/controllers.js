@@ -115,7 +115,7 @@ controllers.controller('domainListController', function($scope, domainsService) 
 
     initBreadCrumb();
 });
-controllers.controller('domainEditController', function($scope, $filter, $modal, $q, domainsService, $routeParams, modulesService) {
+controllers.controller('domainEditController', function($scope, $filter, $modal, $q, domainsService, $routeParams, modulesService, logsService) {
     $scope.domainId = $routeParams.domainId;
 
     $scope.loadDomain = true;
@@ -131,6 +131,16 @@ controllers.controller('domainEditController', function($scope, $filter, $modal,
         }
         $scope.loadDomain = false;
     })
+
+    $scope.loadLogs = false;
+    logsService.list({domain: $scope.domainId,limit: 10}).success(function(data) {
+        $scope.logs = data;
+        $scope.loadLogs = true;
+    }).error(function(data) {
+        console.log(data);
+        $scope.loadLogs = true;
+        console.log('error logs');
+    });
 
     $scope.modalDeleteDomain = function() {
         var modalInstance = $modal.open({

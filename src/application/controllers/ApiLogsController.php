@@ -46,7 +46,7 @@ class ApiLogsController extends MazeLib_Rest_Controller
 
         $jsonLogs = array();
         foreach($logs as $log) {
-            array_push($jsonLogs, $log);
+            array_push($jsonLogs, $logManager->translateLog($log));
         }
 
         if (empty($jsonLogs)) {

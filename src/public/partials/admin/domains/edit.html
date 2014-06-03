@@ -57,10 +57,10 @@
                     <div ng-include="'/partials/admin/domains/services.html'"></div>
                 </tab>
                 <tab heading="Nodes ({{nodes.length || 0}})">
-                    nodes
+                    <div ng-include="'/partials/admin/domains/nodes.html'"></div>
                 </tab>
                 <tab heading="Logs">
-                    logs
+                    <div ng-include="'/partials/admin/domains/logs.html'"></div>
                 </tab>
             </tabset>
         </div>
@@ -154,5 +154,26 @@
             Cancel
         </button>
     </div>
+</script>
+
+<script type="text/ng-template" id="/partials/admin/domains/logs.html">
+    <ul id="tabDomainLogsList" class="unstyled jsLineColor">
+        <li ng-repeat="log in logs" id="tabDomainLogsListEntry-{{log._id}}" class="row-fluid cssLine jsLine">
+            <span class="span2">
+                {{log.datetime}}
+            </span>
+            <span class="span8">
+                {{log.translation}}
+            </span>
+            <span class="pull-right">
+                {{log.user}}
+            </span>
+        </li>
+    </ul>
+</script>
+
+<script type="text/ng-template" id="/partials/admin/domains/nodes.html">
+    nodes
+    @todo
 </script>
 

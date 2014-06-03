@@ -296,6 +296,28 @@ class Core_Model_LogManager
     {
         return $this->getContextLogs(Core_Model_Logger::TYPE_WARNING, null, $count);
     }
-    
+
+    public function translateLog(array $log)
+    {
+        if(!$log || !is_array($log)) {
+            return array();
+        }
+
+        if(array_key_exists('message', $log) && Zend_Registry::isRegistered('Zend_Translate')) {
+            /*@var $translator Zend_Translate */
+            $translator = Zend_Registry::get('Zend_Translate');
+            /*@var $adapter Zend_Translate_Adapter */
+            $adapter = $translator->getAdapter();
+
+            if(array_key_exists('messageVars', $log)) {
+                $log['translation'] = vsprintf($adapter->translate($log['message']), $log['messageVars']);
+            } else {
+                $log['translation'] = $adapter->translate($log['message']);
+            }
+        }
+
+        return $log;
+    }
+
 }
 
