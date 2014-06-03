@@ -1,0 +1,34 @@
+<div class="span12">
+    <div class="row-fluid cssListing">
+        <div class="span12 cssHeaderList">
+            <div class="cssButton span12">
+                <a class="btn btn-info jsButton" href="#/new">
+                    Create domain
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="push"></div>
+
+    <div id="domainListing" class="row-fluid cssListing">
+        <ul class="span12 unstyled">
+            <li class="row-fluid" ng-repeat="domain in domains">
+                <div class="span10">
+                    <a href="#/edit/{{domain._id}}" class="cssListItem span12">
+                        <span class="cssAvatar">
+                            <img src="/img/dummy_domain_50.png" alt="avatar"/>
+                        </span>
+
+                        <span>
+                            {{domain.name}}
+                        </span>
+                    </a>
+                </div>
+                <div class="span2 cssAction"></div>
+            </li>
+        </ul>
+    </div>
+</div>
+
+

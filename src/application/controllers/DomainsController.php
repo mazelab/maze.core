@@ -60,44 +60,9 @@ class DomainsController extends Zend_Controller_Action
 
     public function detailAction()
     {
-        $domainManager = Core_Model_DiFactory::getDomainManager();
-        
-        if(!($domain = $domainManager->getDomain($this->_getParam('domainId')))) {
-            Core_Model_DiFactory::getMessageManager()
-                    ->addError(self::MESSAGE_DOMAIN_NOT_FOUND, $this->_getParam('domainId'));
-            return $this->_forward('index');
-        }
-        
-        $clientManager = Core_Model_DiFactory::getClientManager();
-        $serviceForm = new Core_Form_DomainServices();
-        $form = new Core_Form_Domain();
-        
-        $form->setAdditionalFields($domain);
-        if ($this->getRequest()->isPost()) {
-            $values = $form->getValidValues($this->_request->getPost());
-            
-            if(!empty($values)) {
-                $this->view->result = $domainManager->updateDomain($domain->getId(), $values);
-            }
-            
-            $this->view->formErrors = $form->getMessages();
-        }
-        
-        $this->view->domain = $domain->getData();
-        $this->view->domainId = $domain->getId();
-        $this->view->form = $form->setDefaults($domain->getData());
-        $this->view->serviceForm = $serviceForm->setServiceSelect($domain);
-        $this->view->owner = $clientManager->getClientByDomainAsArray($domain->getId());
-        $this->view->services = $domain->getServices();
-        
-        $this->view->logs = Core_Model_DiFactory::getLogManager()->getDomainLogs($domain->getId());
-        $this->view->nodes = Core_Model_DiFactory::getModuleListings()
-                ->getNodesWithServicesByDomain($domain->getId());
-        
-        $navigation = $this->view->navigation();
-        if (($active = $navigation->findActive($navigation->getContainer()))){
-            $active["page"]->setLabel($form->getValue("name"));
-        }
+        $url = $this->view->url(array(), 'domains') . "/#/edit/{$this->_getParam('domainId')}";
+
+        return $this->redirect($url, array('code'=>301));
     }
     
     public function deleteAction()

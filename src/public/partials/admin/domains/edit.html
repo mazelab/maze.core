@@ -1,0 +1,158 @@
+<div class="row-fluid">
+    <span ng-show="loadDomain">
+        <img src="/img/js/loading.gif" title="Loading...">
+        Loading...
+    </span>
+
+    <span ng-show="!loadDomain && !domain">
+        Failed to load domain
+    </span>
+
+    <div id="domainEditContent" ng-show="domain">
+        <div class="row-fluid text-left cssBoxCenter">
+            <button ng-click="modalDeleteDomain();" ng-disabled="!domain" class="jsIconDeleteTxt btn" title="delete domain">
+                <i class="icon-trash"></i>
+               delete
+            </button>
+        </div>
+
+        <div class="row-fluid cssBoxCenter">
+            <div class="span10">
+                <div class="row-fluid">
+                    <div class="cssUserImage span2">
+                        <img name="avatar" class="img-polaroid" src="/img/dummy_domain_200.png" alt="avatar">
+                    </div>
+
+                    <div class="span9 offset1">
+                        <maze-dl-wrapper dt-class="span3" dd-class="span9 cssBigItem" class="row-fluid">
+                            {{domain.name}}
+                        </maze-dl-wrapper>
+
+                        <maze-dl-wrapper label="Client" dt-class="span3" dd-class="span9">
+                            <a ng-if="domain.ownerData.url" href="{{domain.ownerData.url}}">
+                                {{domain.ownerData.label}}
+                            </a>
+                            <span ng-if="!domain.ownerData.url">
+                                {{domain.ownerData.label}}
+                            </span>
+                        </maze-dl-wrapper>
+
+                        <maze-dl-wrapper class="row-fluid" label="procurement place" dt-class="span3" dd-class="span9">
+                            <span editable-text="domain.procurement" ng-class="{cssColorGray: !domain.procurement}"
+                                  onbeforesave="updateProperty('procurement', $data);">
+                                {{domain.procurement || 'procurement place' }}
+                            </span>
+                        </maze-dl-wrapper>
+                    </div>
+                </div>
+                <div class="row-fluid" id="additionalFieldsContent">
+                    <maze-additional fields="domain" update="update($data)"></maze-additional>
+                </div>
+            </div>
+        </div>
+
+        <div class="row-fluid cssBoxCenter">
+            <tabset>
+                <tab heading="Services ({{domain.services.length || 0}})">
+                    <div ng-include="'/partials/admin/domains/services.html'"></div>
+                </tab>
+                <tab heading="Nodes ({{nodes.length || 0}})">
+                    nodes
+                </tab>
+                <tab heading="Logs">
+                    logs
+                </tab>
+            </tabset>
+        </div>
+
+    </div>
+</div>
+
+<script type="text/ng-template" id="modalDomainDelete.html">
+    <div class="modal-body">
+        <p>
+            Shall the domain really be deleted?
+        </p>
+
+        <alert ng-repeat="error in errMessages" type="'danger'">{{error}}</alert>
+    </div>
+
+    <div class="modal-footer">
+        <button class="btn" ng-click="cancel();">Cancel</button>
+        <button class="btn btn-primary" ng-click="ok();">Ok</button>
+    </div>
+</script>
+
+<script type="text/ng-template" id="/partials/admin/domains/services.html">
+    <div id="domainServicesContent" class="row-fluid">
+
+        <div class="row-fluid">
+            <maze-dl-wrapper label="Add new service" dl-class="span12" dt-class="span3 text-right"
+                             dd-class="span7">
+                <span ng-show="loadServices">
+                    <img src="/img/js/loading.gif" title="Loading...">
+                    Loading...
+                </span>
+
+                <select ng-options="service.name as service.label for service in services.available"
+                        ng-model="services.selected" ng-disabled="services.available.length <= 1" ng-show="!loadServices">
+                </select>
+
+                <button class="btn btn-info" ng-disabled="!services.selected" ng-show="!loadServices"
+                        ng-click="addService(services.selected)">
+                    Ok
+                </button>
+
+                <div class="row-fluid" ng-show="errAddService.length">
+                    <alert ng-repeat="error in errAddService" type="'danger'">{{error}}</alert>
+                </div>
+            </maze-dl-wrapper>
+        </div>
+
+        <div class="row-fluid tabbable tabs-left cssTabContentAll">
+            <div class="row-fluid cssBoxCenter">
+                <tabset>
+                    <tab ng-repeat="service in domain.services" heading="{{service.label}}">
+                        <tab-heading>
+                            {{service.label}}
+                            <i class="icon-trash text-right" ng-click="modalRemoveDomainService(service)"></i>
+                        </tab-heading>
+
+                        <ng-include ng-if="service.configUrl" src="service.configUrl">
+                            <img src="/img/js/loading.gif" title="Loading...">
+                            Loading...
+                        </ng-include>
+
+                        <div ng-if="!service.configUrl">
+                            No configuration available
+                        </div>
+                    </tab>
+                </tabset>
+            </div>
+        </div>
+
+    </div>
+</script>
+
+<script type="text/ng-template" id="modalRemoveDomainService.html">
+    <div class="modal-header">
+        <h3 class="modal-title">Remove Service {{service.name}} from domain {{domain.name}}</h3>
+    </div>
+
+    <div class="modal-body">
+        <p>
+            Should the service {{service.name}} be removed from the domain?
+        </p>
+        <alert ng-repeat="error in errMessages" type="'danger'">{{error}}</alert>
+    </div>
+
+    <div class="modal-footer">
+        <button class="btn btn-danger" ng-click="ok()">
+            Ok
+        </button>
+        <button class="btn" ng-click="cancel()">
+            Cancel
+        </button>
+    </div>
+</script>
+
