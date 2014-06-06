@@ -23,6 +23,23 @@ class MazeLib_Rest_Controller extends Zend_Controller_Action
     );
 
     /**
+     * removes all first lvl keys of given array
+     *
+     * @param array $data
+     * @return array
+     */
+    protected function _arrayRemoveKeys(array $data)
+    {
+        $result = array();
+
+        foreach($data as $val) {
+            array_push($result, $val);
+        }
+
+        return $result;
+    }
+
+    /**
      * set accepted header and clears body
      */
     protected function _setAcceptedHeader()

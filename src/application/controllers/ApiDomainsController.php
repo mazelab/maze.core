@@ -12,25 +12,25 @@
  */
 class ApiDomainsController extends MazeLib_Rest_Controller
 {
+
     /**
      * get paginated domains
      */
     public function getResourcesAction()
     {
         $domainManager = Core_Model_DiFactory::getDomainManager();
-        $jsonDomains = array();
+        $result = array();
 
-        if(($service = $this->getParam('service'))) {
-            $domains = $domainManager->getDomainsByServiceAsArray($service);
+        if($page = $this->getParam('page')) {
+            $result = $domainManager->paginate($this->getParam('limit', 10),
+                $this->getParam('page', 1), $this->getParam('search', null));
+        } elseif (($service = $this->getParam('service'))) {
+            $result = $this->_arrayRemoveKeys($domainManager->getDomainsByServiceAsArray($service));
         } else {
-            $domains = $domainManager->getDomainsAsArray();
+            $result = $this->_arrayRemoveKeys($domainManager->getDomainsAsArray());
         }
 
-        foreach($domains as $domain) {
-            array_push($jsonDomains, $domain);
-        }
-
-        $this->_helper->json->sendJson($jsonDomains);
+        $this->_helper->json->sendJson($result);
     }
 
     public function postResourcesAction()
@@ -41,7 +41,10 @@ class ApiDomainsController extends MazeLib_Rest_Controller
             $domainId = $domainManager->createDomain($form->getValue('name'),
                 $form->getValue('owner'), $form->getValue('procurementplace'));
 
-            if($domainId) {
+            if($domainId){
+                $this->getResponse()->setHeader('Location', $this->view->url(array($domainId), 'domaindetail'));
+
+                $response['result'] = true;
                 $this->getResponse()->setHttpResponseCode(201);
             }
         } else {

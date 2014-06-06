@@ -23,7 +23,6 @@ directives.directive('mazeDlWrapper', function() {
             '</dl>'
     }
 });
-
 directives.directive('mazeAdditional', function() {
     return {
         restrict: "E",
@@ -141,4 +140,78 @@ directives.directive('mazeAdditional', function() {
             };
         }]
     };
+});
+directives.directive('mazeSearch', function() {
+    return {
+        restrict: 'E',
+        templateUrl: '/partials/admin/search.html',
+        transclude: true,
+        scope: {
+            data: '=',
+            limit: '@',
+            page: '@',
+            uri: '@'
+        },
+        compile: function(element, attrs){
+            // set default values for pagination component
+            if (!attrs.limit) { attrs.limit = 10; }
+            if (!attrs.page) { attrs.page = 1; }
+        },
+        controller: function($scope, $http, $q) {
+            $scope.search = $scope.first = $scope.last = $scope.total = '';
+            if(!$scope.uri) {
+                return false;
+            }
+
+            $scope.$watch('page + search + limit', function() {
+                $scope.loadPager = true;
+                $scope.errorMsg = [];
+
+                var params = {
+                    search: $scope.search || '',
+                    page: $scope.page || 1,
+                    limit: $scope.limit || 10
+                }
+
+                // cancel current request
+                if($scope.currentRequest) {
+                    $scope.currentRequest.resolve();
+                }
+
+                $scope.currentRequest = $q.defer();
+                $http.get($scope.uri, {
+                    timeout: $scope.currentRequest.promise,
+                    params: params
+                }).success(function(data) {
+                    if(data.data) {
+                        $scope.data = data.data;
+                    } else {
+                        $scope.data = [];
+                    }
+
+                    if(data.total) {
+                        $scope.first = (params.limit * (params.page - 1)) + 1;
+                        $scope.last = ($scope.first + $scope.data.length) - 1;
+                        $scope.total = data.total;
+                    } else {
+                        $scope.total = 0;
+                    }
+
+                    $scope.loadPager = false;
+                }).error(function(data, code) {
+                    // ignore cancels
+                    if(code === 0) {
+                        return false;
+                    }
+
+                    $scope.data = null;
+                    $scope.loadPager = false;
+
+                    $scope.errorMsg = [ 'Request failed!' ];
+                });
+
+            });
+
+        }
+    }
 });

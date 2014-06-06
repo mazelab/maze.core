@@ -1,0 +1,42 @@
+<div class="row-fluid">
+    <div class="cssToolBar cssPager">
+        <div class="span1">
+            <label>
+                Search
+            </label>
+        </div>
+
+        <div class="span4">
+            <input type="text" ng-model="search" ng-change="page=1">
+        </div>
+
+        <div class="span5">
+            <span class="pull-right" ng-show="total">
+                {{first}}-{{last}} of {{total}}
+            </span>
+        </div>
+
+        <div class="span2 pagination pagination-right">
+            <pagination class="pull-right" boundary-links="true" total-items="total" page="page" items-per-page="limit"
+                        previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;"
+                        last-text="&raquo;" max-size="0"></pagination>
+        </div>
+    </div>
+
+    <div class="row-fluid">
+        <div class="row-fluid">
+            <alert ng-repeat="error in errorMsg" type="'danger'">{{error}}</alert>
+        </div>
+
+        <div class="row-fluid" ng-show="loadPager">
+            <img alt="" src="/img/js/loading.gif">
+            Loading...
+        </div>
+
+        <div class="row-fluid" ng-show="!loadPager && (!data || !data.length)">
+            Nothing found
+        </div>
+
+        <div ng-transclude ng-show="!loadPager && data"></div>
+    </div>
+<div>

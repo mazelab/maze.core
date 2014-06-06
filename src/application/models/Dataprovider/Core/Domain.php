@@ -224,6 +224,45 @@ class Core_Model_Dataprovider_Core_Domain
     }
 
     /**
+     * paginates domains
+     *
+     * example return:
+     * array(
+     *  'data' => array(),
+     *  'total' => '55'
+     * )
+     *
+     * @param int $limit
+     * @param int $page
+     * @param string $searchTerm
+     * @return array
+     */
+    public function paginate($limit, $page, $searchTerm = null)
+    {
+        $result = array('total' => null, 'data' => array());
+        $query = array();
+
+        if ($searchTerm) {
+            $query[self::KEY_NAME] = new MongoRegex("/$searchTerm/i");
+        }
+
+        $sort = array(
+            self::KEY_NAME => 1
+        );
+
+        $mongoCursor = $this->_getDomainCollection()->find($query);
+        $result['total'] = $mongoCursor->count();
+
+        $skip = ($limit * $page) - $limit;
+        foreach($mongoCursor->sort($sort)->skip($skip)->limit($limit) as $domainId => $domain) {
+            $domain[self::KEY_ID] = $domainId;
+            array_push($result['data'], $domain);
+        }
+
+        return $result;
+    }
+
+    /**
      * save domain data and return id
      * 
      * @param array $data

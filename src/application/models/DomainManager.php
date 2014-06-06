@@ -609,7 +609,30 @@ class Core_Model_DomainManager
         
         return $this->_getLogger()->saveByContext($domainName);
     }
-    
+
+    /**
+     * paginate domains
+     *
+     * example return:
+     * array(
+     *      'total' => 20,
+     *      'data' => array(0 => array(...), ...)
+     * )
+     *
+     * @param int $numPerPage
+     * @param int $page
+     * @param string $term
+     * @return array
+     */
+    public function paginate($numPerPage = 10, $page = 1, $term = null)
+    {
+        if(!is_numeric($page)) {
+            return array();
+        }
+
+        return $this->getProvider()->paginate($numPerPage, $page, $term);
+    }
+
     /**
      * registers a domain instance
      * 

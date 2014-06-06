@@ -68,7 +68,23 @@ interface Core_Model_Dataprovider_Interface_Domain
      * @return array
      */
     public function getDomainsByService($serviceName, $clientId = null);
-            
+
+    /**
+     * paginates domains
+     *
+     * example return:
+     * array(
+     *  'data' => array(),
+     *  'total' => '55'
+     * )
+     *
+     * @param int $limit
+     * @param int $page
+     * @param string $searchTerm
+     * @return array
+     */
+    public function paginate($limit, $page, $searchTerm = null);
+
     /**
      * updates/create domain with the given data set
      * 

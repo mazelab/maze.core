@@ -101,14 +101,6 @@ controllers.controller('modalDeleteDomain', function($scope, $modalInstance, dom
 controllers.controller('domainListController', function($scope, domainsService) {
     $scope.domains = [];
 
-    $scope.loadDomains = true;
-    domainsService.list().success(function(data) {
-        $scope.loadDomains = false;
-        $scope.domains = data;
-    }).error(function(){
-        $scope.loadDomains = false;
-    });
-
     var initBreadCrumb = function() {
         $('ul.breadcrumb').html('<li><a href="/">Dashboard</a><span class="divider">/</span></li><li class="active">Domains</li>');
     };
@@ -299,12 +291,14 @@ controllers.controller('domainNewController', function($scope, $filter, domainsS
 
     $scope.submit = function(event){
         FormElements.disable(true);
-        domainsService.create($scope.domain).success(function(response, status){
+        domainsService.create($scope.domain).success(function(response, status, headers){
             $scope.response = response;
 
-            if (status === 201){
-                return location.href = "#/domains";
+            if(headers('location')) {
+                return location.href = headers('location');
             }
+
+            return location.href = "#/";
 
             FormElements.disable(false);
         });
