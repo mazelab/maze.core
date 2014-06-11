@@ -542,6 +542,27 @@ class Core_Model_DomainManager
         
         return $domains;
     }
+
+    /**
+     * get all domains of a certain node enriched with api dependencies for api use
+     *
+     * @param string $nodeId
+     * @return array
+     */
+    public function getDomainsByNodeForApi($nodeId)
+    {
+        $result = array();
+
+        if(!$nodeId || !($domains = Core_Model_DiFactory::getModuleListings()->getDomainsWithClientsByNode($nodeId))) {
+            return array();
+        }
+
+        foreach($domains as $domain) {
+            array_push($result, $domain);
+        }
+
+        return $result;
+    }
     
     /**
      * returns all domains of a certain owner

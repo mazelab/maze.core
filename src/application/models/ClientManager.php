@@ -523,6 +523,27 @@ class Core_Model_ClientManager
         
         return $client->getData();
     }
+
+    /**
+     * get all clients of a certain node enriched with api dependencies for api use
+     *
+     * @param string $nodeId
+     * @return array
+     */
+    public function getClientsByNodeForApi($nodeId)
+    {
+        $result = array();
+
+        if(!$nodeId || !($clients = Core_Model_DiFactory::getModuleListings()->getClientsWithDomainsByNode($nodeId))) {
+            return array();
+        }
+
+        foreach($clients as $client) {
+            array_push($result, $client);
+        }
+
+        return $result;
+    }
     
     /**
      * return client instance by user name

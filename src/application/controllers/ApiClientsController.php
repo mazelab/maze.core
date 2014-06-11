@@ -19,19 +19,17 @@ class ApiClientsController extends MazeLib_Rest_Controller
     public function getResourcesAction()
     {
         $clientManager = Core_Model_DiFactory::getClientManager();
-        $jsonClients = array();
+        $result = array();
 
         if(($service = $this->getParam('service'))) {
-            $clients = $clientManager->getClientsByServiceAsArray($service);
-        } else {
-            $clients = $clientManager->getClientsAsArray();
+            $result = $this->_arrayRemoveKeys($clientManager->getClientsByServiceAsArray($service));
+        } elseif(($node = $this->getParam('node'))) {
+            $result = $clientManager->getClientsByNodeForApi($node);
+        }else {
+            $result = $this->_arrayRemoveKeys($clientManager->getClientsAsArray());
         }
 
-        foreach($clients as $client) {
-            array_push($jsonClients, $client);
-        }
-
-        $this->_helper->json->sendJson($jsonClients);
+        $this->_helper->json->sendJson($result);
     }
 
     public function getResourceAction()

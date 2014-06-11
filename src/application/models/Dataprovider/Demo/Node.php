@@ -117,15 +117,15 @@ class Core_Model_Dataprovider_Demo_Node
     {
         return array();
     }
-    
+
     /**
-     * updates/creates a node dataset
-     * 
+     * updates/creates a node data
+     *
      * @param array $data
      * @param string $nodeId
-     * @return boolean 
+     * @return string|boolean mongoId or false
      */
-    public function saveNode($data, $nodeId)
+    public function saveNode($data, $nodeId = null)
     {
         $collection = $this->_getCollection(self::COLLECTION);
 

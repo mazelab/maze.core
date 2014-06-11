@@ -21,15 +21,21 @@ services.service('nodesService', function($http) {
             }
         });
     };
-    this.set = function(id, dataset){
-        return($http.put("/api/nodes/"+ id, $.param(dataset)));
-    };
     this.delete = function(id){
         return($http.delete("/api/nodes/"+ id));
     };
-    this.create = function(dataset){
-        return($http.post("/api/nodes/", $.param(dataset),
-              {headers: {"Content-Type": "application/x-www-form-urlencoded"}}));
+    this.create = function(data){
+        return(
+            $http({
+                method: 'POST',
+                url: '/api/nodes/',
+                data: data,
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+        );
     };
 });
 
@@ -108,11 +114,6 @@ services.service('domainsService', function($http) {
                 'X-Requested-With': 'XMLHttpRequest'
             }
         });
-    };
-    this.set = function(id, dataset){
-        return(
-            $http.put("/api/domains/"+ id, $.param(dataset))
-        );
     };
     this.delete = function(id){
         return($http.delete("/api/domains/"+ id));

@@ -140,6 +140,61 @@ class Core_Model_NodeManager
     }
 
     /**
+     * updates additional fields
+     *
+     * services schema:
+     * array(
+     *     'e3d704f3542b44a621ebed70dc0efe13' => array( # update/set additional field
+     *          'label' => 'test1',
+     *          'value' => 'test'
+     * ),
+     *     'e3d704f3542b44a621ebed70dc0efe15' => array( # remove additional field
+     *          'value' =>
+     * )
+     *
+     * @param string $nodeId
+     * @param array $data
+     * @return boolean
+     */
+    public function _updateAdditionalFields($nodeId, array $data)
+    {
+        if(!$data) {
+            return true;
+        }
+        if(!($node = $this->getNode($nodeId))) {
+            return false;
+        }
+
+        $updateData = $data;
+        foreach($data as $key => $additionalField) {
+            if(!array_key_exists('value', $additionalField)) {
+                unset($updateData[$key]);
+                continue;
+            }
+
+            if($additionalField['value']) {
+                if(!$node->getData("additionalFields/$key")) {
+                    return false;
+                } elseif (array_key_exists('label', $additionalField)) {
+                    unset($updateData[$key]['label']);
+                }
+            } else {
+                if(!$node->deleteAdditionalField($key)) {
+                    return false;
+                }
+                unset($updateData[$key]);
+            }
+
+        }
+
+        if($updateData) {
+            $node->setData(array('additionalFields' => $updateData));
+        }
+
+        return true;
+    }
+
+    /**
      * updates node services via boolean values
      *
      * services schema:
@@ -227,8 +282,8 @@ class Core_Model_NodeManager
     /**
      * creates a new node
      * 
-     * @param type $nodeData
-     * @return boolean
+     * @param array $data
+     * @return string|boolean nodeId on success
      */
     public function createNode($data)
     {
@@ -251,7 +306,7 @@ class Core_Model_NodeManager
             ->setNodeRef($node->getId())
             ->save();
         
-        return true;
+        return $node->getId();
     }
 
     /**
@@ -552,6 +607,29 @@ class Core_Model_NodeManager
     }
 
     /**
+     * paginate nodes
+     *
+     * example return:
+     * array(
+     *      'total' => 20,
+     *      'data' => array(0 => array(...), ...)
+     * )
+     *
+     * @param int $numPerPage
+     * @param int $page
+     * @param string $term
+     * @return array
+     */
+    public function paginate($numPerPage = 10, $page = 1, $term = null)
+    {
+        if(!is_numeric($page)) {
+            return array();
+        }
+
+        return $this->getProvider()->paginate($numPerPage, $page, $term);
+    }
+
+    /**
      * registers a node instance
      * 
      * overwrites existing instances
@@ -678,26 +756,16 @@ class Core_Model_NodeManager
             unset($data['services']);
         }
 
+        if(array_key_exists('additionalFields', $data) && is_array($data['additionalFields'])) {
+            if(!$this->_updateAdditionalFields($nodeId, $data['additionalFields'])) {
+                return false;
+            }
+            unset($data['additionalFields']);
+        }
+
         if (isset($data['additionalKey']) && isset($data['additionalValue'])) {
             $node->addAdditionalField($data['additionalKey'], $data['additionalValue']);
             unset($data['additionalKey'], $data['additionalValue']);
-        }
-
-        if(isset($data['additionalFields'])) {
-            foreach ($data['additionalFields'] as $id => $additionalField) {
-                if (!$additionalField["value"] || trim($additionalField["value"]) == "") {
-                    $this->deleteAdditionalField($nodeId, $id);
-                    unset($data['additionalFields'][$id]);
-                }
-            }
-
-            if(empty($data['additionalFields'])) {
-                unset($data['additionalFields']);
-            }
-
-            if(empty($data)) {
-                return true;
-            }
         }
 
         if(!$node->setData($data)->save()) {

@@ -1,1 +1,21 @@
-<?= $this->render('nodes/index.ajax.phtml'); ?>
+<script type="text/javascript">
+    angular.module('maze').config(['$routeProvider',function($routeProvider) {
+        $routeProvider.
+            when('/', {
+                templateUrl: '/partials/admin/nodes/list.html',
+                controller: 'nodeListController'
+            }).
+            when('/edit/:nodeId', {
+                templateUrl: '/partials/admin/nodes/edit.html',
+                controller: 'nodeEditController'
+            }).
+            when('/register/:nodeName', {
+                templateUrl: '/partials/admin/nodes/register.html',
+                controller: 'nodeRegisterController'
+            });
+    }]);
+</script>
+
+<div class="row-fluid">
+    <div ng-view></div>
+</div>

@@ -67,14 +67,31 @@ interface Core_Model_Dataprovider_Interface_Node
      * @return array
      */
     public function getNodesByService($serviceName);
-    
+
     /**
-     * updates/creates a node dataset
-     * 
+     * paginates nodes
+     *
+     * example return:
+     * array(
+     *  'data' => array(),
+     *  'total' => '55'
+     * )
+     *
+     * @param int $limit
+     * @param int $page
+     * @param string $searchTerm
+     * @return array
+     */
+    public function paginate($limit, $page, $searchTerm = null);
+
+    /**
+     * updates/creates a node data
+     *
      * @param array $data
      * @param string $nodeId
      * @string accountId
+     * @return string|boolean mongoId or false
      */
-    public function saveNode($data, $nodeId);
+    public function saveNode($data, $nodeId = null);
     
 }

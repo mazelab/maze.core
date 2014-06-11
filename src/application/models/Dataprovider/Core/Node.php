@@ -203,14 +203,55 @@ class Core_Model_Dataprovider_Core_Node
     }
 
     /**
-     * saves node data and returns it id
-     * 
-     * @param array $data
-     * @return string id of saved node
+     * paginates nodes
+     *
+     * example return:
+     * array(
+     *  'data' => array(),
+     *  'total' => '55'
+     * )
+     *
+     * @param int $limit
+     * @param int $page
+     * @param string $searchTerm
+     * @return array
      */
-    public function saveNode($data, $id = null)
+    public function paginate($limit, $page, $searchTerm = null)
     {
-        $mongoId = new MongoId($id);
+        $result = array('total' => null, 'data' => array());
+        $query = array();
+
+        if ($searchTerm) {
+            $query[self::KEY_NAME] = new MongoRegex("/$searchTerm/i");
+        }
+
+        $sort = array(
+            self::KEY_NAME => 1
+        );
+
+        $mongoCursor = $this->_getNodeCollection()->find($query);
+        $result['total'] = $mongoCursor->count();
+
+        $skip = ($limit * $page) - $limit;
+        foreach($mongoCursor->sort($sort)->skip($skip)->limit($limit) as $nodeId => $node) {
+            $node[self::KEY_ID] = $nodeId;
+            array_push($result['data'], $node);
+        }
+
+        return $result;
+    }
+
+    /**
+     * updates/creates a node data
+     *
+     * @param array $data
+     * @param string $nodeId
+     * @string accountId
+     * @return string|boolean mongoId or false
+     */
+    public function saveNode($data, $nodeId = null)
+    {
+        $mongoId = new MongoId($nodeId);
 
         $data[self::KEY_ID] = $mongoId;
         

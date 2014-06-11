@@ -24,6 +24,32 @@ class Core_Form_Node extends Core_Form_AdditionalInfo
     );
 
     /**
+     * init additional field elements of given data
+     *
+     * @param array $data
+     * @return Core_Form_Node
+     */
+    public function _initAdditionalFields(array $data)
+    {
+        if (empty($data)) {
+            return false;
+        }
+
+        $additionalFieldsForm = new Zend_Form_SubForm();
+
+        foreach($data as $key => $value) {
+            $field = new Zend_Form_SubForm();
+            $field->addElement('text', 'value');
+
+            $additionalFieldsForm->addSubForm($field, $key);
+        }
+
+        $this->addSubForm($additionalFieldsForm, 'additionalFields');
+
+        return $this;
+    }
+
+    /**
      * init services sub forms
      *
      * @param array $services
@@ -108,6 +134,9 @@ class Core_Form_Node extends Core_Form_AdditionalInfo
     {
         if(array_key_exists('services', $data) && is_array($data['services'])) {
             $this->_initServices($data['services']);
+        }
+        if(array_key_exists('additionalFields', $data) && is_array($data['additionalFields'])) {
+            $this->_initAdditionalFields($data['additionalFields']);
         }
 
         return $this;

@@ -25,10 +25,15 @@ class ApiNodesController extends MazeLib_Rest_Controller
         $nodeManager = Core_Model_DiFactory::getNodeManager();
         $result = array();
 
-        if(($domain = $this->getParam('domain'))) {
+        if($this->getParam('unregistered')) {
+            $result = $this->_arrayRemoveKeys(Core_Model_DiFactory::getApiManager()->getUnregisteredApiRequests());
+        } elseif(($domain = $this->getParam('domain'))) {
             $result = $nodeManager->getNodesByDomainForApi($domain);
         } elseif(($service = $this->getParam('service'))) {
             $result = $this->_arrayRemoveKeys($nodeManager->getNodesByServiceAsArray($service));
+        } elseif ($page = $this->getParam('page')) {
+            $result = $nodeManager->paginate($this->getParam('limit', 10),$this->getParam('page', 1),
+                $this->getParam('search', null));
         } else {
             $result = $this->_arrayRemoveKeys($nodeManager->getNodesAsArray());
         }
@@ -39,19 +44,25 @@ class ApiNodesController extends MazeLib_Rest_Controller
     public function postResourcesAction()
     {
         $apiManager = Core_Model_DiFactory::getApiManager();
+
         if(!($request = $apiManager->getUnregisteredApiRequest($this->getParam('name'))) ||
                 !array_key_exists('data', $request)) {
             $messageManager = Core_Model_DiFactory::getMessageManager();
             $messageManager->addError(self::MESSAGE_API_REQUEST_NOT_FOUND, $this->getParam('name'));
+
+            $this->_setServerErrorHeader();
             return $this->_helper->json->sendJson($messageManager->getMessages());
         }
 
+        $nodeManager = Core_Model_DiFactory::getNodeManager();
         $form = new Core_Form_AddNode();
-        if($form->isValid($this->getRequest()->getPost())) {
-            $nodeManager = Core_Model_DiFactory::getNodeManager();
-            if($nodeManager->createNode($form->getValues())){
-                $this->getResponse()->setHttpResponseCode(201);
-            }
+
+        if($form->isValid($this->getRequest()->getPost()) && ($nodeId =$nodeManager->createNode($form->getValues()))) {
+            $this->getResponse()->setHeader('Location', $this->view->url(array($nodeId), 'nodedetail'));
+
+            $this->getResponse()->setHttpResponseCode(201);
+        } else {
+            return $this->_setServerErrorHeader();
         }
     }
 
@@ -96,7 +107,6 @@ class ApiNodesController extends MazeLib_Rest_Controller
         );
 
         $form->initDynamicContent($params);
-
         if($params && $form->isValidPartial($params) && ($values = $form->getValidValues($params))) {
             $response['result'] = $nodeManager->updateNode($this->getParam('nodeId'), $values);
             $response['node'] = $nodeManager->getNodeForApi($this->getParam('nodeId'));

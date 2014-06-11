@@ -1,0 +1,16 @@
+<ul id="tabNodeDomainsList" class="unstyled cssTab">
+    <li ng-repeat="domain in domains" id="tabNodeDomainsListEntry-{{domain._id}}" class="row-fluid cssLine">
+
+        <a href="/domains/detail/{{domain._id}}" title="Label" class="span8">
+            {{domain.name}}
+        </a>
+
+        <a ng-if="domain.client" href="/clients/detail/{{domain.client._id}}/{{domain.client.label}}"
+           title="{{domain.client.label}}" class="pull-right">
+            <span>
+                {{domain.client.label}}
+            </span>
+        </a>
+
+    </li>
+</ul>
