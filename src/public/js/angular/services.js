@@ -117,9 +117,16 @@ services.service('domainsService', function($http) {
     this.delete = function(id){
         return($http.delete("/api/domains/"+ id));
     };
-    this.create = function(dataset){
-        return $http.post("/api/domains/", $.param(dataset),
-               {headers: {"Content-Type": "application/x-www-form-urlencoded"}});
+    this.create = function(data){
+        return $http({
+            method: 'POST',
+            url: '/api/domains',
+            data: data,
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        });
     };
 });
 

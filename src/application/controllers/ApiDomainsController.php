@@ -37,9 +37,10 @@ class ApiDomainsController extends MazeLib_Rest_Controller
     {
         $domainManager = Core_Model_DiFactory::getDomainManager();
         $form = new Core_Form_AddDomain();
+
         if ($form->isValid($this->getRequest()->getPost())) {
-            $domainId = $domainManager->createDomain($form->getValue('name'),
-                $form->getValue('owner'), $form->getValue('procurementplace'));
+            $domainId = $domainManager->createDomain($form->getValue('name'),$form->getValue('owner'),
+                    $form->getValue('procurementplace'));
 
             if($domainId){
                 $this->getResponse()->setHeader('Location', $this->view->url(array($domainId), 'domaindetail'));
@@ -48,7 +49,8 @@ class ApiDomainsController extends MazeLib_Rest_Controller
                 $this->getResponse()->setHttpResponseCode(201);
             }
         } else {
-            $this->_helper->json->sendJson(array("errors" => $form->getMessages()));
+            $this->_setServerErrorHeader();
+            $this->_helper->json->sendJson(array("formErrors" => $form->getMessages()));
         }
     }
 
@@ -88,27 +90,6 @@ class ApiDomainsController extends MazeLib_Rest_Controller
         }
 
         $this->_helper->json->sendJson($response);
-    }
-
-    public function putResourceAction()
-    {
-        $domainManager = Core_Model_DiFactory::getDomainManager();
-        if(!($domain = $domainManager->getDomain($this->getParam("domainId")))) {
-            return $this->_setNotFoundHeader();
-        }
-
-        $form = new Core_Form_Domain();
-        $form->setAdditionalFields($domain);
-
-        $values = $form->getValidValues($this->getRequest()->getParams());
-        if(!empty($values)) {
-            if (($result = $domainManager->updateDomain($domain->getId(), $values))) {
-                $this->getResponse()->setHttpResponseCode(202);
-                $this->_helper->json->sendJson($domain->getData());
-            }
-        } else {
-            $this->_helper->json->sendJson(array("errors" => $form->getMessages()));
-        }
     }
 
     public function getResourceAction()

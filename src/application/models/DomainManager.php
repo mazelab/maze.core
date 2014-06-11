@@ -134,6 +134,61 @@ class Core_Model_DomainManager
     }
 
     /**
+     * updates additional fields
+     *
+     * services schema:
+     * array(
+     *     'e3d704f3542b44a621ebed70dc0efe13' => array( # update/set additional field
+     *          'label' => 'test1',
+     *          'value' => 'test'
+     * ),
+     *     'e3d704f3542b44a621ebed70dc0efe15' => array( # remove additional field
+     *          'value' =>
+     * )
+     *
+     * @param string $domainId
+     * @param array $data
+     * @return boolean
+     */
+    public function _updateAdditionalFields($domainId, array $data)
+    {
+        if(!$data) {
+            return true;
+        }
+        if(!($domain = $this->getDomain($domainId))) {
+            return false;
+        }
+
+        $updateData = $data;
+        foreach($data as $key => $additionalField) {
+            if(!array_key_exists('value', $additionalField)) {
+                unset($updateData[$key]);
+                continue;
+            }
+
+            if($additionalField['value']) {
+                if(!$domain->getData("additionalFields/$key")) {
+                    return false;
+                } elseif (array_key_exists('label', $additionalField)) {
+                    unset($updateData[$key]['label']);
+                }
+            } else {
+                if(!$domain->deleteAdditionalField($key)) {
+                    return false;
+                }
+                unset($updateData[$key]);
+            }
+
+        }
+
+        if($updateData) {
+            $domain->setData(array('additionalFields' => $updateData));
+        }
+
+        return true;
+    }
+
+    /**
      * updates domain services via boolean values
      *
      * services schema:
@@ -775,26 +830,16 @@ class Core_Model_DomainManager
             unset($data['services']);
         }
 
+        if(array_key_exists('additionalFields', $data) && is_array($data['additionalFields'])) {
+            if(!$this->_updateAdditionalFields($domainId, $data['additionalFields'])) {
+                return false;
+            }
+            unset($data['additionalFields']);
+        }
+
         if (isset($data['additionalKey']) && isset($data['additionalValue'])) {
             $domain->addAdditionalField($data['additionalKey'], $data['additionalValue']);
             unset($data['additionalKey'], $data['additionalValue']);
-        }
-
-        if(isset($data['additionalFields'])) {
-            foreach ($data['additionalFields'] as $id => $additionalField) {
-                if (!$additionalField["value"] || trim($additionalField["value"]) == "") {
-                    $this->deleteAdditionalField($domainId, $id);
-                    unset($data['additionalFields'][$id]);
-                }
-            }
-
-            if(empty($data['additionalFields'])) {
-                unset($data['additionalFields']);
-            }
-            
-            if(empty($data)) {
-                return true;
-            }
         }
 
         if(!$domain->setData($data)->save()) {

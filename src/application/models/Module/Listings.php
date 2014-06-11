@@ -162,8 +162,8 @@ class Core_Model_Module_Listings
         return $nodes;
     }
     
-        /**
-     * returns nodes data with its module context
+    /**
+     * returns nodes data with service context
      * 
      * @param string $domainId
      * @return array
@@ -171,22 +171,26 @@ class Core_Model_Module_Listings
     public function getNodesWithServicesByDomain($domainId)
     {
         $result = array();
-        
-        foreach(Core_Model_DiFactory::getModuleApi()
-                ->getNodesByDomain($domainId, null, true) as $moduleName => $nodes) {
-            $module = Core_Model_DiFactory::getModuleRegistry()->getModule($moduleName);
-            
-            foreach($nodes as $nodeId => $node) {
+
+        if(!($domain = Core_Model_DiFactory::getDomainManager()->getDomain($domainId))) {
+            return false;
+        }
+
+        foreach($domain->getServices() as $serviceName => $service) {
+            if(!($serviceNodes = Core_Model_DiFactory::getModuleApi()->getNodesByDomain($domainId, $serviceName))) {
+                continue;
+            }
+
+            foreach($serviceNodes as $nodeId => $node) {
                 if(!array_key_exists($nodeId, $result)) {
                     $result[$nodeId] = $node->getData();
-                }
-                
-                if($module) {
-                    $result[$nodeId]['usedModules'][$module->getName()] = $module->getData();
+                    $result[$nodeId]['services'] = array();;
                 }
             }
+
+            $result[$nodeId]['services'][$serviceName] = $service;
         }
-        
+
         return $result;
     }
     

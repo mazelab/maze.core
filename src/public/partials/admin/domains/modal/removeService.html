@@ -1,0 +1,23 @@
+<div class="modal-header">
+    <h3 class="modal-title">
+        Remove Service {{service.name}} from domain {{domain.name}}
+    </h3>
+</div>
+
+<div class="modal-body">
+    <p>
+        Should the service {{service.name}} be removed from the domain?
+    </p>
+    <alert ng-repeat="error in errMessages" type="'danger'">
+        {{error}}
+    </alert>
+</div>
+
+<div class="modal-footer">
+    <button class="btn btn-danger" ng-click="ok()">
+        Ok
+    </button>
+    <button class="btn" ng-click="cancel()">
+        Cancel
+    </button>
+</div>

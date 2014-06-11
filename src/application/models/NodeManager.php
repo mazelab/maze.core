@@ -385,7 +385,28 @@ class Core_Model_NodeManager
                 
         return $node->getData();
     }
-    
+
+    /**
+     * get all nodes of a certain domain enriched with api dependencies for api use
+     *
+     * @param string $domainId
+     * @return array
+     */
+    public function getNodesByDomainForApi($domainId)
+    {
+        $result = array();
+
+        if(!$domainId || !($nodes = Core_Model_DiFactory::getModuleListings()->getNodesWithServicesByDomain($domainId))) {
+            return array();
+        }
+
+        foreach($nodes as $node) {
+            array_push($result, $node);
+        }
+
+        return $result;
+    }
+
     /**
      * returns the node identified by the given node name
      * 

@@ -39,7 +39,7 @@ controllers.controller('modalRemoveNodeService', function($scope, $modalInstance
         $modalInstance.dismiss();
     };
 });
-controllers.controller('modalRemoveDomainService', function($scope, $modalInstance, service, domain, domainsService) {
+controllers.controller('domainModalRemoveService', function($scope, $modalInstance, service, domain, domainsService) {
     $scope.service = service;
     $scope.domain = domain;
 
@@ -84,7 +84,7 @@ controllers.controller('modalDeleteNode', function($scope, $modalInstance, nodes
         $modalInstance.dismiss();
     }
 });
-controllers.controller('modalDeleteDomain', function($scope, $modalInstance, domainsService, domainId) {
+controllers.controller('domainModalDelete', function($scope, $modalInstance, domainsService, domainId) {
     $scope.ok = function(){
         $scope.errMessages = [];
         domainsService.delete(domainId).success(function(data, code) {
@@ -107,7 +107,7 @@ controllers.controller('domainListController', function($scope, domainsService) 
 
     initBreadCrumb();
 });
-controllers.controller('domainEditController', function($scope, $filter, $modal, $q, domainsService, $routeParams, modulesService, logsService) {
+controllers.controller('domainEditController', function($scope, $filter, $modal, $q, domainsService, $routeParams, modulesService, logsService, nodesService) {
     $scope.domainId = $routeParams.domainId;
 
     $scope.loadDomain = true;
@@ -124,20 +124,30 @@ controllers.controller('domainEditController', function($scope, $filter, $modal,
         $scope.loadDomain = false;
     })
 
-    $scope.loadLogs = false;
+    $scope.loadLogs = true;
     logsService.list({domain: $scope.domainId,limit: 10}).success(function(data) {
         $scope.logs = data;
-        $scope.loadLogs = true;
+        $scope.loadLogs = false;
     }).error(function(data) {
         console.log(data);
-        $scope.loadLogs = true;
+        $scope.loadLogs = false;
+        console.log('error logs');
+    });
+
+    $scope.loadNodes = true;
+    nodesService.list({domain: $scope.domainId,limit: 10}).success(function(data) {
+        $scope.nodes =  data;
+        $scope.loadNodes = false;
+    }).error(function(data) {
+        console.log(data);
+        $scope.loadNodes = false;
         console.log('error logs');
     });
 
     $scope.modalDeleteDomain = function() {
         var modalInstance = $modal.open({
-            templateUrl: 'modalDomainDelete.html',
-            controller: 'modalDeleteDomain',
+            templateUrl: '/partials/admin/domains/modal/delete.html',
+            controller: 'domainModalDelete',
             resolve: {
                 domainId: function () {return $scope.domainId}
             }
@@ -170,6 +180,14 @@ controllers.controller('domainEditController', function($scope, $filter, $modal,
                 messages = false
             }
             return $q.reject(messages);
+        });
+    };
+
+    $scope.updateAdditional = function (data) {
+        return domainsService.update($scope.domainId, $.param(data)).success(function(data, code){
+            if(code === 200 && data.domain && data.domain.additionalFields) {
+                $scope.domain.additionalFields = data.domain.additionalFields;
+            }
         });
     };
 
@@ -220,8 +238,8 @@ controllers.controller('domainEditController', function($scope, $filter, $modal,
             }
 
             var modalInstance = $modal.open({
-                templateUrl: 'modalRemoveDomainService.html',
-                controller: 'modalRemoveDomainService',
+                templateUrl: '/partials/admin/domains/modal/removeService.html',
+                controller: 'domainModalRemoveService',
                 resolve: {
                     service: function () {return service},
                     domain: function () {return $scope.domain}
@@ -258,25 +276,7 @@ controllers.controller('domainEditController', function($scope, $filter, $modal,
     };
 
 });
-controllers.factory('FormElements', function(){
-    return {
-        form: $("#addDomain"),
-        disable: function(disable){
-            angular.element(this.form).find("input, button").each(function(){
-                $this = angular.element(this);
-                $this.prop("disabled", disable);
-                if (disable && $this.hasClass("btn") === true){
-                    $this.addClass("disabled");
-                } else {
-                    $this.removeClass("disabled");
-                }
-            });
-
-            return($this);
-        }
-    };
-});
-controllers.controller('domainNewController', function($scope, $filter, domainsService, clientsService, FormElements) {
+controllers.controller('domainNewController', function($scope, $filter, domainsService, clientsService) {
     $scope.clients  = {};
     $scope.domain   = {};
     $scope.selected = {};
@@ -289,23 +289,24 @@ controllers.controller('domainNewController', function($scope, $filter, domainsS
         $scope.clients = clients || {};
     });
 
-    $scope.submit = function(event){
-        FormElements.disable(true);
-        domainsService.create($scope.domain).success(function(response, status, headers){
-            $scope.response = response;
-
+    $scope.createDomain = function(){
+        $scope.formErrors = [];
+        domainsService.create($.param($scope.domain)).success(function(data, status, headers){
             if(headers('location')) {
                 return location.href = headers('location');
             }
 
             return location.href = "#/";
-
-            FormElements.disable(false);
+        }).error(function(data) {
+            if(data.formErrors) {
+                $scope.formErrors = data.formErrors;
+            }
         });
-
-        event.preventDefault();
     };
 
+    $scope.cancelCreation = function() {
+        window.location = '#/';
+    }
 
     var initBreadCrumb = function() {
         $('ul.breadcrumb').html('<li><a href="/">Dashboard</a><span class="divider">/</span></li><li><a href="#/">Domains</a><span class="divider">/</span></li><li class="active">new</li>');

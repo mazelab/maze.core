@@ -91,11 +91,11 @@ directives.directive('mazeAdditional', function() {
                     }
 
                     $parse($attrs.update)($scope.$parent, {$data: this.model}).then(function(response){
-                        $scope.response = response.data;
-                        if (response.status === 202 || response.status === 204) {
+//                        $scope.response = response.data;
+//                        if (response.status === 202 || response.status === 204) {
                             $scope._hide();
                             $scope._created = {};
-                        }
+//                        }
                     });
                 }
             };
@@ -109,10 +109,12 @@ directives.directive('mazeAdditional', function() {
              */
             $scope._update = function(id, data){
                 if (id && $attrs.update && $attrs.fields) {
-                    this.model = angular.copy($scope.fields);
-                    this.model.additionalFields[id].value = data;
+                    var update = {
+                        additionalFields: {}
+                    };
+                    update.additionalFields[id] = {value: data};
 
-                    return($parse($attrs.update)($scope.$parent, {$data: this.model}));
+                    return($parse($attrs.update)($scope.$parent, {$data: update}));
                 }
             };
 
@@ -215,3 +217,25 @@ directives.directive('mazeSearch', function() {
         }
     }
 });
+directives.directive('mazeHtmlPopover', function() {
+    return {
+        restrict: 'E',
+        scope: {
+            label: '@',
+            title: '@',
+            placement: '@'
+        },
+        transclude: true,
+        template: '<div><a href="" onclick="return false;">{{label || "popover"}}</a></div>',
+        link: function(scope, element, attrs, ctrl, transclude) {
+            $(element).find('a').popover({
+                content: transclude(),
+                html: true,
+                trigger: 'click',
+                placement: scope.placement,
+                title: scope.title
+            });
+        }
+    }
+});
+

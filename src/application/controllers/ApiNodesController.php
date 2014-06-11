@@ -23,19 +23,17 @@ class ApiNodesController extends MazeLib_Rest_Controller
     public function getResourcesAction()
     {
         $nodeManager = Core_Model_DiFactory::getNodeManager();
-        $jsonNodes = array();
+        $result = array();
 
-        if(($service = $this->getParam('service'))) {
-            $nodes = $nodeManager->getNodesByServiceAsArray($service);
+        if(($domain = $this->getParam('domain'))) {
+            $result = $nodeManager->getNodesByDomainForApi($domain);
+        } elseif(($service = $this->getParam('service'))) {
+            $result = $this->_arrayRemoveKeys($nodeManager->getNodesByServiceAsArray($service));
         } else {
-            $nodes = $nodeManager->getNodesAsArray();
+            $result = $this->_arrayRemoveKeys($nodeManager->getNodesAsArray());
         }
 
-        foreach($nodes as $node) {
-            array_push($jsonNodes, $node);
-        }
-
-        $this->_helper->json->sendJson($jsonNodes);
+        $this->_helper->json->sendJson($result);
     }
 
     public function postResourcesAction()
