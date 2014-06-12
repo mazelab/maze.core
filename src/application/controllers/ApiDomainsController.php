@@ -21,13 +21,13 @@ class ApiDomainsController extends MazeLib_Rest_Controller
         $domainManager = Core_Model_DiFactory::getDomainManager();
         $result = array();
 
-        if($page = $this->getParam('page')) {
-            $result = $domainManager->paginate($this->getParam('limit', 10),
-                $this->getParam('page', 1), $this->getParam('search', null));
-        } elseif (($node = $this->getParam('node'))) {
+        if (($node = $this->getParam('node'))) {
             $result = $domainManager->getDomainsByNodeForApi($node);
         } elseif (($service = $this->getParam('service'))) {
             $result = $this->_arrayRemoveKeys($domainManager->getDomainsByServiceAsArray($service));
+        } elseif($page = $this->getParam('page')) {
+            $result = $domainManager->paginate($this->getParam('limit', 10),
+            $this->getParam('page', 1), $this->getParam('search', null));
         } else {
             $result = $this->_arrayRemoveKeys($domainManager->getDomainsAsArray());
         }

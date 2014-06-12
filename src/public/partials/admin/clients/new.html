@@ -1,0 +1,136 @@
+<div class="row-fluid">
+    <div class="span12">
+        <div class="row-fluid ">
+
+            <form class="cssUserImage span2">
+                <img class="img-polaroid" name="avatar" src="/img/dummy_user_200.png" alt="Avatar">
+
+                <alert ng-repeat="error in formErrors.avatar" type="'danger'">
+                    {{error}}
+                </alert>
+            </form>
+
+            <form  class="span10" id="clientForm">
+                <maze-dl-wrapper label="Company **" dt-class="span3" dd-class="span9">
+                    <input type="text" ng-model="client.company">
+
+                    <alert ng-repeat="error in formErrors.company" type="'danger'">
+                        {{error}}
+                    </alert>
+                </maze-dl-wrapper>
+
+                <maze-dl-wrapper label="Prename **" dt-class="span3" dd-class="span9">
+                    <input type="text" ng-model="client.prename">
+
+                    <alert ng-repeat="error in formErrors.prename" type="'danger'">
+                        {{error}}
+                    </alert>
+                </maze-dl-wrapper>
+
+                <maze-dl-wrapper label="Surname **" dt-class="span3" dd-class="span9">
+                    <input type="text" ng-model="client.surname">
+
+                    <alert ng-repeat="error in formErrors.surname" type="'danger'">
+                        {{error}}
+                    </alert>
+                </maze-dl-wrapper>
+
+                <maze-dl-wrapper label="Street *" dt-class="span3" dd-class="span9">
+                    <input type="text" ng-model="client.street">
+
+                    <alert ng-repeat="error in formErrors.street" type="'danger'">
+                        {{error}}
+                    </alert>
+                </maze-dl-wrapper>
+
+                <maze-dl-wrapper label="No. *" dt-class="span3" dd-class="span9">
+                    <input type="text" ng-model="client.houseNumber">
+
+                    <alert ng-repeat="error in formErrors.houseNumber" type="'danger'">
+                        {{error}}
+                    </alert>
+                </maze-dl-wrapper>
+
+                <maze-dl-wrapper label="Postcode *" dt-class="span3" dd-class="span9">
+                    <input type="text" ng-model="client.postcode">
+
+                    <alert ng-repeat="error in formErrors.postcode" type="'danger'">
+                        {{error}}
+                    </alert>
+                </maze-dl-wrapper>
+
+                <maze-dl-wrapper label="City *" dt-class="span3" dd-class="span9">
+                    <input type="text" ng-model="client.city">
+
+                    <alert ng-repeat="error in formErrors.city" type="'danger'">
+                        {{error}}
+                    </alert>
+                </maze-dl-wrapper>
+
+                <maze-dl-wrapper label="Phone *" dt-class="span3" dd-class="span9">
+                    <input type="text" ng-model="client.phone">
+
+                    <alert ng-repeat="error in formErrors.phone" type="'danger'">
+                        {{error}}
+                    </alert>
+                </maze-dl-wrapper>
+
+                <maze-dl-wrapper label="Fax *" dt-class="span3" dd-class="span9">
+                    <input type="text" ng-model="client.fax">
+
+                    <alert ng-repeat="error in formErrors.fax" type="'danger'">
+                        {{error}}
+                    </alert>
+                </maze-dl-wrapper>
+
+                <maze-dl-wrapper label="E-mail address *" dt-class="span3" dd-class="span9">
+                    <input type="text" ng-model="client.email">
+
+                    <alert ng-repeat="error in formErrors.email" type="'danger'">
+                        {{error}}
+                    </alert>
+                </maze-dl-wrapper>
+
+                <maze-dl-wrapper label="The client is" dt-class="span3" dd-class="span9">
+                    <select>
+                        <option>enabled</option>
+                        <option>disabled</option>
+                    </select>
+
+                    <alert ng-repeat="error in formErrors.status" type="'danger'">
+                        {{error}}
+                    </alert>
+                </maze-dl-wrapper>
+
+                <div class="row-fluid">
+                    <h6>Access data</h6>
+                </div>
+
+                <maze-dl-wrapper label="Username *" dt-class="span3" dd-class="span9">
+                    <input type="text" ng-model="client.username">
+
+                    <alert ng-repeat="error in formErrors.username" type="'danger'">
+                        {{error}}
+                    </alert>
+                </maze-dl-wrapper>
+
+                <maze-dl-wrapper label="Psername *" dt-class="span3" dd-class="span9">
+                    <input type="text" ng-model="client.password">
+
+                    <alert ng-repeat="error in formErrors.password" type="'danger'">
+                        {{error}}
+                    </alert>
+                </maze-dl-wrapper>
+
+                <div class="row-fluid">
+                    <button class="btn" type="button" ng-click="cancel()">
+                        Cancel
+                    </button>
+                    <button class="btn btn-info" type="submit" ng-click="create()">
+                        Save
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

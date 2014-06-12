@@ -23,7 +23,7 @@ class ApiLogsController extends MazeLib_Rest_Controller
         $logLimit = $this->getParam("limit", 100);
 
         if ($this->getParam("client")) {
-            $logs = $logManager->getClientLogs($this->getParam("Client"), $logLimit);
+            $logs = $logManager->getClientLogs($this->getParam("client"), $logLimit);
         } else if ($this->getParam("domain")) {
             $logs = $logManager->getDomainLogs($this->getParam("domain"), $logLimit);
         } else if ($this->getParam("module")) {
@@ -31,7 +31,9 @@ class ApiLogsController extends MazeLib_Rest_Controller
         } else if ($this->getParam("node")) {
             $logs = $logManager->getNodeLogs($this->getParam("node"), $logLimit);
         } else if ($this->getParam("context")) {
-            $logs = array($logManager->getContextLog($this->getParam("context"), $logTypes, $logAction));
+            if(($logs = $logManager->getContextLog($this->getParam("context"), $logTypes, $logAction))) {
+                $logs = array($logs);
+            }
         } else if ($logTypes == "warnings") {
             $logs = $logManager->getWarnings($logLimit);
         } else if ($logTypes == "errors") {

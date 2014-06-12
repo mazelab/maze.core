@@ -1,0 +1,59 @@
+<div class="span12">
+    <div class="row-fluid cssListing">
+        <div class="span12 cssHeaderList">
+            <div class="cssButton span12">
+                <a class="btn btn-info jsButton" href="#/new">
+                    Create client
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <maze-search data="clients" uri="/api/clients">
+
+        <div id="listClients" class="span12">
+            <div class="row-fluid cssColumn4">
+
+                <div ng-repeat="client in clients" class="cssListColumn4 span3">
+                    <div  class="cssListColumn4Content">
+                        <div class="row-fluid">
+                            <a class="span3" title="Edit" href="#/edit/{{client._id}}">
+                                <img src="{{client.avatar? '/avatar/' + client._id : '/img/dummy_user_200.png'}}"
+                                     class="img-rounded cssAvatar" alt="Avatar"/>
+                            </a>
+
+                            <a href="#/edit/{{client._id}}" title="Edit" class="span9">
+                                <span class="pull-left cssUserItemSpan">
+                                    {{client.label}}
+                                </span>
+                            </a>
+
+                            <small ng-if="client.company" class="span9 muted">
+                                Company {{client.company}}
+                            </small>
+
+                            <small class="span9 muted">
+                                Status {{client.status? 'Activated' : 'Deactivated'}}
+                            </small>
+
+                            <small ng-if="!client.company" class="span9"></small>
+
+                            <div class="pull-right">
+                                <button type="button" title="Login as {{client.label}}" class="btn btn-info pull-right">
+                                    <span>
+                                        Log on
+                                    </span>
+                                </button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row-fluid cssColumn4">
+            </div>
+        </div>
+
+    </maze-search>
+</div>

@@ -105,7 +105,7 @@ class Core_Model_LogManager
      * @param string $action default null
      * @return array
      */
-    public function getContextLog($contextId, $type, $action = null)
+    public function getContextLog($contextId, $type = null, $action = null)
     {
         $entry = $this->getProvider()->getContextLog($contextId, $type, $action);
         if(empty($entry) || !is_array($entry)) {
@@ -297,6 +297,12 @@ class Core_Model_LogManager
         return $this->getContextLogs(Core_Model_Logger::TYPE_WARNING, null, $count);
     }
 
+    /**
+     * translates log message and returns it
+     *
+     * @param array $log
+     * @return array
+     */
     public function translateLog(array $log)
     {
         if(!$log || !is_array($log)) {

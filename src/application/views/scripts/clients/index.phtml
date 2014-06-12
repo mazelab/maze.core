@@ -1,1 +1,21 @@
-<?= $this->render('clients/index.ajax.phtml'); ?>
+<script type="text/javascript">
+    angular.module('maze').config(['$routeProvider',function($routeProvider) {
+        $routeProvider.
+            when('/', {
+                templateUrl: '/partials/admin/clients/list.html',
+                controller: 'clientListController'
+            }).
+            when('/edit/:clientId', {
+                templateUrl: '/partials/admin/clients/edit.html',
+                controller: 'clientEditController'
+            }).
+            when('/new', {
+                templateUrl: '/partials/admin/clients/new.html',
+                controller: 'clientNewController'
+            });
+    }]);
+</script>
+
+<div class="row-fluid">
+    <div ng-view></div>
+</div>

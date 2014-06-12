@@ -19,7 +19,12 @@ class Core_Model_Dataprovider_Core_Client
      * collection name
      */
     CONST COLLECTION = 'user';
-    
+
+    /**
+     * field key which contains company name
+     */
+    CONST KEY_COMPANY = 'company';
+
     /**
      * key name email
      */
@@ -29,12 +34,22 @@ class Core_Model_Dataprovider_Core_Client
      * key name label
      */
     CONST KEY_LABEL = 'label';
-    
+
+    /**
+     * field key for family name
+     */
+    CONST KEY_FAMILY_NAME = 'surname';
+
+    /**
+     * field key for given name
+     */
+    CONST KEY_GIVEN_NAME = 'prename';
+
     /**
      * key name group
      */
     CONST KEY_GROUP = 'group';
-    
+
     /**
      * value group type client
      */
@@ -261,7 +276,52 @@ class Core_Model_Dataprovider_Core_Client
 
         return $clients;
     }
-    
+
+    /**
+     * paginates clients
+     *
+     * example return:
+     * array(
+     *  'data' => array(),
+     *  'total' => '55'
+     * )
+     *
+     * @param int $limit
+     * @param int $page
+     * @param string $searchTerm
+     * @return array
+     */
+    public function paginate($limit, $page, $searchTerm = null)
+    {
+        $result = array('total' => null, 'data' => array());
+        $query = array(
+            self::KEY_GROUP => self::KEY_GROUP_CLIENT
+        );
+
+        if ($searchTerm) {
+            $query['$or'] = array(
+                array(self::KEY_COMPANY => new MongoRegex("/$searchTerm/i")),
+                array(self::KEY_FAMILY_NAME => new MongoRegex("/$searchTerm/i")),
+                array(self::KEY_GIVEN_NAME => new MongoRegex("/$searchTerm/i"))
+            );
+        }
+
+        $sort = array(
+            self::KEY_LABEL => 1
+        );
+
+        $mongoCursor = $this->_getUserCollection()->find($query);
+        $result['total'] = $mongoCursor->count();
+
+        $skip = ($limit * $page) - $limit;
+        foreach($mongoCursor->sort($sort)->skip($skip)->limit($limit) as $clientId => $client) {
+            $client[self::KEY_ID] = $clientId;
+            array_push($result['data'], $client);
+        }
+
+        return $result;
+    }
+
     /**
      * save client
      * 

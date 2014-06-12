@@ -47,7 +47,7 @@ interface Core_Model_Dataprovider_Interface_Log
      * @param string $action default null
      * @return array
      */
-    public function getContextLog($contextId, $type, $action = null);
+    public function getContextLog($contextId, $type = null, $action = null);
     
     /**
      * gets certain context entries found type and/or action

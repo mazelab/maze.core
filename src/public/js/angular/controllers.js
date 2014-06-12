@@ -1,5 +1,25 @@
 var controllers = angular.module("maze.controllers", []);
 
+controllers.controller('clientListController', function($scope) {
+    $scope.clients = [];
+
+    var initBreadCrumb = function() {
+        $('ul.breadcrumb').html('<li><a href="/">Dashboard</a><span class="divider">/</span></li><li class="active">Clients</li>');
+    };
+
+    initBreadCrumb();
+});
+controllers.controller('clientNewController', function($scope) {
+    var initBreadCrumb = function() {
+        $('ul.breadcrumb').html('<li><a href="/">Dashboard</a><span class="divider">/</span></li><li><a href="#/">Clients</a><span class="divider">/</span></li><li class="active">new</li>');
+    };
+
+    $scope.cancel = function() {
+        window.location = '#/';
+    }
+
+    initBreadCrumb();
+});
 controllers.controller('domainModalRemoveService', function($scope, $modalInstance, service, domain, domainsService) {
     $scope.service = service;
     $scope.domain = domain;
@@ -19,7 +39,6 @@ controllers.controller('domainModalRemoveService', function($scope, $modalInstan
         $modalInstance.dismiss();
     };
 });
-
 controllers.controller('domainModalDelete', function($scope, $modalInstance, domainsService, domainId) {
     $scope.ok = function(){
         $scope.errMessages = [];
@@ -33,7 +52,6 @@ controllers.controller('domainModalDelete', function($scope, $modalInstance, dom
         $modalInstance.dismiss();
     }
 });
-
 controllers.controller('domainListController', function($scope) {
     $scope.domains = [];
 

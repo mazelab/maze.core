@@ -266,13 +266,16 @@ class Core_Model_Dataprovider_Core_Log
      * @param string $action default null
      * @return array
      */
-    public function getContextLog($contextId, $type, $action = null)
+    public function getContextLog($contextId, $type = null, $action = null)
     {
         $query = array(
             self::KEY_CONTEXTID => (string) $contextId,
-            self::KEY_TYPE => $type
+
         );
-        
+
+        if($type) {
+            $query[self::KEY_TYPE] = (string) $type;
+        }
         if($action) {
             $query[self::KEY_ACTION] = (string) $action;
         }

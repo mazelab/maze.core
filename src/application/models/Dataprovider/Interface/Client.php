@@ -75,7 +75,23 @@ interface Core_Model_Dataprovider_Interface_Client
      * @return array
      */
     public function getClientsByService($serviceName);
-    
+
+    /**
+     * paginates clients
+     *
+     * example return:
+     * array(
+     *  'data' => array(),
+     *  'total' => '55'
+     * )
+     *
+     * @param int $limit
+     * @param int $page
+     * @param string $searchTerm
+     * @return array
+     */
+    public function paginate($limit, $page, $searchTerm = null);
+
     /**
      * save client
      * 

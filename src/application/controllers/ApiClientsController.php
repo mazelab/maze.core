@@ -25,7 +25,10 @@ class ApiClientsController extends MazeLib_Rest_Controller
             $result = $this->_arrayRemoveKeys($clientManager->getClientsByServiceAsArray($service));
         } elseif(($node = $this->getParam('node'))) {
             $result = $clientManager->getClientsByNodeForApi($node);
-        }else {
+        } elseif($page = $this->getParam('page')) {
+            $result = $clientManager->paginate($this->getParam('limit', 10), $this->getParam('page', 1),
+                $this->getParam('search', null));
+        } else{
             $result = $this->_arrayRemoveKeys($clientManager->getClientsAsArray());
         }
 

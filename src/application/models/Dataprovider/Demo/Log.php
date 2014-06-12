@@ -60,7 +60,7 @@ class Core_Model_Dataprovider_Demo_Log
      * @param string $action default null
      * @return array
      */
-    public function getContextLog($contextId, $type, $action = null)
+    public function getContextLog($contextId, $type = null, $action = null)
     {
         return array();
     }
