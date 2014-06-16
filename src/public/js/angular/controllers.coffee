@@ -1,20 +1,43 @@
 controllers = angular.module 'maze.controllers', []
 
-controllers.controller 'clientListController', ['$scope', ($scope) ->
+controllers.controller 'clientListController', ['$scope', 'authService', ($scope, authService) ->
   $scope.client = []
 
   initBreadCrumb = () ->
     $('ul.breadcrumb').html('<li><a href="/">Dashboard</a><span class="divider">/</span></li><li class="active">Clients</li>')
 
+  $scope.loginAsClient = (id) ->
+    $scope.loadClientLogin = true;
+    $scope.errors = {}
+    authService.client id
+    .success (data, code, headers) ->
+        return window.location = headers('location') if headers('location')
+        return location.href = "/";
+        $scope.loadClientLogin = false;
+    .error (data) ->
+        $scope.errors[id] = ['Request failed!'];
+        $scope.loadClientLogin = false;
+
   initBreadCrumb()
 ]
 
-controllers.controller 'clientNewController', ['$scope', ($scope) ->
+controllers.controller 'clientNewController', ['$scope', 'clientsService', ($scope, clientsService) ->
+  $scope.client = {}
+
   initBreadCrumb = () ->
     $('ul.breadcrumb').html('<li><a href="/">Dashboard</a><span class="divider">/</span></li><li><a href="#/">Clients</a><span class="divider">/</span></li><li class="active">new</li>')
 
   $scope.cancel = () ->
     window.location = '#/'
+
+  $scope.createClient = () ->
+    $scope.formErrors = []
+    clientsService.create $.param($scope.client)
+    .success (data, status, headers) ->
+        return window.location = headers('location') if headers('location')
+        return location.href = "#/";
+    .error (data) ->
+        $scope.formErrors = data.formErrors if data.formErrors?
 
   initBreadCrumb()
 ]

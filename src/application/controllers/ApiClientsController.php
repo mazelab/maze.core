@@ -13,6 +13,48 @@
 class ApiClientsController extends MazeLib_Rest_Controller
 {
 
+    protected  function _notifyDeletedClient(array $client)
+    {
+        $this->view->client = $client;
+
+        $emailManager = Core_Model_DiFactory::getEmailManager();
+        $emailManager->setSubject("[Maze.dashboard] - A client has been deleted")
+            ->setBody($this->view->render("email/deleteuser.phtml"), true)
+            ->setToAdmins();
+
+        if ($emailManager->send()){
+            return true;
+        }
+
+        if ($emailManager->hasException()){
+            Core_Model_DiFactory::getMessageManager()->addError(
+                $emailManager->getException()->getMessage());
+        }
+
+        return false;
+    }
+
+    protected function _notifyCreatedClient(array $client)
+    {
+        $this->view->client = $client;
+
+        $emailManager = Core_Model_DiFactory::getEmailManager();
+        $emailManager->setSubject("[Maze.dashboard] - A new client has been created")
+            ->setBody($this->view->render("email/createduser.phtml"), true)
+            ->setToAdmins();
+
+        if ($emailManager->send()){
+            return true;
+        }
+
+        if ($emailManager->hasException()){
+            Core_Model_DiFactory::getMessageManager()->addError(
+                $emailManager->getException()->getMessage());
+        }
+
+        return false;
+    }
+
     /**
      * get clients
      */
@@ -96,12 +138,37 @@ class ApiClientsController extends MazeLib_Rest_Controller
         $this->_helper->json->sendJson($response);
     }
 
+    public function postResourcesAction()
+    {
+        $clientsManager = Core_Model_DiFactory::getClientManager();
+        $form = new Core_Form_Client();
+
+        if ($form->isValid($this->getRequest()->getPost())) {
+            if(($client = $clientsManager->createClient($form->getValues()))){
+                $this->_notifyCreatedClient($client->getData());
+
+                $this->getResponse()->setHeader('Location', $this->view->
+                    url(array($client->getId(), $client->getLabel()), 'clientDetail'));
+
+                $response['result'] = true;
+                $this->getResponse()->setHttpResponseCode(201);
+            }
+        } else {
+            $this->_setServerErrorHeader();
+            $this->_helper->json->sendJson(array("formErrors" => $form->getMessages()));
+        }
+    }
+
     public function deleteResourceAction()
     {
         $clientManager = Core_Model_DiFactory::getClientManager();
-        if(!$clientManager->deleteClient($this->getParam('clientId'))) {
-            $this->_setServerErrorHeader();
-        };
+        if(!($client = $clientManager->getClient($this->getParam('clientId')))) {
+            return $this->_setServerErrorHeader();
+        }
+
+        if(($status = $clientManager->deleteClient($client->getId()))) {
+            $this->notifyDeletedClient($client->getData());
+        }
 
         $this->getResponse()->setBody(null);
     }

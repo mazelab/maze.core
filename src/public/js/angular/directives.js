@@ -44,86 +44,6 @@
     }
   ]);
 
-  directives.directive('mazeAdditional', [
-    function() {
-      return {
-        restrict: "E",
-        scope: {
-          fields: "="
-        },
-        templateUrl: '/partials/admin/directives/additional.html',
-        controller: [
-          '$scope', '$attrs', '$parse', function($scope, $attrs, $parse) {
-            $scope._errors = $scope._fields = $scope._created = {};
-            $scope._activeId = null;
-            $scope._infotext = angular.element("#additional-infotext");
-            $scope._newfield = angular.element("#additional-newfield");
-            $scope._open = function() {
-              this._infotext.hide();
-              return this._newfield.show();
-            };
-            $scope._hide = function() {
-              this._infotext.show();
-              this._newfield.hide();
-              return $scope._errors = {};
-            };
-            $scope._create = function() {
-              var id, _i, _len, _ref;
-              if ($attrs.update && $attrs.fields && $scope.fields) {
-                this.model = angular.copy($scope.fields);
-                this.model.additionalKey = this._created.label;
-                this.model.additionalValue = this._created.value;
-                _ref = this.model.additionalFields;
-                for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-                  id = _ref[_i];
-                  if (this.model.additionalFields[id].label === this._created.label) {
-                    $scope._errors.additionalValue = ["this label allready exists"];
-                    return false;
-                  }
-                }
-                return $parse($attrs.update)($scope.$parent, {
-                  $data: this.model
-                }).then(function() {
-                  $scope._hide();
-                  return $scope._created = {};
-                });
-              }
-            };
-            $scope._update = function(id, data) {
-              var update;
-              if (id && $attrs.update && $attrs.fields) {
-                update = {
-                  additionalFields: {}
-                };
-                update.additionalFields[id] = {
-                  value: data
-                };
-                return $parse($attrs.update)($scope.$parent, {
-                  $data: update
-                });
-              }
-            };
-            return $scope._keydown = function(event) {
-              var endPos, startPos;
-              if (9 === (event.keyCode || event.which) && event.target.nodeName.toLowerCase() === "textarea") {
-                startPos = event.target.selectionStart;
-                endPos = event.target.selectionEnd;
-                event.target.value = event.target.value.substring(0, startPos) + "\t" + event.target.value.substring(endPos, event.target.value.length);
-                event.target.focus();
-                event.target.selectionStart = startPos + "\t".length;
-                event.target.selectionEnd = startPos + "\t".length;
-                event.preventDefault();
-              } else if (event.which === 9) {
-                event.preventDefault();
-              }
-              return event;
-            };
-          }
-        ]
-      };
-    }
-  ]);
-
   directives.directive('mazeSearch', [
     function() {
       return {
@@ -189,6 +109,93 @@
             });
           });
         }
+      };
+    }
+  ]);
+
+  directives.directive('mazeAdditional', [
+    function() {
+      return {
+        restrict: "E",
+        scope: {
+          fields: "=",
+          update: "@"
+        },
+        templateUrl: '/partials/admin/directives/additional.html',
+        controller: [
+          '$scope', '$parse', function($scope, $parse) {
+            var keyExists;
+            $scope.errors = $scope.fields = $scope.created = {};
+            $scope.openNewForm = false;
+            $scope.open = function() {
+              return $scope.openNewForm = true;
+            };
+            $scope.hide = function() {
+              $scope.openNewForm = false;
+              return $scope.errors = $scope.created = {};
+            };
+            keyExists = function(key) {
+              var found;
+              found = false;
+              angular.forEach($scope.fields, function(additional) {
+                if (additional.label === key) {
+                  return found = true;
+                }
+              });
+              return found;
+            };
+            $scope.create = function(key, value) {
+              var updateData;
+              if ((key == null) || (value == null) || !$scope.update) {
+                return false;
+              }
+              $scope.errors = {};
+              if (($scope.fields != null) && keyExists(key)) {
+                $scope.errors.additionalValue = ["this label allready exists"];
+                return false;
+              }
+              updateData = {
+                additionalKey: key,
+                additionalValue: value
+              };
+              return $parse($scope.update)($scope.$parent, {
+                $data: updateData
+              }).then(function() {
+                return $scope.hide();
+              });
+            };
+            $scope.updateAdditional = function(id, data) {
+              var updateData;
+              if (!id || !$scope.update || !$scope.fields) {
+                return false;
+              }
+              updateData = {
+                additionalFields: {}
+              };
+              updateData.additionalFields[id] = {
+                value: data
+              };
+              return $parse($scope.update)($scope.$parent, {
+                $data: updateData
+              });
+            };
+            return $scope.keyDown = function(event) {
+              var endPos, startPos;
+              if (9 === (event.keyCode || event.which) && event.target.nodeName.toLowerCase() === "textarea") {
+                startPos = event.target.selectionStart;
+                endPos = event.target.selectionEnd;
+                event.target.value = event.target.value.substring(0, startPos) + "\t" + event.target.value.substring(endPos, event.target.value.length);
+                event.target.focus();
+                event.target.selectionStart = startPos + "\t".length;
+                event.target.selectionEnd = startPos + "\t".length;
+                event.preventDefault();
+              } else if (event.which === 9) {
+                event.preventDefault();
+              }
+              return event;
+            };
+          }
+        ]
       };
     }
   ]);

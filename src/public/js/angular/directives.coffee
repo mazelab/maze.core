@@ -37,67 +37,6 @@ directives.directive 'mazeHtmlPopover', [ () ->
   }
 ]
 
-directives.directive 'mazeAdditional', [ () ->
-  {
-    restrict: "E"
-    scope: {
-      fields: "="
-    }
-    templateUrl: '/partials/admin/directives/additional.html'
-    controller: [ '$scope', '$attrs', '$parse', ($scope, $attrs, $parse) ->
-      $scope._errors   = $scope._fields = $scope._created = {}
-      $scope._activeId = null
-      $scope._infotext = angular.element("#additional-infotext")
-      $scope._newfield = angular.element("#additional-newfield")
-
-      $scope._open = () ->
-        this._infotext.hide()
-        this._newfield.show()
-
-      $scope._hide = () ->
-        this._infotext.show()
-        this._newfield.hide()
-        $scope._errors = {}
-
-      $scope._create = () ->
-        if $attrs.update and $attrs.fields and $scope.fields
-          @model = angular.copy $scope.fields
-          @model.additionalKey = @_created.label
-          @model.additionalValue = @_created.value
-
-          for id in @model.additionalFields
-            if @model.additionalFields[id].label is @_created.label
-              $scope._errors.additionalValue = ["this label allready exists"]
-              return false
-
-          $parse($attrs.update)($scope.$parent, {$data: this.model}).then () ->
-            $scope._hide();
-            $scope._created = {};
-
-      $scope._update = (id, data) ->
-        if id and $attrs.update and $attrs.fields
-          update = { additionalFields: {} }
-          update.additionalFields[id] = {value: data}
-
-          $parse($attrs.update)($scope.$parent, {$data: update})
-
-      $scope._keydown = (event) ->
-        if 9 is (event.keyCode || event.which) and event.target.nodeName.toLowerCase() is "textarea"
-          startPos = event.target.selectionStart
-          endPos   = event.target.selectionEnd
-          event.target.value = event.target.value.substring(0, startPos) + "\t" + event.target.value.substring(endPos, event.target.value.length)
-          event.target.focus()
-          event.target.selectionStart = startPos + "\t".length
-          event.target.selectionEnd = startPos + "\t".length
-          event.preventDefault()
-        else if event.which is 9
-          event.preventDefault()
-
-        return(event)
-    ]
-  }
-]
-
 directives.directive 'mazeSearch', [ () ->
   {
     restrict: 'E'
@@ -153,5 +92,73 @@ directives.directive 'mazeSearch', [ () ->
           $scope.data = null
           $scope.loadPager = false
           $scope.errorMsg = [ 'Request failed!' ]
+  }
+]
+
+directives.directive 'mazeAdditional', [ () ->
+  {
+    restrict: "E"
+    scope: {
+      fields: "="
+      update: "@"
+    }
+    templateUrl: '/partials/admin/directives/additional.html'
+    controller: [ '$scope', '$parse', ($scope, $parse) ->
+      $scope.errors   = $scope.fields = $scope.created = {}
+      $scope.openNewForm = false;
+
+      $scope.open = () ->
+        $scope.openNewForm = true
+
+      $scope.hide = () ->
+        $scope.openNewForm = false
+        $scope.errors = $scope.created = {}
+
+      keyExists = (key) ->
+        found = false
+        angular.forEach $scope.fields, (additional) ->
+          if additional.label is key
+            found = true
+        return found
+
+      $scope.create = (key, value) ->
+        return false if not key? or not value? or not $scope.update
+        $scope.errors = {}
+
+        if $scope.fields? and keyExists key
+          $scope.errors.additionalValue = ["this label allready exists"]
+          return false
+
+        updateData = {
+          additionalKey: key,
+          additionalValue: value
+        }
+
+        $parse($scope.update)($scope.$parent, {$data: updateData}).then () ->
+          $scope.hide();
+
+      $scope.updateAdditional = (id, data) ->
+        return false if not id or not $scope.update or not $scope.fields
+
+        updateData =
+          additionalFields: {}
+        updateData.additionalFields[id] = {value: data};
+
+        $parse($scope.update)($scope.$parent, {$data: updateData})
+
+      $scope.keyDown = (event) ->
+        if 9 is (event.keyCode || event.which) and event.target.nodeName.toLowerCase() is "textarea"
+          startPos = event.target.selectionStart
+          endPos   = event.target.selectionEnd
+          event.target.value = event.target.value.substring(0, startPos) + "\t" + event.target.value.substring(endPos, event.target.value.length)
+          event.target.focus()
+          event.target.selectionStart = startPos + "\t".length
+          event.target.selectionEnd = startPos + "\t".length
+          event.preventDefault()
+        else if event.which is 9
+          event.preventDefault()
+
+        return(event)
+    ]
   }
 ]

@@ -711,7 +711,7 @@ class Core_Model_ClientManager
     {
         return Core_Model_Dataprovider_DiFactory::getClient();
     }
-    
+
     /**
      * checks if a certain client instance is allready registered
      * 

@@ -77,24 +77,22 @@ class Core_Form_Client extends Zend_Form
                 new Core_Form_Validate_ExistsUsername
             )
         ));
-        $this->addElement('file', 'avatar', array(
-            'class' => 'jsUserAvatar',
-            'validators' => array(
-                array('Size', false, '500kb'),
-                array('Count', false, 1),
-                array('Extension', false, 'jpg,jpeg,gif,png')
-            ),
-            'valueDisabled' => true
-        ));
+//        $this->addElement('file', 'avatar', array(
+//            'required' => false,
+//            'validators' => array(
+//                array('Size', false, '500kb'),
+//                array('Count', false, 1),
+//                array('Extension', false, 'jpg,jpeg,gif,png')
+//            ),
+//            'valueDisabled' => true
+//        ));
         $this->addElement('password', 'password', array(
             'required' => true,
             'validators' => array(
-                array('StringLength', NULL, array(4)),
-                array('identical', true, array('confirmPassword'))
+                array('StringLength', NULL, array(4))
             )
         ));
         $this->addElement('password', 'confirmPassword', array(
-            'required' => true,
             'ignore' => true,
             'validators' => array(
                 array('NotEmpty', true),

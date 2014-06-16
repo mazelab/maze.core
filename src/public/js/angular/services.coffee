@@ -57,6 +57,18 @@ services.service 'clientsService', [ '$http', ($http) ->
       }
       $http httpProperties
 
+    create: (data) ->
+      httpProperties = {
+        method: 'POST',
+        url: '/api/clients',
+        data: data,
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'X-Requested-With': 'XMLHttpRequest'
+        }
+      }
+      $http httpProperties
+
     set: (id, dataset) ->
       $http.put("/api/clients/"+ id, $.param(dataset))
 
@@ -131,5 +143,12 @@ services.service 'logsService', [ '$http', ($http) ->
   {
     list: (params) ->
       $http.get('/api/logs', {params: params})
+  }
+]
+
+services.service 'authService', [ '$http', ($http) ->
+  {
+    client: (id) ->
+      $http.post('/api/auth/' + id, {})
   }
 ]

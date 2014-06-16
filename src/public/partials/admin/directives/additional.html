@@ -1,37 +1,43 @@
-<div ng-repeat="(id, field) in fields.additionalFields" class="row-fluid" id="additional-{{id}}">
-    <dt class="span3">
-        <label>
-            {{field.label}}
-        </label>
-    </dt>
-    <dd class="span5 cssEditable">
-        <span name="{{field.label}}" editable-textarea="field.value" onbeforesave="_update(id, $data);" e-ng-keydown="_keydown($event);" id="{{id}}" ng-click="_hide();" class="jsEditableAdditionalFields">{{field.value || "empty"}}</span>
-    </dd>
-</div>
-
-<div class="row-fluid">
-    <a id="additional-infotext" class="muted span12" ng-click="_open();">
-        Add Info
-    </a>
-</div>
-
-<div id="additional-newfield" style="display:none;" class="cssAddItem">
-    <div class="span3">
-        <input type="text" placeholder="label" ng-model="_created.label;" class="span12">
+<div>
+    <div ng-repeat="(id, field) in fields" class="row-fluid" id="divAdditional-{{id}}">
+        <dt class="span3">
+            <label id="labelAdditional-{{id}}">
+                {{field.label}}
+            </label>
+        </dt>
+        <dd class="span5 cssEditable">
+            <span name="{{field.label}}" editable-textarea="field.value" onbeforesave="updateAdditional(id, $data)"
+                  e-ng-keydown="keyDown($event);" id="valueAdditional-{{id}}" ng-click="hide();">
+                {{field.value || "empty"}}
+            </span>
+        </dd>
     </div>
 
-    <div class="span5">
-        <textarea ng-model="_created.value;" placeholder="text" ng-keydown="_keydown($event);"></textarea>
+    <div class="row-fluid">
+        <a id="buttonAdditionalOpenNew" class="muted span12" ng-click="open();" ng-show="!openNewForm">
+            Add Info
+        </a>
+    </div>
 
-        <button value="cancel" type="button" ng-click="_hide();" class="jsButton jsAdditionalCancel btn btn-info btn-mini">
-            <i class="icon-remove icon-white"></i>
-        </button>
-        <button value="save" type="submit" ng-click="_create();" class="jsButton jsAdditionalSave btn btn-info btn-mini">
-            <i class="icon-ok icon-white"></i>
-        </button>
+    <div id="formAdditionalNew" class="cssAddItem" ng-show="openNewForm">
+        <div class="span3">
+            <input type="text" placeholder="label" ng-model="created.label;" class="span12">
+        </div>
 
-        <alert ng-repeat="alert in _errors.additionalValue" class="alert-danger" >
-            {{alert}}
-        </alert>
+        <div class="span5">
+            <textarea ng-model="created.value;" placeholder="text" ng-keydown="keyDown($event)"></textarea>
+
+            <button type="button" ng-click="hide();" class="btn btn-info btn-mini">
+                <i class="icon-remove icon-white"></i>
+            </button>
+
+            <button type="submit" ng-click="create(created.label, created.value)" class="btn btn-info btn-mini">
+                <i class="icon-ok icon-white"></i>
+            </button>
+
+            <alert ng-repeat="alert in errors.additionalValue" class="alert-danger" >
+                {{alert}}
+            </alert>
+        </div>
     </div>
 </div>

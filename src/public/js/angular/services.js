@@ -76,6 +76,19 @@
           };
           return $http(httpProperties);
         },
+        create: function(data) {
+          var httpProperties;
+          httpProperties = {
+            method: 'POST',
+            url: '/api/clients',
+            data: data,
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded',
+              'X-Requested-With': 'XMLHttpRequest'
+            }
+          };
+          return $http(httpProperties);
+        },
         set: function(id, dataset) {
           return $http.put("/api/clients/" + id, $.param(dataset));
         },
@@ -172,6 +185,16 @@
           return $http.get('/api/logs', {
             params: params
           });
+        }
+      };
+    }
+  ]);
+
+  services.service('authService', [
+    '$http', function($http) {
+      return {
+        client: function(id) {
+          return $http.post('/api/auth/' + id, {});
         }
       };
     }

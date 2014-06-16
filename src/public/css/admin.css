@@ -708,6 +708,9 @@ img.cssAvatar{
 .cssAssignedDomainsList li{
     line-height: 20px;
 }
+.cssListClientsContent:nth-child(4n+1) {
+    margin-left: 0 !important;
+}
 /*-------------------Diffdesign-------------------*/
 .cssColumn2 {
     border-top: 1px dashed #ccc;

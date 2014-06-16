@@ -8,7 +8,7 @@
         Failed to load node
     </span>
 
-    <div id="nodeEditContent" ng-show="node">
+    <div id="nodeEditContent" ng-show="!loadNode && node">
         <div class="row-fluid text-left cssBoxCenter">
             <button ng-click="modalDelete();" ng-disabled="!node" class="btn" title="delete node">
                 <i class="icon-trash"></i>
@@ -42,7 +42,7 @@
                 </div>
 
                 <div class="row-fluid" id="additionalFieldsContent">
-                    <maze-additional fields="node" update="updateAdditional($data)"></maze-additional>
+                    <maze-additional fields="node.additionalFields" update="updateAdditional($data)"></maze-additional>
                 </div>
             </div>
         </div>

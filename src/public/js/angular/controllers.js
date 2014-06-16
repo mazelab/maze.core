@@ -5,24 +5,52 @@
   controllers = angular.module('maze.controllers', []);
 
   controllers.controller('clientListController', [
-    '$scope', function($scope) {
+    '$scope', 'authService', function($scope, authService) {
       var initBreadCrumb;
       $scope.client = [];
       initBreadCrumb = function() {
         return $('ul.breadcrumb').html('<li><a href="/">Dashboard</a><span class="divider">/</span></li><li class="active">Clients</li>');
+      };
+      $scope.loginAsClient = function(id) {
+        $scope.loadClientLogin = true;
+        $scope.errors = {};
+        return authService.client(id).success(function(data, code, headers) {
+          if (headers('location')) {
+            return window.location = headers('location');
+          }
+          return location.href = "/";
+          return $scope.loadClientLogin = false;
+        }).error(function(data) {
+          $scope.errors[id] = ['Request failed!'];
+          return $scope.loadClientLogin = false;
+        });
       };
       return initBreadCrumb();
     }
   ]);
 
   controllers.controller('clientNewController', [
-    '$scope', function($scope) {
+    '$scope', 'clientsService', function($scope, clientsService) {
       var initBreadCrumb;
+      $scope.client = {};
       initBreadCrumb = function() {
         return $('ul.breadcrumb').html('<li><a href="/">Dashboard</a><span class="divider">/</span></li><li><a href="#/">Clients</a><span class="divider">/</span></li><li class="active">new</li>');
       };
       $scope.cancel = function() {
         return window.location = '#/';
+      };
+      $scope.createClient = function() {
+        $scope.formErrors = [];
+        return clientsService.create($.param($scope.client)).success(function(data, status, headers) {
+          if (headers('location')) {
+            return window.location = headers('location');
+          }
+          return location.href = "#/";
+        }).error(function(data) {
+          if (data.formErrors != null) {
+            return $scope.formErrors = data.formErrors;
+          }
+        });
       };
       return initBreadCrumb();
     }
