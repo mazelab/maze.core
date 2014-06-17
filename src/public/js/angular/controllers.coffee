@@ -21,6 +21,206 @@ controllers.controller 'clientListController', ['$scope', 'authService', ($scope
   initBreadCrumb()
 ]
 
+controllers.controller 'clientEditController', ['$scope', '$routeParams', '$q', '$modal', '$filter', 'clientsService', 'authService', 'modulesService', 'domainsService', 'logsService', ($scope, $routeParams, $q, $modal, $filter, clientsService, authService, modulesService, domainsService, logsService) ->
+  $scope.client = {}
+  $scope.clientId = $routeParams.clientId
+
+  initBreadCrumb = () ->
+    $('ul.breadcrumb').html('<li><a href="/">Dashboard</a><span class="divider">/</span></li><li><a href="#/">Clients</a><span class="divider">/</span></li><li class="active">{{client.label}}</li>')
+
+  $scope.activate = () ->
+    $scope.changeState true
+
+  $scope.deactivate = () ->
+    $scope.changeState false
+
+  $scope.updateAdditional = (data) ->
+    clientsService.update $scope.clientId, $.param(data)
+    .success (data, code) ->
+        $scope.client.additionalFields = data.client.additionalFields if code is 200 and data.client.additionalFields?
+
+  $scope.changeState = (state) ->
+    $scope.alerts = []
+    clientsService.update $scope.clientId, $.param({'status': state})
+    .success (data) ->
+      $scope.client.status = state;
+    .error () ->
+      $scope.alerts = [ {msg: 'Request failed!', type: 'danger'}]
+
+  $scope.modalDelete = () ->
+    modalProperties =
+      templateUrl: '/partials/admin/clients/modal/delete.html'
+      controller: 'clientModalDelete'
+      resolve: clientId: () -> $scope.clientId
+
+    modalInstance = $modal.open modalProperties
+    modalInstance.result.then (code) ->
+      window.location = "#/" if code is 200
+
+  $scope.loadLogs = true
+  logsService.list {client: $scope.clientId, limit: 10}
+  .success (data) ->
+      $scope.logs = data
+      $scope.loadLogs = false
+  .error (data) ->
+      $scope.logs = null
+      $scope.loadLogs = false
+
+  $scope.loadDomains = true
+  domainsService.list {client: $scope.clientId, limit: 10}
+  .success (data) ->
+      $scope.domains =  data
+      $scope.loadDomains = false
+  .error () ->
+      $scope.domains =  null;
+      $scope.loadDomains = false;
+
+  $scope.loadClient = true
+  clientsService.get $scope.clientId
+  .success (data) ->
+      $scope.client = data
+      $scope.loadClient = false
+
+      initBreadCrumb()
+      initServices()
+  .error () ->
+      $scope.client = null
+      $scope.loadClient = false
+
+  $scope.updateProperty = (property, data) ->
+    return false if not (property or data)
+
+    updateData = {}
+    updateData[property] = data
+
+    clientsService.update $scope.clientId, $.param(updateData)
+    .catch (request) ->
+        if request.data.errForm?[property]?
+          messages = ""
+          angular.forEach request.data.errForm[property], (value) ->
+            messages = messages + ";" if messages
+            messages = messages + value
+        else
+          messages = false
+
+        $q.reject(messages)
+
+  $scope.loginAsClient = () ->
+    return false if not $scope.client._id
+    $scope.loadClientLogin = true;
+    $scope.errors = {}
+    authService.client $scope.client._id
+    .success (data, code, headers) ->
+        return window.location = headers('location') if headers('location')
+        return location.href = "/";
+        $scope.loadClientLogin = false;
+    .error (data) ->
+        $scope.alerts = [ {msg: 'Request failed!', type: 'danger'}]
+        $scope.loadClientLogin = false;
+
+  initServices = () ->
+    $scope.loadServices = true;
+    $scope.services = {selected: '', all: []};
+
+    modulesService.list()
+    .success (data) ->
+        $scope.services.all = data
+        buildAvailableServices()
+        $scope.loadServices = false
+    .error () ->
+        $scope.loadServices = false
+        buildAvailableServices()
+        $scope.errAddService = ['Failed to load services']
+
+    $scope.addService = (serviceName) ->
+      $scope.errAddService = []
+      service = $filter('filter')($scope.services.available, {name: serviceName})[0]
+
+      return false if not service?._id?
+
+      updateData = {services: {}}
+      updateData.services[serviceName] = true;
+
+      clientsService.update $scope.client._id, $.param(updateData)
+      .success (data) ->
+          $scope.client.services = data.client.services
+          $scope.services.selected = ''
+          buildAvailableServices()
+
+          setTimeout () ->
+            $('#tabServices-' + serviceName).tab('show')
+          , 0
+      .error () ->
+          $scope.errAddService.push('Failed')
+
+    $scope.modalRemoveService = (service) ->
+      return false if not service
+
+      modalProperties =
+        templateUrl: '/partials/admin/clients/modal/removeService.html'
+        controller: 'clientModalRemoveService'
+        resolve: {
+          service: () ->
+            service
+          client: () ->
+            $scope.client
+        }
+
+      modalInstance = $modal.open(modalProperties)
+      modalInstance.result.then (services) ->
+        $scope.client.services = services
+        $('#tabServicesList li a:first').tab('show')
+        buildAvailableServices()
+
+    buildAvailableServices = () ->
+      return false if not $scope.client?
+
+      availableServices = []
+      angular.forEach $scope.services.all, (service) ->
+        availableServices.push(service) if service.name? and not $scope.client.services?[service.name]?
+
+      if !availableServices.length
+        $scope.services.available = [{label: 'No services available', name:''}]
+      else
+        $scope.services.available = [{label: 'Add new service', name:''}]
+
+      $scope.services.available = $scope.services.available.concat(availableServices);
+]
+controllers.controller 'clientModalDelete', [ '$scope', '$modalInstance', 'clientsService', 'clientId', ($scope, $modalInstance, clientsService, clientId) ->
+  $scope.ok = () ->
+    $scope.errMessages = []
+
+    clientsService.delete clientId
+    .success (data, code) ->
+        $modalInstance.close(code);
+    .error () ->
+        $scope.errMessages.push('Failed')
+
+  $scope.cancel = () ->
+    $modalInstance.dismiss()
+]
+
+controllers.controller 'clientModalRemoveService', ['$scope', '$modalInstance', 'service', 'client', 'clientsService', ($scope, $modalInstance, service, client, clientsService) ->
+  $scope.service = service
+  $scope.client = client
+  $scope.errMessages = []
+
+  $scope.ok = () ->
+    $scope.errMessages = []
+
+    updateData = {services: {}}
+    updateData.services[service.name] = false
+
+    clientsService.update client._id, $.param(updateData)
+    .success (data) ->
+        $modalInstance.close(data.client.services)
+    .error () ->
+        $scope.errMessages.push('Failed')
+
+  $scope.cancel = () ->
+    $modalInstance.dismiss()
+]
+
 controllers.controller 'clientNewController', ['$scope', 'clientsService', ($scope, clientsService) ->
   $scope.client = {}
 
@@ -144,7 +344,8 @@ controllers.controller 'domainEditController', [ '$scope', '$filter', '$modal', 
 
     domainsService.update $scope.domainId, $.param(updateData)
     .catch (request) ->
-      if request.data?.errForm? and request.data.errForm[property]
+      if request.data.errForm?[property]?
+        messages = ""
         angular.forEach request.data.errForm[property], (value, key) ->
           messages = messages + ";" if messages?
           messages = messages + value
@@ -336,7 +537,8 @@ controllers.controller 'nodeEditController', ['$scope', '$filter', '$modal', '$q
 
     nodesService.update $scope.nodeId, $.param(updateData)
     .catch (request) ->
-      if request.data?.errForm? and request.data.errForm[property]
+      if request.data.errForm?[property]?
+        messages = ""
         angular.forEach request.data.errForm[property], (value, key) ->
           messages = messages + ";" if messages?
           messages = messages + value
@@ -516,37 +718,3 @@ controllers.controller 'nodeModalRemoveService', [ '$scope', '$modalInstance', '
     $modalInstance.dismiss()
 ]
 
-controllers.controller 'modalDeleteClient', [ '$scope', '$modalInstance', 'clientsService', 'clientId', ($scope, $modalInstance, clientsService, clientId) ->
-  $scope.ok = () ->
-    $scope.errMessages = []
-
-    clientsService.delete clientId
-    .success (data, code) ->
-      $modalInstance.close(code);
-    .error () ->
-      $scope.errMessages.push('Failed')
-
-  $scope.cancel = () ->
-    $modalInstance.dismiss()
-]
-
-controllers.controller 'modalRemoveClientService', ['$scope', '$modalInstance', 'service', 'client', 'clientsService', ($scope, $modalInstance, service, client, clientsService) ->
-  $scope.service = service
-  $scope.client = client
-  $scope.errMessages = []
-
-  $scope.ok = () ->
-    $scope.errMessages = []
-
-    updateData = {services: {}}
-    updateData.services[service.name] = false
-
-    clientsService.update client._id, $.param(updateData)
-    .success (data) ->
-      $modalInstance.close(data.client.services)
-    .error () ->
-      $scope.errMessages.push('Failed')
-
-  $scope.cancel = () ->
-    $modalInstance.dismiss()
-]

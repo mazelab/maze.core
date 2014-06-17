@@ -1,0 +1,158 @@
+<div class="row-fluid">
+    <span ng-show="loadClient">
+        <img src="/img/js/loading.gif" title="Loading...">
+        Loading...
+    </span>
+
+    <span ng-show="!loadClient && !client">
+        Failed to load client
+    </span>
+
+    <div id="clientEditContent" ng-show="!loadClient && client">
+
+        <div id="divClientActionButtons" class=" row-fluid text-left cssBoxCenter">
+            <button id="buttonDeleteClient" ng-click="modalDelete()" type="button" class="btn" ng-enbaled="client">
+                <i class="icon-trash"></i>
+                Delete
+            </button>
+
+            <button ng-click="client.status? deactivate(): activate()" class="btn" ng-enbaled="client">
+                <i ng-class="{'icon-minus-sign' : client.status, 'icon-ok-sign': !client.status}"></i>
+                {{client.status? 'Deactivate' : 'Activate'}}
+            </button>
+
+            <button id="buttonLoginAsClient" type="button" class="btn" ng-enbaled="client || loadClientLogin"
+                    ng-click="loginAsClient()">
+                <span>
+                    Login as {{client.label}}
+                </span>
+            </button>
+
+            <div class="span2 pull-right cssStatusText cssBigItem">
+                <span class="stat" ng-class="{'online' : client.status, 'offline': !client.status}">
+                    {{client.status? 'Online' : 'Offline'}}
+                </span>
+            </div>
+        </div>
+
+        <alert ng-repeat="alert in alerts" type="alert.type">
+            {{alert.msg}}
+        </alert>
+
+        <div class="row-fluid cssBoxCenter">
+            <div class="span10">
+                <div class="row-fluid">
+                    <div id="divClientAvatar" class="cssUserImage span2">
+                        <img  ng-src="{{client.avatar? '/avatar/' + client._id : '/img/dummy_user_200.png'}}"
+                              class="img-polaroid" alt="Avatar">
+                    </div>
+
+                    <div id="divClientContent" class="offset1 span9">
+                        <maze-dl-wrapper dl-class='row-fluid' ng-class="{cssBigItem: client.company}">
+                            <span editable-text="client.company" ng-class="{cssColorGray: !client.company}"
+                                  onbeforesave="updateProperty('company', $data);">
+                                {{client.company || 'Company' }}
+                            </span>
+                        </maze-dl-wrapper>
+
+                        <div class="row-fluid" style="margin-bottom: 20px;">
+                            <maze-dl-wrapper dl-class="pull-left cssItemWithoutLabel" ng-class="{cssBigItem: !client.company}">
+                                <span editable-text="client.prename" ng-class="{cssColorGray: !client.prename}"
+                                      onbeforesave="updateProperty('prename', $data);">
+                                    {{client.prename || 'Prename' }}
+                                </span>
+                            </maze-dl-wrapper>
+
+                            <maze-dl-wrapper dl-class="pull-left cssItemWithoutLabel" ng-class="{cssBigItem: !client.company}">
+                                <span editable-text="client.surname" ng-class="{cssColorGray: !client.surname}"
+                                      onbeforesave="updateProperty('surname', $data);">
+                                    {{client.surname || 'Surname' }}
+                                </span>
+                            </maze-dl-wrapper>
+                        </div>
+
+                        <div class="row-fluid">
+                            <maze-dl-wrapper dl-class="pull-left cssItemWithoutLabel">
+                                <span editable-text="client.street" ng-class="{cssColorGray: !client.street}"
+                                      onbeforesave="updateProperty('street', $data);">
+                                    {{client.street || 'Street' }}
+                                </span>
+                            </maze-dl-wrapper>
+
+                            <maze-dl-wrapper dl-class="pull-left cssItemWithoutLabel">
+                                <span editable-text="client.houseNumber" ng-class="{cssColorGray: !client.houseNumber}"
+                                      onbeforesave="updateProperty('houseNumber', $data);">
+                                    {{client.houseNumber || 'House number' }}
+                                </span>
+                            </maze-dl-wrapper>
+                        </div>
+
+                        <div class="row-fluid">
+                            <maze-dl-wrapper dl-class="pull-left cssItemWithoutLabel">
+                                <span editable-text="client.postcode" ng-class="{cssColorGray: !client.postcode}"
+                                      onbeforesave="updateProperty('postcode', $data);">
+                                    {{client.postcode || 'Postcode' }}
+                                </span>
+                            </maze-dl-wrapper>
+
+                            <maze-dl-wrapper dl-class="pull-left cssItemWithoutLabel">
+                                <span editable-text="client.city" ng-class="{cssColorGray: !client.city}"
+                                      onbeforesave="updateProperty('city', $data);">
+                                    {{client.city || 'City' }}
+                                </span>
+                            </maze-dl-wrapper>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row-fluid">
+                    <maze-dl-wrapper dl-class="row-fluid" label="Phone" dt-class="span3" dd-class="span5 cssEditable">
+                        <span editable-text="client.phone" ng-class="{cssColorGray: !client.phone}"
+                              onbeforesave="updateProperty('phone', $data);">
+                            {{client.phone || 'Phone' }}
+                        </span>
+                    </maze-dl-wrapper>
+
+                    <maze-dl-wrapper dl-class="row-fluid" label="Fax" dt-class="span3" dd-class="span5 cssEditable">
+                        <span editable-text="client.fax" ng-class="{cssColorGray: !client.fax}"
+                              onbeforesave="updateProperty('fax', $data);">
+                            {{client.fax || 'Fax' }}
+                        </span>
+                    </maze-dl-wrapper>
+
+                    <maze-dl-wrapper dl-class="row-fluid" label="E-mail address" dt-class="span3" dd-class="span5 cssEditable">
+                        <span editable-text="client.email" ng-class="{cssColorGray: !client.email}"
+                              onbeforesave="updateProperty('email', $data);">
+                            {{client.email || 'Email' }}
+                        </span>
+                    </maze-dl-wrapper>
+
+                    <div class="row-fluid" id="additionalFieldsContent">
+                        <maze-additional fields="client.additionalFields" update="updateAdditional($data)"></maze-additional>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row-fluid cssBoxCenter">
+            <tabset>
+                <tab heading="Services ({{(client.services).length || 0}})">
+                    <div ng-include="'/partials/admin/clients/tabs/services.html'"></div>
+                </tab>
+                <tab heading="Nodes ({{(nodes).length || 0}})">
+                    <!--<div ng-include="'/partials/admin/clients/tabs/nodes.html'"></div>-->
+                </tab>
+                <tab heading="Domains ({{(domains).length || 0}})">
+                    <div ng-include="'/partials/admin/clients/tabs/domains.html'"></div>
+                </tab>
+                <tab heading="Access data">
+                    <!--<div ng-include="'/partials/admin/clients/tabs/access.html'"></div>-->
+                </tab>
+                <tab heading="Logs">
+                    <div ng-include="'/partials/admin/clients/tabs/logs.html'"></div>
+                </tab>
+            </tabset>
+        </div>
+    </div>
+</div>
+

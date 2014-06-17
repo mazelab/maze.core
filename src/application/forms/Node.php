@@ -87,7 +87,7 @@ class Core_Form_Node extends Core_Form_AdditionalInfo
         ));
         
         $this->addElement('text', 'name', array(
-            'required' => 'true',
+            'required' => true,
             'jsLabel' => 'node name',
             'label' => 'node name *',
             'helper' => 'formTextAsSpan'
@@ -114,12 +114,8 @@ class Core_Form_Node extends Core_Form_AdditionalInfo
             'class' => 'jsEditable',
             'helper' => 'formTextAsSpan'
         ));
-        $this->addElement('text', 'additionalKey', array(
-            'required' => true
-        ));
-        $this->addElement('text', 'additionalValue', array(
-            'required' => true
-        ));
+        $this->addElement('text', 'additionalKey');
+        $this->addElement('text', 'additionalValue');
 
         $this->setElementDecorators($this->_elementDecorators);
     }

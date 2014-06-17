@@ -167,7 +167,7 @@ class ApiClientsController extends MazeLib_Rest_Controller
         }
 
         if(($status = $clientManager->deleteClient($client->getId()))) {
-            $this->notifyDeletedClient($client->getData());
+            $this->_notifyDeletedClient($client->getData());
         }
 
         $this->getResponse()->setBody(null);

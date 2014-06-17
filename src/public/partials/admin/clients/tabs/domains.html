@@ -1,0 +1,21 @@
+<ul id="tabClientDomainsList" class="unstyled cssTab">
+    <li ng-repeat="domain in domains" id="tabClientDomainsListEntry-{{domain._id}}" class="row-fluid cssLine">
+
+        <a href="domains/#/edit/{{domain._id}}" title="Label" class="span8">
+            {{domain.name}}
+        </a>
+
+        <maze-html-popover ng-if="domain.nodes" label="dependant Nodes (count nodes)"
+                           placement="bottom" class="pull-right">
+            <ul id="tabClientDomainNodesListServices-{{node._id}}" class="cssPopoverTabList unstyled pull-left row-fluid">
+                <li ng-repeat="(id, node) in domain.nodes">
+                    <a href="/nodes#/edit/{{node._id}}" title="{{node.name}}" class="pull-left">
+                        <span>
+                            {{node.name}}
+                        </span>
+                    </a>
+                </li>
+            </ul>
+        </maze-html-popover>
+    </li>
+</ul>

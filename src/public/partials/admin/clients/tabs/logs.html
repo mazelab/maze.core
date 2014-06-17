@@ -1,0 +1,13 @@
+<ul id="tabClientLogsList" class="unstyled jsLineColor">
+    <li ng-repeat="log in logs" id="tabClientLogsListEntry-{{log._id}}" class="row-fluid cssLine jsLine">
+        <span class="span2">
+            {{log.datetime}}
+        </span>
+        <span class="span8">
+            {{log.translation}}
+        </span>
+        <span class="pull-right">
+            {{log.user}}
+        </span>
+    </li>
+</ul>

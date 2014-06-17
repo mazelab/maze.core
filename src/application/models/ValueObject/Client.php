@@ -197,6 +197,9 @@ class Core_Model_ValueObject_Client
      */
     public function setData(array $data, $skipUpload = false, $skipPasswordEncrypt = false)
     {
+        if(array_key_exists('status', $data)) {
+            $data["status"] = filter_var($data['status'], FILTER_VALIDATE_BOOLEAN);
+        }
         if (array_key_exists('password', $data) && !$skipPasswordEncrypt) {
             $data['password'] = md5($data['password']);
         }

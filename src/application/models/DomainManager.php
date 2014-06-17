@@ -503,6 +503,27 @@ class Core_Model_DomainManager
         
         return $return;
     }
+
+    /**
+     * get all domains of a certain client enriched with api dependencies for api use
+     *
+     * @param string $clientId
+     * @return array
+     */
+    public function getDomainsByClientForApi($clientId)
+    {
+        $result = array();
+
+        if(!$clientId || !($domains = Core_Model_DiFactory::getModuleListings()->getDomainsWithNodesByClient($clientId))) {
+            return array();
+        }
+
+        foreach($domains as $domain) {
+            array_push($result, $domain);
+        }
+
+        return $result;
+    }
     
     /**
      * returns the last modificated domains

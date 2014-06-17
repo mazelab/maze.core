@@ -23,6 +23,8 @@ class ApiDomainsController extends MazeLib_Rest_Controller
 
         if (($node = $this->getParam('node'))) {
             $result = $domainManager->getDomainsByNodeForApi($node);
+        } elseif(($client = $this->getParam('client'))) {
+            $result = $domainManager->getDomainsByClientForApi($client);
         } elseif (($service = $this->getParam('service'))) {
             $result = $this->_arrayRemoveKeys($domainManager->getDomainsByServiceAsArray($service));
         } elseif($page = $this->getParam('page')) {

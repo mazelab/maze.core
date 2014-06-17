@@ -84,12 +84,8 @@ class Core_Form_Domain extends Core_Form_AdditionalInfo
             'class' => 'jsEditable',
             'helper' => 'formTextAsSpan'
         ));
-        $this->addElement('text', 'additionalKey', array(
-            'required' => true
-        ));
-        $this->addElement('text', 'additionalValue', array(
-            'required' => true
-        ));
+        $this->addElement('text', 'additionalKey');
+        $this->addElement('text', 'additionalValue');
 
         $this->setElementDecorators($this->_elementDecorators);
         

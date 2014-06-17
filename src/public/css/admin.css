@@ -115,19 +115,13 @@ span.jsEditable form.cssFormEditable input,
 dl dt label{
     line-height: 18px;
 }
-.cssBigItem span, .cssBigItem span.jsEditable{
+.cssBigItem span{
     margin:0 0 20px 0;
     font-size:22px;
-    float: left;
 }
-.cssBigItem span.jsEditable:hover{
-    margin:0 0 20px 0;
-}
-.cssBigItem span.jsEditable input{
+.cssBigItem span.editable-buttons span{
+    margin:0 0 0 0;
     font-size:22px;
-}
-.cssBigItem span.jsEditable.active:hover{
-    margin:0 0 20px 0;
 }
 .cssItemWithoutLabel{
     margin-right: 10px;
@@ -135,6 +129,9 @@ dl dt label{
 }
 .cssItemWithoutLabel span{
     padding-right:10px;
+}
+.cssItemWithoutLabel span.editable-buttons button{
+    padding-right:0px;
 }
 span.jsEditable, span.jsEditableAdditionalFields{
     width: 100%;

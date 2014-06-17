@@ -29,6 +29,274 @@
     }
   ]);
 
+  controllers.controller('clientEditController', [
+    '$scope', '$routeParams', '$q', '$modal', '$filter', 'clientsService', 'authService', 'modulesService', 'domainsService', 'logsService', function($scope, $routeParams, $q, $modal, $filter, clientsService, authService, modulesService, domainsService, logsService) {
+      var initBreadCrumb, initServices;
+      $scope.client = {};
+      $scope.clientId = $routeParams.clientId;
+      initBreadCrumb = function() {
+        return $('ul.breadcrumb').html('<li><a href="/">Dashboard</a><span class="divider">/</span></li><li><a href="#/">Clients</a><span class="divider">/</span></li><li class="active">{{client.label}}</li>');
+      };
+      $scope.activate = function() {
+        return $scope.changeState(true);
+      };
+      $scope.deactivate = function() {
+        return $scope.changeState(false);
+      };
+      $scope.updateAdditional = function(data) {
+        return clientsService.update($scope.clientId, $.param(data)).success(function(data, code) {
+          if (code === 200 && (data.client.additionalFields != null)) {
+            return $scope.client.additionalFields = data.client.additionalFields;
+          }
+        });
+      };
+      $scope.changeState = function(state) {
+        $scope.alerts = [];
+        return clientsService.update($scope.clientId, $.param({
+          'status': state
+        })).success(function(data) {
+          return $scope.client.status = state;
+        }).error(function() {
+          return $scope.alerts = [
+            {
+              msg: 'Request failed!',
+              type: 'danger'
+            }
+          ];
+        });
+      };
+      $scope.modalDelete = function() {
+        var modalInstance, modalProperties;
+        modalProperties = {
+          templateUrl: '/partials/admin/clients/modal/delete.html',
+          controller: 'clientModalDelete',
+          resolve: {
+            clientId: function() {
+              return $scope.clientId;
+            }
+          }
+        };
+        modalInstance = $modal.open(modalProperties);
+        return modalInstance.result.then(function(code) {
+          if (code === 200) {
+            return window.location = "#/";
+          }
+        });
+      };
+      $scope.loadLogs = true;
+      logsService.list({
+        client: $scope.clientId,
+        limit: 10
+      }).success(function(data) {
+        $scope.logs = data;
+        return $scope.loadLogs = false;
+      }).error(function(data) {
+        $scope.logs = null;
+        return $scope.loadLogs = false;
+      });
+      $scope.loadDomains = true;
+      domainsService.list({
+        client: $scope.clientId,
+        limit: 10
+      }).success(function(data) {
+        $scope.domains = data;
+        return $scope.loadDomains = false;
+      }).error(function() {
+        $scope.domains = null;
+        return $scope.loadDomains = false;
+      });
+      $scope.loadClient = true;
+      clientsService.get($scope.clientId).success(function(data) {
+        $scope.client = data;
+        $scope.loadClient = false;
+        initBreadCrumb();
+        return initServices();
+      }).error(function() {
+        $scope.client = null;
+        return $scope.loadClient = false;
+      });
+      $scope.updateProperty = function(property, data) {
+        var updateData;
+        if (!(property || data)) {
+          return false;
+        }
+        updateData = {};
+        updateData[property] = data;
+        return clientsService.update($scope.clientId, $.param(updateData))["catch"](function(request) {
+          var messages, _ref;
+          if (((_ref = request.data.errForm) != null ? _ref[property] : void 0) != null) {
+            messages = "";
+            angular.forEach(request.data.errForm[property], function(value) {
+              if (messages) {
+                messages = messages + ";";
+              }
+              return messages = messages + value;
+            });
+          } else {
+            messages = false;
+          }
+          return $q.reject(messages);
+        });
+      };
+      $scope.loginAsClient = function() {
+        if (!$scope.client._id) {
+          return false;
+        }
+        $scope.loadClientLogin = true;
+        $scope.errors = {};
+        return authService.client($scope.client._id).success(function(data, code, headers) {
+          if (headers('location')) {
+            return window.location = headers('location');
+          }
+          return location.href = "/";
+          return $scope.loadClientLogin = false;
+        }).error(function(data) {
+          $scope.alerts = [
+            {
+              msg: 'Request failed!',
+              type: 'danger'
+            }
+          ];
+          return $scope.loadClientLogin = false;
+        });
+      };
+      return initServices = function() {
+        var buildAvailableServices;
+        $scope.loadServices = true;
+        $scope.services = {
+          selected: '',
+          all: []
+        };
+        modulesService.list().success(function(data) {
+          $scope.services.all = data;
+          buildAvailableServices();
+          return $scope.loadServices = false;
+        }).error(function() {
+          $scope.loadServices = false;
+          buildAvailableServices();
+          return $scope.errAddService = ['Failed to load services'];
+        });
+        $scope.addService = function(serviceName) {
+          var service, updateData;
+          $scope.errAddService = [];
+          service = $filter('filter')($scope.services.available, {
+            name: serviceName
+          })[0];
+          if ((service != null ? service._id : void 0) == null) {
+            return false;
+          }
+          updateData = {
+            services: {}
+          };
+          updateData.services[serviceName] = true;
+          return clientsService.update($scope.client._id, $.param(updateData)).success(function(data) {
+            $scope.client.services = data.client.services;
+            $scope.services.selected = '';
+            buildAvailableServices();
+            return setTimeout(function() {
+              return $('#tabServices-' + serviceName).tab('show');
+            }, 0);
+          }).error(function() {
+            return $scope.errAddService.push('Failed');
+          });
+        };
+        $scope.modalRemoveService = function(service) {
+          var modalInstance, modalProperties;
+          if (!service) {
+            return false;
+          }
+          modalProperties = {
+            templateUrl: '/partials/admin/clients/modal/removeService.html',
+            controller: 'clientModalRemoveService',
+            resolve: {
+              service: function() {
+                return service;
+              },
+              client: function() {
+                return $scope.client;
+              }
+            }
+          };
+          modalInstance = $modal.open(modalProperties);
+          return modalInstance.result.then(function(services) {
+            $scope.client.services = services;
+            $('#tabServicesList li a:first').tab('show');
+            return buildAvailableServices();
+          });
+        };
+        return buildAvailableServices = function() {
+          var availableServices;
+          if ($scope.client == null) {
+            return false;
+          }
+          availableServices = [];
+          angular.forEach($scope.services.all, function(service) {
+            var _ref;
+            if ((service.name != null) && (((_ref = $scope.client.services) != null ? _ref[service.name] : void 0) == null)) {
+              return availableServices.push(service);
+            }
+          });
+          if (!availableServices.length) {
+            $scope.services.available = [
+              {
+                label: 'No services available',
+                name: ''
+              }
+            ];
+          } else {
+            $scope.services.available = [
+              {
+                label: 'Add new service',
+                name: ''
+              }
+            ];
+          }
+          return $scope.services.available = $scope.services.available.concat(availableServices);
+        };
+      };
+    }
+  ]);
+
+  controllers.controller('clientModalDelete', [
+    '$scope', '$modalInstance', 'clientsService', 'clientId', function($scope, $modalInstance, clientsService, clientId) {
+      $scope.ok = function() {
+        $scope.errMessages = [];
+        return clientsService["delete"](clientId).success(function(data, code) {
+          return $modalInstance.close(code);
+        }).error(function() {
+          return $scope.errMessages.push('Failed');
+        });
+      };
+      return $scope.cancel = function() {
+        return $modalInstance.dismiss();
+      };
+    }
+  ]);
+
+  controllers.controller('clientModalRemoveService', [
+    '$scope', '$modalInstance', 'service', 'client', 'clientsService', function($scope, $modalInstance, service, client, clientsService) {
+      $scope.service = service;
+      $scope.client = client;
+      $scope.errMessages = [];
+      $scope.ok = function() {
+        var updateData;
+        $scope.errMessages = [];
+        updateData = {
+          services: {}
+        };
+        updateData.services[service.name] = false;
+        return clientsService.update(client._id, $.param(updateData)).success(function(data) {
+          return $modalInstance.close(data.client.services);
+        }).error(function() {
+          return $scope.errMessages.push('Failed');
+        });
+      };
+      return $scope.cancel = function() {
+        return $modalInstance.dismiss();
+      };
+    }
+  ]);
+
   controllers.controller('clientNewController', [
     '$scope', 'clientsService', function($scope, clientsService) {
       var initBreadCrumb;
@@ -182,10 +450,10 @@
         updateData[property] = data;
         return domainsService.update($scope.domainId, $.param(updateData))["catch"](function(request) {
           var messages, _ref;
-          if ((((_ref = request.data) != null ? _ref.errForm : void 0) != null) && request.data.errForm[property]) {
+          if (((_ref = request.data.errForm) != null ? _ref[property] : void 0) != null) {
+            messages = "";
             angular.forEach(request.data.errForm[property], function(value, key) {
-              var messages;
-              if (typeof messages !== "undefined" && messages !== null) {
+              if (messages != null) {
                 messages = messages + ";";
               }
               return messages = messages + value;
@@ -445,10 +713,10 @@
         updateData[property] = data;
         return nodesService.update($scope.nodeId, $.param(updateData))["catch"](function(request) {
           var messages, _ref;
-          if ((((_ref = request.data) != null ? _ref.errForm : void 0) != null) && request.data.errForm[property]) {
+          if (((_ref = request.data.errForm) != null ? _ref[property] : void 0) != null) {
+            messages = "";
             angular.forEach(request.data.errForm[property], function(value, key) {
-              var messages;
-              if (typeof messages !== "undefined" && messages !== null) {
+              if (messages != null) {
                 messages = messages + ";";
               }
               return messages = messages + value;
@@ -680,46 +948,6 @@
         updateData.services[service.name] = false;
         return nodesService.update(node._id, $.param(updateData)).success(function(data) {
           return $modalInstance.close(data.node.services);
-        }).error(function() {
-          return $scope.errMessages.push('Failed');
-        });
-      };
-      return $scope.cancel = function() {
-        return $modalInstance.dismiss();
-      };
-    }
-  ]);
-
-  controllers.controller('modalDeleteClient', [
-    '$scope', '$modalInstance', 'clientsService', 'clientId', function($scope, $modalInstance, clientsService, clientId) {
-      $scope.ok = function() {
-        $scope.errMessages = [];
-        return clientsService["delete"](clientId).success(function(data, code) {
-          return $modalInstance.close(code);
-        }).error(function() {
-          return $scope.errMessages.push('Failed');
-        });
-      };
-      return $scope.cancel = function() {
-        return $modalInstance.dismiss();
-      };
-    }
-  ]);
-
-  controllers.controller('modalRemoveClientService', [
-    '$scope', '$modalInstance', 'service', 'client', 'clientsService', function($scope, $modalInstance, service, client, clientsService) {
-      $scope.service = service;
-      $scope.client = client;
-      $scope.errMessages = [];
-      $scope.ok = function() {
-        var updateData;
-        $scope.errMessages = [];
-        updateData = {
-          services: {}
-        };
-        updateData.services[service.name] = false;
-        return clientsService.update(client._id, $.param(updateData)).success(function(data) {
-          return $modalInstance.close(data.client.services);
         }).error(function() {
           return $scope.errMessages.push('Failed');
         });
