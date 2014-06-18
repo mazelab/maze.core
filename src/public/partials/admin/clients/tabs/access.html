@@ -1,0 +1,52 @@
+<div class="span11" xmlns="http://www.w3.org/1999/html">
+    <div class="cssBoxRight" id="tabContentClientAccess">
+        <maze-dl-wrapper class="row-fluid" dt-class="span3" dd-class="span6" label="Username">
+            <span editable-text="client.username" ng-class="{cssColorGray: !client.username}"
+                  onbeforesave="updateProperty('username', $data);">
+                {{ client.username || 'username'}}
+            </span>
+        </maze-dl-wrapper>
+
+        <maze-dl-wrapper class="row-fluid" dt-class="span3" dd-class="span6" label="Password" ng-show="!passwordPrompt">
+            <span class="cssColorGray" ng-click="openPasswordPrompt()">
+                Change Password...
+            </span>
+        </maze-dl-wrapper>
+
+        <div class="row-fluid" ng-show="passwordPrompt">
+            <form name="formClientAccess" novalidate="">
+                <maze-dl-wrapper class="row-fluid" dt-class="span3" dd-class="span6" label="New password">
+                    <input type="password" id="password" ng-model="accessData.password" required>
+
+                    <alert ng-repeat="error in accessFormErr.password" type="'danger'">
+                        {{error}}
+                    </alert>
+                </maze-dl-wrapper>
+
+                <maze-dl-wrapper class="row-fluid" dt-class="span3" dd-class="span6" label="Confirm password">
+                    <input type="password" id="confirmPassword" ng-model="accessData.confirmPassword" required>
+
+                    <alert ng-repeat="error in accessFormErr.confirmPassword" type="'danger'">
+                        {{error}}
+                    </alert>
+                </maze-dl-wrapper>
+
+                <div class="row-fluid">
+                    <button class="btn" type="button" ng-click="closePasswordPrompt()">
+                        Cancel
+                    </button>
+
+                    <button class="btn btn-info" type="button" ng-click="changeClientPassword()"
+                            ng-disabled="formClientAccess.$invalid">
+                        Save
+                    </button>
+                </div>
+
+                <alert class="row-fluid" type="'success'" ng-show="accessSuccess">
+                    The password has been changed
+                </alert>
+            </form>
+        </div>
+
+    </div>
+</div>

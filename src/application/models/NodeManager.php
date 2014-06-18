@@ -442,6 +442,27 @@ class Core_Model_NodeManager
     }
 
     /**
+     * get all nodes of a certain client enriched with api dependencies for api use
+     *
+     * @param string $clientId
+     * @return array
+     */
+    public function getNodesByClientForApi($clientId)
+    {
+        $result = array();
+
+        if(!$clientId || !($nodes = Core_Model_DiFactory::getModuleListings()->getNodesWithDomainsByClient($clientId))) {
+            return array();
+        }
+
+        foreach($nodes as $node) {
+            array_push($result, $node);
+        }
+
+        return $result;
+    }
+
+    /**
      * get all nodes of a certain domain enriched with api dependencies for api use
      *
      * @param string $domainId

@@ -21,18 +21,39 @@ directives.directive 'mazeHtmlPopover', [ () ->
       label: '@',
       title: '@',
       placement: '@'
+      namespace: '@'
+      single: '@'
     }
     transclude: true,
-    template: '<div><a href="" onclick="return false;">{{label || "popover"}}</a></div>'
-    link: (scope, element, attrs, ctrl, transclude) ->
-      $ element
-      .find 'a'
-      .popover {
-        content: transclude()
-        html: true
-        trigger: 'click'
-        placement: scope.placement
-        title: scope.title
+    template: '<div><a class="{{namespace}}" href="" onclick="return false;">{{label || "popover"}}</span></div>'
+    compile: (element, attrs) ->
+      attrs.namespace = 'aMazeHtmlPopover' if not attrs.namespace?
+      attrs.single = true if attrs.single? and attrs.single and not attrs.single == 'false'
+
+      {
+        post: ($scope, element, attrs, ctrl, transclude) ->
+          clickEvent = () ->
+            if $scope.single == 'true'
+              $ '.' + $scope.namespace
+              .not(this)
+              .popover 'hide'
+
+#            $ this
+#            .popover 'toggle'
+
+
+          transclude $scope.$parent, (content) ->
+            element
+            .find 'a'
+            .unbind 'click'
+            .popover {
+              content: content
+              html: true
+              trigger: 'click'
+              placement: $scope.placement
+              title: $scope.title
+            }
+            .click clickEvent
       }
   }
 ]

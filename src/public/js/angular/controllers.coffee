@@ -21,12 +21,12 @@ controllers.controller 'clientListController', ['$scope', 'authService', ($scope
   initBreadCrumb()
 ]
 
-controllers.controller 'clientEditController', ['$scope', '$routeParams', '$q', '$modal', '$filter', 'clientsService', 'authService', 'modulesService', 'domainsService', 'logsService', ($scope, $routeParams, $q, $modal, $filter, clientsService, authService, modulesService, domainsService, logsService) ->
+controllers.controller 'clientEditController', ['$scope', '$routeParams', '$q', '$modal', '$filter', '$timeout', 'clientsService', 'authService', 'modulesService', 'domainsService', 'logsService', 'nodesService', ($scope, $routeParams, $q, $modal, $filter, $timeout, clientsService, authService, modulesService, domainsService, logsService, nodesService) ->
   $scope.client = {}
   $scope.clientId = $routeParams.clientId
 
   initBreadCrumb = () ->
-    $('ul.breadcrumb').html('<li><a href="/">Dashboard</a><span class="divider">/</span></li><li><a href="#/">Clients</a><span class="divider">/</span></li><li class="active">{{client.label}}</li>')
+    $('ul.breadcrumb').html('<li><a href="/">Dashboard</a><span class="divider">/</span></li><li><a href="#/">Clients</a><span class="divider">/</span></li><li class="active"> ' + $scope.client.label + '</li>')
 
   $scope.activate = () ->
     $scope.changeState true
@@ -34,10 +34,20 @@ controllers.controller 'clientEditController', ['$scope', '$routeParams', '$q', 
   $scope.deactivate = () ->
     $scope.changeState false
 
+  $scope.passwordPrompt = false
+  $scope.openPasswordPrompt = () ->
+    $scope.passwordPrompt = true
+
   $scope.updateAdditional = (data) ->
     clientsService.update $scope.clientId, $.param(data)
     .success (data, code) ->
         $scope.client.additionalFields = data.client.additionalFields if code is 200 and data.client.additionalFields?
+
+  $scope.closePasswordPrompt = () ->
+    $scope.passwordPrompt = false
+    $scope.accessFormErr = []
+    $scope.accessData = {}
+    $scope.accessSuccess = false
 
   $scope.changeState = (state) ->
     $scope.alerts = []
@@ -75,6 +85,15 @@ controllers.controller 'clientEditController', ['$scope', '$routeParams', '$q', 
       $scope.domains =  null;
       $scope.loadDomains = false;
 
+  $scope.loadNodes = true
+  nodesService.list {client: $scope.clientId, limit: 10}
+  .success (data) ->
+      $scope.nodes =  data
+      $scope.loadNodes = false
+  .error () ->
+      $scope.nodes =  null;
+      $scope.loadNodes = false;
+
   $scope.loadClient = true
   clientsService.get $scope.clientId
   .success (data) ->
@@ -86,6 +105,21 @@ controllers.controller 'clientEditController', ['$scope', '$routeParams', '$q', 
   .error () ->
       $scope.client = null
       $scope.loadClient = false
+
+  $scope.accessData = {}
+  $scope.changeClientPassword = () ->
+    return false if not $scope.accessData.password or not $scope.accessData.confirmPassword
+    $scope.accessFormErr = []
+    $scope.accessSuccess = false
+
+    clientsService.update $scope.clientId, $.param $scope.accessData
+    .success () ->
+        $scope.accessSuccess = true
+        $timeout () ->
+          $scope.closePasswordPrompt()
+        , 4000
+    .error (data) ->
+        $scope.accessFormErr = data.errForm if data.errForm?
 
   $scope.updateProperty = (property, data) ->
     return false if not (property or data)

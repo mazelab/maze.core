@@ -27,6 +27,8 @@ class ApiNodesController extends MazeLib_Rest_Controller
 
         if($this->getParam('unregistered')) {
             $result = $this->_arrayRemoveKeys(Core_Model_DiFactory::getApiManager()->getUnregisteredApiRequests());
+        } elseif(($client = $this->getParam('client'))) {
+            $result = $nodeManager->getNodesByClientForApi($client);
         } elseif(($domain = $this->getParam('domain'))) {
             $result = $nodeManager->getNodesByDomainForApi($domain);
         } elseif(($service = $this->getParam('service'))) {

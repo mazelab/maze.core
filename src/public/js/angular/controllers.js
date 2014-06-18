@@ -30,12 +30,12 @@
   ]);
 
   controllers.controller('clientEditController', [
-    '$scope', '$routeParams', '$q', '$modal', '$filter', 'clientsService', 'authService', 'modulesService', 'domainsService', 'logsService', function($scope, $routeParams, $q, $modal, $filter, clientsService, authService, modulesService, domainsService, logsService) {
+    '$scope', '$routeParams', '$q', '$modal', '$filter', '$timeout', 'clientsService', 'authService', 'modulesService', 'domainsService', 'logsService', 'nodesService', function($scope, $routeParams, $q, $modal, $filter, $timeout, clientsService, authService, modulesService, domainsService, logsService, nodesService) {
       var initBreadCrumb, initServices;
       $scope.client = {};
       $scope.clientId = $routeParams.clientId;
       initBreadCrumb = function() {
-        return $('ul.breadcrumb').html('<li><a href="/">Dashboard</a><span class="divider">/</span></li><li><a href="#/">Clients</a><span class="divider">/</span></li><li class="active">{{client.label}}</li>');
+        return $('ul.breadcrumb').html('<li><a href="/">Dashboard</a><span class="divider">/</span></li><li><a href="#/">Clients</a><span class="divider">/</span></li><li class="active"> ' + $scope.client.label + '</li>');
       };
       $scope.activate = function() {
         return $scope.changeState(true);
@@ -43,12 +43,22 @@
       $scope.deactivate = function() {
         return $scope.changeState(false);
       };
+      $scope.passwordPrompt = false;
+      $scope.openPasswordPrompt = function() {
+        return $scope.passwordPrompt = true;
+      };
       $scope.updateAdditional = function(data) {
         return clientsService.update($scope.clientId, $.param(data)).success(function(data, code) {
           if (code === 200 && (data.client.additionalFields != null)) {
             return $scope.client.additionalFields = data.client.additionalFields;
           }
         });
+      };
+      $scope.closePasswordPrompt = function() {
+        $scope.passwordPrompt = false;
+        $scope.accessFormErr = [];
+        $scope.accessData = {};
+        return $scope.accessSuccess = false;
       };
       $scope.changeState = function(state) {
         $scope.alerts = [];
@@ -105,6 +115,17 @@
         $scope.domains = null;
         return $scope.loadDomains = false;
       });
+      $scope.loadNodes = true;
+      nodesService.list({
+        client: $scope.clientId,
+        limit: 10
+      }).success(function(data) {
+        $scope.nodes = data;
+        return $scope.loadNodes = false;
+      }).error(function() {
+        $scope.nodes = null;
+        return $scope.loadNodes = false;
+      });
       $scope.loadClient = true;
       clientsService.get($scope.clientId).success(function(data) {
         $scope.client = data;
@@ -115,6 +136,24 @@
         $scope.client = null;
         return $scope.loadClient = false;
       });
+      $scope.accessData = {};
+      $scope.changeClientPassword = function() {
+        if (!$scope.accessData.password || !$scope.accessData.confirmPassword) {
+          return false;
+        }
+        $scope.accessFormErr = [];
+        $scope.accessSuccess = false;
+        return clientsService.update($scope.clientId, $.param($scope.accessData)).success(function() {
+          $scope.accessSuccess = true;
+          return $timeout(function() {
+            return $scope.closePasswordPrompt();
+          }, 4000);
+        }).error(function(data) {
+          if (data.errForm != null) {
+            return $scope.accessFormErr = data.errForm;
+          }
+        });
+      };
       $scope.updateProperty = function(property, data) {
         var updateData;
         if (!(property || data)) {

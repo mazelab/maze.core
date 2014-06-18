@@ -121,7 +121,6 @@ class Core_Form_Client extends Zend_Form
         $this->addElement('password', 'confirmPassword', array(
             'ignore' => true,
             'validators' => array(
-                array('NotEmpty', true),
                 array('StringLength', NULL, array(4)),
                 array('identical', true, array('password'))
             )

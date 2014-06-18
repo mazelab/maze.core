@@ -27,18 +27,38 @@
         scope: {
           label: '@',
           title: '@',
-          placement: '@'
+          placement: '@',
+          namespace: '@',
+          single: '@'
         },
         transclude: true,
-        template: '<div><a href="" onclick="return false;">{{label || "popover"}}</a></div>',
-        link: function(scope, element, attrs, ctrl, transclude) {
-          return $(element).find('a').popover({
-            content: transclude(),
-            html: true,
-            trigger: 'click',
-            placement: scope.placement,
-            title: scope.title
-          });
+        template: '<div><a class="{{namespace}}" href="" onclick="return false;">{{label || "popover"}}</span></div>',
+        compile: function(element, attrs) {
+          if (attrs.namespace == null) {
+            attrs.namespace = 'aMazeHtmlPopover';
+          }
+          if ((attrs.single != null) && attrs.single && !attrs.single === 'false') {
+            attrs.single = true;
+          }
+          return {
+            post: function($scope, element, attrs, ctrl, transclude) {
+              var clickEvent;
+              clickEvent = function() {
+                if ($scope.single === 'true') {
+                  return $('.' + $scope.namespace).not(this).popover('hide');
+                }
+              };
+              return transclude($scope.$parent, function(content) {
+                return element.find('a').unbind('click').popover({
+                  content: content,
+                  html: true,
+                  trigger: 'click',
+                  placement: $scope.placement,
+                  title: $scope.title
+                }).click(clickEvent);
+              });
+            }
+          };
         }
       };
     }
