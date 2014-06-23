@@ -399,13 +399,13 @@ class Core_Model_ValueObject_ClientTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('test', $client->getEmail());
     }
     
-    public function testGetStatusShouldBeEqual()
+    public function testGetStatusShouldMapStringToBoolean()
     {
         $client = Core_Model_DiFactory::newClient();
         
-        $client->setData(array('status' => 'test'));
+        $client->setData(array('status' => 'true'));
         
-        $this->assertEquals('test', $client->getStatus());
+        $this->assertEquals(true, $client->getStatus());
     }
     
     public function testGetUsernameShouldBeEqual()

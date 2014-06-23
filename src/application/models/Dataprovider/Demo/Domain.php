@@ -129,6 +129,28 @@ class Core_Model_Dataprovider_Demo_Domain
     }
 
     /**
+     * paginates domains
+     *
+     * example return:
+     * array(
+     *  'data' => array(),
+     *  'total' => '55'
+     * )
+     *
+     * @param int $limit
+     * @param int $page
+     * @param string $searchTerm
+     * @return array
+     */
+    public function paginate($limit, $page, $searchTerm = null)
+    {
+        return array(
+            'total' => 0,
+            'data' => array()
+        );
+    }
+
+    /**
      * updates/create domain with the given data set
      * 
      * @param array $data

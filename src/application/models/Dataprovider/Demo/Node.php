@@ -119,6 +119,28 @@ class Core_Model_Dataprovider_Demo_Node
     }
 
     /**
+     * paginates nodes
+     *
+     * example return:
+     * array(
+     *  'data' => array(),
+     *  'total' => '55'
+     * )
+     *
+     * @param int $limit
+     * @param int $page
+     * @param string $searchTerm
+     * @return array
+     */
+    public function paginate($limit, $page, $searchTerm = null)
+    {
+        return array(
+            'total' => 0,
+            'data' => array()
+        );
+    }
+
+    /**
      * updates/creates a node data
      *
      * @param array $data
