@@ -5,7 +5,7 @@
             {{domain.name}}
         </a>
 
-        <maze-html-popover ng-if="domain.nodes" label="dependant Nodes (count nodes)"
+        <maze-html-popover ng-if="domain.nodes" label="Nodes ({{countObject(domain.nodes) || 0}})"
                            placement="bottom" class="pull-right" single="true">
             <ul id="tabClientDomainNodesListServices-{{node._id}}" class="cssPopoverTabList unstyled pull-left row-fluid">
                 <li ng-repeat="(id, node) in domain.nodes">

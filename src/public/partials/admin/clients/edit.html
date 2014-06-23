@@ -136,7 +136,7 @@
 
         <div class="row-fluid cssBoxCenter">
             <tabset>
-                <tab heading="Services ({{(client.services).length || 0}})">
+                <tab heading="Services ({{countObject(client.services) || 0}})">
                     <div ng-include="'/partials/admin/clients/tabs/services.html'"></div>
                 </tab>
                 <tab heading="Nodes ({{(nodes).length || 0}})">

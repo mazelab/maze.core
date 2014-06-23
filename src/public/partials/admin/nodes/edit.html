@@ -49,7 +49,7 @@
 
         <div class="row-fluid cssBoxCenter">
             <tabset>
-                <tab heading="Services ({{(node.services).length || 0}})">
+                <tab heading="Services ({{countObject(node.services) || 0}})">
                     <div ng-include="'/partials/admin/nodes/tabs/services.html'"></div>
                 </tab>
                 <tab heading="Clients ({{(clients).length || 0}})">

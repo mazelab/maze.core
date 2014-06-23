@@ -43,6 +43,12 @@
       $scope.deactivate = function() {
         return $scope.changeState(false);
       };
+      $scope.countObject = function(val) {
+        if (!angular.isObject(val)) {
+          return 0;
+        }
+        return Object.keys(val).length;
+      };
       $scope.passwordPrompt = false;
       $scope.openPasswordPrompt = function() {
         return $scope.passwordPrompt = true;
@@ -420,6 +426,12 @@
       initBreadCrumb = function() {
         return $('ul.breadcrumb').html('<li><a href="/">Dashboard</a><span class="divider">/</span></li><li><a href="#/">Domains</a><span class="divider">/</span></li><li class="active">' + $scope.domain.name + '</li>');
       };
+      $scope.countObject = function(val) {
+        if (!angular.isObject(val)) {
+          return 0;
+        }
+        return Object.keys(val).length;
+      };
       $scope.updateAdditional = function(data) {
         return domainsService.update($scope.domainId, $.param(data)).success(function(data) {
           var _ref;
@@ -656,6 +668,12 @@
       ];
       initBreadCrumb = function() {
         return $('ul.breadcrumb').html('<li><a href="/">Dashboard</a><span class="divider">/</span></li><li><a href="#/">Nodes</a><span class="divider">/</span></li><li class="active">' + $scope.node.name + '</li>');
+      };
+      $scope.countObject = function(val) {
+        if (!angular.isObject(val)) {
+          return 0;
+        }
+        return Object.keys(val).length;
       };
       $scope.updateAdditional = function(data) {
         return nodesService.update($scope.nodeId, $.param(data)).success(function(data, code) {

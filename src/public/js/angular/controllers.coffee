@@ -34,6 +34,10 @@ controllers.controller 'clientEditController', ['$scope', '$routeParams', '$q', 
   $scope.deactivate = () ->
     $scope.changeState false
 
+  $scope.countObject = (val) ->
+    return 0 if not angular.isObject(val)
+    Object.keys(val).length
+
   $scope.passwordPrompt = false
   $scope.openPasswordPrompt = () ->
     $scope.passwordPrompt = true
@@ -325,6 +329,10 @@ controllers.controller 'domainEditController', [ '$scope', '$filter', '$modal', 
   initBreadCrumb = () ->
     $('ul.breadcrumb').html('<li><a href="/">Dashboard</a><span class="divider">/</span></li><li><a href="#/">Domains</a><span class="divider">/</span></li><li class="active">' + $scope.domain.name + '</li>')
 
+  $scope.countObject = (val) ->
+    return 0 if not angular.isObject(val)
+    Object.keys(val).length
+
   $scope.updateAdditional = (data) ->
     return domainsService.update $scope.domainId, $.param(data)
     .success (data) ->
@@ -495,6 +503,10 @@ controllers.controller 'nodeEditController', ['$scope', '$filter', '$modal', '$q
 
   initBreadCrumb = () ->
     $('ul.breadcrumb').html('<li><a href="/">Dashboard</a><span class="divider">/</span></li><li><a href="#/">Nodes</a><span class="divider">/</span></li><li class="active">' + $scope.node.name + '</li>');
+
+  $scope.countObject = (val) ->
+    return 0 if not angular.isObject(val)
+    Object.keys(val).length
 
   $scope.updateAdditional = (data) ->
     nodesService.update $scope.nodeId, $.param(data)
