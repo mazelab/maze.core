@@ -7,16 +7,16 @@
     "packages": [
         {
             "name": "mazelab/zendframework1-min",
-            "version": "1.12.3",
+            "version": "1.12.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mazelab/zendframework1-min.git",
-                "reference": "e145c052eafe3a73704ffcfe73f2d4e1db1054e7"
+                "reference": "c47b92b61cb8c1d8ea2a5b9ae8b7bb5d551fcf13"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mazelab/zendframework1-min/zipball/e145c052eafe3a73704ffcfe73f2d4e1db1054e7",
-                "reference": "e145c052eafe3a73704ffcfe73f2d4e1db1054e7",
+                "url": "https://api.github.com/repos/mazelab/zendframework1-min/zipball/c47b92b61cb8c1d8ea2a5b9ae8b7bb5d551fcf13",
+                "reference": "c47b92b61cb8c1d8ea2a5b9ae8b7bb5d551fcf13",
                 "shasum": ""
             },
             "require": {
@@ -49,7 +49,7 @@
                 "ZendFramework",
                 "zend"
             ],
-            "time": "2013-11-26 04:08:21"
+            "time": "2014-06-23 09:40:28"
         },
         {
             "name": "zendx/viewautoescape",
