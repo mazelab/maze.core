@@ -17,7 +17,7 @@
                                 </a>
                                 <a class="cssAddIcon pull-right" 
                                    title="<?= $this->translate('Create client') ?>" 
-                                   href="<?= $this->url(array(), 'addClient') ?>">
+                                   href="/clients#/new">
                                     <i class="icon-plus icon-white"></i>
                                 </a>
                             </div>
@@ -25,7 +25,7 @@
                         <ul class="cssToolboxList row-fluid unstyled">
                             <? foreach ($this->lastClients as $client): ?>
                             <li class="row-fluid">
-                                <a class="row-fluid" href="<?= $this->url(array($client->html("_id"), $client->html("label")), "clientDetail"); ?>">
+                                <a class="row-fluid" href="/clients#/edit/<?= $client->html("_id") ?>">
                                     <small><?= $client->html("label"); ?></small>
                                     <i class="icon-chevron-right pull-right"></i>
                                 </a>
@@ -48,7 +48,7 @@
                                 </a>
                                 <a class="cssAddIcon pull-right" 
                                    title="<?= $this->translate('Create domain') ?>"
-                                   href="<?= $this->url(array(), 'addDomain') ?>">
+                                   href="/domains#/new">
                                     <i class="icon-plus icon-white"></i>
                                 </a>
                             </div>
@@ -56,7 +56,7 @@
                         <ul class="cssToolboxList row-fluid unstyled">
                             <? foreach ($this->lastDomains as $domain): ?>
                             <li class="row-fluid">
-                                <a href="<?= $this->url(array($domain->html("_id")), "domaindetail"); ?>">
+                                <a href="/domains#/edit/<?= $domain->html("_id") ?>">
                                     <small><?= $domain->html("name"); ?></small>
                                     <i class="icon-chevron-right pull-right"></i>
                                 </a>
@@ -82,7 +82,7 @@
                         <ul class="cssToolboxList row-fluid unstyled">
                             <? foreach ($this->lastNodes as $node): ?>
                             <li class="row-fluid">
-                                <a href="<?= $this->url(array($node->html("_id")), "nodedetail"); ?>">
+                                <a href="/nodes#/edit/<?= $node->html("_id") ?>">
                                     <small><?= $node->html("name"); ?></small>
                                     <i class="icon-chevron-right pull-right"></i>
                                 </a>

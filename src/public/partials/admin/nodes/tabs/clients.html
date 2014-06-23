@@ -1,7 +1,7 @@
 <ul id="tabNodeClientsList" class="unstyled cssTab">
     <li ng-repeat="client in clients" id="tabNodeClientsListEntry-{{client._id}}" class="row-fluid cssLine">
 
-        <a href="/clients/detail/{{client._id}}/{{client.label}}" title="Label" class="span8">
+        <a href="/clients/#/edit/{{client._id}}" title="Label" class="span8">
             {{client.label}}
         </a>
 
@@ -9,7 +9,7 @@
                            placement="bottom" class="pull-right">
             <ul id="tabNodeClientListServices-{{client._id}}" class="cssPopoverTabList unstyled pull-left row-fluid">
                 <li ng-repeat="domain in client.domains">
-                    <a href="/domains/detail/{{domain._id}}" title="{{domain.name}}" class="pull-left">
+                    <a href="/domains#/edit/{{domain._id}}" title="{{domain.name}}" class="pull-left">
                         <span>
                             {{domain.name}}
                         </span>
