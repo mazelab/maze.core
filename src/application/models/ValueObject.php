@@ -164,20 +164,18 @@ class Core_Model_ValueObject
     }
 
     /**
-     * returns property of data backend context
-     * 
-     * property in depth dissolving
-     * 
+     * returns mapped bean properties with local values
+     *
      * @param string $propertyPath
      * @return mixed
      */
     public function getData($propertyPath = null)
     {
         if (!$propertyPath) {
-            return $this->getBean()->asDeepArray();
+            return $this->getBean()->getData();
         }
 
-        return $this->getBean()->getLocalProperty($propertyPath);
+        return $this->getBean()->getProperty($propertyPath);
     }
 
     /**
@@ -191,7 +189,24 @@ class Core_Model_ValueObject
     }
 
     /**
-     * returns remote properties of data backend context
+     * returns raw bean properties
+     *
+     * unmapped maze values
+     *
+     * @param string $propertyPath
+     * @return mixed
+     */
+    public function getRawData($propertyPath = null)
+    {
+        if (!$propertyPath) {
+            return $this->getBean()->getRawData();
+        }
+
+        return $this->getBean()->getRawProperty($propertyPath);
+    }
+
+    /**
+     * returns mapped bean properties with remote values
      * 
      * @param string $propertyPath
      * @return mixed
@@ -267,7 +282,20 @@ class Core_Model_ValueObject
      */
     public function setData(array $data)
     {
-        $this->getBean()->setLocalData($data);
+        $this->getBean()->setData($data);
+
+        return $this;
+    }
+
+    /**
+     * sets/adds new data set as raw data
+     *
+     * @param array $data
+     * @return Core_Model_ValueObject
+     */
+    public function setRawData(array $data)
+    {
+        $this->getBean()->setRawData($data);
 
         return $this;
     }
@@ -278,7 +306,7 @@ class Core_Model_ValueObject
      * @param array $data
      * @return Core_Model_ValueObject
      */
-    public function setRemoteData($data)
+    public function setRemoteData(array $data)
     {
         $this->getBean()->setRemoteData($data);
 
@@ -303,21 +331,58 @@ class Core_Model_ValueObject
     }
     
     /**
-     * set a certain property with a certain value
-     * 
+     * set a certain property with a certain value mapped as local
+     *
+     * raw maze values should not be set
+     *
      * @param string $propertyPath for MazeLib_Bean
      * @param string $value
+     * @throw MazeLib_View_Bean_Exception
      * @return Core_Model_ValueObject
      */
     public function setProperty($propertyPath, $value)
     {
-        $this->getBean()->setLocalProperty($propertyPath, $value);
+        $this->getBean()->setProperty($propertyPath, $value);
         
         return $this;
     }
 
     /**
-     * unsets a certain property
+     * set a certain property with a certain raw value
+     *
+     * raw data is not mapped to local or remote, in fact on maze values the whole maze value must be set
+     *
+     * @param string $propertyPath for MazeLib_Bean
+     * @param string $value
+     * @throw MazeLib_View_Bean_Exception
+     * @return Core_Model_ValueObject
+     */
+    public function setRawProperty($propertyPath, $value)
+    {
+        $this->getBean()->setRawProperty($propertyPath, $value);
+
+        return $this;
+    }
+
+    /**
+     * set a certain property with a certain value mapped as remote
+     *
+     * raw maze values should not be set
+     *
+     * @param string $propertyPath for MazeLib_Bean
+     * @param string $value
+     * @throw MazeLib_View_Bean_Exception
+     * @return Core_Model_ValueObject
+     */
+    public function setRemoteProperty($propertyPath, $value)
+    {
+        $this->getBean()->setRemoteProperty($propertyPath, $value);
+
+        return $this;
+    }
+
+    /**
+     * unset a certain property
      * 
      * @param string $propertyPath for MazeLib_Bean
      * @return Core_Model_ValueObject

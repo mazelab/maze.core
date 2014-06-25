@@ -31,8 +31,8 @@ class MazeLib_BeanLocalTest extends PHPUnit_Framework_TestCase
             )
         );
         
-        $this->bean->setLocalData($data);
-        $this->assertEquals($data['array']['key'], $this->bean->getLocalProperty('array/key'));
+        $this->bean->setData($data);
+        $this->assertEquals($data['array']['key'], $this->bean->getProperty('array/key'));
     }
     
     public function testSetLocalDataWithMazePathShouldSetValue()
@@ -41,8 +41,8 @@ class MazeLib_BeanLocalTest extends PHPUnit_Framework_TestCase
             'array/key' => 'test'
         );
         
-        $this->bean->setLocalData($data);
-        $this->assertEquals($data['array/key'], $this->bean->getLocalProperty('array/key'));
+        $this->bean->setData($data);
+        $this->assertEquals($data['array/key'], $this->bean->getProperty('array/key'));
     }
     
     public function testSetLocalDataWithMazePathShouldUse1xCode()
@@ -51,7 +51,7 @@ class MazeLib_BeanLocalTest extends PHPUnit_Framework_TestCase
             'array/key' => 'test'
         );
         
-        $this->bean->setLocalData($data);
+        $this->bean->setData($data);
         $this->assertEquals(-1, $this->bean->getProperty('array/key/status'));
     }
     
@@ -61,7 +61,7 @@ class MazeLib_BeanLocalTest extends PHPUnit_Framework_TestCase
             'maze/val' => 'des'
         );
         
-        $this->bean->setLocalData($data);
+        $this->bean->setData($data);
         $this->assertEquals(-2, $this->bean->getProperty('maze/val/status'));
     }
     
@@ -76,7 +76,7 @@ class MazeLib_BeanLocalTest extends PHPUnit_Framework_TestCase
             )
         );
         
-        $this->bean->setLocalData($data);
+        $this->bean->setData($data);
     }
     
     /**
@@ -92,7 +92,7 @@ class MazeLib_BeanLocalTest extends PHPUnit_Framework_TestCase
             )
         );
         
-        $this->bean->setLocalData($data);
+        $this->bean->setData($data);
     }
     
     /**
@@ -110,7 +110,7 @@ class MazeLib_BeanLocalTest extends PHPUnit_Framework_TestCase
             )
         );
         
-        $this->bean->setLocalData($data);
+        $this->bean->setData($data);
     }
     
     public function testSetLocalDataWithoutAnyPriorDataShouldSetNegativConflictSate()
@@ -121,7 +121,7 @@ class MazeLib_BeanLocalTest extends PHPUnit_Framework_TestCase
             )
         );
         
-        $this->bean->setLocalData($data);
+        $this->bean->setData($data);
         $this->assertEquals(-1, $this->bean->getProperty('array/key/status'));
     }
     
@@ -134,7 +134,7 @@ class MazeLib_BeanLocalTest extends PHPUnit_Framework_TestCase
         );
         
         $this->bean->setRemoteData($data);
-        $this->bean->setLocalData($data);
+        $this->bean->setData($data);
         
         $this->assertEquals(1000, $this->bean->getProperty('array/key/status'));
     }
@@ -153,7 +153,7 @@ class MazeLib_BeanLocalTest extends PHPUnit_Framework_TestCase
         );
         
         $this->bean->setRemoteData($dataRemote);
-        $this->bean->setLocalData($dataLocal);
+        $this->bean->setData($dataLocal);
         
         $this->assertEquals(-1, $this->bean->getProperty('array/key/status'));
     }
@@ -166,8 +166,8 @@ class MazeLib_BeanLocalTest extends PHPUnit_Framework_TestCase
             'remote' => 'nothing'
         );
         
-        $this->bean->setProperty('array/key', $valueProperty);
-        $this->bean->setLocalData(array('array/key' => 'nothing'));
+        $this->bean->setRawProperty('array/key', $valueProperty);
+        $this->bean->setData(array('array/key' => 'nothing'));
         
         $this->assertEquals(1000, $this->bean->getProperty('array/key/status'));
     }
@@ -179,7 +179,7 @@ class MazeLib_BeanLocalTest extends PHPUnit_Framework_TestCase
         );
         
         $this->bean->setBean($data);
-        $this->assertEquals($data['path/key'], $this->bean->getLocalProperty('path/key'));
+        $this->assertEquals($data['path/key'], $this->bean->getProperty('path/key'));
     }
     
     public function testGetLocalPropertyWithValueBeanPathShouldReturnCorrectLocalValue()
@@ -193,7 +193,7 @@ class MazeLib_BeanLocalTest extends PHPUnit_Framework_TestCase
         );
         
         $this->bean->setBean($data);
-        $this->assertEquals($data['array/key']['local'], $this->bean->getLocalProperty('array/key'));
+        $this->assertEquals($data['array/key']['local'], $this->bean->getProperty('array/key'));
     }
     
     public function testGetLocalPropertyWithLocalPathIntoMazeValueShouldReturnLocalValue()
@@ -202,25 +202,25 @@ class MazeLib_BeanLocalTest extends PHPUnit_Framework_TestCase
             'array/key' => 'uno'
         );
         
-        $this->bean->setLocalData($data);
-        $this->assertEquals('uno', $this->bean->getLocalProperty('array/key/local'));
+        $this->bean->setData($data);
+        $this->assertEquals('uno', $this->bean->getProperty('array/key/local'));
     }
     
-    public function testSetLocalPropertyShouldOverwriteValueFromBefore()
+    public function testSetPropertyShouldOverwriteValueFromBefore()
     {
-        $this->bean->setLocalProperty('some/key', 'first string');
-        $this->bean->setLocalProperty('some/key', 'second string');
-        $this->assertEquals('second string', $this->bean->getLocalProperty('some/key'));
+        $this->bean->setProperty('some/key', 'first string');
+        $this->bean->setProperty('some/key', 'second string');
+        $this->assertEquals('second string', $this->bean->getProperty('some/key'));
     }
     
-    public function testSetLocalPropertyOfMazeValueShouldOverwriteValueFromBefore()
+    public function testSetPropertyOfMazeValueShouldOverwriteValueFromBefore()
     {
-        $this->bean->setLocalProperty('array/key', 'first string');
-        $this->bean->setLocalProperty('array/key', 'second string');
-        $this->assertEquals('second string', $this->bean->getLocalProperty('array/key'));
+        $this->bean->setProperty('array/key', 'first string');
+        $this->bean->setProperty('array/key', 'second string');
+        $this->assertEquals('second string', $this->bean->getProperty('array/key'));
     }
     
-    public function testSetLocalPropertyWithDeepArrayShouldSetValues()
+    public function testSetPropertyWithDeepArrayShouldSetValues()
     {
         $data = array(
             'more' => array(
@@ -230,14 +230,14 @@ class MazeLib_BeanLocalTest extends PHPUnit_Framework_TestCase
             )
         );
         
-        $this->bean->setLocalProperty('sample', $data);
-        $this->assertEquals($data, $this->bean->getLocalProperty('sample'));
+        $this->bean->setProperty('sample', $data);
+        $this->assertEquals($data, $this->bean->getProperty('sample'));
     }
     
     /**
      * @expectedException MazeLib_View_Bean_Exception
      */
-    public function testSetLocalPropertyWithMazeValueInMazePathShouldThrowException()
+    public function testSetPropertyWithMazeValueInMazePathShouldThrowException()
     {
         $data = array(
             'local' => 'test',
@@ -245,10 +245,10 @@ class MazeLib_BeanLocalTest extends PHPUnit_Framework_TestCase
             'remote' => 'test'
         );
         
-        $this->bean->setLocalProperty('array/key', $data);
+        $this->bean->setProperty('array/key', $data);
     }
     
-    public function testSetLocalPropertyWithMazeValueInNonMazePathShouldSetMazeValue()
+    public function testSetPropertyWithMazeValueInNonMazePathShouldSetMazeValue()
     {
         $data = array(
             'local' => 'test',
@@ -256,11 +256,11 @@ class MazeLib_BeanLocalTest extends PHPUnit_Framework_TestCase
             'remote' => 'test'
         );
         
-        $this->bean->setLocalProperty('some/key', $data);
-        $this->assertEquals($data, $this->bean->getLocalProperty('some/key'));
+        $this->bean->setProperty('some/key', $data);
+        $this->assertEquals($data, $this->bean->getProperty('some/key'));
     }
     
-    public function testSetLocalPropertyShouldCreateRemoteValueFieldWithNull()
+    public function testSetPropertyShouldCreateRemoteValueFieldWithNull()
     {
         $result = array(
             'local' => 'test',
@@ -268,44 +268,44 @@ class MazeLib_BeanLocalTest extends PHPUnit_Framework_TestCase
             'remote' => null
         );
         
-        $this->bean->setLocalProperty('array/key', $result['local']);
-        $this->assertEquals($result, $this->bean->getProperty('array/key'));
+        $this->bean->setProperty('array/key', $result['local']);
+        $this->assertEquals($result, $this->bean->getRawProperty('array/key'));
     }
     
-    public function testSetLocalPropertyWithBooleanShouldSetBoolean()
+    public function testSetPropertyWithBooleanShouldSetBoolean()
     {
-        $this->bean->setLocalProperty('array/key', true);
-        $this->assertTrue($this->bean->getLocalProperty('array/key'));
+        $this->bean->setProperty('array/key', true);
+        $this->assertTrue($this->bean->getProperty('array/key'));
     }
     
     public function testHasConflictWithOnlyLocalPropertyShouldReturnTrue()
     {
-        $this->bean->setLocalProperty('array/key', 'val');
+        $this->bean->setProperty('array/key', 'val');
         $this->assertTrue($this->bean->hasConflict('array/key'));
     }
     
     public function testHasConflictWhenOnlyLocalPropertyIsFalseShouldReturnTrue()
     {
-        $this->bean->setLocalProperty('array/key', false);
+        $this->bean->setProperty('array/key', false);
         $this->assertTrue($this->bean->hasConflict('array/key'));
     }
     
     public function testHasConflictWhenOnlyLocalPropertyIsNullShouldReturnFalse()
     {
-        $this->bean->setLocalProperty('array/key', null);
+        $this->bean->setProperty('array/key', null);
         $this->assertFalse($this->bean->hasConflict('array/key'));
     }
     
     public function testHasConflictAfterLocalSetWithShouldReturnTrue()
     {
-        $this->bean->setLocalProperty('array/key', 'conflict');
+        $this->bean->setProperty('array/key', 'conflict');
         
         $this->assertTrue($this->bean->hasConflict('array/key'));
     }
     
     public function testHasConflictNegativeAfterLocalSetShouldReturnTrue()
     {
-        $this->bean->setLocalProperty('array/key', 'conflict');
+        $this->bean->setProperty('array/key', 'conflict');
         
         $this->assertTrue($this->bean->hasConflict('array/key', true));
     }
@@ -324,44 +324,44 @@ class MazeLib_BeanLocalTest extends PHPUnit_Framework_TestCase
             )
         );
         
-        $this->bean->setLocalData($data);
+        $this->bean->setData($data);
         $this->assertEquals($conflicts, $this->bean->getConflicts());
     }
     
     public function testGetConflictsAfterLocalSetWithNegativ1xStatusShouldReturnOneEntry()
     {
-        $this->bean->setLocalProperty('array/key', 'conflict');
+        $this->bean->setProperty('array/key', 'conflict');
         
         $this->assertCount(1, $this->bean->getConflicts(-1));
     }
     
     public function testGetConflictsAfterLocalSetWithPositiv1xStatusShouldReturnEmptyArray()
     {
-        $this->bean->setLocalProperty('array/key', 'conflict');
+        $this->bean->setProperty('array/key', 'conflict');
         
         $this->assertEmpty($this->bean->getConflicts(1));
     }
     
     public function testGetLocalDataOnEmptyBeanShouldReturnEmtpyArray()
     {
-        $this->assertInternalType('array', $this->bean->getLocalData());
-        $this->assertEmpty($this->bean->getLocalData());
+        $this->assertInternalType('array', $this->bean->getData());
+        $this->assertEmpty($this->bean->getData());
     }
     
     public function testGetLocalDataShouldReturn2Entries()
     {
-        $this->bean->setLocalProperty('array/key', 'ichi');
-        $this->bean->setLocalProperty('maze/val', 'ni');
+        $this->bean->setProperty('array/key', 'ichi');
+        $this->bean->setProperty('maze/val', 'ni');
         
-        $this->assertCount(2, $this->bean->getLocalData());
+        $this->assertCount(2, $this->bean->getData());
     }
     
     public function testGetLocalDataShouldReturnCorrectArrayStruct()
     {
-        $this->bean->setLocalProperty('array/key', 'ichi');
-        $this->bean->setLocalProperty('maze/val', 'ni');
+        $this->bean->setProperty('array/key', 'ichi');
+        $this->bean->setProperty('maze/val', 'ni');
 
-        $localData = $this->bean->getLocalData();
+        $localData = $this->bean->getData();
         $this->assertArrayHasKey('array', $localData);
         $this->assertArrayHasKey('maze', $localData);
 
@@ -371,16 +371,16 @@ class MazeLib_BeanLocalTest extends PHPUnit_Framework_TestCase
     
     public function testGetLocalDataShouldReturnCorrectValues()
     {
-        $this->bean->setLocalProperty('array/key', 'ichi');
-        $this->bean->setLocalProperty('maze/val', 'ni');
+        $this->bean->setProperty('array/key', 'ichi');
+        $this->bean->setProperty('maze/val', 'ni');
 
-        $localData = $this->bean->getLocalData();
+        $localData = $this->bean->getData();
         
         $this->assertEquals('ichi', $localData['array']['key']);
         $this->assertEquals('ni', $localData['maze']['val']);
     }
     
-    public function testSetLocalPropertyAsWildcardShouldSetMazeValue()
+    public function testSetPropertyAsWildcardShouldSetMazeValue()
     {
         $value = 'testing';
         $result = array(
@@ -389,8 +389,8 @@ class MazeLib_BeanLocalTest extends PHPUnit_Framework_TestCase
             'remote' => null
         );
         
-        $this->bean->setLocalProperty('wildcard/test1', $value);
-        $this->assertEquals($result, $this->bean->getProperty('wildcard/test1'));
+        $this->bean->setProperty('wildcard/test1', $value);
+        $this->assertEquals($result, $this->bean->getRawProperty('wildcard/test1'));
     }
     
     public function testGetLocalPropertyAsWildcardShouldSetMazeValue()
@@ -402,8 +402,8 @@ class MazeLib_BeanLocalTest extends PHPUnit_Framework_TestCase
             'remote' => null
         );
         
-        $this->bean->setLocalProperty('wildcard/test1', $value);
-        $this->assertEquals($result, $this->bean->getProperty('wildcard/test1'));
+        $this->bean->setProperty('wildcard/test1', $value);
+        $this->assertEquals($result, $this->bean->getRawProperty('wildcard/test1'));
     }
     
     public function testSetLocalDataOfWildcardEntriesShouldSetValues()
@@ -430,7 +430,7 @@ class MazeLib_BeanLocalTest extends PHPUnit_Framework_TestCase
             )
         );
         
-        $this->bean->setLocalData($data);
+        $this->bean->setData($data);
         
         $this->assertEquals($result, $this->bean->asArray(true));
     }
@@ -444,25 +444,25 @@ class MazeLib_BeanLocalTest extends PHPUnit_Framework_TestCase
             )
         );
         
-        $this->bean->setLocalData($data);
+        $this->bean->setData($data);
         
-        $this->assertEquals($data, $this->bean->getLocalData());
+        $this->assertEquals($data, $this->bean->getData());
     }
 
-    public function testSetLocalPropertyInConflictedMazeValueWithSameLocalPropertyShouldOverwriteChangeConflictState()
+    public function testSetPropertyInConflictedMazeValueWithSameLocalPropertyShouldOverwriteChangeConflictState()
     {
-        $this->bean->setLocalProperty('array/key', 'test');
+        $this->bean->setProperty('array/key', 'test');
         $this->bean->setRemoteProperty('array/key', 'taste');
-        $this->bean->setLocalProperty('array/key', 'test');
+        $this->bean->setProperty('array/key', 'test');
         
         $this->assertEquals(-1, $this->bean->getProperty('array/key/status'));
     }
 
     public function testGetLocalPropertyOfWildcardEntryShouldReturnCorrectString()
     {
-        $this->bean->setLocalProperty('wildcard/1', 'test');
+        $this->bean->setProperty('wildcard/1', 'test');
         
-        $this->assertEquals('test', $this->bean->getLocalProperty('wildcard/1'));
+        $this->assertEquals('test', $this->bean->getProperty('wildcard/1'));
     }
     
     public function testGetLocalPropertyOfWildcardParentShouldOnlyReturnLocalValues()
@@ -471,8 +471,8 @@ class MazeLib_BeanLocalTest extends PHPUnit_Framework_TestCase
             '1' => 'test'
         );
         
-        $this->bean->setLocalProperty('wildcard/1', 'test');
-        $this->assertEquals($data, $this->bean->getLocalProperty('wildcard'));
+        $this->bean->setProperty('wildcard/1', 'test');
+        $this->assertEquals($data, $this->bean->getProperty('wildcard'));
     }
     
 }

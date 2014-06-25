@@ -133,7 +133,7 @@ class MazeLib_View_Facade_MazeBeanTest extends PHPUnit_Framework_TestCase
         );
         
         $data = new MazeLib_Bean_TestBean();
-        $data->setLocalProperty('array/key', '11.11.11.30');
+        $data->setProperty('array/key', '11.11.11.30');
         $data->setRemoteProperty('array/key', '11.11.11.40');
         
         $test = new MazeLib_View_Facade_MazeBean($data, $this->_view);

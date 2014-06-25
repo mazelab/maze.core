@@ -79,7 +79,7 @@ class Core_Model_ValueObject_ClientTest extends PHPUnit_Framework_TestCase
         Core_Model_DiFactory::getModuleRegistry()->registerModule(APPLICATION_TEST_PATH . $this->_sampleServicePath2);
         
         $this->_sample->addService('validServiceSample2');
-        
+
         $this->assertNotNull($this->_sample->getData('services/validServiceSample2/name'));
         $this->assertNotNull($this->_sample->getData('services/validServiceSample2/label'));
     }

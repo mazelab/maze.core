@@ -31,20 +31,20 @@ class MazeLib_BeanWildcardTest extends PHPUnit_Framework_TestCase
             'remote' => null
         );
 
-        $this->bean->setProperty('wildcard/test1', $data);
-        $this->assertEquals($data, $this->bean->getProperty('wildcard/test1'));
+        $this->bean->setRawProperty('wildcard/test1', $data);
+        $this->assertEquals($data, $this->bean->getRawProperty('wildcard/test1'));
     }
 
     public function testSetLocalAndRemotePropertyOnWildcardFieldShouldSetSynchedStatus()
     {
-        $this->bean->setLocalProperty('wildcard/test1', 'test');
+        $this->bean->setProperty('wildcard/test1', 'test');
         $this->bean->setRemoteProperty('wildcard/test1', 'test');
         $this->assertEquals(2000, $this->bean->getProperty('wildcard/test1/status'));
     }
 
     public function testSetLocalAndRemoteOnWildcardShouldSetPositivErrorStatus()
     {
-        $this->bean->setLocalProperty('wildcard/test1', 'testing');
+        $this->bean->setProperty('wildcard/test1', 'testing');
         $this->bean->setRemoteProperty('wildcard/test1', 'testing1');
         $this->assertEquals(2, $this->bean->getProperty('wildcard/test1/status'));
     }
@@ -90,7 +90,7 @@ class MazeLib_BeanWildcardTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('testing', $this->bean->getProperty('wildcard'));
     }
 
-    public function testSetPropertyOnWildCardOnShouldOverwriteProperty()
+    public function testSetPropertyOnWildCardShouldOverwriteProperty()
     {
         $data = array(
             'local' => 'test',
@@ -104,10 +104,10 @@ class MazeLib_BeanWildcardTest extends PHPUnit_Framework_TestCase
             'remote' => 'test'
         );
 
-        $this->bean->setProperty('wildcard/test1', $data);
-        $this->bean->setProperty('wildcard/test1', $data2);
+        $this->bean->setRawProperty('wildcard/test1', $data);
+        $this->bean->setRawProperty('wildcard/test1', $data2);
 
-        $this->assertEquals($data2, $this->bean->getProperty('wildcard/test1'));
+        $this->assertEquals($data2, $this->bean->getRawProperty('wildcard/test1'));
     }
 
     public function testLocalSetPropertyWithFirstTierWildCardShouldSetMappedProperties()
@@ -129,10 +129,10 @@ class MazeLib_BeanWildcardTest extends PHPUnit_Framework_TestCase
             )
         );
 
-        $valueBean->setLocalProperty('prop1', $value1);
+        $valueBean->setProperty('prop1', $value1);
         $valueBean->setRemoteProperty('prop2', $value2);
 
-        $this->assertEquals($result, $valueBean->asDeepArray(true));
+        $this->assertEquals($result, $valueBean->getRawData());
     }
 
     public function testAsArrayShouldMapLocalWildcardMazeValuesProperly()
@@ -143,7 +143,7 @@ class MazeLib_BeanWildcardTest extends PHPUnit_Framework_TestCase
             )
         );
 
-        $this->bean->setLocalProperty('wildcard/1', 'test');
+        $this->bean->setProperty('wildcard/1', 'test');
 
         $this->assertEquals($data, $this->bean->asArray());
     }
@@ -157,8 +157,8 @@ class MazeLib_BeanWildcardTest extends PHPUnit_Framework_TestCase
             )
         );
 
-        $this->bean->setLocalProperty('wildcard/1', 'test');
-        $this->bean->setLocalProperty('wildcard/2', 'taste');
+        $this->bean->setProperty('wildcard/1', 'test');
+        $this->bean->setProperty('wildcard/2', 'taste');
 
         $this->assertEquals($data, $this->bean->asDeepArray());
     }
@@ -177,7 +177,7 @@ class MazeLib_BeanWildcardTest extends PHPUnit_Framework_TestCase
             )
         );
 
-        $this->bean->setLocalProperty('wildcard2/1/depth', 'test');
+        $this->bean->setProperty('wildcard2/1/depth', 'test');
 
         $this->assertEquals($data, $this->bean->asDeepArray(true));
     }
@@ -195,9 +195,9 @@ class MazeLib_BeanWildcardTest extends PHPUnit_Framework_TestCase
             )
         );
 
-        $this->bean->setLocalData($data);
+        $this->bean->setData($data);
 
-        $this->assertEquals($data, $this->bean->getLocalData());
+        $this->assertEquals($data, $this->bean->getData());
     }
 
     public function testGetLocalPropertyOfNonAssosiativeOnWildcardShouldReturnCorrectArrayArray()
@@ -216,9 +216,9 @@ class MazeLib_BeanWildcardTest extends PHPUnit_Framework_TestCase
             )
         );
 
-        $this->bean->setLocalData($data);
+        $this->bean->setData($data);
 
-        $this->assertEquals($data['wildcard2'], $this->bean->getLocalProperty('wildcard2'));
+        $this->assertEquals($data['wildcard2'], $this->bean->getProperty('wildcard2'));
     }
 
     public function testGetRemoteDataOfNonAssosiativeOnWildcardShouldReturnCorrectArrayArray()

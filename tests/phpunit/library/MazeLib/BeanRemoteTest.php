@@ -136,7 +136,7 @@ class MazeLib_BeanRemoteTest extends PHPUnit_Framework_TestCase
             )
         );
         
-        $this->bean->setLocalData($data);
+        $this->bean->setData($data);
         $this->bean->setRemoteData($data);
         
         $this->assertEquals(1000, $this->bean->getProperty('array/key/status'));
@@ -155,7 +155,7 @@ class MazeLib_BeanRemoteTest extends PHPUnit_Framework_TestCase
             )
         );
         
-        $this->bean->setLocalData($dataLocal);
+        $this->bean->setData($dataLocal);
         $this->bean->setRemoteData($dataRemote);
         
         $this->assertEquals(1, $this->bean->getProperty('array/key/status'));
@@ -169,7 +169,7 @@ class MazeLib_BeanRemoteTest extends PHPUnit_Framework_TestCase
             'remote' => 'nothing'
         );
         
-        $this->bean->setProperty('array/key', $valueProperty);
+        $this->bean->setRawProperty('array/key', $valueProperty);
         $this->bean->setRemoteData(array('array/key' => 'more'));
         
         $this->assertEquals(1, $this->bean->getProperty('array/key/status'));
@@ -272,7 +272,7 @@ class MazeLib_BeanRemoteTest extends PHPUnit_Framework_TestCase
         );
         
         $this->bean->setRemoteProperty('array/key', $result['remote']);
-        $this->assertEquals($result, $this->bean->getProperty('array/key'));
+        $this->assertEquals($result, $this->bean->getRawProperty('array/key'));
     }
     
     public function testSetRemotePropertyWithBooleanShouldSetBoolean()
@@ -393,7 +393,7 @@ class MazeLib_BeanRemoteTest extends PHPUnit_Framework_TestCase
         );
         
         $this->bean->setRemoteProperty('wildcard/test1', $value);
-        $this->assertEquals($result, $this->bean->getProperty('wildcard/test1'));
+        $this->assertEquals($result, $this->bean->getRawProperty('wildcard/test1'));
     }
     
     public function testSetRemoteDataOfWildcardEntriesShouldSetValues()
@@ -442,7 +442,7 @@ class MazeLib_BeanRemoteTest extends PHPUnit_Framework_TestCase
     public function testSetRemotePropertyInConflictedMazeValueWithSameLocalPropertyShouldNotChangeConflictState()
     {
         $this->bean->setRemoteProperty('array/key', 'taste');
-        $this->bean->setLocalProperty('array/key', 'test');
+        $this->bean->setProperty('array/key', 'test');
         $this->bean->setRemoteProperty('array/key', 'taste');
         
         $this->assertEquals(-1, $this->bean->getProperty('array/key/status'));

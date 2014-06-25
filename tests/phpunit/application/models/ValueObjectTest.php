@@ -248,13 +248,6 @@ class Core_Model_ValueObjectTest extends PHPUnit_Framework_TestCase
         $this->assertNull($this->_sample1->getData('key1'));
     }
     
-    public function testAddAdditionalFieldShouldNotSaveTheDataset()
-    {
-        $object = new Core_Model_ValueObject();
-        $this->assertNotNull($object->addAdditionalField('key1', 'val1'));
-        $this->assertEmpty($object->getBean()->getRemoteData());
-    }
-
     public function testAddAdditionalFieldWithValidDataShouldNotCallSave()
     {
         $object = $this->getMock('Core_Model_ValueObject_Client', array('save'), array('valueSample2'));
