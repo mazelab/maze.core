@@ -76,7 +76,13 @@ directives.directive 'mazeSearch', [ () ->
       $scope.search = $scope.first = $scope.last = $scope.total = ''
       return false if not $scope.uri
 
+      $scope.$parent.$on 'mazeSearchReload', () ->
+        load()
+
       $scope.$watch 'page + search + limit', ()  ->
+        load()
+
+      load = () ->
         $scope.loadPager = true
         $scope.errorMsg = []
 

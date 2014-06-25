@@ -8,8 +8,11 @@
     function() {
       return function(items, search) {
         var result;
-        result = [];
-        if (!search || typeof search === !'object' || !angular.element.isEmptyObject(search)) {
+        result = {};
+        if (typeof items === !'object') {
+          return;
+        }
+        if (!search || typeof search === !'object' || angular.element.isEmptyObject(search)) {
           result = items;
         } else {
           angular.forEach(items, function(value, key) {
@@ -20,7 +23,7 @@
               if (!value2 || failed) {
                 return false;
               }
-              if (value2[key2] == null) {
+              if (value[key2] == null) {
                 failed = true;
                 return false;
               }
@@ -36,7 +39,7 @@
               }
             });
             if (!failed) {
-              return result.push(value);
+              return result[key] = value;
             }
           });
         }

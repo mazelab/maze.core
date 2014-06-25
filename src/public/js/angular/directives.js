@@ -85,11 +85,18 @@
           }
         },
         controller: function($scope, $http, $q) {
+          var load;
           $scope.search = $scope.first = $scope.last = $scope.total = '';
           if (!$scope.uri) {
             return false;
           }
-          return $scope.$watch('page + search + limit', function() {
+          $scope.$parent.$on('mazeSearchReload', function() {
+            return load();
+          });
+          $scope.$watch('page + search + limit', function() {
+            return load();
+          });
+          return load = function() {
             var params;
             $scope.loadPager = true;
             $scope.errorMsg = [];
@@ -127,7 +134,7 @@
               $scope.loadPager = false;
               return $scope.errorMsg = ['Request failed!'];
             });
-          });
+          };
         }
       };
     }

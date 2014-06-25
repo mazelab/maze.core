@@ -2,9 +2,11 @@ filters = angular.module "maze.filters", []
 
 filters.filter 'filterObject', [ () ->
   (items, search) ->
-    result = []
+    result = {}
 
-    if not search or typeof search is not 'object' or not angular.element.isEmptyObject(search)
+    return if typeof items is not 'object'
+
+    if not search or typeof search is not 'object' or angular.element.isEmptyObject(search)
       result = items;
     else
       angular.forEach items, (value, key) ->
@@ -13,7 +15,7 @@ filters.filter 'filterObject', [ () ->
         angular.forEach search, (value2, key2) ->
           return false if not value2 or failed
 
-          if not value2[key2]?
+          if not value[key2]?
             failed = true
             return false
 
@@ -23,7 +25,8 @@ filters.filter 'filterObject', [ () ->
             regex = new RegExp(value2)
             failed = true if not regex.test(value[key2])
 
-        result.push(value) if not failed
+
+        result[key] = value if not failed
 
     return result
 ]
