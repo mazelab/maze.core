@@ -541,6 +541,151 @@ class MazeLib_BeanCoreTest extends PHPUnit_Framework_TestCase
         
         $this->assertFalse($this->bean->hasConflict('some/key'));
     }
+
+    public function testHasConflictWithNegativeFlagTrueShouldReturnTrue()
+    {
+        $data = array(
+            'local' => 'test',
+            'status' => -1,
+            'remote' => 'taste'
+        );
+
+        $this->bean->setRawProperty('maze/val', $data);
+        $this->assertTrue($this->bean->hasConflict('maze/val', true));
+    }
+
+    public function testHasConflictWithNegativeFlagFalseShouldReturnFalse()
+    {
+        $data = array(
+            'local' => 'test',
+            'status' => -1,
+            'remote' => 'taste'
+        );
+
+        $this->bean->setRawProperty('maze/val', $data);
+        $this->assertFalse($this->bean->hasConflict('maze/val', false));
+    }
+
+    public function testHasConflictWithoutNegativeFlagShouldReturnTrue()
+    {
+        $data = array(
+            'local' => 'test',
+            'status' => -1,
+            'remote' => 'taste'
+        );
+
+        $this->bean->setRawProperty('maze/val', $data);
+        $this->assertTrue($this->bean->hasConflict('maze/val'));
+    }
+
+    public function testHasConflictInDepthWithNegativeFlagNullShouldReturnTrue()
+    {
+        $data = array(
+            'local' => 'test',
+            'status' => -1,
+            'remote' => 'taste'
+        );
+
+        $this->bean->setRawProperty('maze/val', $data);
+        $this->assertTrue($this->bean->hasConflict('maze', null, true));
+    }
+
+    public function testHasConflictInDepthWithNegativeFlagTrueShouldReturnTrue()
+    {
+        $data = array(
+            'local' => 'test',
+            'status' => -1,
+            'remote' => 'taste'
+        );
+
+        $this->bean->setRawProperty('maze/val', $data);
+        $this->assertTrue($this->bean->hasConflict('maze', true, true));
+    }
+
+    public function testHasConflictInDepthWithNegativeFlagFalseShouldReturnFalse()
+    {
+        $data = array(
+            'local' => 'test',
+            'status' => -1,
+            'remote' => 'taste'
+        );
+
+        $this->bean->setRawProperty('maze/val', $data);
+        $this->assertFalse($this->bean->hasConflict('maze', false, true));
+    }
+
+    public function testHasConflictInDepthWithMultipleConflictsAndNegativeFlagNullShouldReturnTrue()
+    {
+        $data = array(
+            'local' => 'test',
+            'status' => -1,
+            'remote' => 'taste'
+        );
+
+        $this->bean->setRawProperty('wildcard/1', $data);
+        $this->bean->setRawProperty('wildcard/2', $data);
+        $this->bean->setRawProperty('wildcard/3', $data);
+        $this->assertTrue($this->bean->hasConflict('wildcard', null, true));
+    }
+
+    public function testHasConflictInDepthWithMultipleConflictsAndNegativeFlagFalseShouldReturnFalse()
+    {
+        $data = array(
+            'local' => 'test',
+            'status' => -1,
+            'remote' => 'taste'
+        );
+
+        $this->bean->setRawProperty('wildcard/1', $data);
+        $this->bean->setRawProperty('wildcard/2', $data);
+        $this->bean->setRawProperty('wildcard/3', $data);
+        $this->assertFalse($this->bean->hasConflict('wildcard', false, true));
+    }
+
+    public function testHasConflictInDepthWithMultipleConflictsShouldReturnFalse()
+    {
+        $data = array(
+            'local' => 'test',
+            'status' => -1,
+            'remote' => 'taste'
+        );
+
+        $this->bean->setRawProperty('wildcard/1', $data);
+        $this->bean->setRawProperty('wildcard/2', $data);
+        $this->bean->setRawProperty('wildcard/3', $data);
+        $this->assertFalse($this->bean->hasConflict('maze', false, true));
+    }
+
+    public function testHasConflictInDepthShouldSkipSomeConflictsAndShouldReturnTrue()
+    {
+        $data = array(
+            'local' => 'test',
+            'status' => -1,
+            'remote' => 'taste'
+        );
+        $data2 = array(
+            'local' => 'test',
+            'status' => 1,
+            'remote' => 'taste'
+        );
+
+        $this->bean->setRawProperty('wildcard/1', $data);
+        $this->bean->setRawProperty('wildcard/2', $data);
+        $this->bean->setRawProperty('wildcard/3', $data2);
+        $this->assertTrue($this->bean->hasConflict('wildcard', false, true));
+    }
+
+    public function testHasConflictInDepthWithoutConflictsAndNegativeFlagFalseShouldReturnFalse()
+    {
+        $data = array(
+            'local' => 'test',
+            'status' => -1,
+            'remote' => 'taste'
+        );
+
+        $this->bean->setRawProperty('wildcard/1', $data);
+        $this->assertFalse($this->bean->hasConflict('maze', null, true));
+    }
     
     public function testGetConflictsOnEmptyBeanShouldReturnEmptyArray()
     {

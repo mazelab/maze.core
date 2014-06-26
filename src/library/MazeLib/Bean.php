@@ -341,7 +341,7 @@ class MazeLib_Bean extends ZendX_AbstractBean
      * @throws Exception
      * @return mixed
      */
-    public function _getProperty($propertyPath, $throwExceptions = false)
+    protected function _getProperty($propertyPath, $throwExceptions = false)
     {
         $disProperty = $this->_dissolvePropertyPath($propertyPath);
 
@@ -727,16 +727,42 @@ class MazeLib_Bean extends ZendX_AbstractBean
      * 
      * @param string $propertyPath
      * @param boolean $negative check for negative conflict instead
-     * @return boolean 
+     * @param boolean $inDepth checks als inDepth from given path
+     * @return null|boolean null (default) ignores conflict prefix, boolean value determines if conflict is or is not negative
      */
-    public function hasConflict($propertyPath, $negative = false)
+    public function hasConflict($propertyPath, $negative = null, $inDepth = false)
     {
-        if(!($conflicts = $this->getConflicts()) || !array_key_exists($propertyPath, $conflicts)) {
+        if(!($conflicts = $this->getConflicts()) || (!$inDepth && !array_key_exists($propertyPath, $conflicts))) {
             return false;
         }
 
-        if($negative && $conflicts[$propertyPath][self::FIELD_STATUS] >= 1) {
+        if ($inDepth) {
+            foreach ($conflicts as $property => $mazeValue) {
+                if (($regex = preg_quote($propertyPath, '/')) && !preg_match("/^{$regex}/", $property)) {
+                    continue;
+                }
+
+                if($negative === true && $mazeValue[self::FIELD_STATUS] >= 1) {
+                    continue;
+                }else if($negative === false && $mazeValue[self::FIELD_STATUS] < 1) {
+                    continue;
+                }
+
+                return true;
+            }
             return false;
+        } else {
+            if(!($conflicts = $this->getConflicts()) || !array_key_exists($propertyPath, $conflicts)) {
+                return false;
+            }
+
+            if($negative === true && $conflicts[$propertyPath][self::FIELD_STATUS] >= 1) {
+                return false;
+            }
+
+            if($negative === false && $conflicts[$propertyPath][self::FIELD_STATUS] < 1) {
+                return false;
+            }
         }
 
         return true;
