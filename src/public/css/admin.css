@@ -874,6 +874,12 @@ a.cssPagerInfo:hover{
     color:#cbcbcb;
 	cursor:default;
 }
+.cssStatusSuccess {
+    background:#caffc9;
+}
+.cssStatusSuccess:hover {
+    background:#CAFFA9;
+}
 /*-----------------System Settings------------------*/
 .cssContent .cssSystemDatabaseHost {
     width:141px;
