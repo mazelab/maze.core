@@ -126,12 +126,10 @@
                     <div id='loadingIndicator' style='display:none;'>
                         <img src="<?= $this->baseUrl() ?>/img/js/loading.gif">
                     </div>
-                    <div class="active tab-pane cssTabContentAll" id="tabModuleConfig"
+                    <div class="active tab-pane cssTabContentAll" id="tabModuleConfig">
                         <? if($this->toBool('config/routes/config/config/route')): ?>
-                            href='<?= $this->url(array(), (string) $this->html('config/routes/config/config/route')); ?>?format=html'
-                       <? endif; ?>>
-
-                        <? if(!$this->toBool('config/routes/config/config/route')): ?>
+                            <div ng-include="'<?= $this->url(array(), (string) $this->html('config/routes/config/config/route')); ?>'"></div>
+                        <? else: ?>
                             <?= $this->translate('No configuration available'); ?>
                         <? endif; ?>
                     </div>
@@ -216,7 +214,7 @@
             return false;
         });
     });
-    
+
     function initTabClickEvent() {
         $('a[data-toggle="tab"]:visible').click(function (e) {
             e.preventDefault();
@@ -224,13 +222,13 @@
             if($(target).length > 0 && $(target).attr('href') && $(target).attr('loaded') !== "true") {
                 $('#loadingIndicator').show();
                 $(target).attr('loaded', true);
-                
+
                 $(target).load($(target).attr('href'), function(response, status) {
                     if (status === "error") {
                         var msg = "<?= $this->translate('Couldn\'t load module configuration') ?>";
                         $(target).html(msg);
                       }
-                  
+
                     $('#loadingIndicator').hide();
                 });
             }
