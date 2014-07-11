@@ -175,7 +175,7 @@ class LoginController extends Zend_Controller_Action
             return true;
         }
 
-        if ($emailManager-hasExceptionn()){
+        if ($emailManager->hasException()){
             Core_Model_DiFactory::getMessageManager()->addError(
                     $emailManager->getException()->getMessage());
         }
