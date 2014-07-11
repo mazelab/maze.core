@@ -51,51 +51,81 @@ class Core_Model_Module_Api_Broker
             $this->registerModule($module->getName(), $moduleApi);
         }
     }
-    
+
     /**
-     * Register a certain module.
+     * returns all clients of a certain node which are set in a particular module
      *
-     * @param  string $moduleName name of the module
-     * @param  Core_Model_Module_Api_Abstract $stackIndex
-     * @return Core_Model_Module_Api_Broker
+     * @param string $nodeId
+     * @param string $moduleName name of the module
+     * @return array contains Core_Model_ValueObject_Client
      */
-    public function registerModule($moduleName, Core_Model_Module_Api_Abstract $moduleApi)
+    public function getClientsByNode($nodeId, $moduleName = null)
     {
-        if($this->hasModule($moduleName)) {
-            throw new Core_Model_Module_Api_Exception('Module already registered');
-        }
-        
-        $this->_modules[$moduleName] = $moduleApi;
-        
-        return $this;
-    }
-    
-    /**
-     * Unregister a module.
-     *
-     * @param string|Core_Model_Module_Api_Abstract $module Module object or class name
-     * @return Core_Model_Module_Api_Broker
-     */
-    public function unregisterModule($moduleName)
-    {
-        if(!$this->hasModule($moduleName)) {
-            throw new Core_Model_Module_Api_Exception('Module never registered.');
+        $clients = array();
+
+        if($moduleName) {
+            if(!$this->hasModule($moduleName)) {
+                return array();
+            }
+
+            return $this->getModule($moduleName)->getClientsByNode($nodeId);
+        } else {
+            foreach($this->getModules() as $module) {
+                foreach($module->getClientsByNode($nodeId) as $id => $client) {
+                    if(!array_key_exists($id, $clients)) {
+                        $clients[$id] = $client;
+                    }
+                }
+            }
         }
 
-        unset($this->_modules[$moduleName]);
-        
-        return $this;
+        return $clients;
     }
-    
+
     /**
-     * Is a module of a particular class registered?
+     * returns all domains which are set in a particular module
      *
-     * @param  string $moduleName
-     * @return bool
+     * @param string $moduleName name of the module
+     * @return array contains Core_Model_ValueObject_Domain
      */
-    public function hasModule($moduleName)
+    public function getDomains($moduleName)
     {
-        return isset($this->_modules[$moduleName]);
+        if(!$this->hasModule($moduleName)) {
+            return array();
+        }
+
+        return $this->getModule($moduleName)->getDomains();
+    }
+
+    /**
+     * returns all domains of a certain client on a certain node
+     *
+     * @param string $nodeId
+     * @param string $clientId
+     * @param strign $moduleName
+     * @return array contains Core_Model_ValueObject_Domain
+     */
+    public function getDomainsByNode($nodeId, $clientId = null, $moduleName = null)
+    {
+        $domains = array();
+
+        if($moduleName) {
+            if(!$this->hasModule($moduleName)) {
+                return array();
+            }
+
+            return $this->getModule($moduleName)->getDomainsByNode($nodeId, $clientId);
+        } else {
+            foreach($this->getModules() as $module) {
+                foreach($module->getDomainsByNode($nodeId, $clientId) as $id => $domain) {
+                    if(!array_key_exists($id, $domains)) {
+                        $domains[$id] = $domain;
+                    }
+                }
+            }
+        }
+
+        return $domains;
     }
 
     /**
@@ -124,20 +154,64 @@ class Core_Model_Module_Api_Broker
     }
 
     /**
-     * returns all domains which are set in a particular module
-     * 
+     * returns all nodes which are set in a particular module
+     *
      * @param string $moduleName name of the module
-     * @return array contains Core_Model_ValueObject_Domain
+     * @return array contains Core_Model_ValueObject_Node
      */
-    public function getDomains($moduleName)
+    public function getNodes($moduleName = null)
     {
-        if(!$this->hasModule($moduleName)) {
-            return array();
+        $nodes = array();
+
+        if($moduleName) {
+            if(!$this->hasModule($moduleName)) {
+                return array();
+            }
+
+            return $this->getModule($moduleName)->getNodes();
+        } else {
+            foreach($this->getModules() as $module) {
+                foreach($module->getNodes() as $id => $node) {
+                    if(!array_key_exists($id, $nodes)) {
+                        $nodes[$id] = $node;
+                    }
+                }
+            }
         }
-        
-        return $this->getModule($moduleName)->getDomains();
+
+        return $nodes;
     }
-    
+
+    /**
+     * returns all nodes of a certain client which are set in a particular module
+     *
+     * @param string $clientId
+     * @param string $moduleName name of the module
+     * @return array contains Core_Model_ValueObject_Node
+     */
+    public function getNodesByClient($clientId, $moduleName = null)
+    {
+        $nodes = array();
+
+        if($moduleName) {
+            if(!$this->hasModule($moduleName)) {
+                return array();
+            }
+
+            return $this->getModule($moduleName)->getNodesByClient($clientId);
+        } else {
+            foreach($this->getModules() as $module) {
+                foreach($module->getNodesByClient($clientId) as $id => $node) {
+                    if(!array_key_exists($id, $nodes)) {
+                        $nodes[$id] = $node;
+                    }
+                }
+            }
+        }
+
+        return $nodes;
+    }
+
     /**
      * returns all nodes of a certain domain
      * 
@@ -172,125 +246,53 @@ class Core_Model_Module_Api_Broker
         
         return $nodes;
     }
-    
-    /**
-     * returns all nodes which are set in a particular module
-     * 
-     * @param string $moduleName name of the module
-     * @return array contains Core_Model_ValueObject_Node
-     */
-    public function getNodes($moduleName = null)
-    {
-        $nodes = array();
-        
-        if($moduleName) {
-            if(!$this->hasModule($moduleName)) {
-                return array();
-            }
 
-            return $this->getModule($moduleName)->getNodes();
-        } else {
-            foreach($this->getModules() as $module) {
-                foreach($module->getNodes() as $id => $node) {
-                    if(!array_key_exists($id, $nodes)) {
-                        $nodes[$id] = $node;
-                    }
-                }
-            }
+    /**
+     * Is a module of a particular class registered?
+     *
+     * @param  string $moduleName
+     * @return bool
+     */
+    public function hasModule($moduleName)
+    {
+        return isset($this->_modules[$moduleName]);
+    }
+
+    /**
+     * Register a certain module.
+     *
+     * @param  string $moduleName name of the module
+     * @param  Core_Model_Module_Api_Abstract $moduleApi
+     * @throws Core_Model_Module_Api_Exception
+     * @return Core_Model_Module_Api_Broker
+     */
+    public function registerModule($moduleName, Core_Model_Module_Api_Abstract $moduleApi)
+    {
+        if($this->hasModule($moduleName)) {
+            throw new Core_Model_Module_Api_Exception('Module already registered');
         }
-        
-        return $nodes;
+
+        $this->_modules[$moduleName] = $moduleApi;
+
+        return $this;
     }
     
     /**
-     * returns all nodes of a certain client which are set in a particular module
-     * 
-     * @param string $clientId 
-     * @param string $moduleName name of the module
-     * @return array contains Core_Model_ValueObject_Node
+     * Unregister a module.
+     *
+     * @param string $moduleName Module object or class name
+     * @throws Core_Model_Module_Api_Exception
+     * @return Core_Model_Module_Api_Broker
      */
-    public function getNodesByClient($clientId, $moduleName = null)
+    public function unregisterModule($moduleName)
     {
-        $nodes = array();
-        
-        if($moduleName) {
-            if(!$this->hasModule($moduleName)) {
-                return array();
-            }
-
-            return $this->getModule($moduleName)->getNodesByClient($clientId);
-        } else {
-            foreach($this->getModules() as $module) {
-                foreach($module->getNodesByClient($clientId) as $id => $node) {
-                    if(!array_key_exists($id, $nodes)) {
-                        $nodes[$id] = $node;
-                    }
-                }
-            }
+        if(!$this->hasModule($moduleName)) {
+            throw new Core_Model_Module_Api_Exception('Module never registered.');
         }
-        
-        return $nodes;
-    }
-    
-    /**
-     * returns all domains of a certain client on a certain node
-     * 
-     * @param string $nodeId
-     * @param string $clientId
-     * @param strign $moduleName
-     * @return array contains Core_Model_ValueObject_Domain
-     */
-    public function getDomainsByNode($nodeId, $clientId = null, $moduleName = null)
-    {
-        $domains = array();
-        
-        if($moduleName) {
-            if(!$this->hasModule($moduleName)) {
-                return array();
-            }
 
-            return $this->getModule($moduleName)->getDomainsByNode($nodeId, $clientId);
-        } else {
-            foreach($this->getModules() as $module) {
-                foreach($module->getDomainsByNode($nodeId, $clientId) as $id => $domain) {
-                    if(!array_key_exists($id, $domains)) {
-                        $domains[$id] = $domain;
-                    }
-                }
-            }
-        }
-        
-        return $domains;
-    }
-    
-    /**
-     * returns all clients of a certain node which are set in a particular module
-     * 
-     * @param string $nodeId
-     * @param string $moduleName name of the module
-     * @return array contains Core_Model_ValueObject_Client
-     */
-    public function getClientsByNode($nodeId, $moduleName = null)
-    {
-        $clients = array();
-        
-        if($moduleName) {
-            if(!$this->hasModule($moduleName)) {
-                return array();
-            }
+        unset($this->_modules[$moduleName]);
 
-            return $this->getModule($moduleName)->getClientsByNode($nodeId);
-        } else {
-            foreach($this->getModules() as $module) {
-                foreach($module->getClientsByNode($nodeId) as $id => $client) {
-                    if(!array_key_exists($id, $clients)) {
-                        $clients[$id] = $client;
-                    }
-                }
-            }
-        }
-        
-        return $clients;
+        return $this;
     }
-    
+
 }

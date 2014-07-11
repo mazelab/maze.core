@@ -29,8 +29,6 @@ class Core_Model_Module_Api
 
     /**
      * init module broker
-     *
-     * @return void
      */
     public function __construct()
     {
@@ -310,6 +308,24 @@ class Core_Model_Module_Api
         }
 
         return $module->validateDomainForService($domainId);
-    }    
+    }
+
+    /**
+     * triggers before adding a client service
+     *
+     * if returned false it will abort adding the service
+     *
+     * @param string $service
+     * @param string $clientId
+     * @return boolean
+     */
+    public function preAddClientService($service, $clientId)
+    {
+        if(!$this->hasModule($service) || !($module = $this->getModule($service))) {
+            return true;
+        }
+
+        return $module->preAddClientService($clientId);
+    }
     
 }

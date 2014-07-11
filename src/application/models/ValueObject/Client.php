@@ -95,6 +95,29 @@ class Core_Model_ValueObject_Client
             
         return true;
     }
+
+    /**
+     * adds a certain service in data backend
+     *
+     * @param string $service name of the service
+     * @return boolean
+     */
+    public function addService($service)
+    {
+        if (!$this->getId()) {
+            return false;
+        }
+
+        if(!($service = Core_Model_DiFactory::getModuleRegistry()->getModule($service))) {
+            return false;
+        }
+
+        if(!Core_Model_DiFactory::getModuleApi()->preAddClientService($service->getName(), $this->getId())) {
+            return false;
+        }
+
+        return parent::addService($service->getName());
+    }
     
     /**
      * deactivates this instance
@@ -154,7 +177,7 @@ class Core_Model_ValueObject_Client
     {
         return $this->getData('email');
     }
-    
+
     /**
      * returns the user label
      * 

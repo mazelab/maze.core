@@ -34,6 +34,7 @@ class Core_Model_ValueObject
      */
     protected $_valueBean;
 
+
     /**
      * sets instance id
      * 

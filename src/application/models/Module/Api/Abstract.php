@@ -14,6 +14,27 @@ abstract class Core_Model_Module_Api_Abstract
 {
 
     /**
+     * removes the module collection
+     *
+     * @return boolean
+     */
+    public function deinstall()
+    {
+        return true;
+    }
+
+    /**
+     * returns all clients of a certain node
+     *
+     * @param string $nodeId
+     * @return array contains Core_Model_ValueObject_Client
+     */
+    public function getClientsByNode($nodeId)
+    {
+        return array();
+    }
+
+    /**
      * returns all domains which are set in a particular module
      * 
      * @return array contains Core_Model_ValueObject_Domain
@@ -44,6 +65,17 @@ abstract class Core_Model_Module_Api_Abstract
     {
         return array();
     }
+
+    /**
+     * returns all nodes of a certain client which are set in a particular module
+     *
+     * @param string $clientId
+     * @return array contains Core_Model_ValueObject_Node
+     */
+    public function getNodesByClient($clientId)
+    {
+        return array();
+    }
     
     /**
      * returns all nodes of a certain domain
@@ -57,44 +89,25 @@ abstract class Core_Model_Module_Api_Abstract
     }
     
     /**
-     * returns all nodes of a certain client which are set in a particular module
-     * 
-     * @param string $clientId 
-     * @return array contains Core_Model_ValueObject_Node
+     * triggers before adding a client service
+     *
+     * if returned false it will abort adding the service
+     *
+     * @param string $clientId
+     * @return boolean
      */
-    public function getNodesByClient($clientId)
+    public function preAddClientService($clientId)
     {
-        return array();
+        return true;
     }
 
     /**
-     * returns all clients of a certain node
-     * 
-     * @param string $nodeId
-     * @return array contains Core_Model_ValueObject_Client
-     */
-    public function getClientsByNode($nodeId)
-    {
-        return array();
-    }
-    
-    /**
      * trigger when client or client service will be removed
-     * 
+     *
      * @param  string $clientId
      * @return boolean
      */
     public function removeClient($clientId)
-    {
-        return true;
-    }
-    
-    /**
-     * removes the module collection
-     * 
-     * @return boolean
-     */
-    public function deinstall()
     {
         return true;
     }

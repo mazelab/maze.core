@@ -126,6 +126,7 @@ class ApiClientsController extends MazeLib_Rest_Controller
         if($params && $form->isValidPartial($params) && ($values = $form->getValidValues($params))) {
             $response['result'] = $clientManager->updateClient($this->getParam('clientId'), $values);
             $response['client'] = $clientManager->getClientForApi($this->getParam('clientId'));
+            $response['messages'] = Core_Model_DiFactory::getMessageManager()->getMessages();
         } else {
             $response['params'] = $params;
             $response['errForm'] = $form->getMessages();
