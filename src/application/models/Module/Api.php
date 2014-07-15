@@ -191,81 +191,6 @@ class Core_Model_Module_Api
     }
     
     /**
-     * trigger when client or client service will be removed
-     *
-     * @param  string $clientId
-     * @param  string $service of a certain service
-     * @return boolean
-     */
-    public function removeClient($clientId, $service = null)
-    {
-        $modules = array();
-        if($service && $this->hasModule($service)) {
-            $modules[$service] = $this->getModule($service);
-        } else {
-            $modules = $this->getModules();
-        }
-
-        foreach($modules as $module) {
-            if(!$module->removeClient($clientId)) {
-                return false;
-            }
-        }
-
-        return true;
-   }
-   
-    /**
-     * trigger when client or client service will be removed
-     *
-     * @param  string $domainId
-     * @param string $service of a certain service
-     * @return boolean
-     */
-    public function removeDomain($domainId, $service = null)
-    {
-        $modules = array();
-        if($service && $this->hasModule($service)) {
-            $modules[$service] = $this->getModule($service);
-        } else {
-            $modules = $this->getModules();
-        }
-
-        foreach($modules as $module) {
-            if(!$module->removeDomain($domainId)) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    /**
-     * trigger when node or node service will be removed
-     *
-     * @param  string $nodeId
-     * @param  string $service of a certain service
-     * @return boolean
-     */
-    public function removeNode($nodeId, $service = null)
-    {
-        $modules = array();
-        if($service && $this->hasModule($service)) {
-            $modules[$service] = $this->getModule($service);
-        } else {
-            $modules = $this->getModules();
-        }
-
-        foreach($modules as $module) {
-            if(!$module->removeNode($nodeId)) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-    
-    /**
      * reports a certain node service
      * 
      * @param string $nodeId
@@ -326,6 +251,78 @@ class Core_Model_Module_Api
         }
 
         return $module->preAddClientService($clientId);
+    }
+
+    /**
+     * triggers before adding a domain service
+     *
+     * if returned false it will abort adding the service
+     *
+     * @param string $service
+     * @param string $domainId
+     * @return boolean
+     */
+    public function preAddDomainService($service, $domainId)
+    {
+        if(!$this->hasModule($service) || !($module = $this->getModule($service))) {
+            return true;
+        }
+
+        return $module->preAddDomainService($domainId);
+    }
+
+    /**
+     * triggers before adding a node service
+     *
+     * if returned false it will abort adding the service
+     *
+     * @param string $service
+     * @param string $nodeId
+     * @return boolean
+     */
+    public function preAddNodeService($service, $nodeId)
+    {
+        if(!$this->hasModule($service) || !($module = $this->getModule($service))) {
+            return true;
+        }
+
+        return $module->preAddNodeService($nodeId);
+    }
+
+    /**
+     * triggers before removing a client service
+     *
+     * if returned false it will abort adding the service
+     *
+     * @param string $service
+     * @param string $clientId
+     * @return boolean
+     */
+    public function preRemoveClientService($service, $clientId)
+    {
+        if(!$this->hasModule($service) || !($module = $this->getModule($service))) {
+            return true;
+        }
+
+        return $module->preRemoveClientService($clientId);
+    }
+
+    /**
+     * triggers before removing a domain service
+     *
+     * if returned false it will abort adding the service
+     *
+     * @param string $service
+     * @param string $domainId
+     * @return boolean
+     */
+    public function preRemoveDomainService($service, $domainId)
+    {
+        if(!$this->hasModule($service) || !($module = $this->getModule($service))) {
+            return true;
+        }
+
+        return $module->preRemoveDomainService($domainId);
     }
 
     /**

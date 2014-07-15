@@ -26,6 +26,11 @@ class Core_Model_ValueObject_Domain extends Core_Model_ServiceObject
     CONST ERROR_SAVING= 'Something went wrong while saving domain %1$s';
 
     /**
+     * message when service remove failed
+     */
+    CONST MESSAGE_SERVICE_REMOVE_FAILED = 'Failed to remove Service %1$s';
+
+    /**
      * returns data backend provider
      * 
      * @return Core_Model_Dataprovider_Interface_Domain
@@ -68,6 +73,29 @@ class Core_Model_ValueObject_Domain extends Core_Model_ServiceObject
         }
         
         return $id;
+    }
+
+    /**
+     * adds a certain service in data backend
+     *
+     * @param string $service name of the service
+     * @return boolean
+     */
+    public function addService($service)
+    {
+        if (!$this->getId()) {
+            return false;
+        }
+
+        if(!($service = Core_Model_DiFactory::getModuleRegistry()->getModule($service))) {
+            return false;
+        }
+
+        if(!Core_Model_DiFactory::getModuleApi()->preAddDomainService($service->getName(), $this->getId())) {
+            return false;
+        }
+
+        return parent::addService($service->getName());
     }
 
     /**
@@ -120,7 +148,27 @@ class Core_Model_ValueObject_Domain extends Core_Model_ServiceObject
 
         return Core_Model_DiFactory::getClientManager()->getClient($this->getData('owner'));
     }
-    
+
+    /**
+     * removes a certain service in data backend
+     *
+     * @param string $service name of the service
+     * @return boolean
+     */
+    public function removeService($service)
+    {
+        if(!$this->hasService($service)) {
+            return false;
+        }
+
+        if(!Core_Model_DiFactory::getModuleApi()->preRemoveDomainService($service, $this->getId())) {
+            Core_Model_DiFactory::getMessageManager()->addError(self::MESSAGE_SERVICE_REMOVE_FAILED, $service);
+            return false;
+        }
+
+        return parent::removeService($service);
+    }
+
     /**
      * sets/adds new data set
      * 

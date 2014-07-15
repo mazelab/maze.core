@@ -27,6 +27,11 @@ class Core_Model_ValueObject_Node extends Core_Model_ServiceObject
      * message for reporting a node service
      */
     CONST MESSAGE_REPORT_NODE_SERVICE = 'Report of service %1$s from node %2$s - %3$s';
+
+    /**
+     * message when service remove failed
+     */
+    CONST MESSAGE_SERVICE_REMOVE_FAILED = 'Failed to remove Service %1$s';
     
     /**
      * @var Core_Model_Node_Commands
@@ -83,6 +88,29 @@ class Core_Model_ValueObject_Node extends Core_Model_ServiceObject
         }
 
         return $id;
+    }
+
+    /**
+     * adds a certain service in data backend
+     *
+     * @param string $service name of the service
+     * @return boolean
+     */
+    public function addService($service)
+    {
+        if (!$this->getId()) {
+            return false;
+        }
+
+        if(!($service = Core_Model_DiFactory::getModuleRegistry()->getModule($service))) {
+            return false;
+        }
+
+        if(!Core_Model_DiFactory::getModuleApi()->preAddNodeService($service->getName(), $this->getId())) {
+            return false;
+        }
+
+        return parent::addService($service->getName());
     }
         
     /**
@@ -209,12 +237,8 @@ class Core_Model_ValueObject_Node extends Core_Model_ServiceObject
             return false;
         }
 
-        //@todo outdated -> should be removed
-        if (!Core_Model_DiFactory::getModuleApi()->removeNode($this->getId(), $service)) {
-            Core_Model_DiFactory::getMessageManager()->addError(self::MESSAGE_NODE_SERVICE_REMOVE_FAILED, $service);
-            return false;
-        }
         if(!Core_Model_DiFactory::getModuleApi()->preRemoveNodeService($service, $this->getId())) {
+            Core_Model_DiFactory::getMessageManager()->addError(self::MESSAGE_SERVICE_REMOVE_FAILED, $service);
             return false;
         }
 

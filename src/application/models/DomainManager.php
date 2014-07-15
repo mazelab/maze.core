@@ -54,11 +54,6 @@ class Core_Model_DomainManager
     CONST MESSAGE_DOMAIN_SERVICE_ADD = 'Service %1$s was added to domain %2$s';
 
     /**
-     * message when service remove failed
-     */
-    CONST MESSAGE_DOMAIN_SERVICE_REMOVE_FAILED = 'Failed to remove Service %1$s';
-
-    /**
      * message when domain was updated
      */
     CONST MESSAGE_DOMAIN_UPDATED = 'Domain %1$s was updated';
@@ -819,22 +814,8 @@ class Core_Model_DomainManager
         if(!($domain = $this->getDomain($domainId))) {
             return false;
         }
-        if(!$domain->hasService($service)) {
-            return true;
-        }
 
-        if (!Core_Model_DiFactory::getModuleApi()->removeDomain($domainId, $service)) {
-            Core_Model_DiFactory::getMessageManager()->addError(self::MESSAGE_DOMAIN_SERVICE_REMOVE_FAILED, $service);
-            return false;
-        }
-
-        if (count($domain->getData("services")) == 1){
-            $domain->unsetProperty("services");
-        }else {
-            $domain->unsetProperty("services/$service");
-        }
-
-        return $domain->save();
+        return $domain->removeService($service);
     }
 
     /**

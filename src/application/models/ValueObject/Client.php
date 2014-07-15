@@ -24,7 +24,12 @@ class Core_Model_ValueObject_Client
      * message when upload failed
      */
     CONST ERROR_UPLOAD_FAILED = 'Upload of %1$s failed!';
-    
+
+    /**
+     * message when service remove failed
+     */
+    CONST MESSAGE_SERVICE_REMOVE_FAILED = 'Failed to remove Service %1$s';
+
     /**
      * upload path
      */
@@ -269,6 +274,26 @@ class Core_Model_ValueObject_Client
         }
 
         return false;
+    }
+
+    /**
+     * removes a certain service in data backend
+     *
+     * @param string $service name of the service
+     * @return boolean
+     */
+    public function removeService($service)
+    {
+        if(!$this->hasService($service)) {
+            return false;
+        }
+
+        if(!Core_Model_DiFactory::getModuleApi()->preRemoveClientService($service, $this->getId())) {
+            Core_Model_DiFactory::getMessageManager()->addError(self::MESSAGE_SERVICE_REMOVE_FAILED, $service);
+            return false;
+        }
+
+        return parent::removeService($service);
     }
         
     /**

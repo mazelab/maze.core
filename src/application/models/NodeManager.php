@@ -39,11 +39,6 @@ class Core_Model_NodeManager
     CONST MESSAGE_NODE_SERVICE_ADD = 'Service %1$s was added to node %2$s';
 
     /**
-     * message when service remove failed
-     */
-    CONST MESSAGE_NODE_SERVICE_REMOVE_FAILED = 'Failed to remove Service %1$s';
-
-    /**
      * message when node was updated
      */
     CONST MESSAGE_NODE_UPDATED = 'Node %1$s was updated';
@@ -505,7 +500,7 @@ class Core_Model_NodeManager
     /**
      * returns the node identified by the given name
      * 
-     * @param string $apiKey
+     * @param string $nodeName
      * @return array
      */
     public function getNodeByNameAsArray($nodeName)

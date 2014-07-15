@@ -102,6 +102,58 @@ abstract class Core_Model_Module_Api_Abstract
     }
 
     /**
+     * triggers before adding a domain service
+     *
+     * if returned false it will abort adding the service
+     *
+     * @param string $domainId
+     * @return boolean
+     */
+    public function preAddDomainService($domainId)
+    {
+        return true;
+    }
+
+    /**
+     * triggers before adding a node service
+     *
+     * if returned false it will abort adding the service
+     *
+     * @param string $nodeId
+     * @return boolean
+     */
+    public function preAddNodeService($nodeId)
+    {
+        return true;
+    }
+
+    /**
+     * triggers before removing a node service
+     *
+     * if returned false it will abort adding the service
+     *
+     * @param string $nodeId
+     * @return boolean
+     */
+    public function preRemoveClientService($nodeId)
+    {
+        return true;
+    }
+
+    /**
+     * triggers before removing a domain service
+     *
+     * if returned false it will abort adding the service
+     *
+     * @param string $domainId
+     * @return boolean
+     */
+    public function preRemoveDomainService($domainId)
+    {
+        return true;
+    }
+
+    /**
      * triggers before removing a node service
      *
      * if returned false it will abort adding the service
@@ -110,39 +162,6 @@ abstract class Core_Model_Module_Api_Abstract
      * @return boolean
      */
     public function preRemoveNodeService($nodeId)
-    {
-        return true;
-    }
-
-    /**
-     * trigger when client or client service will be removed
-     *
-     * @param  string $clientId
-     * @return boolean
-     */
-    public function removeClient($clientId)
-    {
-        return true;
-    }
-    
-    /**
-     * trigger when domain or domain service will be removed
-     * 
-     * @param  string $domainId
-     * @return boolean
-     */
-    public function removeDomain($domainId)
-    {
-        return true;
-    }
-
-    /**
-     * trigger when node or node service will be removed
-     *
-     * @param  string $nodeId
-     * @return boolean
-     */
-    public function removeNode($nodeId)
     {
         return true;
     }

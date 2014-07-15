@@ -44,11 +44,6 @@ class Core_Model_ClientManager
     CONST MESSAGE_CLIENT_SERVICE_ADD = 'Service %1$s was added to client %2$s';
 
     /**
-     * message when service remove failed
-     */
-    CONST MESSAGE_CLIENT_SERVICE_REMOVE_FAILED = 'Failed to remove Service %1$s';
-    
-    /**
      * message when client was updated
      */
     CONST MESSAGE_CLIENT_UPDATED = 'Client %1$s was updated';
@@ -874,22 +869,8 @@ class Core_Model_ClientManager
         if(!($client = $this->getClient($clientId))) {
             return false;
         }
-        if(!$client->hasService($service)) {
-            return true;
-        }
 
-        if (!Core_Model_DiFactory::getModuleApi()->removeClient($clientId, $service)) {
-            Core_Model_DiFactory::getMessageManager()->addError(self::MESSAGE_CLIENT_SERVICE_REMOVE_FAILED, $service);
-            return false;
-        }
-
-        if (count($client->getData("services")) == 1){
-            $client->unsetProperty("services");
-        }else {
-            $client->unsetProperty("services/$service");
-        }
-
-        return $client->save();
+        return $client->removeService($service);
     }
 
     /**
