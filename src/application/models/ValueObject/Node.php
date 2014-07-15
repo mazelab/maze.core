@@ -62,9 +62,9 @@ class Core_Model_ValueObject_Node extends Core_Model_ServiceObject
     }
 
     /**
-     * saves allready seted Data into the data backend
+     * saves already set Data into the data backend
      * 
-     * @param array $unmappedData from Bean
+     * @param array $unmappedContext from Bean
      * @return string $id data backend identification
      */
     protected function _save($unmappedContext)
@@ -195,6 +195,30 @@ class Core_Model_ValueObject_Node extends Core_Model_ServiceObject
         }
         
         return $hash;
+    }
+
+    /**
+     * removes a certain service in data backend
+     *
+     * @param string $service name of the service
+     * @return boolean
+     */
+    public function removeService($service)
+    {
+        if(!$this->hasService($service)) {
+            return false;
+        }
+
+        //@todo outdated -> should be removed
+        if (!Core_Model_DiFactory::getModuleApi()->removeNode($this->getId(), $service)) {
+            Core_Model_DiFactory::getMessageManager()->addError(self::MESSAGE_NODE_SERVICE_REMOVE_FAILED, $service);
+            return false;
+        }
+        if(!Core_Model_DiFactory::getModuleApi()->preRemoveNodeService($service, $this->getId())) {
+            return false;
+        }
+
+        return parent::removeService($service);
     }
     
     /**

@@ -102,6 +102,19 @@ abstract class Core_Model_Module_Api_Abstract
     }
 
     /**
+     * triggers before removing a node service
+     *
+     * if returned false it will abort adding the service
+     *
+     * @param string $nodeId
+     * @return boolean
+     */
+    public function preRemoveNodeService($nodeId)
+    {
+        return true;
+    }
+
+    /**
      * trigger when client or client service will be removed
      *
      * @param  string $clientId

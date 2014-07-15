@@ -739,22 +739,8 @@ class Core_Model_NodeManager
         if(!($node = $this->getNode($nodeId))) {
             return false;
         }
-        if(!$node->hasService($service)) {
-            return true;
-        }
 
-        if (!Core_Model_DiFactory::getModuleApi()->removeNode($nodeId, $service)) {
-            Core_Model_DiFactory::getMessageManager()->addError(self::MESSAGE_NODE_SERVICE_REMOVE_FAILED, $service);
-            return false;
-        }
-
-        if (count($node->getData("services")) == 1){
-            $node->unsetProperty("services");
-        }else {
-            $node->unsetProperty("services/$service");
-        }
-
-        return $node->save();
+        return $node->removeService($service);
     }
 
     /**

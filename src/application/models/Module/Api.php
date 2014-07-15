@@ -327,5 +327,23 @@ class Core_Model_Module_Api
 
         return $module->preAddClientService($clientId);
     }
+
+    /**
+     * triggers before removing a node service
+     *
+     * if returned false it will abort adding the service
+     *
+     * @param string $service
+     * @param string $nodeId
+     * @return boolean
+     */
+    public function preRemoveNodeService($service, $nodeId)
+    {
+        if(!$this->hasModule($service) || !($module = $this->getModule($service))) {
+            return true;
+        }
+
+        return $module->preRemoveNodeService($nodeId);
+    }
     
 }

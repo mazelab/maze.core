@@ -99,4 +99,5 @@ class Core_Model_ServiceObject extends Core_Model_ValueObject
             return $this->unsetProperty("services/$service")->save();
         }
     }
+
 }
