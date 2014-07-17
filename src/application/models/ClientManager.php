@@ -356,17 +356,27 @@ class Core_Model_ClientManager
         $client = Core_Model_DiFactory::newClient();
         $data['group'] = self::GROUP_CLIENT;
         $data["status"] = isset($data["status"]) ? (boolean) $data["status"] : true;
-        
+
+        $services = array();
+        if(array_key_exists('services', $data) && is_array($data['services'])) {
+            $services = $data['services'];
+            unset($data['services']);
+        }
+
         if (!$client->setData($data)->save()) {
             return false;
         }
         
         $this->registerClient($client->getId(), $client);
-        
+
+        if($services) {
+            $this->_updateClientServices($client->getId(), $services);
+        }
+
         $this->_getLogger()->setType(Core_Model_Logger::TYPE_NOTIFICATION)
             ->setMessage(self::MESSAGE_CLIENT_CREATED)->setMessageVars($client->getLabel())
             ->setClientRef($client->getId())->setData($client->getData())->save();
-        
+
         return $client;
     }
 

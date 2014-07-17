@@ -144,6 +144,7 @@ class ApiClientsController extends MazeLib_Rest_Controller
         $clientsManager = Core_Model_DiFactory::getClientManager();
         $form = new Core_Form_Client();
 
+        $form->initDynamicContent($this->getRequest()->getPost());
         if ($form->isValid($this->getRequest()->getPost())) {
             if(($client = $clientsManager->createClient($form->getValues()))){
                 $this->_notifyCreatedClient($client->getData());
