@@ -241,8 +241,21 @@
             return setTimeout(function() {
               return $('#tabServices-' + serviceName).tab('show');
             }, 0);
-          }).error(function() {
-            return $scope.errAddService.push('Failed');
+          }).error(function(data) {
+            var index, _ref, _ref1, _results;
+            if ((data != null ? (_ref = data.messages) != null ? _ref.errors : void 0 : void 0) != null) {
+              _results = [];
+              for (index in data.messages.errors) {
+                if ((data != null ? (_ref1 = data.messages) != null ? _ref1.errors : void 0 : void 0) != null) {
+                  _results.push($scope.errAddService.push(data.messages.errors[index]));
+                } else {
+                  _results.push(void 0);
+                }
+              }
+              return _results;
+            } else {
+              return $scope.errAddService.push('Failed');
+            }
           });
         };
         $scope.modalRemoveService = function(service) {

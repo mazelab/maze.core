@@ -188,7 +188,11 @@ controllers.controller 'clientEditController', ['$scope', '$routeParams', '$q', 
           setTimeout () ->
             $('#tabServices-' + serviceName).tab('show')
           , 0
-      .error () ->
+      .error (data) ->
+        if data?.messages?.errors?
+          for index of data.messages.errors
+            $scope.errAddService.push data.messages.errors[index] if data?.messages?.errors?
+        else
           $scope.errAddService.push('Failed')
 
     $scope.modalRemoveService = (service) ->
