@@ -1,8 +1,8 @@
 <dl class="{{dlClass}}">
-    <dt ng-if="label" class="{{dtClass}}">
+    <dt ng-if="label || dtClass" class="{{dtClass}}">
         <label>
             {{label}}
         </label>
-        </dt>
+    </dt>
     <dd ng-transclude class="{{ddClass}}"></dd>
 </dl>
