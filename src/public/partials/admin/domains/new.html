@@ -14,7 +14,7 @@
                     <alert ng-repeat="alert in formErrors.name" class="alert-danger" >{{alert}}</alert>
                 </maze-dl-wrapper>
 
-                <maze-dl-wrapper class="row-fluid" label="domain of client *" dt-class="span3" dd-class="span9">
+                <maze-dl-wrapper class="row-fluid" label="domain of client *" dt-class="span3" dd-class="span3 cssEditable">
                     <span href="" editable-select="domain.owner" e-ng-options="s._id as s.label for s in clients"
                           id="owner" onaftersave="changeclient($data);">
                         {{selected.label || "Choose client"}}

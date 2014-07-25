@@ -133,18 +133,14 @@ dl dt label{
 .cssItemWithoutLabel span.editable-buttons button{
     padding-right:0px;
 }
-span.jsEditable, span.jsEditableAdditionalFields{
-    width: 100%;
-    float:left;
-    position: relative;
-    min-height: 28px;
-}
-span.jsEditableAdditionalFields{
-    white-space: pre;
+a.editable-click, .editable {
+    border-bottom: none;
+    color: #333333;
 }
 span.jsEditable:hover,
 span.jsEditableTextareas:hover,
-span.jsEditableAdditionalFields:hover{
+span.jsEditableAdditionalFields:hover,
+.cssEditable:hover .editable {
     background: #fff url("../img/edit.png") top right no-repeat;
     cursor:pointer;
     color:#0088CC;
@@ -152,10 +148,11 @@ span.jsEditableAdditionalFields:hover{
     border-color: rgba(82, 168, 236, 0.8);
     outline: 0;
     outline: thin dotted \9;
-   IE6-9 
+   IE6-9
   -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(82,168,236,.6);
   -moz-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(82,168,236,.6);
   box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(82,168,236,.6);
+  display: table;
 }
 span.jsEditable.active:hover,
 span.jsEditableTextareas.active:hover,
@@ -165,7 +162,19 @@ span.jsEditableAdditionalFields.active:hover{
     cursor:pointer;
     min-width:70%;
     padding:0;
+}
+.cssEditable.cssItemWithoutLabel:hover .editable {
+    display: inline;
+}
+.cssAdditionalFields span.editable{
+    white-space: pre-line;
+}
+.cssEditable > .editable {
+    display: inline-block;
+    float: left;
     min-height: 28px;
+    position: relative;
+    width: 100%;
 }
 span.jsEditableTextareas.whiteSpace {
     white-space:pre;
