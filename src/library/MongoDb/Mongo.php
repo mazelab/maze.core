@@ -54,6 +54,15 @@ class MongoDb_Mongo
     protected $_host = null;
 
     /**
+     * an array of options for the mongo connection
+     *
+     * @var array
+     */
+    protected  $_options = array(
+        "readPreference" => MongoClient::RP_PRIMARY_PREFERRED
+    );
+
+    /**
      * @var null|mixed
      */
     protected $_username = null;
@@ -150,7 +159,9 @@ class MongoDb_Mongo
         }
 
         try {
-            @new Mongo($this->_getConnectionString(), array("timeout" => 1000));
+            $options = $this->_options;
+            $options["timeout"] = 1000;
+            @new MongoClient($this->_getConnectionString(), $options);
         } catch (Exception $exception) {
             return false;
         }
@@ -302,8 +313,8 @@ class MongoDb_Mongo
     public function getDatabase()
     {
         if (!$this->_db && $this->getDbName()){
-            $mongo = new Mongo($this->_getConnectionString());
-            $this->_db = $mongo->{$this->getDbName()};
+            $mongo = new MongoClient($this->_getConnectionString(), $this->_options);
+            $this->_db = $mongo->selectDB($this->getDbName());
         }
 
         return $this->_db;
