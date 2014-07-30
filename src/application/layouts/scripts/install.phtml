@@ -2,7 +2,7 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="de" lang="de">
     <head>
-        <link rel="icon" href="<?= $this->baseUrl() ?>/img/cds.ico" />
+        <link rel="icon" href="<?= $this->baseUrl() ?>/img/maze.ico" />
         <?= $this->headMeta()->appendHttpEquiv('expires', '604800') ?>
         <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1" />
         <meta charset="utf-8"/>
@@ -23,27 +23,23 @@
     <body id="body">
         <div class="cssWrapper">
             <div class="cssHeader">
+                <div class="cssHeaderStripeTop"></div>
                 <div  class="container_16">
                     <div  class="grid_16 alpha omega">
                         <div class="grid_6 alpha omega cssLogo">
-                            <a href="#">
-                                <img src="<?= $this->baseUrl() ?>/img/logo_maze_sh.png"  alt="<?= $this->translate('image') ?>" />
+                            <a href=" <?= $this->url(array(), 'index')?>" >
+                                <img src="<?= $this->baseUrl() ?>/img/logo_maze_sh.png" alt="<?= $this->translate('image') ?>" />
                                 <span>
                                 Maze.<b>dashboard</b>
                             </span>
                             </a>
-                        </div>
-                        <div class="grid_10 alpha omega cssUserbox">
-                            
                         </div>
                     </div>
                 </div>
             </div>
             <div class="cssSubNav">
                 <div  class="container_16">
-                    <div  class="grid_16 alpha omega">
-                        
-                    </div>
+                    <div  class="grid_16 alpha omega"></div>
                 </div>
             </div>
             <div class="cssContent">
@@ -53,9 +49,7 @@
                 </div>
             </div>
             <div class="cssFooter">
-                <div  class="container_16">
-                    
-                </div>
+                <div  class="container_16"></div>
             </div>
         </div>
     </body>
