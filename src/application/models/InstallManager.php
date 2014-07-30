@@ -117,7 +117,7 @@ class Core_Model_InstallManager
         $configWriter = new Zend_Config_Writer_Ini();
         $configWriter->setConfig($config);
         $configWriter->write(APPLICATION_PATH . self::CONFIG_PATH . self::CONFIG_FILE);
-        
+
         // change config registry in order to use new mongodb config
         Zend_Registry::getInstance()->get('config')->merge($config);
         Core_Model_DiFactory::reset();
@@ -169,12 +169,12 @@ class Core_Model_InstallManager
     {
         $serverConfigData = array(
             'mongodb' => array(
-                'database' => $this->getConfig()->database,
-                'collectionPrefix' => $this->getConfig()->collectionPrefix,
-                'username' => $this->getConfig()->dbUsername,
-                'password' => $this->getConfig()->dbPassword,
-                'host' => $this->getConfig()->host,
-                'port' => $this->getConfig()->port
+                'database' => $this->getConfig()->database->name,
+                'collectionPrefix' => $this->getConfig()->database->prefix,
+                'username' => $this->getConfig()->database->username,
+                'password' => $this->getConfig()->database->password,
+                'host' => $this->getConfig()->database->host,
+                'port' => $this->getConfig()->database->port
             ),
             'security' => array(
                 'hash' => $this->getConfig()->securekey

@@ -26,7 +26,7 @@
                 </dt>
                 <dd>
                     <span>
-                        <?= $this->html('config/database'); ?>
+                        <?= $this->html('config/database/name'); ?>
                     </span>
                 </dd>
             </dl>
@@ -38,8 +38,8 @@
                 </dt>
                 <dd>
                     <span>
-                        <?= $this->toBool('config/host') ? $this->html('config/host') : MongoDb_Mongo::DEFAULT_HOST; ?> :
-                        <?= $this->toBool('config/port') ? $this->html('config/port') : MongoDb_Mongo::DEFAULT_PORT; ?>
+                        <?= $this->toBool('config/database/host') ? $this->html('config/database/host') : MongoDb_Mongo::DEFAULT_HOST; ?> :
+                        <?= $this->toBool('config/database/port') ? $this->html('config/database/port') : MongoDb_Mongo::DEFAULT_PORT; ?>
                     </span>
                 </dd>
             </dl>
@@ -51,7 +51,7 @@
                 </dt>
                 <dd>
                     <span>
-                        <?= $this->html('config/collectionPrefix'); ?>
+                        <?= $this->html('config/database/prefix'); ?>
                     </span>
                 </dd>
             </dl>

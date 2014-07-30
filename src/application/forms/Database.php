@@ -15,17 +15,18 @@ class Core_Form_Database extends Zend_Form
 
     public function init()
     {
-        $this->addElement("text", "database", array(
+        $database = new Zend_Form_SubForm();
+        $database->addElement("text", "name", array(
             "required" => "true",
             "label" => "Database Name"
         ));
-        $this->addElement("text", "collectionPrefix", array(
+        $database->addElement("text", "prefix", array(
             "label" => "Database Prefix",
             "validators" => array(
                 array("Alnum")
             )
         ));
-        $this->addElement("text", "host", array(
+        $database->addElement("text", "host", array(
             "label" => "Database Server",
             "value" => MongoDb_Mongo::DEFAULT_HOST,
             "class" => "cssInstallDatabaseHost",
@@ -37,21 +38,23 @@ class Core_Form_Database extends Zend_Form
                 )
             )
         ));
-        $this->addElement("text", "port", array(
+        $database->addElement("text", "port", array(
             "class" => "cssInstallDatabasePort",
             "validators" => array(
                 array("Digits")
             ),
             "value" => MongoDb_Mongo::DEFAULT_PORT
         ));
-        $this->addElement("text", "username", array(
+        $database->addElement("text", "username", array(
             "label" => "username",
             "required" => "true"
         ));
-        $this->addElement("password", "password", array(
+        $database->addElement("password", "password", array(
             "label" => "password",
             "required" => "true"
         ));
+
+        $this->addSubForm($database, "database");
     }
 
     /**
@@ -61,8 +64,8 @@ class Core_Form_Database extends Zend_Form
     public function isValid($value)
     {
         if (empty($value["password"]) && empty($value["username"])) {
-            $this->password->setRequired(false);
-            $this->username->setRequired(false);
+            $this->getSubForm("database")->password->setRequired(false);
+            $this->getSubForm("database")->username->setRequired(false);
         }
 
         return parent::isValid($value);

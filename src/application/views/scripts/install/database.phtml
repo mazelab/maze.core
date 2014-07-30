@@ -20,27 +20,27 @@
         <div class="cssFormBoxLong grid_16">
             <form method="post" action="<?= $this->url(array(), 'installDatabase') ?>">
                 <dl class="grid_16">
-                    <?= $this->form->database ?>
+                    <?= $this->form->database->name ?>
                 </dl>
                 <dl class="grid_16">
-                    <?= $this->form->collectionPrefix ?>
+                    <?= $this->form->database->prefix ?>
                 </dl>
                 <dl class="grid_16">
                     <dt id="connection-label">
-                        <label><?= $this->form->host->getLabel(); ?></label>
+                        <label><?= $this->form->database->host->getLabel(); ?></label>
                     </dt>
                     <dd id="connection-element">
                         <div class="grid_16 ">
-                            <div class="grid_3"><?= $this->form->host->renderViewHelper(); ?></div>
-                            <div class="grid_4"><?= $this->form->port->renderViewHelper(); ?></div>
+                            <div class="grid_3"><?= $this->form->database->host->renderViewHelper(); ?></div>
+                            <div class="grid_4"><?= $this->form->database->port->renderViewHelper(); ?></div>
                         </div>
                     </dd>
                 </dl>
                 <dl class="grid_16">
-                    <?= $this->form->username; ?>
+                    <?= $this->form->database->username; ?>
                 </dl>
                 <dl class="grid_16">
-                    <?= $this->form->password; ?>
+                    <?= $this->form->database->password; ?>
                 </dl>
                 <div class="grid_16 cssButtonSpace cssButtonNew">
                     <input class="cssButton jsButton" type="submit" value="<?= $this->translate('more') ?>" />
