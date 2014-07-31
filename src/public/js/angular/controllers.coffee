@@ -256,8 +256,12 @@ controllers.controller 'clientModalRemoveService', ['$scope', '$modalInstance', 
     clientsService.update client._id, $.param(updateData)
     .success (data) ->
         $modalInstance.close(data.client.services)
-    .error () ->
-        $scope.errMessages.push('Failed')
+    .error (response) ->
+        $scope.notifyMessages = response.messages.notifications if response.messages.notifications
+        $scope.errMessages = response.messages.errors if response.messages.errors
+        $scope.successeMessages = response.messages.successes if response.messages.successes
+        if not $scope.successeMessages || not $scope.errMessages || not $scope.notifyMessages
+          $scope.errMessages.push('Failed')
 
   $scope.cancel = () ->
     $modalInstance.dismiss()
