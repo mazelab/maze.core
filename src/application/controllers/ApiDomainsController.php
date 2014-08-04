@@ -42,19 +42,18 @@ class ApiDomainsController extends MazeLib_Rest_Controller
         $domainManager = Core_Model_DiFactory::getDomainManager();
         $form = new Core_Form_AddDomain();
 
-        if ($form->isValid($this->getRequest()->getPost())) {
-            $domainId = $domainManager->createDomain($form->getValue('name'),$form->getValue('owner'),
-                    $form->getValue('procurementplace'));
+        if ($form->isValid($this->getRequest()->getPost()) &&
+                ($domainId = $domainManager->createDomain($form->getValue('name'), $form->getValue('owner'),
+                $form->getValue('procurementplace')))) {
+            $this->getResponse()->setHeader('Location', $this->view->url(array($domainId), 'domaindetail'));
 
-            if($domainId){
-                $this->getResponse()->setHeader('Location', $this->view->url(array($domainId), 'domaindetail'));
-
-                $response['result'] = true;
-                $this->getResponse()->setHttpResponseCode(201);
-            }
+            $response['result'] = true;
+            $this->getResponse()->setHttpResponseCode(201);
         } else {
             $this->_setServerErrorHeader();
-            $this->_helper->json->sendJson(array("formErrors" => $form->getMessages()));
+            $this->_helper->json->sendJson(array(
+                "messages" => Core_Model_DiFactory::getMessageManager()->getMessages(),
+                "formErrors" => $form->getMessages()));
         }
     }
 
