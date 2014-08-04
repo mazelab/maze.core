@@ -103,7 +103,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
             $routingFile = APPLICATION_PATH . '/configs/routes.ini';
             $router->addConfig(new Zend_Config_Ini($routingFile, $this->getEnvironment()), 'routes');
         }
-        
+
         return $router;
     }
     
@@ -136,5 +136,5 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         
         return $view;
     }
-    
+
 }

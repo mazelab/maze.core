@@ -259,6 +259,99 @@ class Core_Model_Module_Api_Broker
     }
 
     /**
+     * triggers event for all modules before adding a new client
+     *
+     * if returned false it will abort adding the client
+     *
+     * @param array $data
+     * @return boolean
+     */
+    public function preAddClient(array $data)
+    {
+        foreach($this->getModules() as $moduleName => $module) {
+            if(!$module->preAddClient($data)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * triggers event for all modules before adding a new domain
+     *
+     * if returned false it will abort adding the domain
+     *
+     * @param array $data
+     * @return boolean
+     */
+    public function preAddDomain(array $data)
+    {
+        foreach($this->getModules() as $moduleName => $module) {
+            if(!$module->preAddDomain($data)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * triggers event for all modules before adding a new node
+     *
+     * if returned false it will abort adding the node
+     *
+     * @param array $data
+     * @return boolean
+     */
+    public function preAddNode(array $data)
+    {
+        foreach($this->getModules() as $moduleName => $module) {
+            if(!$module->preAddNode($data)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * triggers event for all modules after a new client has been added
+     *
+     * @param string $clientId
+     */
+    public function postAddClient($clientId)
+    {
+        foreach($this->getModules() as $moduleName => $module) {
+            $module->postAddClient($clientId);
+        }
+    }
+
+    /**
+     * triggers event for all modules after a new domain has been added
+     *
+     * @param string $domainId
+     */
+    public function postAddDomain($domainId)
+    {
+        foreach($this->getModules() as $moduleName => $module) {
+            $module->postAddDomain($domainId);
+        }
+    }
+
+    /**
+     * triggers event for all modules after a new node has been added
+     *
+     * @param string $nodeId
+     */
+    public function postAddNode($nodeId)
+    {
+        foreach($this->getModules() as $moduleName => $module) {
+            $module->postAddNode($nodeId);
+        }
+    }
+
+    /**
      * Register a certain module.
      *
      * @param  string $moduleName name of the module

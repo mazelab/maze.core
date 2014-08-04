@@ -145,19 +145,20 @@ class ApiClientsController extends MazeLib_Rest_Controller
         $form = new Core_Form_Client();
 
         $form->initDynamicContent($this->getRequest()->getPost());
-        if ($form->isValid($this->getRequest()->getPost())) {
-            if(($client = $clientsManager->createClient($form->getValues()))){
-                $this->_notifyCreatedClient($client->getData());
+        if ($form->isValid($this->getRequest()->getPost()) &&
+                ($client = $clientsManager->createClient($form->getValues()))) {
+            $this->_notifyCreatedClient($client->getData());
 
-                $this->getResponse()->setHeader('Location', $this->view->
-                    url(array($client->getId(), $client->getLabel()), 'clientDetail'));
+            $this->getResponse()->setHeader('Location', $this->view->
+                url(array($client->getId(), $client->getLabel()), 'clientDetail'));
 
-                $response['result'] = true;
-                $this->getResponse()->setHttpResponseCode(201);
-            }
+            $response['result'] = true;
+            $this->getResponse()->setHttpResponseCode(201);
         } else {
             $this->_setServerErrorHeader();
-            $this->_helper->json->sendJson(array("formErrors" => $form->getMessages()));
+            $this->_helper->json->sendJson(array(
+                "messages" => Core_Model_DiFactory::getMessageManager()->getMessages(),
+                "formErrors" => $form->getMessages()));
         }
     }
 

@@ -87,7 +87,20 @@ abstract class Core_Model_Module_Api_Abstract
     {
         return array();
     }
-    
+
+    /**
+     * event before adding a new client
+     *
+     * if returned false it will abort adding the client
+     *
+     * @param array $data
+     * @return boolean
+     */
+    public function preAddClient(array $data)
+    {
+        return true;
+    }
+
     /**
      * triggers before adding a client service
      *
@@ -102,6 +115,19 @@ abstract class Core_Model_Module_Api_Abstract
     }
 
     /**
+     * event before adding a new domain
+     *
+     * if returned false it will abort adding the domain
+     *
+     * @param array $data
+     * @return boolean
+     */
+    public function preAddDomain(array $data)
+    {
+        return true;
+    }
+
+    /**
      * triggers before adding a domain service
      *
      * if returned false it will abort adding the service
@@ -110,6 +136,19 @@ abstract class Core_Model_Module_Api_Abstract
      * @return boolean
      */
     public function preAddDomainService($domainId)
+    {
+        return true;
+    }
+
+    /**
+     * event before adding a new node
+     *
+     * if returned false it will abort adding the node
+     *
+     * @param array $data
+     * @return boolean
+     */
+    public function preAddNode(array $data)
     {
         return true;
     }
@@ -164,6 +203,33 @@ abstract class Core_Model_Module_Api_Abstract
     public function preRemoveNodeService($nodeId)
     {
         return true;
+    }
+
+    /**
+     * event after a new client has been added
+     *
+     * @param string $clientId
+     */
+    public function postAddClient($clientId)
+    {
+    }
+
+    /**
+     * event after a new domain has been added
+     *
+     * @param string $domainId
+     */
+    public function postAddDomain($domainId)
+    {
+    }
+
+    /**
+     * event after a new node has been added
+     *
+     * @param string $nodeId
+     */
+    public function postAddNode($nodeId)
+    {
     }
 
     /**

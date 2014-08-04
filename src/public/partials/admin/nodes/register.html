@@ -47,7 +47,7 @@
                     {{node.ipAddress}}
                 </maze-dl-wrapper>
 
-                <div class="row-fluid">
+                <div class="row-fluid cssBoxCenter">
                     <button class="btn btn-info" type="submit" ng-click="register()">
                         Connect with Maze.dashboard
                     </button>
@@ -57,8 +57,16 @@
                 </div>
             </div>
 
-            <div class="row-fluid">
-                <alert ng-repeat="alert in errors" class="alert-danger">{{alert}}</alert>
+            <div class="row-fluid cssBoxCenter">
+                <alert ng-repeat="error in messages.errors" type="'danger'">
+                    {{error}}
+                </alert>
+                <alert ng-repeat="notification in messages.notifications" type="'info'">
+                    {{notification}}
+                </alert>
+                <alert ng-repeat="success in messages.successes" type="'success'">
+                    {{success}}
+                </alert>
             </div>
         </div>
 

@@ -345,8 +345,19 @@
         updateData.services[service.name] = false;
         return clientsService.update(client._id, $.param(updateData)).success(function(data) {
           return $modalInstance.close(data.client.services);
-        }).error(function() {
-          return $scope.errMessages.push('Failed');
+        }).error(function(response) {
+          if (response.messages.notifications) {
+            $scope.notifyMessages = response.messages.notifications;
+          }
+          if (response.messages.errors) {
+            $scope.errMessages = response.messages.errors;
+          }
+          if (response.messages.successes) {
+            $scope.successeMessages = response.messages.successes;
+          }
+          if (!$scope.successeMessages || !$scope.errMessages || !$scope.notifyMessages) {
+            return $scope.errMessages.push('Failed');
+          }
         });
       };
       return $scope.cancel = function() {
@@ -366,13 +377,16 @@
         return window.location = '#/';
       };
       $scope.createClient = function() {
-        $scope.formErrors = [];
+        $scope.formErrors = $scope.messages = [];
         return clientsService.create($.param($scope.client)).success(function(data, status, headers) {
           if (headers('location')) {
             return window.location = headers('location');
           }
           return location.href = "#/";
         }).error(function(data) {
+          if (data.messages != null) {
+            $scope.messages = data.messages;
+          }
           if (data.formErrors != null) {
             return $scope.formErrors = data.formErrors;
           }
@@ -638,13 +652,16 @@
         return $scope.clients = clients || {};
       });
       $scope.createDomain = function() {
-        $scope.formErrors = [];
+        $scope.formErrors = $scope.messages = [];
         return domainsService.create($.param($scope.domain)).success(function(data, status, headers) {
           if (headers('location')) {
             return window.location = headers('location');
           }
           return location.href = "#/";
         }).error(function(data) {
+          if (data.messages != null) {
+            $scope.messages = data.messages;
+          }
           if (data.formErrors != null) {
             return $scope.formErrors = data.formErrors;
           }
@@ -954,17 +971,19 @@
         return $scope.changetype(option);
       });
       $scope.register = function() {
-        $scope.errors = [];
+        $scope.messages = [];
         return nodesService.create($.param($scope.node)).success(function(response, status, headers) {
           if (headers('location') != null) {
             return window.location = headers('location');
           }
           return window.location = "#/";
         }).error(function(data) {
-          if (data.errors) {
-            return $scope.errors = data.errors;
-          } else {
-            return $scope.errors[0] = 'Request failed!';
+          var _ref;
+          if (data.messages != null) {
+            $scope.messages = data.messages;
+          }
+          if (((_ref = data.messages) != null ? _ref.errors : void 0) == null) {
+            return $scope.messages.errors[0] = 'Request failed!';
           }
         });
       };
@@ -1029,5 +1048,3 @@
   ]);
 
 }).call(this);
-
-//# sourceMappingURL=controllers.map

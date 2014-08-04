@@ -277,12 +277,13 @@ controllers.controller 'clientNewController', ['$scope', 'clientsService', ($sco
     window.location = '#/'
 
   $scope.createClient = () ->
-    $scope.formErrors = []
+    $scope.formErrors = $scope.messages = []
     clientsService.create $.param($scope.client)
     .success (data, status, headers) ->
         return window.location = headers('location') if headers('location')
         return location.href = "#/";
     .error (data) ->
+        $scope.messages = data.messages if data.messages?
         $scope.formErrors = data.formErrors if data.formErrors?
 
   initBreadCrumb()
@@ -484,12 +485,13 @@ controllers.controller 'domainNewController', [ '$scope', '$filter', 'domainsSer
     $scope.clients = clients || {}
 
   $scope.createDomain = () ->
-    $scope.formErrors = []
+    $scope.formErrors = $scope.messages = []
     domainsService.create $.param($scope.domain)
     .success (data, status, headers) ->
       return window.location = headers('location') if headers('location')
       return location.href = "#/";
     .error (data) ->
+      $scope.messages = data.messages if data.messages?
       $scope.formErrors = data.formErrors if data.formErrors?
 
   $scope.cancelCreation = () ->
@@ -711,16 +713,14 @@ controllers.controller 'nodeRegisterController', [ '$scope', '$filter', '$routeP
     $scope.changetype option
 
   $scope.register = () ->
-    $scope.errors = []
+    $scope.messages = []
     nodesService.create $.param($scope.node)
     .success (response, status, headers) ->
       return window.location = headers('location') if headers('location')?
       window.location = "#/"
     .error (data) ->
-      if data.errors
-        $scope.errors = data.errors;
-      else
-        $scope.errors[0] = 'Request failed!';
+        $scope.messages = data.messages if data.messages?
+        $scope.messages.errors[0] = 'Request failed!' if ! data.messages?.errors?
 
   $scope.loadLog = true
   logsService.list {context: $scope.nodeName, type:"conflict", action: "unregistered api"}

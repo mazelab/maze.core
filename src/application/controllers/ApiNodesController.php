@@ -61,10 +61,12 @@ class ApiNodesController extends MazeLib_Rest_Controller
 
         if($form->isValid($this->getRequest()->getPost()) && ($nodeId =$nodeManager->createNode($form->getValues()))) {
             $this->getResponse()->setHeader('Location', $this->view->url(array($nodeId), 'nodedetail'));
-
             $this->getResponse()->setHttpResponseCode(201);
         } else {
-            return $this->_setServerErrorHeader();
+            $this->_setServerErrorHeader();
+            $this->_helper->json->sendJson(array(
+                "messages" => Core_Model_DiFactory::getMessageManager()->getMessages(),
+                "formErrors" => $form->getMessages()));
         }
     }
 

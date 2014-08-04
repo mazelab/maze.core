@@ -283,12 +283,12 @@ class Core_Model_NodeManager
     public function createNode($data)
     {
         $node = Core_Model_DiFactory::newNode();
-        
         $data["status"] = true;
-        if(!$node->setData($data)->save()) {
+
+        if(!Core_Model_DiFactory::getModuleApi()->preAddNode($data) || !$node->setData($data)->save()) {
             return false;
         }
-        
+
         $this->registerNode($node->getId(), $node);
 
         if (isset($data["apiKey"])){
@@ -300,7 +300,9 @@ class Core_Model_NodeManager
             ->setMessageVars($node->getName())
             ->setNodeRef($node->getId())
             ->save();
-        
+
+        Core_Model_DiFactory::getModuleApi()->postAddNode($node->getId());
+
         return $node->getId();
     }
 

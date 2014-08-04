@@ -363,7 +363,7 @@ class Core_Model_ClientManager
             unset($data['services']);
         }
 
-        if (!$client->setData($data)->save()) {
+        if (!Core_Model_DiFactory::getModuleApi()->preAddClient($data) || !$client->setData($data)->save()) {
             return false;
         }
         
@@ -376,6 +376,8 @@ class Core_Model_ClientManager
         $this->_getLogger()->setType(Core_Model_Logger::TYPE_NOTIFICATION)
             ->setMessage(self::MESSAGE_CLIENT_CREATED)->setMessageVars($client->getLabel())
             ->setClientRef($client->getId())->setData($client->getData())->save();
+
+        Core_Model_DiFactory::getModuleApi()->postAddClient($client->getId());
 
         return $client;
     }

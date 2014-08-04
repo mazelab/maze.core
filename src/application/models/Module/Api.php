@@ -236,6 +236,19 @@ class Core_Model_Module_Api
     }
 
     /**
+     * triggers event for all modules before adding a new client
+     *
+     * if returned false it will abort adding the client
+     *
+     * @param array $data
+     * @return boolean
+     */
+    public function preAddClient(array $data)
+    {
+        return $this->_modules->preAddClient($data);
+    }
+
+    /**
      * triggers before adding a client service
      *
      * if returned false it will abort adding the service
@@ -254,6 +267,19 @@ class Core_Model_Module_Api
     }
 
     /**
+     * triggers event for all modules before adding a new domain
+     *
+     * if returned false it will abort adding the domain
+     *
+     * @param array $data
+     * @return boolean
+     */
+    public function preAddDomain(array $data)
+    {
+        return $this->_modules->preAddDomain($data);
+    }
+
+    /**
      * triggers before adding a domain service
      *
      * if returned false it will abort adding the service
@@ -269,6 +295,19 @@ class Core_Model_Module_Api
         }
 
         return $module->preAddDomainService($domainId);
+    }
+
+    /**
+     * triggers event for all modules before adding a new node
+     *
+     * if returned false it will abort adding the node
+     *
+     * @param array $data
+     * @return boolean
+     */
+    public function preAddNode(array $data)
+    {
+        return $this->_modules->preAddNode($data);
     }
 
     /**
@@ -342,5 +381,35 @@ class Core_Model_Module_Api
 
         return $module->preRemoveNodeService($nodeId);
     }
-    
+
+    /**
+     * triggers event for all modules after a new client has been added
+     *
+     * @param array $clientId
+     */
+    public function postAddClient($clientId)
+    {
+        return $this->_modules->postAddClient($clientId);
+    }
+
+    /**
+     * triggers event for all modules after a new domain has been added
+     *
+     * @param array $nodeId
+     */
+    public function postAddDomain($nodeId)
+    {
+        return $this->_modules->postAddDomain($nodeId);
+    }
+
+    /**
+     * triggers event for all modules after a new node has been added
+     *
+     * @param array $nodeId
+     */
+    public function postAddNode($nodeId)
+    {
+        return $this->_modules->postAddNode($nodeId);
+    }
+
 }

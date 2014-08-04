@@ -301,11 +301,11 @@ class Core_Model_DomainManager
             'procurement' => $procurement,
             'status' => true
         );
-        
-        if(!$domain->setData($data)->save()) {
+
+        if(!Core_Model_DiFactory::getModuleApi()->preAddDomain($data) || !$domain->setData($data)->save()) {
             return false;
         }
-        
+
         $this->registerDomain($domain->getId(), $domain);
 
         $this->_getLogger()->setType(Core_Model_Logger::TYPE_WARNING)
@@ -314,6 +314,8 @@ class Core_Model_DomainManager
                 ->setClientRef($domain->getOwner()->getId())
                 ->setDomainRef($domain->getId())
                 ->save();
+
+        Core_Model_DiFactory::getModuleApi()->postAddDomain($domain->getId());
         
         return $domain->getId();
     }
