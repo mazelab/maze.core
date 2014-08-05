@@ -341,18 +341,19 @@ class Core_Model_ValueObject_Module
                 $form->getValue('name') !== $this->getName()) {
             return false;
         }
-        
+
         if(!$this->isInstalled()) {
             $this->setData($moduleData);
         } else if (!$this->getData('repository')) {
             $this->setData(array('repository' => $form->repository->getValues()));
         } else if($this->isNewerVersion($form->repository->getValue('version'))) {
             $this->setData(array('update' => $moduleData, 'updateable' => true));
-        } else {
+        } elseif($this->getData('_id')) {
+            # save if only locally installed
             return false;
         }
-        
+
         return $this->save();
     }
     
-        }
+}

@@ -55,7 +55,7 @@ class Core_Model_Module_Sync
             Core_Model_DiFactory::getMessageManager()->addError(self::ERROR_INVALID_DECLARATION);
             return array();
         }
-        
+
         if(!is_array($modules)) {
             return array();
         }
@@ -71,7 +71,7 @@ class Core_Model_Module_Sync
     public function _loadJson()
     {
         $json = '';
-        
+
         if(Zend_Uri::check($this->getModuleSyncTarget())) {
             $zendHttp = new Zend_Http_Client($this->getModuleSyncTarget());
             $response = $zendHttp->request();
@@ -152,7 +152,7 @@ class Core_Model_Module_Sync
             if(!array_key_exists('name', $moduleData)) {
                 continue;
             }
-            
+
             if(!($module = $moduleManager->getModule($moduleData['name']))) {
                 $moduleManager->addModule($moduleData);
             } else {
