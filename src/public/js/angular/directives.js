@@ -7,7 +7,7 @@
   directives.directive('mazeDlWrapper', [
     function() {
       return {
-        restrict: 'E',
+        restrict: 'A',
         scope: {
           'label': '@',
           'dlClass': '@',
@@ -23,7 +23,7 @@
   directives.directive('mazeHtmlPopover', [
     function() {
       return {
-        restrict: 'E',
+        restrict: 'A',
         scope: {
           label: '@',
           title: '@',
@@ -67,7 +67,7 @@
   directives.directive('mazeSearch', [
     function() {
       return {
-        restrict: 'E',
+        restrict: 'A',
         templateUrl: '/partials/admin/directives/search.html',
         transclude: true,
         scope: {
@@ -143,7 +143,7 @@
   directives.directive('mazeAdditional', [
     function() {
       return {
-        restrict: "E",
+        restrict: "A",
         scope: {
           fields: "=",
           update: "@"
@@ -228,3 +228,5 @@
   ]);
 
 }).call(this);
+
+//# sourceMappingURL=directives.map
