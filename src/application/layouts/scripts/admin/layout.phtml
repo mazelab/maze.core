@@ -24,6 +24,7 @@
         <? $this->headScript()->prependFile($this->baseUrl() . '/js/angular/directives.js') ?>
         <? $this->headScript()->prependFile($this->baseUrl() . '/js/min//xeditable.min.js') ?>
         <? $this->headScript()->prependFile($this->baseUrl() . '/js/min/ui-bootstrap-tpls-0.10.0.min.js') ?>
+        <? $this->headScript()->prependFile($this->baseUrl() . '/js/min/angular-translate.min.js') ?>
         <? $this->headScript()->prependFile($this->baseUrl() . '/js/min/angular-route.js') ?>
         <? $this->headScript()->prependFile($this->baseUrl() . '/js/min/angular.min.js') ?>
         <? $this->headScript()->prependFile($this->baseUrl() . '/js/ui/jquery.ui.editable.js') ?>
@@ -155,8 +156,25 @@
         <div class="cssFooter muted">
             <?= $this->render('footer.phtml'); ?>
         </div>
-        
+
         <script type="text/javascript">
+
+            if (Array.prototype.indexOf === undefined) {
+                Array.prototype.indexOf = function(obj, start) {
+                    for (var i = (start || 0), j = this.length; i < j; i++) {
+                        if (this[i] === obj) { return i; }
+                    }
+                    return -1;
+                };
+
+                if (String.prototype.trim === undefined) {
+                    String.prototype.trim = function () {
+                        return this.replace(/^\s+|\s+$/g, '');
+                    };
+                }
+            }
+
+
             $(document).ready(function() {
                 $('.selectpicker').selectpicker();
                 $('ul.jsLineColor .jsLine:even').addClass('One');
