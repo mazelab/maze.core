@@ -59,7 +59,21 @@ class MazeLib_Plugins_Init extends Zend_Controller_Plugin_Abstract
     {
         $this->_auth = Zend_Auth::getInstance();
     }
-    
+
+    /**
+     * exit app with the given code
+     *
+     * exits php!
+     *
+     * @param int $code
+     */
+    protected function _exitWithCode($code = 500)
+    {
+        $this->getResponse()->setHttpResponseCode($code);
+        $this->getResponse()->sendResponse();
+        exit;
+    }
+
     /**
      * return logger instance
      * 
@@ -86,7 +100,7 @@ class MazeLib_Plugins_Init extends Zend_Controller_Plugin_Abstract
     }
     
     /**
-     * initialize allready bootstraped modules for usage in maze
+     * initialize already bootstrapped modules for usage in maze
      */
     protected function _initModules()
     {
@@ -152,7 +166,7 @@ class MazeLib_Plugins_Init extends Zend_Controller_Plugin_Abstract
         $module = $this->_request->getModuleName();
         $controller = $this->_request->getControllerName();
         $action = $this->_request->getActionName();
-        
+
         if (!Zend_Auth::getInstance()->hasIdentity()) {
             if(!$request->getHeader('X-Requested-With') == 'Maze') {
                 $this->_role = self::ROLE_DEFAULT;
@@ -184,6 +198,40 @@ class MazeLib_Plugins_Init extends Zend_Controller_Plugin_Abstract
         
         $this->_initAclNavigation();
     }
+
+    /**
+     * authentication for api token requests
+     *
+     * serve better return codes
+     * ignores Zend_Auth instance because no session is needed
+     *
+     * called by routeShutdown()
+     *
+     * @param Zend_Controller_Request_Abstract $request
+     */
+    protected function _initAuthenticateToken(Zend_Controller_Request_Abstract $request)
+    {
+        $this->_acl = Zend_Registry::getInstance()->get('MazeLib_Acl_Builder')->getAcl();
+        $module = $this->_request->getModuleName();
+        $controller = $this->_request->getControllerName();
+        $action = $this->_request->getActionName();
+
+        $errorCode = '';
+        if(!Zend_Registry::isRegistered('config')) {
+            $this->_exitWithCode(500);
+        }
+
+        $config = Zend_Registry::get('config');
+        $probe = $request->getHeader('X-Authorization-Token');
+        if(!$errorCode && (!$config->api || !($token = $config->api->token) || $token !== $probe)) {
+            $this->_exitWithCode(403);
+        }
+
+        $resource = $module ? $module . '_' . $controller : $controller;
+        if ($errorCode || !$this->_acl->isAllowed('admin', $resource, $action)) {
+            $this->_exitWithCode(403);
+        }
+    }
     
     /**
      * inits api request
@@ -207,7 +255,7 @@ class MazeLib_Plugins_Init extends Zend_Controller_Plugin_Abstract
             } else {
                 $this->_role = self::ROLE_API_REGISTERED;
             }
-            
+
         } else {
             $this->_role = self::ROLE_API_UNREGISTERED;
         }
@@ -230,7 +278,12 @@ class MazeLib_Plugins_Init extends Zend_Controller_Plugin_Abstract
     public function routeShutdown(Zend_Controller_Request_Abstract $request)
     {
         $this->_initCheckDataprovider($request);
-        $this->_initAuthenticate($request);
+
+        if($request->getHeader('X-Authorization-Token')) {
+            $this->_initAuthenticateToken($request);
+        } else {
+            $this->_initAuthenticate($request);
+        }
     }
 
     /**
