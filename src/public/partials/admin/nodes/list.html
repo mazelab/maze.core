@@ -1,30 +1,28 @@
 <div class="span12">
 
     <span ng-show="loadUnregisteredNodes">
-        <img src="/img/js/loading.gif" title="Loading...">
-        Loading...
+        <img src="/img/js/loading.gif" title="{{'CORE.LOADING' | translate}}">
+        <span translate="CORE.LOADING"></span>
     </span>
 
-    <span ng-show="!loadUnregisteredNodes && !unregisteredNodes">
+    <span ng-show="!loadUnregisteredNodes && !unregisteredNodes" translate="CORE.NODES.LOADING_FAILED">
         Failed to load unregistered Domains
     </span>
 
     <div class="row-fluid cssListingDiff" ng-show="!loadUnregisteredNodes && unregisteredNodes">
         <div class="alert" ng-show="unregisteredNodes">
             <div class=" row-fluid">
-                <strong>
-                    Attention
-                </strong>
-                New or unregistered nodes found
+                <strong translate="CORE.MESSAGES.ATTENTION"></strong>
+                <span translate="CORE.NODES.FOUND_NEW_NODES"></span>
             </div>
 
             <ul class="row-fluid unstyled">
                 <li ng-repeat="nodeLog in unregisteredNodes" id="itemUnregisteredNode-{{nodeLog._id}}">
                     <div class="span10">
 
-                        <a href="{{nodeLog.url}}" class="cssListItem span12" title="Unregistered Node">
+                        <a href="{{nodeLog.url}}" class="cssListItem span12" title="{{'CORE.NODES.UNREGISTERED_NODE' | translate}}">
                             <span class="cssAvatar">
-                                <img src="/img/dummy_node_50_red.png" alt="Avatar"/>
+                                <img src="/img/dummy_node_50_red.png" alt="{{'CORE.LABELS.AVATAR' | translate}}"/>
                             </span>
                             <span>
                                 {{nodeLog.contextId}}
@@ -33,9 +31,9 @@
 
                     </div>
                     <div class="span2 cssAction">
-                        <a href="{{nodeLog.url}}" class="btn btn-mini btn-danger" title="Edit">
+                        <a href="{{nodeLog.url}}" class="btn btn-mini btn-danger" title="{{'CORE.NODES.REGISTER' | translate}}">
                             <i class="icon-wrench icon-white"></i>
-                            Register
+                            <span translate="CORE.NODES.REGISTER"></span>
                         </a>
                     </div>
                 </li>
@@ -52,7 +50,7 @@
                         <div class="span12">
                             <a href="#/edit/{{node._id}}" class="cssListItem span12">
                                 <span class="cssAvatar">
-                                    <img src="/img/dummy_domain_50.png" alt="avatar"/>
+                                    <img src="/img/dummy_domain_50.png" alt="{{'CORE.LABELS.AVATAR' | translate}}"/>
                                 </span>
 
                                 <span>

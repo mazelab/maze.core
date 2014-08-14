@@ -1,23 +1,17 @@
 <div class="modal-header">
     <h3 class="modal-title">
-        Remove Service {{service.name}} from domain {{domain.name}}
+        <div translate="CORE.DOMAINS.REMOVE_SERVICE" translate-values="{domain: domain.name, service: service.name}"></div>
     </h3>
 </div>
 
 <div class="modal-body">
-    <p>
-        Should the service {{service.name}} be removed from the domain?
-    </p>
+    <p translate="CORE.DOMAINS.DELETE_SERVICE" translate-values="{service: service.name}"></p>
     <alert ng-repeat="error in errMessages" type="'danger'">
         {{error}}
     </alert>
 </div>
 
 <div class="modal-footer">
-    <button class="btn btn-danger" ng-click="ok()">
-        Ok
-    </button>
-    <button class="btn" ng-click="cancel()">
-        Cancel
-    </button>
+    <button class="btn btn-danger" ng-click="ok()" translate="CORE.LABELS.OK"></button>
+    <button class="btn" ng-click="cancel()" translate="CORE.LABELS.CANCEL"></button>
 </div>

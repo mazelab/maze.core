@@ -8,24 +8,24 @@
         <dd class="span5 cssEditable">
             <span name="{{field.label}}" editable-textarea="field.value" onbeforesave="updateAdditional(id, $data)"
                   e-ng-keydown="keyDown($event);" id="valueAdditional-{{id}}" ng-click="hide();">
-                {{field.value || "empty"}}
+                {{field.value || 'CORE.DIRECTIVES.ADDITIONAL_EMPTY' | translate}}
             </span>
         </dd>
     </div>
 
     <div class="row-fluid">
         <a id="buttonAdditionalOpenNew" class="muted span12" ng-click="open();" ng-show="!openNewForm">
-            Add Info
+            <span translate="CORE.DIRECTIVES.ADDITIONAL_ADD_INFO"></span>
         </a>
     </div>
 
     <div id="formAdditionalNew" class="cssAddItem" ng-show="openNewForm">
         <div class="span3">
-            <input type="text" placeholder="label" ng-model="created.label;" class="span12">
+            <input type="text" placeholder="{{'CORE.LABELS.LABEL' | translate}}" ng-model="created.label;" class="span12">
         </div>
 
         <div class="span5">
-            <textarea ng-model="created.value;" placeholder="text" ng-keydown="keyDown($event)"></textarea>
+            <textarea ng-model="created.value;" placeholder="{{'CORE.LABELS.TEXT' | translate}}" ng-keydown="keyDown($event)"></textarea>
 
             <button type="button" ng-click="hide();" class="btn btn-info btn-mini">
                 <i class="icon-remove icon-white"></i>

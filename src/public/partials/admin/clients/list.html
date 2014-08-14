@@ -2,9 +2,7 @@
     <div class="row-fluid cssListing">
         <div class="span12 cssHeaderList">
             <div class="cssButton span12">
-                <a class="btn btn-info" href="#/new">
-                    Create client
-                </a>
+                <a class="btn btn-info" href="#/new" translate="CORE.CLIENTS.CREATE_CLIENT"></a>
             </div>
         </div>
     </div>
@@ -15,33 +13,32 @@
             <div ng-repeat="client in clients" class="span3 cssListClientsContent">
                 <div class="cssListColumn4Content">
                     <div class="row-fluid">
-                        <a class="span3" title="Edit" href="#/edit/{{client._id}}">
+                        <a class="span3" title="{{'CORE.LABELS.EDIT' | translate}}" href="#/edit/{{client._id}}">
                             <img src="{{client.avatar? '/avatar/' + client._id : '/img/dummy_user_200.png'}}"
-                                 class="img-rounded cssAvatar" alt="Avatar"/>
+                                 class="img-rounded cssAvatar" alt="{{'CORE.LABELS.AVATAR' | translate}}"/>
                         </a>
 
-                        <a href="#/edit/{{client._id}}" title="Edit" class="span9">
+                        <a href="#/edit/{{client._id}}" title="{{'CORE.LABELS.EDIT' | translate}}" class="span9">
                             <span class="pull-left cssUserItemSpan">
                                 {{client.label}}
                             </span>
                         </a>
 
                         <small ng-if="client.company" class="span9 muted">
-                            Company {{client.company}}
+                            {{'CORE.LABELS.COMPANY' | translate}} {{client.company}}
                         </small>
 
                         <small class="span9 muted">
-                            Status {{client.status? 'Activated' : 'Deactivated'}}
+                            {{'CORE.LABELS.STATUS' | translate}}
+                            {{client.status? 'CORE.LABELS.ENABLED' : 'CORE.LABELS.DISABLED' | translate}}
                         </small>
 
                         <small ng-if="!client.company" class="span9"></small>
 
                         <div class="pull-right">
-                            <button type="button" title="Login as {{client.label}}" class="btn btn-info pull-right"
-                                    ng-click="loginAsClient(client._id)" ng-disabled="loadClientLogin">
-                                <span>
-                                    Log on
-                                </span>
+                            <button type="button" class="btn btn-info pull-right" ng-click="loginAsClient(client._id)"
+                                      ng-disabled="loadClientLogin" title="{{'CORE.CLIENTS.LOGIN_AS_CLIENT' | translate: '{client: client.label}'}}" >
+                                <span translate="CORE.LABELS.SIGN_IN"></span>
                             </button>
                         </div>
 

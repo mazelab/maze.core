@@ -2,9 +2,7 @@
     <div class="row-fluid cssListing">
         <div class="span12 cssHeaderList">
             <div class="cssButton span12">
-                <a class="btn btn-info" href="#/new">
-                    Create domain
-                </a>
+                <a class="btn btn-info" href="#/new" translate="CORE.DOMAINS.CREATE_DOMAIN"></a>
             </div>
         </div>
     </div>
@@ -13,11 +11,11 @@
 
         <div id="domainListing" class="row-fluid cssListing">
             <ul class="span12 unstyled">
-                <li class="row-fluid" ng-repeat="domain in domains">
+                <li class="row-fluid" ng-repeat="domain in domains" title="{{'CORE.LABELS.EDIT' | translate}}">
                     <div class="span12">
                         <a href="#/edit/{{domain._id}}" class="cssListItem span12">
                             <span class="cssAvatar">
-                                <img src="/img/dummy_domain_50.png" alt="avatar"/>
+                                <img src="/img/dummy_domain_50.png" alt="{{'CORE.LABELS.AVATAR' | translate}}"/>
                             </span>
 
                             <span>

@@ -4,8 +4,8 @@
             {{node.name}}
         </a>
 
-        <div maze-html-popover ng-if="node.services" label="Services ({{countObject(node.services) || 0}})"
-                           placement="bottom" class="pull-right">
+        <div maze-html-popover ng-if="node.services" placement="bottom" class="pull-right"
+             label="{{'CORE.LABELS.SERVICES' | translate}} ({{countObject(node.services) || 0}})">
             <ul id="tabDomainNodesListServices-{{node._id}}" class="cssPopoverTabList unstyled pull-left row-fluid">
                 <li ng-repeat="service in node.services">
                     <a href="/modules/detail/{{service.name}}" title="{{service.label}}" class="pull-left">

@@ -3,10 +3,11 @@
   angular.module('maze', ['ui.bootstrap', 'maze.directives', 'maze.services', 'maze.filters', 'maze.controllers', 'xeditable', 'ngRoute', 'angular-md5', 'pascalprecht.translate']).run(function(editableOptions) {
     return editableOptions.theme = 'bs2';
   }).config(function($translateProvider) {
-    return $translateProvider.useStaticFilesLoader({
-      prefix: "js/angular/locale/",
+    $translateProvider.useStaticFilesLoader({
+      prefix: "/js/angular/locale/",
       suffix: ".json"
     });
+    return $translateProvider.preferredLanguage("en_US");
   });
 
 }).call(this);

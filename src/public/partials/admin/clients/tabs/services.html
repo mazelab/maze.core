@@ -2,8 +2,8 @@
     <div class="row-fluid">
         <div maze-dl-wrapper dd-class="span4">
                 <span ng-show="loadServices">
-                    <img src="/img/js/loading.gif" title="Loading...">
-                    Loading...
+                    <img src="/img/js/loading.gif" title="{{'CORE.LOADING' | translate}}">
+                    <span translate="CORE.LOADING"></span>
                 </span>
 
             <select ng-options="service.name as service.label for service in services.available"
@@ -11,8 +11,7 @@
             </select>
 
             <button class="btn btn-info" ng-disabled="!services.selected" ng-show="!loadServices"
-                    ng-click="addService(services.selected)">
-                Ok
+                    ng-click="addService(services.selected)" translate="CORE.LABELS.OK">
             </button>
 
             <div class="row-fluid" ng-show="errAddService.length">
@@ -40,23 +39,19 @@
 
                 <div class="row-fluid">
                     <h3>
-                        Configuration of service {{service.label}}
-                        <a class="btn" ng-click="modalRemoveService(service)">
-                            Remove service
-                        </a>
+                        <span translate="CORE.SERVICES.CONF_OF_SERVICE" translate-values="{service: service.label}"></span>
+                        <a class="btn" ng-click="modalRemoveService(service)" translate="CORE.SERVICES.REMOVE_SERVICE"></a>
                     </h3>
                 </div>
 
                 <hr>
 
                 <div ng-include ng-if="service.configUrl" src="service.configUrl">
-                    <img src="/img/js/loading.gif" title="Loading...">
-                    Loading...
+                    <img src="/img/js/loading.gif" title="{{'CORE.LOADING' | translate}}">
+                    <span translate="CORE.LOADING"></span>
                 </div>
 
-                <div ng-if="!service.configUrl" class="row-fluid">
-                    No configuration available
-                </div>
+                <div ng-if="!service.configUrl" class="row-fluid" translate="CORE.SERVICES.CONF_NO_AVAILABLE"></div>
 
             </div>
         </div>

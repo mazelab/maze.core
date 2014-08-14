@@ -1,0 +1,104 @@
+{
+    "CORE" : {
+        "CLIENTS": {
+            "LOADING_FAILED": "Failed to load client",
+            "LOGIN_AS_CLIENT": "Login as {{client}}",
+            "CREATE_CLIENT": "Create client",
+            "THE_CLIENT_IS": "The client is",
+            "CLIENT_LABEL": "Client",
+            "CHOOSE_CLIENT": "Choose client",
+            "DELETE_CLIENT": "Shall the client really be deleted?",
+            "REMOVE_SERVICE": "Remove Service {{service}} from client {{client}}",
+            "DELETE_SERVICE": "Should the service {{service}} be removed from the client?"
+        },
+        "DOMAINS": {
+            "LOADING_FAILED": "Failed to load domain",
+            "PROCUREMENT_PLACE": "procurement place",
+            "CREATE_DOMAIN": "Create domain",
+            "DOMAIN_NAME": "Domain name",
+            "DOMAIN_OF_CLIENT": "Domain of client",
+            "DELETE_DOMAIN": "Shall the domain really be deleted?",
+            "REMOVE_SERVICE": "Remove Service {{service}} from domain {{domains}}",
+            "DELETE_SERVICE": "Should the service {{service}} be removed from the domain?"
+        },
+        "NODES": {
+            "LOADING_FAILED": "Failed to load node",
+            "NODE_TYPE": "Node Type",
+            "NODE_NAME": "Node name",
+            "ASSIGN_NODETYPE": "Assign a server type",
+            "SELECT_NODETYPE": "Select a node type",
+            "FOUND_NEW_NODES": "New or unregistered nodes found",
+            "UNREGISTERED_NODE": "Unregistered Node",
+            "REGISTER": "Register",
+            "LOADING_LOG_FAILED": "Failed to load log",
+            "DELETE_NODE": "Shall the node really be deleted?",
+            "UNREGISTERED_NODE_FOUND": "Attention a new or unregistered node was found",
+            "NODE_WANTS_CONNECT": "A new or unregistered node wants to connect with Maze.dashboard.",
+            "CONNECT_WITH_MAZE": "Connect with Maze.dashboard",
+            "REMOVE_SERVICE": "Remove Service {{service}} from node {{node}}",
+            "DELETE_SERVICE": "Should the service {{service}} be removed from the node?"
+        },
+        "NEWS": {
+            "LATEST_NEWS": "Latest news"
+        },
+        "SERVICES": {
+            "REMOVE_SERVICE": "Remove service",
+            "CONF_OF_SERVICE": "Configuration of service {{service.label}}",
+            "CONF_NO_AVAILABLE": "No configuration available"
+        },
+        "LABELS": {
+            "USERNAME": "Username",
+            "PASSWORD": "Password",
+            "PASSWORD_NEW": "New password",
+            "PASSWORD_CONFIRM": "Confirm password",
+            "CHANGE_PASSWORD": "Change Password",
+            "PRENAME": "Prename",
+            "SURNAME": "Surname",
+            "COMPANY": "Company",
+            "CITY": "City",
+            "AVATAR": "Avatar",
+            "STREET": "Street",
+            "HOUSE_NUMBER": "House number",
+            "POSTCODE": "Postcode",
+            "PHONE": "Phone",
+            "FAX": "Fax",
+            "EMAIL": "Email",
+            "EMAIL_ADDRESS": "E-mail address",
+            "LABEL": "Label",
+            "STATUS": "Status",
+            "TEXT": "Text",
+            "SIGN_IN": "Sign in",
+            "NODES": "Nodes",
+            "CLIENTS": "Clients",
+            "IP_ADDRESS": "Ip address",
+            "DIFFERENCES": "differences",
+            "OK": "OK",
+            "CANCEL": "Cancel",
+            "DELETE": "Delete",
+            "EDIT": "Edit",
+            "SAVE": "Save",
+            "DEACTIVATE": "Deactivate",
+            "ACTIVATE": "Activate",
+            "DISABLED": "Deactivated",
+            "ENABLED": "Activated",
+            "ONLINE": "Online",
+            "OFFLINE": "Offline",
+            "DOMAINS": "Domains",
+            "SERVICES": "Services",
+            "ACCESS_DATA": "Access data",
+            "LOGS": "Logs"
+        },
+        "MESSAGES": {
+            "ATTENTION": "Attention!",
+            "PASSWORD_CHANGED": "The password has been changed."
+        },
+        "DIRECTIVES": {
+            "ADDITIONAL_ADD_INFO": "Add Info",
+            "ADDITIONAL_EMPTY": "empty",
+            "SEARCH_LABEL": "Search",
+            "SEARCH_TOTAL_OF": "of",
+            "SEARCH_NOTHING_FOUND": "Nothing found"
+        },
+        "LOADING": "Loading..."
+    }
+}

@@ -3,5 +3,6 @@ angular.module 'maze', ['ui.bootstrap', 'maze.directives', 'maze.services', 'maz
   editableOptions.theme = 'bs2';
 .config ($translateProvider) ->
   $translateProvider.useStaticFilesLoader [] =
-    prefix: "js/angular/locale/"
+    prefix: "/js/angular/locale/"
     suffix: ".json"
+  $translateProvider.preferredLanguage("en_US");

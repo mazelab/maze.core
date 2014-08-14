@@ -8,15 +8,13 @@
                             <div class="span12 cssToolboxHead">
                                 <a class="span12 cssToolboxHeadLink" 
                                    href="<?= $this->url(array(), 'clients')?>" 
-                                   title="<?= $this->translate('Clients') ?>"
+                                   title="{{'CORE.LABELS.CLIENTS' | translate}}"
                                    id="goToClients">
-                                    <span>
-                                         <?= $this->translate('Clients') ?>
-                                    </span>
+                                    <span translate="CORE.LABELS.CLIENTS"></span>
                                     <span>(<?= count($this->clients) ?>)</span>
                                 </a>
                                 <a class="cssAddIcon pull-right" 
-                                   title="<?= $this->translate('Create client') ?>" 
+                                   title="{{'CORE.CLIENTS.CREATE_CLIENT' | translate}}"
                                    href="/clients#/new">
                                     <i class="icon-plus icon-white"></i>
                                 </a>
@@ -39,15 +37,13 @@
                             <div class="span12 cssToolboxHead">
                                 <a class="span12 cssToolboxHeadLink" 
                                    href="<?= $this->url(array(), 'domains')?>" 
-                                   title="<?= $this->translate('Domains') ?>"
+                                   title="{{'CORE.LABELS.DOMAINS' | translate}}"
                                    id="goToDomains">
-                                    <span>
-                                         <?= $this->translate('Domains') ?>
-                                    </span>
+                                    <span translate="CORE.LABELS.DOMAINS"></span>
                                     <span>(<?= count($this->domains) ?>)</span>
                                 </a>
                                 <a class="cssAddIcon pull-right" 
-                                   title="<?= $this->translate('Create domain') ?>"
+                                   title="{{'CORE.DOMAINS.CREATE_DOMAIN' | translate}}"
                                    href="/domains#/new">
                                     <i class="icon-plus icon-white"></i>
                                 </a>
@@ -70,11 +66,9 @@
                             <div class="span12 cssToolboxHead">
                                 <a class="span12 cssToolboxHeadLink" 
                                    href="<?= $this->url(array(), 'nodes')?>" 
-                                   title="<?= $this->translate('Nodes') ?>"
+                                   title="{{'CORE.LABELS.NODES' | translate}}"
                                    id="goToNodes">
-                                    <span>
-                                         <?= $this->translate('Nodes') ?>
-                                    </span>
+                                    <span translate="CORE.LABELS.NODES"></span>
                                     <span>(<?= count($this->nodes) ?>)</span>
                                 </a>
                             </div>
@@ -109,12 +103,10 @@
                         <div class=" row-fluid">
                             <div class="span12 cssToolboxHead">
                                 <a href="<?= $this->url(array(), "news"); ?>"
-                                   title="<?= $this->translate("Latest news"); ?>"
+                                   title="{{'CORE.NEWS.LATEST_NEWS' | translate}}"
                                    class="span12 cssToolboxHeadLink"
                                    id="showLogs">
-                                    <span>
-                                        <?= $this->translate("Latest news"); ?>
-                                    </span>
+                                    <span translate="CORE.NEWS.LATEST_NEWS"></span>
                                 </a>
                             </div>
                         </div>
@@ -138,12 +130,10 @@
                         <div class=" row-fluid">
                             <div class="span12 cssToolboxHead">
                                 <a href="#"
-                                   title="<?= $this->translate('log') ?>"
+                                   title="{{'CORE.LABELS.LOGS' | translate}}"
                                    class="span12 cssToolboxHeadLink"
                                    id="showLogs">
-                                    <span>
-                                        <?= $this->translate('log') ?>
-                                    </span>
+                                    <span translate="CORE.LABELS.LOGS"></span>
                                 </a>
                             </div>
                         </div>
@@ -191,6 +181,6 @@
 <script type="text/javascript">
     $(document).ready(function() {
         $('ul.jsLineColor li:even').addClass('One');
-        $('ul.jsLineColor li:odd').addClass('Two'); 
+        $('ul.jsLineColor li:odd').addClass('Two');
     });
-</script>        
+</script>

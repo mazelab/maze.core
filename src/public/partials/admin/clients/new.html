@@ -1,7 +1,7 @@
 <div class="row-fluid">
     <div class="span12">
         <div class="cssUserImage span2">
-            <img class="img-polaroid" name="avatar" src="/img/dummy_user_200.png" alt="Avatar">
+            <img class="img-polaroid" name="avatar" src="/img/dummy_user_200.png" alt="{{'CORE.LABELS.AVATAR' | translate}}">
 
             <alert ng-repeat="error in formErrors.avatar" type="'danger'">
                 {{error}}
@@ -11,7 +11,7 @@
         <div class="span10">
             <form id="formClient" ng-submit="createClient()" name="formClient" novalidate>
 
-                <div maze-dl-wrapper label="Company **" dt-class="span3" dd-class="span9">
+                <div maze-dl-wrapper label="{{'CORE.LABELS.COMPANY' | translate}} **" dt-class="span3" dd-class="span9">
                     <input type="text" ng-model="client.company">
 
                     <alert ng-repeat="error in formErrors.company" type="'danger'">
@@ -19,7 +19,7 @@
                     </alert>
                 </div>
 
-                <div maze-dl-wrapper label="Prename **" dt-class="span3" dd-class="span9">
+                <div maze-dl-wrapper label="{{'CORE.LABELS.PRENAME' | translate}} **" dt-class="span3" dd-class="span9">
                     <input type="text" ng-model="client.prename" required>
 
                     <alert ng-repeat="error in formErrors.prename" type="'danger'">
@@ -27,7 +27,7 @@
                     </alert>
                 </div>
 
-                <div maze-dl-wrapper label="Surname **" dt-class="span3" dd-class="span9">
+                <div maze-dl-wrapper label="{{'CORE.LABELS.SURNAME' | translate}} **" dt-class="span3" dd-class="span9">
                     <input type="text" ng-model="client.surname" required>
 
                     <alert ng-repeat="error in formErrors.surname" type="'danger'">
@@ -35,7 +35,7 @@
                     </alert>
                 </div>
 
-                <div maze-dl-wrapper label="Street *" dt-class="span3" dd-class="span9">
+                <div maze-dl-wrapper label="{{'CORE.LABELS.STREET' | translate}} *" dt-class="span3" dd-class="span9">
                     <input type="text" ng-model="client.street" required>
 
                     <alert ng-repeat="error in formErrors.street" type="'danger'">
@@ -43,7 +43,7 @@
                     </alert>
                 </div>
 
-                <div maze-dl-wrapper label="No. *" dt-class="span3" dd-class="span9">
+                <div maze-dl-wrapper label="{{'CORE.LABELS.HOUSE_NUMBER' | translate}}. *" dt-class="span3" dd-class="span9">
                     <input type="text" ng-model="client.houseNumber" required>
 
                     <alert ng-repeat="error in formErrors.houseNumber" type="'danger'">
@@ -51,7 +51,7 @@
                     </alert>
                 </div>
 
-                <div maze-dl-wrapper label="Postcode *" dt-class="span3" dd-class="span9">
+                <div maze-dl-wrapper label="{{'CORE.LABELS.POSTCODE' | translate}} *" dt-class="span3" dd-class="span9">
                     <input type="text" ng-model="client.postcode" required>
 
                     <alert ng-repeat="error in formErrors.postcode" type="'danger'">
@@ -59,7 +59,7 @@
                     </alert>
                 </div>
 
-                <div maze-dl-wrapper label="City *" dt-class="span3" dd-class="span9">
+                <div maze-dl-wrapper label="{{'CORE.LABELS.CITY' | translate}} *" dt-class="span3" dd-class="span9">
                     <input type="text" ng-model="client.city" required>
 
                     <alert ng-repeat="error in formErrors.city" type="'danger'">
@@ -67,7 +67,7 @@
                     </alert>
                 </div>
 
-                <div maze-dl-wrapper label="Phone *" dt-class="span3" dd-class="span9">
+                <div maze-dl-wrapper label="{{'CORE.LABELS.PHONE' | translate}} *" dt-class="span3" dd-class="span9">
                     <input type="text" ng-model="client.phone" required>
 
                     <alert ng-repeat="error in formErrors.phone" type="'danger'">
@@ -75,7 +75,7 @@
                     </alert>
                 </div>
 
-                <div maze-dl-wrapper label="E-mail address *" dt-class="span3" dd-class="span9">
+                <div maze-dl-wrapper label="{{'CORE.LABELS.EMAIL' | translate}} *" dt-class="span3" dd-class="span9">
                     <input type="text" ng-model="client.email" required>
 
                     <alert ng-repeat="error in formErrors.email" type="'danger'">
@@ -83,7 +83,7 @@
                     </alert>
                 </div>
 
-                <div maze-dl-wrapper label="Fax" dt-class="span3" dd-class="span9">
+                <div maze-dl-wrapper label="{{'CORE.LABELS.FAX' | translate}}" dt-class="span3" dd-class="span9">
                     <input type="text" ng-model="client.fax">
 
                     <alert ng-repeat="error in formErrors.fax" type="'danger'">
@@ -91,10 +91,10 @@
                     </alert>
                 </div>
 
-                <div maze-dl-wrapper label="The client is" dt-class="span3" dd-class="span9">
+                <div maze-dl-wrapper label="{{'CORE.CLIENTS.THE_CLIENT_IS' | translate}}" dt-class="span3" dd-class="span9">
                     <select>
-                        <option>enabled</option>
-                        <option>disabled</option>
+                        <option translate="CORE.LABELS.ENABLED">enabled</option>
+                        <option translate="CORE.LABELS.DISABLED">disabled</option>
                     </select>
 
                     <alert ng-repeat="error in formErrors.status" type="'danger'">
@@ -103,10 +103,10 @@
                 </div>
 
                 <div class="row-fluid">
-                    <h6>Access data</h6>
+                    <h6 translate="CORE.LABELS.ACCESS_DATA"></h6>
                 </div>
 
-                <div maze-dl-wrapper label="Username *" dt-class="span3" dd-class="span9">
+                <div maze-dl-wrapper label="{{'CORE.LABELS.USERNAME' | translate}} *" dt-class="span3" dd-class="span9">
                     <input type="text" ng-model="client.username" required>
 
                     <alert ng-repeat="error in formErrors.username" type="'danger'">
@@ -114,7 +114,7 @@
                     </alert>
                 </div>
 
-                <div maze-dl-wrapper label="Password *" dt-class="span3" dd-class="span9">
+                <div maze-dl-wrapper label="{{'CORE.LABELS.PASSWORD' | translate}} *" dt-class="span3" dd-class="span9">
                     <input type="password" ng-model="client.password" required>
 
                     <alert ng-repeat="error in formErrors.password" type="'danger'">
@@ -123,12 +123,8 @@
                 </div>
 
                 <div class="row-fluid cssBoxCenter">
-                    <button class="btn" type="button" ng-click="cancel()">
-                        Cancel
-                    </button>
-                    <button class="btn btn-info" type="submit">
-                        Save
-                    </button>
+                    <button class="btn" type="button" ng-click="cancel()" translate="CORE.LABELS.CANCEL"></button>
+                    <button class="btn btn-info" type="submit" translate="CORE.LABELS.SAVE"></button>
                 </div>
 
                 <div class="row-fluid cssBoxCenter">

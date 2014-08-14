@@ -1,12 +1,12 @@
 <ul id="tabClientNodesList" class="unstyled cssTab">
     <li ng-repeat="node in nodes" id="tabClientNodesListEntry-{{node._id}}" class="row-fluid cssLine">
 
-        <a href="/nodes/#/edit/{{node._id}}" title="Label" class="span8">
+        <a href="/nodes/#/edit/{{node._id}}" title="{{node.name}}" class="span8">
             {{node.name}}
         </a>
 
-        <div maze-html-popover ng-if="node.domains" label="Domains ({{countObject(node.domains) || 0}})"
-                           placement="bottom" class="pull-right" single="true">
+        <div maze-html-popover ng-if="node.domains" placement="bottom" class="pull-right" single="true"
+                               label="{{'CORE.LABELS.DOMAINS' | translate}} ({{countObject(node.domains) || 0}})">
             <ul id="tabClientNodesListDomains-{{node._id}}" class="cssPopoverTabList unstyled pull-left row-fluid">
                 <li ng-repeat="domain in node.domains">
                     <a href="/domains#/edit/{{domain._id}}" title="{{domain.name}}" class="pull-left">

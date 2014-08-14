@@ -1,14 +1,11 @@
 <div class="modal-body">
-    <p>
-        Shall the node really be deleted?
-    </p>
-
+    <p translate="CORE.NODES.DELETE_NODE"></p>
     <alert ng-repeat="error in errMessages" type="'danger'">
         {{error}}
     </alert>
 </div>
 
 <div class="modal-footer">
-    <button class="btn btn-danger" ng-click="ok();">Ok</button>
-    <button class="btn" ng-click="cancel();">Cancel</button>
+    <button class="btn btn-danger" ng-click="ok();" translate="CORE.LABELS.OK"></button>
+    <button class="btn" ng-click="cancel();" translate="CORE.LABELS.CANCEL"></button>
 </div>

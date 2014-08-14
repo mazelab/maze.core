@@ -1,0 +1,104 @@
+{
+    "CORE" : {
+        "CLIENTS": {
+            "LOADING_FAILED": "Fehler beim laden des Mandanten",
+            "LOGIN_AS_CLIENT": "Anmelden als {{client}}",
+            "CREATE_CLIENT": "Mandant anlegen",
+            "THE_CLIENT_IS": "Der Mandant ist",
+            "CLIENT_LABEL": "Mandant",
+            "CHOOSE_CLIENT": "Mandant auswählen",
+            "DELETE_CLIENT": "Soll der Mandant wirklich gelöscht werden?",
+            "REMOVE_SERVICE": "Dienst {{service}} von Mandant {{client}} entfernen",
+            "DELETE_SERVICE": "Soll der Dienst {{service}} wirklich von dem Mandant entfernt werden?"
+        },
+        "DOMAINS": {
+            "LOADING_FAILED": "Fehler beim laden der Domain",
+            "PROCUREMENT_PLACE": "Vergabestelle",
+            "CREATE_DOMAIN": "Domain anlegen",
+            "DOMAIN_NAME": "Domain-Name",
+            "DOMAIN_OF_CLIENT": "Domain von Mandant",
+            "DELETE_DOMAIN": "Soll die Domain wirklich gelöscht werden?",
+            "REMOVE_SERVICE": "Dienst {{service}} von Domain {{domain}} entfernen",
+            "DELETE_SERVICE": "Soll der Dienst {{service}} wirklich von der Domain gelöscht werden?"
+        },
+        "NODES": {
+            "LOADING_FAILED": "Fehler beim laden der Node",
+            "NODE_TYPE": "Nodetyp",
+            "NODE_NAME": "Nodename",
+            "ASSIGN_NODETYPE": "Einen Servertyp zuweisen",
+            "SELECT_NODETYPE": "Wählen ein Servertyp",
+            "FOUND_NEW_NODES": "Neue oder unregistrierte Nodes gefunden!",
+            "UNREGISTERED_NODE": "Unregistrierter Node",
+            "REGISTER": "Registrieren",
+            "LOADING_LOG_FAILED": "Fehler beim des Protokoll",
+            "DELETE_NODE": "Soll der Node wirklich gelöscht werden?",
+            "UNREGISTERED_NODE_FOUND": "Achtung! Ein neuer oder unregistrierter Node wurde gefunden!",
+            "NODE_WANTS_CONNECT": "Ein neuer oder nicht registrierter Node möchte mit Maze.dashboard verbunden werden.",
+            "CONNECT_WITH_MAZE": "Mit Maze.dashboard verbinden",
+            "REMOVE_SERVICE": "Dienst {{service}} von Node {{node}} entfernen",
+            "DELETE_SERVICE": "Soll der Service {{service}} wirklich von der Node gelöscht werden?"
+        },
+        "NEWS": {
+            "LATEST_NEWS": "Aktuelle Nachrichten"
+        },
+        "SERVICES": {
+            "REMOVE_SERVICE": "Dienst entfernen",
+            "CONF_OF_SERVICE": "Konfiguration von Dienst {{service}}",
+            "CONF_NO_AVAILABLE": "Keine Konfiguration verfügbar"
+        },
+        "LABELS": {
+            "USERNAME": "Benutzername",
+            "PASSWORD": "Passwort",
+            "PASSWORD_NEW": "Neues Passwort",
+            "PASSWORD_CONFIRM": "Passwort bestätigen",
+            "CHANGE_PASSWORD": "Passwort ändern",
+            "PRENAME": "Vorname",
+            "SURNAME": "Nachname",
+            "COMPANY": "Firma",
+            "CITY": "Ort",
+            "AVATAR": "Avatar",
+            "STREET": "Straße",
+            "HOUSE_NUMBER": "Hausnummer",
+            "POSTCODE": "PLZ",
+            "PHONE": "Telefon",
+            "FAX": "Fax",
+            "EMAIL": "E-Mail",
+            "EMAIL_ADDRESS": "E-Mailadresse",
+            "LABEL": "Label",
+            "STATUS": "Status",
+            "TEXT": "Text",
+            "SIGN_IN": "Anmelden",
+            "NODES": "Nodes",
+            "CLIENTS": "Mandanten",
+            "IP_ADDRESS": "IP-Addresse",
+            "DIFFERENCES": "Differenzen!",
+            "OK": "Ok",
+            "CANCEL": "Abbrechen",
+            "DELETE": "Löschen",
+            "EDIT": "Bearbeiten",
+            "SAVE": "Speichern",
+            "DEACTIVATE": "Deaktivieren",
+            "ACTIVATE": "Aktivieren",
+            "DISABLED": "Deaktiviert",
+            "ENABLED": "Aktiviert",
+            "ONLINE": "Online",
+            "OFFLINE": "Offline",
+            "DOMAINS": "Domains",
+            "SERVICES": "Dienste",
+            "ACCESS_DATA": "Zugangsdaten",
+            "LOGS": "Protokolle"
+        },
+        "MESSAGES": {
+            "ATTENTION": "Achtung!",
+            "PASSWORD_CHANGED": "Das Passwort wurde erfolgreich geändert."
+        },
+        "DIRECTIVES": {
+            "ADDITIONAL_ADD_INFO": "Info hinzufügen",
+            "ADDITIONAL_EMPTY": "leer",
+            "SEARCH_LABEL": "Suche",
+            "SEARCH_TOTAL_OF": "von",
+            "SEARCH_NOTHING_FOUND": "Nichts zu finden"
+        },
+        "LOADING": "Wird geladen..."
+    }
+}

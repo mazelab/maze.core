@@ -1,18 +1,16 @@
 <div class="row-fluid">
     <span ng-show="loadDomain">
-        <img src="/img/js/loading.gif" title="Loading...">
-        Loading...
+        <img src="/img/js/loading.gif" title="{{'CORE.LOADING' | translate}}">
+        <span translate="CORE.LOADING"></span>
     </span>
 
-    <span ng-show="!loadDomain && !domain">
-        Failed to load domain
-    </span>
+    <span ng-show="!loadDomain && !domain" translate="CORE.DOMAINS.LOADING_FAILED"></span>
 
     <div id="domainEditContent" ng-show="!loadDomain && domain">
         <div class="row-fluid text-left cssBoxCenter">
-            <button ng-click="modalDeleteDomain();" ng-disabled="!domain" class="btn" title="delete domain">
+            <button ng-click="modalDeleteDomain();" ng-disabled="!domain" class="btn" title="{{'CORE.LABELS.DELETE' | translate}}">
                 <i class="icon-trash"></i>
-               delete
+                <span translate="CORE.LABELS.DELETE"></span>
             </button>
         </div>
 
@@ -20,7 +18,7 @@
             <div class="span10">
                 <div class="row-fluid">
                     <div class="cssUserImage span2">
-                        <img name="avatar" class="img-polaroid" src="/img/dummy_domain_200.png" alt="avatar">
+                        <img name="avatar" class="img-polaroid" src="/img/dummy_domain_200.png" alt="{{'CORE.LABELS.AVATAR' | translate}}">
                     </div>
 
                     <div class="span9 offset1">
@@ -28,7 +26,7 @@
                             {{domain.name}}
                         </div>
 
-                        <div maze-dl-wrapper label="Client" dt-class="span3" dd-class="span9">
+                        <div maze-dl-wrapper label="{{'CORE.CLIENTS.CLIENT_LABEL' | translate}}" dt-class="span3" dd-class="span9">
                             <a ng-if="domain.ownerData.url" href="{{domain.ownerData.url}}">
                                 {{domain.ownerData.label}}
                             </a>
@@ -37,10 +35,11 @@
                             </span>
                         </div>
 
-                        <div maze-dl-wrapper class="row-fluid" label="procurement place" dt-class="span3" dd-class="span5 cssEditable">
+                        <div maze-dl-wrapper class="row-fluid" label="{{'CORE.DOMAINS.PROCUREMENT_PLACE' | translate}}"
+                                             dt-class="span3" dd-class="span5 cssEditable">
                             <span editable-text="domain.procurement" ng-class="{cssColorGray: !domain.procurement}"
                                   onbeforesave="updateProperty('procurement', $data);">
-                                {{domain.procurement || 'procurement place' }}
+                                {{domain.procurement || 'CORE.DOMAINS.PROCUREMENT_PLACE' | translate }}
                             </span>
                         </div>
                     </div>
@@ -54,13 +53,13 @@
 
         <div class="row-fluid cssBoxCenter">
             <tabset>
-                <tab heading="Services ({{countObject(domain.services) || 0}})">
+                <tab heading="{{'CORE.LABELS.SERVICES' | translate}} ({{countObject(domain.services) || 0}})">
                     <div ng-include="'/partials/admin/domains/tabs/services.html'"></div>
                 </tab>
-                <tab heading="Nodes ({{(nodes).length || 0}})">
+                <tab heading="{{'CORE.LABELS.NODES' | translate}} ({{(nodes).length || 0}})">
                     <div ng-include="'/partials/admin/domains/tabs/nodes.html'"></div>
                 </tab>
-                <tab heading="Logs">
+                <tab heading="{{'CORE.LABELS.LOGS' | translate}}">
                     <div ng-include="'/partials/admin/domains/tabs/logs.html'"></div>
                 </tab>
             </tabset>
