@@ -48,87 +48,87 @@
                     </div>
 
                     <div id="divClientContent" class="offset1 span9">
-                        <maze-dl-wrapper dl-class='row-fluid' ng-class="{cssBigItem: client.company}">
+                        <div maze-dl-wrapper dl-class='row-fluid' ng-class="{cssBigItem: client.company}">
                             <span editable-text="client.company" ng-class="{cssColorGray: !client.company}"
                                   onbeforesave="updateProperty('company', $data);">
                                 {{client.company || 'Company' }}
                             </span>
-                        </maze-dl-wrapper>
+                        </div>
 
                         <div class="row-fluid" style="margin-bottom: 20px;">
-                            <maze-dl-wrapper dl-class="pull-left cssItemWithoutLabel cssEditable" ng-class="{cssBigItem: !client.company}">
+                            <div maze-dl-wrapper dl-class="pull-left cssItemWithoutLabel cssEditable" ng-class="{cssBigItem: !client.company}">
                                 <span editable-text="client.prename" ng-class="{cssColorGray: !client.prename}"
                                       onbeforesave="updateProperty('prename', $data);">
                                     {{client.prename || 'Prename' }}
                                 </span>
-                            </maze-dl-wrapper>
+                            </div>
 
-                            <maze-dl-wrapper dl-class="pull-left cssItemWithoutLabel cssEditable" ng-class="{cssBigItem: !client.company}">
+                            <div maze-dl-wrapper dl-class="pull-left cssItemWithoutLabel cssEditable" ng-class="{cssBigItem: !client.company}">
                                 <span editable-text="client.surname" ng-class="{cssColorGray: !client.surname}"
                                       onbeforesave="updateProperty('surname', $data);">
                                     {{client.surname || 'Surname' }}
                                 </span>
-                            </maze-dl-wrapper>
+                            </div>
                         </div>
 
                         <div class="row-fluid">
-                            <maze-dl-wrapper dl-class="pull-left cssItemWithoutLabel cssEditable">
+                            <div maze-dl-wrapper dl-class="pull-left cssItemWithoutLabel cssEditable">
                                 <span editable-text="client.street" ng-class="{cssColorGray: !client.street}"
                                       onbeforesave="updateProperty('street', $data);">
                                     {{client.street || 'Street' }}
                                 </span>
-                            </maze-dl-wrapper>
+                            </div>
 
-                            <maze-dl-wrapper dl-class="pull-left cssItemWithoutLabel cssEditable">
+                            <div maze-dl-wrapper dl-class="pull-left cssItemWithoutLabel cssEditable">
                                 <span editable-text="client.houseNumber" ng-class="{cssColorGray: !client.houseNumber}"
                                       onbeforesave="updateProperty('houseNumber', $data);">
                                     {{client.houseNumber || 'House number' }}
                                 </span>
-                            </maze-dl-wrapper>
+                            </div>
                         </div>
 
                         <div class="row-fluid">
-                            <maze-dl-wrapper dl-class="pull-left cssItemWithoutLabel cssEditable">
+                            <div maze-dl-wrapper dl-class="pull-left cssItemWithoutLabel cssEditable">
                                 <span editable-text="client.postcode" ng-class="{cssColorGray: !client.postcode}"
                                       onbeforesave="updateProperty('postcode', $data);">
                                     {{client.postcode || 'Postcode' }}
                                 </span>
-                            </maze-dl-wrapper>
+                            </div>
 
-                            <maze-dl-wrapper dl-class="pull-left cssItemWithoutLabel cssEditable">
+                            <div maze-dl-wrapper dl-class="pull-left cssItemWithoutLabel cssEditable">
                                 <span editable-text="client.city" ng-class="{cssColorGray: !client.city}"
                                       onbeforesave="updateProperty('city', $data);">
                                     {{client.city || 'City' }}
                                 </span>
-                            </maze-dl-wrapper>
+                            </div>
                         </div>
                     </div>
                 </div>
 
                 <div class="row-fluid">
-                    <maze-dl-wrapper dl-class="row-fluid" label="Phone" dt-class="span3" dd-class="span5 cssEditable">
+                    <div maze-dl-wrapper dl-class="row-fluid" label="Phone" dt-class="span3" dd-class="span5 cssEditable">
                         <span editable-text="client.phone" ng-class="{cssColorGray: !client.phone}"
                               onbeforesave="updateProperty('phone', $data);">
                             {{client.phone || 'Phone' }}
                         </span>
-                    </maze-dl-wrapper>
+                    </div>
 
-                    <maze-dl-wrapper dl-class="row-fluid" label="Fax" dt-class="span3" dd-class="span5 cssEditable">
+                    <div maze-dl-wrapper dl-class="row-fluid" label="Fax" dt-class="span3" dd-class="span5 cssEditable">
                         <span editable-text="client.fax" ng-class="{cssColorGray: !client.fax}"
                               onbeforesave="updateProperty('fax', $data);">
                             {{client.fax || 'Fax' }}
                         </span>
-                    </maze-dl-wrapper>
+                    </div>
 
-                    <maze-dl-wrapper dl-class="row-fluid" label="E-mail address" dt-class="span3" dd-class="span5 cssEditable">
+                    <div maze-dl-wrapper dl-class="row-fluid" label="E-mail address" dt-class="span3" dd-class="span5 cssEditable">
                         <span editable-text="client.email" ng-class="{cssColorGray: !client.email}"
                               onbeforesave="updateProperty('email', $data);">
                             {{client.email || 'Email' }}
                         </span>
-                    </maze-dl-wrapper>
+                    </div>
 
                     <div class="row-fluid cssAdditionalFields" id="additionalFieldsContent">
-                        <maze-additional fields="client.additionalFields" update="updateAdditional($data)"></maze-additional>
+                        <div maze-additional fields="client.additionalFields" update="updateAdditional($data)"></div>
                     </div>
                 </div>
             </div>

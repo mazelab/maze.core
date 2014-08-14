@@ -2,7 +2,7 @@ directives = angular.module "maze.directives", []
 
 directives.directive 'mazeDlWrapper', [ () ->
   {
-    restrict: 'E'
+    restrict: 'A'
     scope: {
       'label': '@',
       'dlClass' : '@',
@@ -16,7 +16,7 @@ directives.directive 'mazeDlWrapper', [ () ->
 
 directives.directive 'mazeHtmlPopover', [ () ->
   {
-    restrict: 'E'
+    restrict: 'A'
     scope: {
       label: '@',
       title: '@',
@@ -60,7 +60,7 @@ directives.directive 'mazeHtmlPopover', [ () ->
 
 directives.directive 'mazeSearch', [ () ->
   {
-    restrict: 'E'
+    restrict: 'A'
     templateUrl: '/partials/admin/directives/search.html'
     transclude: true
     scope: {
@@ -124,7 +124,7 @@ directives.directive 'mazeSearch', [ () ->
 
 directives.directive 'mazeAdditional', [ () ->
   {
-    restrict: "E"
+    restrict: "A"
     scope: {
       fields: "="
       update: "@"
