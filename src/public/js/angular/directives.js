@@ -65,7 +65,7 @@
   ]);
 
   directives.directive('mazeSearch', [
-    function() {
+    '$filter', function($filter) {
       return {
         restrict: 'A',
         templateUrl: '/partials/admin/directives/search.html',
@@ -132,7 +132,7 @@
               }
               $scope.data = null;
               $scope.loadPager = false;
-              return $scope.errorMsg = ['Request failed!'];
+              return $scope.errorMsg = [$filter("translate")("CORE.MESSAGES.REQUEST_FAILED")];
             });
           };
         }
@@ -141,7 +141,7 @@
   ]);
 
   directives.directive('mazeAdditional', [
-    function() {
+    '$filter', function($filter) {
       return {
         restrict: "A",
         scope: {
@@ -178,7 +178,7 @@
               }
               $scope.errors = {};
               if (($scope.fields != null) && keyExists(key)) {
-                $scope.errors.additionalValue = ["this label allready exists"];
+                $scope.errors.additionalValue = [$filter("translate")("CORE.DIRECTIVES.ADDITIONAL_LABEL_EXIST")];
                 return false;
               }
               updateData = {

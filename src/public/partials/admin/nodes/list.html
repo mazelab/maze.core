@@ -5,9 +5,7 @@
         <span translate="CORE.LOADING"></span>
     </span>
 
-    <span ng-show="!loadUnregisteredNodes && !unregisteredNodes" translate="CORE.NODES.LOADING_FAILED">
-        Failed to load unregistered Domains
-    </span>
+    <span ng-show="!loadUnregisteredNodes && !unregisteredNodes" translate="CORE.NODES.LOADING_DOMAINS_FAILED"></span>
 
     <div class="row-fluid cssListingDiff" ng-show="!loadUnregisteredNodes && unregisteredNodes">
         <div class="alert" ng-show="unregisteredNodes">

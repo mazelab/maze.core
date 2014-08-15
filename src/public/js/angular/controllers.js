@@ -5,11 +5,11 @@
   controllers = angular.module('maze.controllers', []);
 
   controllers.controller('clientListController', [
-    '$scope', 'authService', function($scope, authService) {
+    '$scope', 'authService', '$filter', function($scope, authService, $filter) {
       var initBreadCrumb;
       $scope.client = [];
       initBreadCrumb = function() {
-        return $('ul.breadcrumb').html('<li><a href="/">Dashboard</a><span class="divider">/</span></li><li class="active">Clients</li>');
+        return $('ul.breadcrumb').html("<li><a href='/'>" + ($filter("translate")("CORE.LABELS.DASHBOARD")) + "</a><span class='divider'>/</span></li><li class='active'>" + ($filter("translate")("CORE.LABELS.CLIENTS")) + "</li>");
       };
       $scope.loginAsClient = function(id) {
         $scope.loadClientLogin = true;
@@ -21,7 +21,7 @@
           return location.href = "/";
           return $scope.loadClientLogin = false;
         }).error(function(data) {
-          $scope.errors[id] = ['Request failed!'];
+          $scope.errors[id] = [$filter("translate")("CORE.MESSAGES.REQUEST_FAILED")];
           return $scope.loadClientLogin = false;
         });
       };
@@ -35,7 +35,7 @@
       $scope.client = {};
       $scope.clientId = $routeParams.clientId;
       initBreadCrumb = function() {
-        return $('ul.breadcrumb').html('<li><a href="/">Dashboard</a><span class="divider">/</span></li><li><a href="#/">Clients</a><span class="divider">/</span></li><li class="active"> ' + $scope.client.label + '</li>');
+        return $('ul.breadcrumb').html("<li><a href='/'>" + ($filter("translate")("CORE.LABELS.DASHBOARD")) + "</a><span class='divider'>/</span></li><li><a href='#/'>" + ($filter("translate")("CORE.LABELS.CLIENTS")) + "</a><span class='divider'>/</span></li><li class='active'>" + $scope.client.label + "</li>");
       };
       $scope.activate = function() {
         return $scope.changeState(true);
@@ -75,7 +75,7 @@
         }).error(function() {
           return $scope.alerts = [
             {
-              msg: 'Request failed!',
+              msg: $filter("translate")("CORE.MESSAGES.REQUEST_FAILED"),
               type: 'danger'
             }
           ];
@@ -198,7 +198,7 @@
         }).error(function(data) {
           $scope.alerts = [
             {
-              msg: 'Request failed!',
+              msg: $filter("translate")("CORE.MESSAGES.REQUEST_FAILED"),
               type: 'danger'
             }
           ];
@@ -219,7 +219,7 @@
         }).error(function() {
           $scope.loadServices = false;
           buildAvailableServices();
-          return $scope.errAddService = ['Failed to load services'];
+          return $scope.errAddService = [$filter("translate")("CORE.SERVICES.LOADING_FAILED")];
         });
         $scope.addService = function(serviceName) {
           var service, updateData;
@@ -297,14 +297,14 @@
           if (!availableServices.length) {
             $scope.services.available = [
               {
-                label: 'No services available',
+                label: $filter("translate")("CORE.SERVICES.NOT_AVAILABLE"),
                 name: ''
               }
             ];
           } else {
             $scope.services.available = [
               {
-                label: 'Add new service',
+                label: $filter("translate")("CORE.SERVICES.ASSIGN_NEW"),
                 name: ''
               }
             ];
@@ -316,13 +316,13 @@
   ]);
 
   controllers.controller('clientModalDelete', [
-    '$scope', '$modalInstance', 'clientsService', 'clientId', function($scope, $modalInstance, clientsService, clientId) {
+    '$scope', '$filter', '$modalInstance', 'clientsService', 'clientId', function($scope, $filter, $modalInstance, clientsService, clientId) {
       $scope.ok = function() {
         $scope.errMessages = [];
         return clientsService["delete"](clientId).success(function(data, code) {
           return $modalInstance.close(code);
         }).error(function() {
-          return $scope.errMessages.push('Failed');
+          return $scope.errMessages.push($filter("translate")("CORE.LABELS.FAILED"));
         });
       };
       return $scope.cancel = function() {
@@ -332,7 +332,7 @@
   ]);
 
   controllers.controller('clientModalRemoveService', [
-    '$scope', '$modalInstance', 'service', 'client', 'clientsService', function($scope, $modalInstance, service, client, clientsService) {
+    '$scope', '$filter', '$modalInstance', 'service', 'client', 'clientsService', function($scope, $filter, $modalInstance, service, client, clientsService) {
       $scope.service = service;
       $scope.client = client;
       $scope.errMessages = [];
@@ -356,7 +356,7 @@
             $scope.successeMessages = response.messages.successes;
           }
           if (!$scope.successeMessages || !$scope.errMessages || !$scope.notifyMessages) {
-            return $scope.errMessages.push('Failed');
+            return $scope.errMessages.push($filter("translate")("CORE.LABELS.FAILED"));
           }
         });
       };
@@ -367,11 +367,11 @@
   ]);
 
   controllers.controller('clientNewController', [
-    '$scope', 'clientsService', function($scope, clientsService) {
+    '$scope', 'clientsService', '$filter', function($scope, clientsService, $filter) {
       var initBreadCrumb;
       $scope.client = {};
       initBreadCrumb = function() {
-        return $('ul.breadcrumb').html('<li><a href="/">Dashboard</a><span class="divider">/</span></li><li><a href="#/">Clients</a><span class="divider">/</span></li><li class="active">new</li>');
+        return $('ul.breadcrumb').html("<li><a href='/'>" + ($filter("translate")("CORE.LABELS.DASHBOARD")) + "</a><span class='divider'>/</span></li><li><a href='#/'>" + ($filter("translate")("CORE.LABELS.CLIENTS")) + "</a><span class='divider'>/</span></li><li class='active'>" + ($filter("translate")("CORE.CLIENTS.CREATE_CLIENT")) + "</li>");
       };
       $scope.cancel = function() {
         return window.location = '#/';
@@ -397,7 +397,7 @@
   ]);
 
   controllers.controller('domainModalRemoveService', [
-    '$scope', '$modalInstance', 'service', 'domain', 'domainsService', function($scope, $modalInstance, service, domain, domainsService) {
+    '$scope', '$filter', '$modalInstance', 'service', 'domain', 'domainsService', function($scope, $filter, $modalInstance, service, domain, domainsService) {
       $scope.service = service;
       $scope.domain = domain;
       $scope.ok = function() {
@@ -410,7 +410,7 @@
         return domainsService.update(domain._id, $.param(updateData)).success(function(data) {
           return $modalInstance.close(data.domain.services);
         }).error(function() {
-          return $scope.errMessages.push('Failed');
+          return $scope.errMessages.push($filter("translate")("CORE.LABELS.FAILED"));
         });
       };
       return $scope.cancel = function() {
@@ -420,13 +420,13 @@
   ]);
 
   controllers.controller('domainModalDelete', [
-    '$scope', '$modalInstance', 'domainsService', 'domainId', function($scope, $modalInstance, domainsService, domainId) {
+    '$scope', '$filter', '$modalInstance', 'domainsService', 'domainId', function($scope, $filter, $modalInstance, domainsService, domainId) {
       $scope.ok = function() {
         $scope.errMessages = [];
         return domainsService["delete"](domainId).success(function(data, code) {
           return $modalInstance.close(code);
         }).error(function() {
-          return $scope.errMessages.push('Failed');
+          return $scope.errMessages.push($filter("translate")("CORE.LABELS.FAILED"));
         });
       };
       return $scope.cancel = function() {
@@ -436,11 +436,11 @@
   ]);
 
   controllers.controller('domainListController', [
-    '$scope', function($scope) {
+    '$scope', '$filter', function($scope, $filter) {
       var initBreadCrumb;
       $scope.domains = [];
       initBreadCrumb = function() {
-        return $('ul.breadcrumb').html('<li><a href="/">Dashboard</a><span class="divider">/</span></li><li class="active">Domains</li>');
+        return $('ul.breadcrumb').html("<li><a href='/'>" + ($filter("translate")("CORE.LABELS.DASHBOARD")) + "</a><span class='divider'>/</span></li><li class='active'>" + ($filter("translate")("CORE.LABELS.DOMAINS")) + "</li>");
       };
       return initBreadCrumb();
     }
@@ -451,7 +451,7 @@
       var initBreadCrumb, initServices;
       $scope.domainId = $routeParams.domainId;
       initBreadCrumb = function() {
-        return $('ul.breadcrumb').html('<li><a href="/">Dashboard</a><span class="divider">/</span></li><li><a href="#/">Domains</a><span class="divider">/</span></li><li class="active">' + $scope.domain.name + '</li>');
+        return $('ul.breadcrumb').html("<li><a href='/'>" + ($filter("translate")("CORE.LABELS.DASHBOARD")) + "</a><span class='divider'>/</span></li><li><a href='#/'>" + ($filter("translate")("CORE.LABELS.DOMAINS")) + "</a><span class='divider'>/</span></li><li class='active'>" + $scope.domain.name + "</li>");
       };
       $scope.countObject = function(val) {
         if (!angular.isObject(val)) {
@@ -556,7 +556,7 @@
         }).error(function() {
           $scope.loadServices = false;
           buildAvailableServices();
-          return $scope.errAddService = ['Failed to load services'];
+          return $scope.errAddService = [$filter("translate")("CORE.SERVICES.LOADING_FAILED")];
         });
         $scope.addService = function(serviceName) {
           var service, updateData;
@@ -579,7 +579,7 @@
               return $('#tabServices-' + serviceName).tab('show');
             }, 0);
           }).error(function() {
-            return $scope.errAddService.push('Failed');
+            return $scope.errAddService.push($filter("translate")("CORE.LABELS.FAILED"));
           });
         };
         $scope.modalRemoveDomainService = function(service) {
@@ -621,14 +621,14 @@
           if (!availableServices.length) {
             $scope.services.available = [
               {
-                label: 'No services available',
+                label: $filter("translate")("CORE.SERVICES.NOT_AVAILABLE"),
                 name: ''
               }
             ];
           } else {
             $scope.services.available = [
               {
-                label: 'Add new service',
+                label: $filter("translate")("CORE.SERVICES.ASSIGN_NEW"),
                 name: ''
               }
             ];
@@ -671,7 +671,7 @@
         return window.location = '#/';
       };
       initBreadCrumb = function() {
-        return $('ul.breadcrumb').html('<li><a href="/">Dashboard</a><span class="divider">/</span></li><li><a href="#/">Domains</a><span class="divider">/</span></li><li class="active">new</li>');
+        return $('ul.breadcrumb').html("<li><a href='/'>" + ($filter("translate")("CORE.LABELS.DASHBOARD")) + "</a><span class='divider'>/</span></li><li><a href='#/'>" + ($filter("translate")("CORE.LABELS.DOMAINS")) + "</a><span class='divider'>/</span></li><li class='active'>" + ($filter("translate")("CORE.DOMAINS.CREATE_DOMAIN")) + "</li>");
       };
       return initBreadCrumb();
     }
@@ -683,21 +683,21 @@
       $scope.nodeId = $routeParams.nodeId;
       $scope.nodetypes = [
         {
-          name: "Virtual Server",
+          name: $filter("translate")("CORE.NODES.SERVER_VIRTUAL"),
           value: "virtual",
           image: "dummy_vm_200.png"
         }, {
-          name: "Cloud Server",
+          name: $filter("translate")("CORE.NODES.SERVER_CLOUD‎"),
           value: "cloud",
           image: "dummy_cloud_200.png"
         }, {
-          name: "Dedicated Server‎",
+          name: $filter("translate")("CORE.NODES.SERVER_DEDICATED‎"),
           value: "dedicated",
           image: "dummy_server_200.png"
         }
       ];
       initBreadCrumb = function() {
-        return $('ul.breadcrumb').html('<li><a href="/">Dashboard</a><span class="divider">/</span></li><li><a href="#/">Nodes</a><span class="divider">/</span></li><li class="active">' + $scope.node.name + '</li>');
+        return $('ul.breadcrumb').html("<li><a href='/'>" + ($filter("translate")("CORE.LABELS.DASHBOARD")) + "</a><span class='divider'>/</span></li><li><a href='#/'>" + ($filter("translate")("CORE.LABELS.NODES")) + "</a><span class='divider'>/</span></li><li class='active'>" + $scope.node.name + "</li>");
       };
       $scope.countObject = function(val) {
         if (!angular.isObject(val)) {
@@ -828,7 +828,7 @@
         }).error(function() {
           $scope.loadServices = false;
           buildAvailableServices();
-          return $scope.errAddService = ['Failed to load services'];
+          return $scope.errAddService = [$filter("translate")("CORE.SERVICES.LOADING_FAILED")];
         });
         $scope.addService = function(serviceName) {
           var service, updateData;
@@ -851,7 +851,7 @@
               return $('#tabServices-' + serviceName).tab('show');
             }, 0);
           }).error(function() {
-            return $scope.errAddService.push('Failed');
+            return $scope.errAddService.push($filter("translate")("CORE.LABELS.FAILED"));
           });
         };
         $scope.modalRemoveService = function(service) {
@@ -893,14 +893,14 @@
           if (!availableServices.length) {
             $scope.services.available = [
               {
-                label: 'No services available',
+                label: $filter("translate")("CORE.SERVICES.NOT_AVAILABLE"),
                 name: ''
               }
             ];
           } else {
             $scope.services.available = [
               {
-                label: 'Add new service',
+                label: $filter("translate")("CORE.SERVICES.ASSIGN_NEW"),
                 name: ''
               }
             ];
@@ -912,7 +912,7 @@
   ]);
 
   controllers.controller('nodeListController', [
-    '$scope', 'nodesService', function($scope, nodesService) {
+    '$scope', 'nodesService', '$filter', function($scope, nodesService, $filter) {
       var initBreadCrumb;
       $scope.nodes = [];
       $scope.loadUnregisteredNodes = true;
@@ -926,7 +926,7 @@
         return $scope.loadUnregisteredNodes = false;
       });
       initBreadCrumb = function() {
-        return $('ul.breadcrumb').html('<li><a href="/">Dashboard</a><span class="divider">/</span></li><li class="active">Nodes</li>');
+        return $('ul.breadcrumb').html("<li><a href='/'>" + ($filter("translate")("CORE.LABELS.DASHBOARD")) + "</a><span class='divider'>/</span></li><li class='active'>" + ($filter("translate")("CORE.LABELS.NODES")) + "</li>");
       };
       return initBreadCrumb();
     }
@@ -938,18 +938,18 @@
       $scope.nodeName = $routeParams.nodeName;
       $scope.nodetypes = [
         {
-          name: "Select a node type",
+          name: $filter("translate")("CORE.NODES.SELECT_NODETYPE"),
           value: ''
         }, {
-          name: "Virtual Server",
+          name: $filter("translate")("CORE.NODES.SERVER_VIRTUAL"),
           value: "virtual",
           image: "dummy_vm_200.png"
         }, {
-          name: "Cloud Server",
+          name: $filter("translate")("CORE.NODES.SERVER_CLOUD‎"),
           value: "cloud",
           image: "dummy_cloud_200.png"
         }, {
-          name: "Dedicated Server‎",
+          name: $filter("translate")("CORE.NODES.SERVER_DEDICATED‎"),
           value: "dedicated",
           image: "dummy_server_200.png"
         }
@@ -958,7 +958,7 @@
         return window.location = '#/';
       };
       initBreadCrumb = function() {
-        return $('ul.breadcrumb').html('<li><a href="/">Dashboard</a><span class="divider">/</span></li><li><a href="#/">Nodes</a><span class="divider">/</span></li><li class="active">register ' + $scope.nodeName + '</li>');
+        return $('ul.breadcrumb').html("<li><a href='/'>" + ($filter("translate")("CORE.LABELS.DASHBOARD")) + "</a><span class='divider'>/</span></li><li><a href='#/'>" + ($filter("translate")("CORE.LABELS.NODES")) + "</a><span class='divider'>/</span></li><li class='active'>" + ($filter("translate")("CORE.NODES.REGISTER")) + ": " + $scope.nodeName + "</li>");
       };
       $scope.changetype = function(option) {
         if ((this.selected = $filter("filter")($scope.nodetypes, {
@@ -983,7 +983,7 @@
             $scope.messages = data.messages;
           }
           if (((_ref = data.messages) != null ? _ref.errors : void 0) == null) {
-            return $scope.messages.errors[0] = 'Request failed!';
+            return $scope.messages.errors[0] = $filter("translate")("CORE.MESSAGES.REQUEST_FAILED");
           }
         });
       };
@@ -1009,13 +1009,13 @@
   ]);
 
   controllers.controller('nodeModalDelete', [
-    '$scope', '$modalInstance', 'nodesService', 'nodeId', function($scope, $modalInstance, nodesService, nodeId) {
+    '$scope', '$filter', '$modalInstance', 'nodesService', 'nodeId', function($scope, $filter, $modalInstance, nodesService, nodeId) {
       $scope.ok = function() {
         $scope.errMessages = [];
         return nodesService["delete"](nodeId).success(function(data, code) {
           return $modalInstance.close(code);
         }).error(function() {
-          return $scope.errMessages.push('Failed');
+          return $scope.errMessages.push($filter("translate")("CORE.LABELS.FAILED"));
         });
       };
       return $scope.cancel = function() {
@@ -1025,7 +1025,7 @@
   ]);
 
   controllers.controller('nodeModalRemoveService', [
-    '$scope', '$modalInstance', 'service', 'node', 'nodesService', function($scope, $modalInstance, service, node, nodesService) {
+    '$scope', '$filter', '$modalInstance', 'service', 'node', 'nodesService', function($scope, $filter, $modalInstance, service, node, nodesService) {
       $scope.service = service;
       $scope.node = node;
       $scope.ok = function() {
@@ -1038,7 +1038,7 @@
         return nodesService.update(node._id, $.param(updateData)).success(function(data) {
           return $modalInstance.close(data.node.services);
         }).error(function() {
-          return $scope.errMessages.push('Failed');
+          return $scope.errMessages.push($filter("translate")("CORE.LABELS.FAILED"));
         });
       };
       return $scope.cancel = function() {

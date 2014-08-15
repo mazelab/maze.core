@@ -58,7 +58,7 @@ directives.directive 'mazeHtmlPopover', [ () ->
   }
 ]
 
-directives.directive 'mazeSearch', [ () ->
+directives.directive 'mazeSearch', ['$filter', ($filter) ->
   {
     restrict: 'A'
     templateUrl: '/partials/admin/directives/search.html'
@@ -118,11 +118,11 @@ directives.directive 'mazeSearch', [ () ->
 
           $scope.data = null
           $scope.loadPager = false
-          $scope.errorMsg = [ 'Request failed!' ]
+          $scope.errorMsg = [$filter("translate")("CORE.MESSAGES.REQUEST_FAILED")]
   }
 ]
 
-directives.directive 'mazeAdditional', [ () ->
+directives.directive 'mazeAdditional', ['$filter', ($filter) ->
   {
     restrict: "A"
     scope: {
@@ -153,7 +153,7 @@ directives.directive 'mazeAdditional', [ () ->
         $scope.errors = {}
 
         if $scope.fields? and keyExists key
-          $scope.errors.additionalValue = ["this label allready exists"]
+          $scope.errors.additionalValue = [$filter("translate")("CORE.DIRECTIVES.ADDITIONAL_LABEL_EXIST")]
           return false
 
         updateData = {

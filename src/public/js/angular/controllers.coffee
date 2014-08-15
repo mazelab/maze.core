@@ -1,10 +1,10 @@
 controllers = angular.module 'maze.controllers', []
 
-controllers.controller 'clientListController', ['$scope', 'authService', ($scope, authService) ->
+controllers.controller 'clientListController', ['$scope', 'authService', '$filter', ($scope, authService, $filter) ->
   $scope.client = []
 
   initBreadCrumb = () ->
-    $('ul.breadcrumb').html('<li><a href="/">Dashboard</a><span class="divider">/</span></li><li class="active">Clients</li>')
+    $('ul.breadcrumb').html "<li><a href='/'>#{$filter("translate")("CORE.LABELS.DASHBOARD")}</a><span class='divider'>/</span></li><li class='active'>#{$filter("translate")("CORE.LABELS.CLIENTS")}</li>"
 
   $scope.loginAsClient = (id) ->
     $scope.loadClientLogin = true;
@@ -15,7 +15,7 @@ controllers.controller 'clientListController', ['$scope', 'authService', ($scope
         return location.href = "/";
         $scope.loadClientLogin = false;
     .error (data) ->
-        $scope.errors[id] = ['Request failed!'];
+        $scope.errors[id] = [$filter("translate")("CORE.MESSAGES.REQUEST_FAILED")];
         $scope.loadClientLogin = false;
 
   initBreadCrumb()
@@ -26,7 +26,7 @@ controllers.controller 'clientEditController', ['$scope', '$routeParams', '$q', 
   $scope.clientId = $routeParams.clientId
 
   initBreadCrumb = () ->
-    $('ul.breadcrumb').html('<li><a href="/">Dashboard</a><span class="divider">/</span></li><li><a href="#/">Clients</a><span class="divider">/</span></li><li class="active"> ' + $scope.client.label + '</li>')
+    $('ul.breadcrumb').html "<li><a href='/'>#{$filter("translate")("CORE.LABELS.DASHBOARD")}</a><span class='divider'>/</span></li><li><a href='#/'>#{$filter("translate")("CORE.LABELS.CLIENTS")}</a><span class='divider'>/</span></li><li class='active'>#{$scope.client.label}</li>"
 
   $scope.activate = () ->
     $scope.changeState true
@@ -59,7 +59,7 @@ controllers.controller 'clientEditController', ['$scope', '$routeParams', '$q', 
     .success (data) ->
       $scope.client.status = state;
     .error () ->
-      $scope.alerts = [ {msg: 'Request failed!', type: 'danger'}]
+      $scope.alerts = [ {msg: $filter("translate")("CORE.MESSAGES.REQUEST_FAILED"), type: 'danger'}]
 
   $scope.modalDelete = () ->
     modalProperties =
@@ -153,7 +153,7 @@ controllers.controller 'clientEditController', ['$scope', '$routeParams', '$q', 
         return location.href = "/";
         $scope.loadClientLogin = false;
     .error (data) ->
-        $scope.alerts = [ {msg: 'Request failed!', type: 'danger'}]
+        $scope.alerts = [ {msg: $filter("translate")("CORE.MESSAGES.REQUEST_FAILED"), type: 'danger'}]
         $scope.loadClientLogin = false;
 
   initServices = () ->
@@ -168,7 +168,7 @@ controllers.controller 'clientEditController', ['$scope', '$routeParams', '$q', 
     .error () ->
         $scope.loadServices = false
         buildAvailableServices()
-        $scope.errAddService = ['Failed to load services']
+        $scope.errAddService = [$filter("translate")("CORE.SERVICES.LOADING_FAILED")]
 
     $scope.addService = (serviceName) ->
       $scope.errAddService = []
@@ -222,13 +222,13 @@ controllers.controller 'clientEditController', ['$scope', '$routeParams', '$q', 
         availableServices.push(service) if service.name? and not $scope.client.services?[service.name]?
 
       if !availableServices.length
-        $scope.services.available = [{label: 'No services available', name:''}]
+        $scope.services.available = [{label: $filter("translate")("CORE.SERVICES.NOT_AVAILABLE"), name:''}]
       else
-        $scope.services.available = [{label: 'Add new service', name:''}]
+        $scope.services.available = [{label: $filter("translate")("CORE.SERVICES.ASSIGN_NEW"), name:''}]
 
       $scope.services.available = $scope.services.available.concat(availableServices);
 ]
-controllers.controller 'clientModalDelete', [ '$scope', '$modalInstance', 'clientsService', 'clientId', ($scope, $modalInstance, clientsService, clientId) ->
+controllers.controller 'clientModalDelete', [ '$scope', '$filter', '$modalInstance', 'clientsService', 'clientId', ($scope, $filter, $modalInstance, clientsService, clientId) ->
   $scope.ok = () ->
     $scope.errMessages = []
 
@@ -236,13 +236,13 @@ controllers.controller 'clientModalDelete', [ '$scope', '$modalInstance', 'clien
     .success (data, code) ->
         $modalInstance.close(code);
     .error () ->
-        $scope.errMessages.push('Failed')
+        $scope.errMessages.push $filter("translate")("CORE.LABELS.FAILED")
 
   $scope.cancel = () ->
     $modalInstance.dismiss()
 ]
 
-controllers.controller 'clientModalRemoveService', ['$scope', '$modalInstance', 'service', 'client', 'clientsService', ($scope, $modalInstance, service, client, clientsService) ->
+controllers.controller 'clientModalRemoveService', ['$scope', '$filter', '$modalInstance', 'service', 'client', 'clientsService', ($scope, $filter, $modalInstance, service, client, clientsService) ->
   $scope.service = service
   $scope.client = client
   $scope.errMessages = []
@@ -261,17 +261,17 @@ controllers.controller 'clientModalRemoveService', ['$scope', '$modalInstance', 
         $scope.errMessages = response.messages.errors if response.messages.errors
         $scope.successeMessages = response.messages.successes if response.messages.successes
         if not $scope.successeMessages || not $scope.errMessages || not $scope.notifyMessages
-          $scope.errMessages.push('Failed')
+          $scope.errMessages.push($filter("translate")("CORE.LABELS.FAILED"))
 
   $scope.cancel = () ->
     $modalInstance.dismiss()
 ]
 
-controllers.controller 'clientNewController', ['$scope', 'clientsService', ($scope, clientsService) ->
+controllers.controller 'clientNewController', ['$scope', 'clientsService', '$filter', ($scope, clientsService, $filter) ->
   $scope.client = {}
 
   initBreadCrumb = () ->
-    $('ul.breadcrumb').html('<li><a href="/">Dashboard</a><span class="divider">/</span></li><li><a href="#/">Clients</a><span class="divider">/</span></li><li class="active">new</li>')
+    $('ul.breadcrumb').html "<li><a href='/'>#{$filter("translate")("CORE.LABELS.DASHBOARD")}</a><span class='divider'>/</span></li><li><a href='#/'>#{$filter("translate")("CORE.LABELS.CLIENTS")}</a><span class='divider'>/</span></li><li class='active'>#{$filter("translate")("CORE.CLIENTS.CREATE_CLIENT")}</li>"
 
   $scope.cancel = () ->
     window.location = '#/'
@@ -289,7 +289,7 @@ controllers.controller 'clientNewController', ['$scope', 'clientsService', ($sco
   initBreadCrumb()
 ]
 
-controllers.controller 'domainModalRemoveService', ['$scope', '$modalInstance', 'service', 'domain', 'domainsService', ($scope, $modalInstance, service, domain, domainsService) ->
+controllers.controller 'domainModalRemoveService', ['$scope', '$filter', '$modalInstance', 'service', 'domain', 'domainsService', ($scope, $filter, $modalInstance, service, domain, domainsService) ->
   $scope.service = service
   $scope.domain = domain
 
@@ -303,13 +303,13 @@ controllers.controller 'domainModalRemoveService', ['$scope', '$modalInstance', 
     .success (data) ->
       $modalInstance.close(data.domain.services)
     .error () ->
-      $scope.errMessages.push 'Failed'
+      $scope.errMessages.push $filter("translate")("CORE.LABELS.FAILED")
 
   $scope.cancel = () ->
     $modalInstance.dismiss()
 ]
 
-controllers.controller 'domainModalDelete', ['$scope', '$modalInstance', 'domainsService', 'domainId', ($scope, $modalInstance, domainsService, domainId) ->
+controllers.controller 'domainModalDelete', ['$scope', '$filter', '$modalInstance', 'domainsService', 'domainId', ($scope, $filter, $modalInstance, domainsService, domainId) ->
   $scope.ok = () ->
     $scope.errMessages = []
 
@@ -317,17 +317,17 @@ controllers.controller 'domainModalDelete', ['$scope', '$modalInstance', 'domain
       .success (data, code) ->
         $modalInstance.close code
       .error () ->
-        $scope.errMessages.push('Failed')
+        $scope.errMessages.push $filter("translate")("CORE.LABELS.FAILED")
 
   $scope.cancel = () ->
     $modalInstance.dismiss()
 ]
 
-controllers.controller 'domainListController', ['$scope', ($scope) ->
+controllers.controller 'domainListController', ['$scope', '$filter', ($scope, $filter) ->
   $scope.domains = []
 
   initBreadCrumb = () ->
-    $('ul.breadcrumb').html('<li><a href="/">Dashboard</a><span class="divider">/</span></li><li class="active">Domains</li>')
+    $('ul.breadcrumb').html "<li><a href='/'>#{$filter("translate")("CORE.LABELS.DASHBOARD")}</a><span class='divider'>/</span></li><li class='active'>#{$filter("translate")("CORE.LABELS.DOMAINS")}</li>"
 
   initBreadCrumb()
 ]
@@ -336,7 +336,7 @@ controllers.controller 'domainEditController', [ '$scope', '$filter', '$modal', 
   $scope.domainId = $routeParams.domainId
 
   initBreadCrumb = () ->
-    $('ul.breadcrumb').html('<li><a href="/">Dashboard</a><span class="divider">/</span></li><li><a href="#/">Domains</a><span class="divider">/</span></li><li class="active">' + $scope.domain.name + '</li>')
+    $('ul.breadcrumb').html "<li><a href='/'>#{$filter("translate")("CORE.LABELS.DASHBOARD")}</a><span class='divider'>/</span></li><li><a href='#/'>#{$filter("translate")("CORE.LABELS.DOMAINS")}</a><span class='divider'>/</span></li><li class='active'>#{$scope.domain.name}</li>"
 
   $scope.countObject = (val) ->
     return 0 if not angular.isObject(val)
@@ -417,7 +417,7 @@ controllers.controller 'domainEditController', [ '$scope', '$filter', '$modal', 
     .error () ->
       $scope.loadServices = false
       buildAvailableServices()
-      $scope.errAddService = ['Failed to load services']
+      $scope.errAddService = [$filter("translate")("CORE.SERVICES.LOADING_FAILED")]
 
     $scope.addService = (serviceName) ->
       $scope.errAddService = []
@@ -438,7 +438,7 @@ controllers.controller 'domainEditController', [ '$scope', '$filter', '$modal', 
           $('#tabServices-' + serviceName).tab('show')
         , 0
       .error () ->
-        $scope.errAddService.push('Failed')
+        $scope.errAddService.push $filter("translate")("CORE.LABELS.FAILED")
 
     $scope.modalRemoveDomainService = (service) ->
       return false if not service
@@ -467,9 +467,9 @@ controllers.controller 'domainEditController', [ '$scope', '$filter', '$modal', 
         availableServices.push(service) if service.name? and not $scope.domain.services?[service.name]?
 
       if !availableServices.length
-        $scope.services.available = [{label: 'No services available', name:''}]
+        $scope.services.available = [{label: $filter("translate")("CORE.SERVICES.NOT_AVAILABLE"), name:''}]
       else
-        $scope.services.available = [{label: 'Add new service', name:''}]
+        $scope.services.available = [{label: $filter("translate")("CORE.SERVICES.ASSIGN_NEW"), name:''}]
 
       $scope.services.available = $scope.services.available.concat(availableServices);
 ]
@@ -498,7 +498,7 @@ controllers.controller 'domainNewController', [ '$scope', '$filter', 'domainsSer
     window.location = '#/';
 
   initBreadCrumb = () ->
-    $('ul.breadcrumb').html('<li><a href="/">Dashboard</a><span class="divider">/</span></li><li><a href="#/">Domains</a><span class="divider">/</span></li><li class="active">new</li>');
+    $('ul.breadcrumb').html "<li><a href='/'>#{$filter("translate")("CORE.LABELS.DASHBOARD")}</a><span class='divider'>/</span></li><li><a href='#/'>#{$filter("translate")("CORE.LABELS.DOMAINS")}</a><span class='divider'>/</span></li><li class='active'>#{$filter("translate")("CORE.DOMAINS.CREATE_DOMAIN")}</li>"
 
   initBreadCrumb()
 ]
@@ -506,13 +506,13 @@ controllers.controller 'domainNewController', [ '$scope', '$filter', 'domainsSer
 controllers.controller 'nodeEditController', ['$scope', '$filter', '$modal', '$q', '$routeParams', 'nodesService', 'logsService', 'modulesService', 'clientsService', 'domainsService' , ($scope, $filter, $modal, $q, $routeParams, nodesService, logsService, modulesService, clientsService, domainsService) ->
   $scope.nodeId = $routeParams.nodeId
   $scope.nodetypes = [
-    {name:"Virtual Server", value: "virtual", image: "dummy_vm_200.png"}
-    {name:"Cloud Server", value: "cloud", image: "dummy_cloud_200.png"}
-    {name:"Dedicated Server‎", value: "dedicated", image: "dummy_server_200.png"}
+    {name: $filter("translate")("CORE.NODES.SERVER_VIRTUAL"), value: "virtual", image: "dummy_vm_200.png"}
+    {name: $filter("translate")("CORE.NODES.SERVER_CLOUD‎"), value: "cloud", image: "dummy_cloud_200.png"}
+    {name: $filter("translate")("CORE.NODES.SERVER_DEDICATED‎"), value: "dedicated", image: "dummy_server_200.png"}
   ]
 
   initBreadCrumb = () ->
-    $('ul.breadcrumb').html('<li><a href="/">Dashboard</a><span class="divider">/</span></li><li><a href="#/">Nodes</a><span class="divider">/</span></li><li class="active">' + $scope.node.name + '</li>');
+    $('ul.breadcrumb').html "<li><a href='/'>#{$filter("translate")("CORE.LABELS.DASHBOARD")}</a><span class='divider'>/</span></li><li><a href='#/'>#{$filter("translate")("CORE.LABELS.NODES")}</a><span class='divider'>/</span></li><li class='active'>#{$scope.node.name}</li>"
 
   $scope.countObject = (val) ->
     return 0 if not angular.isObject(val)
@@ -615,7 +615,7 @@ controllers.controller 'nodeEditController', ['$scope', '$filter', '$modal', '$q
     .error () ->
         $scope.loadServices = false
         buildAvailableServices()
-        $scope.errAddService = ['Failed to load services']
+        $scope.errAddService = [$filter("translate")("CORE.SERVICES.LOADING_FAILED")]
 
     $scope.addService = (serviceName) ->
       $scope.errAddService = []
@@ -636,7 +636,7 @@ controllers.controller 'nodeEditController', ['$scope', '$filter', '$modal', '$q
           $('#tabServices-' + serviceName).tab('show')
         , 0
       .error () ->
-        $scope.errAddService.push('Failed')
+        $scope.errAddService.push $filter("translate")("CORE.LABELS.FAILED")
 
     $scope.modalRemoveService = (service) ->
       return false if not service
@@ -665,14 +665,14 @@ controllers.controller 'nodeEditController', ['$scope', '$filter', '$modal', '$q
         availableServices.push(service) if service.name? and not $scope.node.services?[service.name]?
 
       if !availableServices.length
-        $scope.services.available = [{label: 'No services available', name:''}]
+        $scope.services.available = [{label: $filter("translate")("CORE.SERVICES.NOT_AVAILABLE"), name:''}]
       else
-        $scope.services.available = [{label: 'Add new service', name:''}]
+        $scope.services.available = [{label: $filter("translate")("CORE.SERVICES.ASSIGN_NEW"), name:''}]
 
       $scope.services.available = $scope.services.available.concat(availableServices);
 ]
 
-controllers.controller 'nodeListController', ['$scope', 'nodesService', ($scope, nodesService) ->
+controllers.controller 'nodeListController', ['$scope', 'nodesService', '$filter', ($scope, nodesService, $filter) ->
   $scope.nodes = []
 
   $scope.loadUnregisteredNodes = true
@@ -685,7 +685,7 @@ controllers.controller 'nodeListController', ['$scope', 'nodesService', ($scope,
     $scope.loadUnregisteredNodes = false
 
   initBreadCrumb = () ->
-    $('ul.breadcrumb').html('<li><a href="/">Dashboard</a><span class="divider">/</span></li><li class="active">Nodes</li>');
+    $('ul.breadcrumb').html "<li><a href='/'>#{$filter("translate")("CORE.LABELS.DASHBOARD")}</a><span class='divider'>/</span></li><li class='active'>#{$filter("translate")("CORE.LABELS.NODES")}</li>"
 
   initBreadCrumb()
 ]
@@ -693,17 +693,17 @@ controllers.controller 'nodeListController', ['$scope', 'nodesService', ($scope,
 controllers.controller 'nodeRegisterController', [ '$scope', '$filter', '$routeParams', 'logsService', 'nodesService', ($scope, $filter, $routeParams, logsService, nodesService) ->
   $scope.nodeName = $routeParams.nodeName
   $scope.nodetypes = [
-    {name:"Select a node type", value: ''}
-    {name:"Virtual Server", value: "virtual", image: "dummy_vm_200.png"}
-    {name:"Cloud Server", value: "cloud", image: "dummy_cloud_200.png"}
-    {name:"Dedicated Server‎", value: "dedicated", image: "dummy_server_200.png"}
+    {name: $filter("translate")("CORE.NODES.SELECT_NODETYPE"), value: ''}
+    {name: $filter("translate")("CORE.NODES.SERVER_VIRTUAL"), value: "virtual", image: "dummy_vm_200.png"}
+    {name: $filter("translate")("CORE.NODES.SERVER_CLOUD‎"), value: "cloud", image: "dummy_cloud_200.png"}
+    {name: $filter("translate")("CORE.NODES.SERVER_DEDICATED‎"), value: "dedicated", image: "dummy_server_200.png"}
   ]
 
   $scope.cancelRegistration = () ->
     window.location = '#/';
 
   initBreadCrumb = () ->
-    $('ul.breadcrumb').html('<li><a href="/">Dashboard</a><span class="divider">/</span></li><li><a href="#/">Nodes</a><span class="divider">/</span></li><li class="active">register ' + $scope.nodeName + '</li>');
+    $('ul.breadcrumb').html "<li><a href='/'>#{$filter("translate")("CORE.LABELS.DASHBOARD")}</a><span class='divider'>/</span></li><li><a href='#/'>#{$filter("translate")("CORE.LABELS.NODES")}</a><span class='divider'>/</span></li><li class='active'>#{$filter("translate")("CORE.NODES.REGISTER")}: #{$scope.nodeName}</li>"
 
   $scope.changetype = (option) ->
     if (@selected = $filter("filter")($scope.nodetypes, {value: (option || "")})[0])
@@ -720,7 +720,7 @@ controllers.controller 'nodeRegisterController', [ '$scope', '$filter', '$routeP
       window.location = "#/"
     .error (data) ->
         $scope.messages = data.messages if data.messages?
-        $scope.messages.errors[0] = 'Request failed!' if ! data.messages?.errors?
+        $scope.messages.errors[0] = $filter("translate")("CORE.MESSAGES.REQUEST_FAILED") if ! data.messages?.errors?
 
   $scope.loadLog = true
   logsService.list {context: $scope.nodeName, type:"conflict", action: "unregistered api"}
@@ -738,7 +738,7 @@ controllers.controller 'nodeRegisterController', [ '$scope', '$filter', '$routeP
   initBreadCrumb();
 ]
 
-controllers.controller 'nodeModalDelete', [ '$scope', '$modalInstance', 'nodesService', 'nodeId', ($scope, $modalInstance, nodesService, nodeId) ->
+controllers.controller 'nodeModalDelete', [ '$scope', '$filter', '$modalInstance', 'nodesService', 'nodeId', ($scope, $filter, $modalInstance, nodesService, nodeId) ->
   $scope.ok = () ->
     $scope.errMessages = [];
 
@@ -746,13 +746,13 @@ controllers.controller 'nodeModalDelete', [ '$scope', '$modalInstance', 'nodesSe
     .success (data, code) ->
       $modalInstance.close(code)
     .error () ->
-      $scope.errMessages.push('Failed');
+      $scope.errMessages.push $filter("translate")("CORE.LABELS.FAILED")
 
   $scope.cancel = () ->
     $modalInstance.dismiss()
 ]
 
-controllers.controller 'nodeModalRemoveService', [ '$scope', '$modalInstance', 'service', 'node', 'nodesService', ($scope, $modalInstance, service, node, nodesService) ->
+controllers.controller 'nodeModalRemoveService', [ '$scope', '$filter', '$modalInstance', 'service', 'node', 'nodesService', ($scope, $filter, $modalInstance, service, node, nodesService) ->
   $scope.service = service
   $scope.node = node
 
@@ -766,7 +766,7 @@ controllers.controller 'nodeModalRemoveService', [ '$scope', '$modalInstance', '
     .success (data) ->
       $modalInstance.close(data.node.services)
     .error () ->
-      $scope.errMessages.push('Failed')
+      $scope.errMessages.push $filter("translate")("CORE.LABELS.FAILED")
 
   $scope.cancel = () ->
     $modalInstance.dismiss()
