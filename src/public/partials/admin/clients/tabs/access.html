@@ -16,17 +16,17 @@
                 <div maze-dl-wrapper class="row-fluid" dt-class="span3" dd-class="span6" label="{{'CORE.LABELS.PASSWORD_NEW' | translate}}">
                     <input type="password" id="password" ng-model="accessData.password" required>
 
-                    <alert ng-repeat="error in accessFormErr.password" type="'danger'">
+                    <div alert ng-repeat="error in accessFormErr.password" type="'danger'">
                         {{error}}
-                    </alert>
+                    </div>
                 </div>
 
                 <div maze-dl-wrapper class="row-fluid" dt-class="span3" dd-class="span6" label="{{'CORE.LABELS.PASSWORD_CONFIRM' | translate}}">
                     <input type="password" id="confirmPassword" ng-model="accessData.confirmPassword" required>
 
-                    <alert ng-repeat="error in accessFormErr.confirmPassword" type="'danger'">
+                    <div alert ng-repeat="error in accessFormErr.confirmPassword" type="'danger'">
                         {{error}}
-                    </alert>
+                    </div>
                 </div>
 
                 <div class="row-fluid">
@@ -35,9 +35,9 @@
                             ng-disabled="formClientAccess.$invalid" translate="CORE.LABELS.SAVE"></button>
                 </div>
 
-                <alert class="row-fluid" type="'success'" ng-show="accessSuccess">
+                <div alert class="row-fluid" type="'success'" ng-show="accessSuccess">
                     <div translate="CORE.MESSAGES.PASSWORD_CHANGED"></div>
-                </alert>
+                </div>
             </form>
         </div>
 

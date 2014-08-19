@@ -8,15 +8,15 @@
     <p>
         <div translate="CORE.CLIENTS.DELETE_SERVICE" translate-values="{service: service.name}"></div>
     </p>
-    <alert ng-repeat="error in errMessages" type="'danger'">
+    <div alert ng-repeat="error in errMessages" type="'danger'">
         {{error}}
-    </alert>
-    <alert ng-repeat="notification in notifyMessages" type="'info'">
+    </div>
+    <div alert ng-repeat="notification in notifyMessages" type="'info'">
         {{notification}}
-    </alert>
-    <alert ng-repeat="successe in successeMessages" type="'success'">
+    </div>
+    <div alert ng-repeat="successe in successeMessages" type="'success'">
         {{successe}}
-    </alert>
+    </div>
 </div>
 
 <div class="modal-footer">

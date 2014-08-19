@@ -47,20 +47,20 @@
         </div>
 
         <div class="row-fluid cssBoxCenter">
-            <tabset>
-                <tab heading="{{'CORE.LABELS.SERVICES' | translate}} ({{countObject(node.services) || 0}})">
+            <ul tabset>
+                <li tab heading="{{'CORE.LABELS.SERVICES' | translate}} ({{countObject(node.services) || 0}})">
                     <div ng-include="'/partials/admin/nodes/tabs/services.html'"></div>
-                </tab>
-                <tab heading="{{'CORE.LABELS.CLIENTS' | translate}} ({{(clients).length || 0}})">
+                </li>
+                <li tab heading="{{'CORE.LABELS.CLIENTS' | translate}} ({{(clients).length || 0}})">
                     <div ng-include="'/partials/admin/nodes/tabs/clients.html'"></div>
-                </tab>
-                <tab heading="{{'CORE.LABELS.DOMAINS' | translate}} ({{(domains).length || 0}})">
+                </li>
+                <li tab heading="{{'CORE.LABELS.DOMAINS' | translate}} ({{(domains).length || 0}})">
                     <div ng-include="'/partials/admin/nodes/tabs/domains.html'"></div>
-                </tab>
-                <tab heading="{{'CORE.LABELS.LOGS' | translate}}">
+                </li>
+                <li tab heading="{{'CORE.LABELS.LOGS' | translate}}">
                     <div ng-include="'/partials/admin/nodes/tabs/logs.html'"></div>
-                </tab>
-            </tabset>
+                </li>
+            </ul>
         </div>
 
     </div>

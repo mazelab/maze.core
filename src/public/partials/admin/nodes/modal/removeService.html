@@ -6,9 +6,9 @@
 
 <div class="modal-body">
     <p translate="CORE.NODES.DELETE_SERVICE" translate-values="{service: service.name}"></p>
-    <alert ng-repeat="error in errMessages" type="'danger'">
+    <div alert ng-repeat="error in errMessages" type="'danger'">
         {{error}}
-    </alert>
+    </div>
 </div>
 
 <div class="modal-footer">

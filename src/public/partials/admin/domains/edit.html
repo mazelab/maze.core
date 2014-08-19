@@ -52,17 +52,17 @@
         </div>
 
         <div class="row-fluid cssBoxCenter">
-            <tabset>
-                <tab heading="{{'CORE.LABELS.SERVICES' | translate}} ({{countObject(domain.services) || 0}})">
+            <ul tabset>
+                <li tab heading="{{'CORE.LABELS.SERVICES' | translate}} ({{countObject(domain.services) || 0}})">
                     <div ng-include="'/partials/admin/domains/tabs/services.html'"></div>
-                </tab>
-                <tab heading="{{'CORE.LABELS.NODES' | translate}} ({{(nodes).length || 0}})">
+                </li>
+                <li tab heading="{{'CORE.LABELS.NODES' | translate}} ({{(nodes).length || 0}})">
                     <div ng-include="'/partials/admin/domains/tabs/nodes.html'"></div>
-                </tab>
-                <tab heading="{{'CORE.LABELS.LOGS' | translate}}">
+                </li>
+                <li tab heading="{{'CORE.LABELS.LOGS' | translate}}">
                     <div ng-include="'/partials/admin/domains/tabs/logs.html'"></div>
-                </tab>
-            </tabset>
+                </li>
+            </ul>
         </div>
 
     </div>
