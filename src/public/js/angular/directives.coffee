@@ -67,13 +67,14 @@ directives.directive 'mazeSearch', ['$filter', ($filter) ->
       data: '=',
       limit: '@',
       page: '@',
-      uri: '@'
+      uri: '@',
+      search: '='
     }
     compile: (element, attrs) ->
       attrs.limit = 10 if not attrs.limit?
       attrs.page = 1 if not attrs.page?
     controller: ($scope, $http, $q) ->
-      $scope.search = $scope.first = $scope.last = $scope.total = ''
+      $scope.first = $scope.last = $scope.total = ''
       return false if not $scope.uri
 
       $scope.$parent.$on 'mazeSearchReload', () ->
@@ -187,5 +188,48 @@ directives.directive 'mazeAdditional', ['$filter', ($filter) ->
 
         return(event)
     ]
+  }
+]
+directives.directive 'mazeAdminSearch', ['$filter', ($filter) ->
+  {
+  restrict: "A"
+  templateUrl: '/partials/admin/directives/adminSearch.html'
+  controller: ['$scope', '$http', '$q', '$location', '$filter', ($scope, $http, $q, $location, $filter) ->
+    $scope.mazesearch = $location.search().search || ""
+    $scope.categories =
+      all     : {name: $filter("translate")("CORE.DIRECTIVES.SEARCH_All"), source: "/search/"},
+      clients : {name: $filter("translate")("CORE.LABELS.CLIENTS"), source: "/clients/"},
+      domains : {name: $filter("translate")("CORE.LABELS.DOMAINS"), source: "/domains/"},
+      nodes   : {name: $filter("translate")("CORE.LABELS.NODES"), source: "/nodes/"}
+    $scope.selection = $scope.categories.all
+
+    $scope.search = (search) ->
+      return if search == undefined
+      $scope.oldcontent().hide() if $scope.oldcontent().is ":visible"
+      if search == "" && $scope.oldcontent().is(":hidden") && $scope.categories.all.source == $scope.selection.source
+        $scope.oldcontent().show()
+        $location.path "/"
+        return false
+      return $location.search({search: search}) if $scope.location() == $scope.selection.source
+      $location.path($scope.selection.source)
+
+    $scope.location = ->
+      if $location.path() == "/" then window.location.pathname+ "/" else $location.path()
+
+    $scope.$watch "mazesearch", (search) ->
+      $scope.search(search) if search
+
+    $scope.oldcontent = ->
+      @content = angular.element "#mainContent" if not @content
+      @content
+
+    $scope.toggle = (category) ->
+      $scope.selection = category
+      $scope.mazesearch = $scope.mazesearch
+      $scope.search($scope.mazesearch)
+
+    for category of $scope.categories
+      $scope.toggle($scope.categories[category]) if $scope.categories[category].source == $scope.location()
+  ]
   }
 ]

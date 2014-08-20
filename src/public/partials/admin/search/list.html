@@ -1,0 +1,33 @@
+<div class="span12">
+
+    <div maze-search search="search" data="result" uri="/api/search">
+
+        <div id="searchListing" class="row-fluid cssListing">
+            <ul class="span12 unstyled">
+                <li class="row-fluid" ng-repeat="entry in result">
+                    <span class="row-fluid cssSearchHeader">
+                        <a class="span12" ng-href="{{entry.link}}">
+                            {{entry.headline}}
+                        </a>
+                    </span>
+                    <div class="row-fluid">
+                        <span class="cssThumbnail pull-left" ng-if="entry.pictureLeft">
+                            <img src="{{entry.pictureLeft}}"/>
+                        </span>
+                        <div class="pull-left cssSearchContent">
+                            <p>{{entry.teaser}}</p>
+                            <small class="muted">
+                                {{'CORE.DIRECTIVES.SEARCH_CATEGORY' | translate}}:
+                                <a ng-href="{{entry.categoryLink}}" ng-if="entry.categoryLink">
+                                    {{entry.category}}
+                                </a>
+                                <span ng-if="!entry.categoryLink">{{entry.category}}</span>
+                            </small>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+    </div>
+</div>

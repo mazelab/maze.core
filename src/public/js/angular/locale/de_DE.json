@@ -108,7 +108,9 @@
             "ADDITIONAL_LABEL_EXIST": "Dieses Label existiert bereits!",
             "SEARCH_LABEL": "Suche",
             "SEARCH_TOTAL_OF": "von",
-            "SEARCH_NOTHING_FOUND": "Nichts zu finden"
+            "SEARCH_NOTHING_FOUND": "Nichts zu finden",
+            "SEARCH_CATEGORY": "Kategorie",
+            "SEARCH_All": "Alles"
         },
         "LOADING": "Wird geladen..."
     }

@@ -1,7 +1,8 @@
 controllers = angular.module 'maze.controllers', []
 
-controllers.controller 'clientListController', ['$scope', 'authService', '$filter', ($scope, authService, $filter) ->
+controllers.controller 'clientListController', ['$scope', 'authService', '$filter', '$location', ($scope, authService, $filter, $location) ->
   $scope.client = []
+  $scope.search = $location.search().search
 
   initBreadCrumb = () ->
     $('ul.breadcrumb').html "<li><a href='/'>#{$filter("translate")("CORE.LABELS.DASHBOARD")}</a><span class='divider'>/</span></li><li class='active'>#{$filter("translate")("CORE.LABELS.CLIENTS")}</li>"
@@ -17,6 +18,9 @@ controllers.controller 'clientListController', ['$scope', 'authService', '$filte
     .error (data) ->
         $scope.errors[id] = [$filter("translate")("CORE.MESSAGES.REQUEST_FAILED")];
         $scope.loadClientLogin = false;
+
+  $scope.$watch "mazesearch", (search) ->
+    $scope.search = search
 
   initBreadCrumb()
 ]
@@ -323,8 +327,12 @@ controllers.controller 'domainModalDelete', ['$scope', '$filter', '$modalInstanc
     $modalInstance.dismiss()
 ]
 
-controllers.controller 'domainListController', ['$scope', '$filter', ($scope, $filter) ->
+controllers.controller 'domainListController', ['$scope', '$filter', '$location', ($scope, $filter, $location) ->
   $scope.domains = []
+  $scope.search = $location.search().search
+
+  $scope.$watch "mazesearch", (search) ->
+    $scope.search = search
 
   initBreadCrumb = () ->
     $('ul.breadcrumb').html "<li><a href='/'>#{$filter("translate")("CORE.LABELS.DASHBOARD")}</a><span class='divider'>/</span></li><li class='active'>#{$filter("translate")("CORE.LABELS.DOMAINS")}</li>"
@@ -672,8 +680,9 @@ controllers.controller 'nodeEditController', ['$scope', '$filter', '$modal', '$q
       $scope.services.available = $scope.services.available.concat(availableServices);
 ]
 
-controllers.controller 'nodeListController', ['$scope', 'nodesService', '$filter', ($scope, nodesService, $filter) ->
+controllers.controller 'nodeListController', ['$scope', 'nodesService', '$filter', '$location', ($scope, nodesService, $filter, $location) ->
   $scope.nodes = []
+  $scope.search = $location.search().search
 
   $scope.loadUnregisteredNodes = true
   nodesService.list ({unregistered: 1})
@@ -683,6 +692,9 @@ controllers.controller 'nodeListController', ['$scope', 'nodesService', '$filter
   .error () ->
     $scope.unregisteredNodes = null
     $scope.loadUnregisteredNodes = false
+
+  $scope.$watch "mazesearch", (search) ->
+    $scope.search = search
 
   initBreadCrumb = () ->
     $('ul.breadcrumb').html "<li><a href='/'>#{$filter("translate")("CORE.LABELS.DASHBOARD")}</a><span class='divider'>/</span></li><li class='active'>#{$filter("translate")("CORE.LABELS.NODES")}</li>"
@@ -772,3 +784,16 @@ controllers.controller 'nodeModalRemoveService', [ '$scope', '$filter', '$modalI
     $modalInstance.dismiss()
 ]
 
+controllers.controller 'searchListController', ['$scope', '$filter', '$location', ($scope, $filter, $location) ->
+  $scope.result = []
+  $scope.search = $location.search().search
+
+  $scope.$watch "mazesearch", (search) ->
+    $scope.search = search
+    initBreadCrumb()
+
+  initBreadCrumb = () ->
+    $('ul.breadcrumb').html "<li><a href='/'>#{$filter("translate")("CORE.LABELS.DASHBOARD")}</a><span class='divider'>/</span></li><li><a >#{$filter("translate")("CORE.DIRECTIVES.SEARCH_LABEL")}</a><span class='divider'>/</span></li><li class='active'>#{$scope.search}</li>"
+
+  initBreadCrumb()
+]

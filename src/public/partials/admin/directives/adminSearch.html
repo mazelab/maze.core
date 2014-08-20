@@ -1,0 +1,19 @@
+<form class="pull-left">
+    <div class="input-prepend span12">
+
+        <div class="btn-group">
+            <button class="btn btn-info dropdown-toggle">
+                {{selection.name}} <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu unstyled">
+                <li ng-repeat="(id, category) in categories" ng-click="toggle(category);">
+                    <a id="searchCategory-{{id}}">{{category.name}}</a>
+                </li>
+            </ul>
+        </div>
+
+        <input class="input-xxlarge" ng-model="mazesearch" type="text"
+               placeholder="{{'CORE.DIRECTIVES.SEARCH_LABEL' | translate}}..."/>
+
+    </div>
+</form>

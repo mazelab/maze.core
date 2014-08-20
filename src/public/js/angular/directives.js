@@ -74,7 +74,8 @@
           data: '=',
           limit: '@',
           page: '@',
-          uri: '@'
+          uri: '@',
+          search: '='
         },
         compile: function(element, attrs) {
           if (attrs.limit == null) {
@@ -86,7 +87,7 @@
         },
         controller: function($scope, $http, $q) {
           var load;
-          $scope.search = $scope.first = $scope.last = $scope.total = '';
+          $scope.first = $scope.last = $scope.total = '';
           if (!$scope.uri) {
             return false;
           }
@@ -227,6 +228,89 @@
     }
   ]);
 
-}).call(this);
+  directives.directive('mazeAdminSearch', [
+    '$filter', function($filter) {
+      return {
+        restrict: "A",
+        templateUrl: '/partials/admin/directives/adminSearch.html',
+        controller: [
+          '$scope', '$http', '$q', '$location', '$filter', function($scope, $http, $q, $location, $filter) {
+            var category, _results;
+            $scope.mazesearch = $location.search().search || "";
+            $scope.categories = {
+              all: {
+                name: $filter("translate")("CORE.DIRECTIVES.SEARCH_All"),
+                source: "/search/"
+              },
+              clients: {
+                name: $filter("translate")("CORE.LABELS.CLIENTS"),
+                source: "/clients/"
+              },
+              domains: {
+                name: $filter("translate")("CORE.LABELS.DOMAINS"),
+                source: "/domains/"
+              },
+              nodes: {
+                name: $filter("translate")("CORE.LABELS.NODES"),
+                source: "/nodes/"
+              }
+            };
+            $scope.selection = $scope.categories.all;
+            $scope.search = function(search) {
+              if (search === void 0) {
+                return;
+              }
+              if ($scope.oldcontent().is(":visible")) {
+                $scope.oldcontent().hide();
+              }
+              if (search === "" && $scope.oldcontent().is(":hidden") && $scope.categories.all.source === $scope.selection.source) {
+                $scope.oldcontent().show();
+                $location.path("/");
+                return false;
+              }
+              if ($scope.location() === $scope.selection.source) {
+                return $location.search({
+                  search: search
+                });
+              }
+              return $location.path($scope.selection.source);
+            };
+            $scope.location = function() {
+              if ($location.path() === "/") {
+                return window.location.pathname + "/";
+              } else {
+                return $location.path();
+              }
+            };
+            $scope.$watch("mazesearch", function(search) {
+              if (search) {
+                return $scope.search(search);
+              }
+            });
+            $scope.oldcontent = function() {
+              if (!this.content) {
+                this.content = angular.element("#mainContent");
+              }
+              return this.content;
+            };
+            $scope.toggle = function(category) {
+              $scope.selection = category;
+              $scope.mazesearch = $scope.mazesearch;
+              return $scope.search($scope.mazesearch);
+            };
+            _results = [];
+            for (category in $scope.categories) {
+              if ($scope.categories[category].source === $scope.location()) {
+                _results.push($scope.toggle($scope.categories[category]));
+              } else {
+                _results.push(void 0);
+              }
+            }
+            return _results;
+          }
+        ]
+      };
+    }
+  ]);
 
-//# sourceMappingURL=directives.map
+}).call(this);

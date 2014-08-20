@@ -50,9 +50,7 @@
                            id="home">
                             <img src="<?= $this->baseUrl() ?>/img/logo_maze_sh.png"  width="40px" height="40px" alt="<?= $this->translate('image') ?>" />
                         </a>
-                        <div class="pull-left cssSearch">
-                            <?= $this->render('admin/search.phtml'); ?>
-                        </div>
+                        <div maze-admin-search class="pull-left cssSearch"></div>
                         <div class="nav-collapse collapse pull-right">
                             <ul class="nav nav-pills pull-right">
                                 <li class="dropdown">
@@ -94,7 +92,7 @@
                                        data-toggle="dropdown"
                                        href="#">
                                            <? if ($this->html('identity/avatar') != ''): ?>
-                                            <img id="jsAvatar" name="avatar" 
+                                            <img id="jsAvatar" name="avatar"
                                                  src="<?= $this->urlAvatar($this->html('identity/_id'), 50); ?>"
                                                  alt="<?= $this->translate('avatar') ?>"/>
                                              <? else: ?>
@@ -149,6 +147,9 @@
                         <?= $this->render('admin/messages.phtml') ?>
                         <?php echo $this->layout()->content; ?>
                     </div>
+                    <div id="ngContent" class="container-fluid">
+                        <div class="row-fluid" ng-view></div>
+                    </div>
                     <div class="push"></div>
                 </div>
             </div>
@@ -186,13 +187,9 @@
             $(document).ready(function() {
                 $('.selectpicker').selectpicker();
                 $('ul.jsLineColor .jsLine:even').addClass('One');
-                $('ul.jsLineColor .jsLine:odd').addClass('Two'); 
-                $("#coreSearchCategoryList li a").click(function(){
-                    $("#coreSearchCategory").html($(this).text()+' <span class="caret"></span>');
-                    $("#coreSearchCategory").val($(this).text());
-
-                });
+                $('ul.jsLineColor .jsLine:odd').addClass('Two');
             });
+
             var mazeEditableOptions = {
                 cancel: '<button class="btn btn-info btn-mini" type="submit" title="<?= $this->translate('cancel') ?>"><i class="icon-remove icon-white"></i></button>',
                 submit: '<button class="btn btn-info btn-mini" type="submit" title="<?= $this->translate('save') ?>"><i class="icon-ok icon-white"></i></button>',

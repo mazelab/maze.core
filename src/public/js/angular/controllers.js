@@ -5,9 +5,10 @@
   controllers = angular.module('maze.controllers', []);
 
   controllers.controller('clientListController', [
-    '$scope', 'authService', '$filter', function($scope, authService, $filter) {
+    '$scope', 'authService', '$filter', '$location', function($scope, authService, $filter, $location) {
       var initBreadCrumb;
       $scope.client = [];
+      $scope.search = $location.search().search;
       initBreadCrumb = function() {
         return $('ul.breadcrumb').html("<li><a href='/'>" + ($filter("translate")("CORE.LABELS.DASHBOARD")) + "</a><span class='divider'>/</span></li><li class='active'>" + ($filter("translate")("CORE.LABELS.CLIENTS")) + "</li>");
       };
@@ -25,6 +26,9 @@
           return $scope.loadClientLogin = false;
         });
       };
+      $scope.$watch("mazesearch", function(search) {
+        return $scope.search = search;
+      });
       return initBreadCrumb();
     }
   ]);
@@ -436,9 +440,13 @@
   ]);
 
   controllers.controller('domainListController', [
-    '$scope', '$filter', function($scope, $filter) {
+    '$scope', '$filter', '$location', function($scope, $filter, $location) {
       var initBreadCrumb;
       $scope.domains = [];
+      $scope.search = $location.search().search;
+      $scope.$watch("mazesearch", function(search) {
+        return $scope.search = search;
+      });
       initBreadCrumb = function() {
         return $('ul.breadcrumb').html("<li><a href='/'>" + ($filter("translate")("CORE.LABELS.DASHBOARD")) + "</a><span class='divider'>/</span></li><li class='active'>" + ($filter("translate")("CORE.LABELS.DOMAINS")) + "</li>");
       };
@@ -912,9 +920,10 @@
   ]);
 
   controllers.controller('nodeListController', [
-    '$scope', 'nodesService', '$filter', function($scope, nodesService, $filter) {
+    '$scope', 'nodesService', '$filter', '$location', function($scope, nodesService, $filter, $location) {
       var initBreadCrumb;
       $scope.nodes = [];
+      $scope.search = $location.search().search;
       $scope.loadUnregisteredNodes = true;
       nodesService.list({
         unregistered: 1
@@ -924,6 +933,9 @@
       }).error(function() {
         $scope.unregisteredNodes = null;
         return $scope.loadUnregisteredNodes = false;
+      });
+      $scope.$watch("mazesearch", function(search) {
+        return $scope.search = search;
       });
       initBreadCrumb = function() {
         return $('ul.breadcrumb').html("<li><a href='/'>" + ($filter("translate")("CORE.LABELS.DASHBOARD")) + "</a><span class='divider'>/</span></li><li class='active'>" + ($filter("translate")("CORE.LABELS.NODES")) + "</li>");
@@ -1047,6 +1059,20 @@
     }
   ]);
 
-}).call(this);
+  controllers.controller('searchListController', [
+    '$scope', '$filter', '$location', function($scope, $filter, $location) {
+      var initBreadCrumb;
+      $scope.result = [];
+      $scope.search = $location.search().search;
+      $scope.$watch("mazesearch", function(search) {
+        $scope.search = search;
+        return initBreadCrumb();
+      });
+      initBreadCrumb = function() {
+        return $('ul.breadcrumb').html("<li><a href='/'>" + ($filter("translate")("CORE.LABELS.DASHBOARD")) + "</a><span class='divider'>/</span></li><li><a >" + ($filter("translate")("CORE.DIRECTIVES.SEARCH_LABEL")) + "</a><span class='divider'>/</span></li><li class='active'>" + $scope.search + "</li>");
+      };
+      return initBreadCrumb();
+    }
+  ]);
 
-//# sourceMappingURL=controllers.map
+}).call(this);
