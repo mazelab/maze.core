@@ -6,6 +6,7 @@
             "CREATE_CLIENT": "Create client",
             "THE_CLIENT_IS": "The client is",
             "CLIENT_LABEL": "Client",
+            "MY_PROFILE": "My profile",
             "CHOOSE_CLIENT": "Choose client",
             "DELETE_CLIENT": "Shall the client really be deleted?",
             "REMOVE_SERVICE": "Remove Service {{service}} from client {{client}}",
@@ -43,7 +44,26 @@
             "DELETE_SERVICE": "Should the service {{service}} be removed from the node?"
         },
         "NEWS": {
-            "LATEST_NEWS": "Latest news"
+            "LATEST_NEWS": "Latest news",
+            "WRITE_MESSAGE": "New Message",
+            "MESSAGES": "Messages",
+            "CONTENT": "Content",
+            "HEADLINE": "Headline",
+            "STICKY": "Sticky",
+            "TAGS": "Tags",
+            "STICKY_DESC": "always kept at the upper position",
+            "CLOSED": "Closed",
+            "DRAFT": "Draft",
+            "PUBLIC": "Public",
+            "PUBLISCH": "Publish",
+            "SAVE_DRAFT": "Save as Draft",
+            "NOT_FOUND": "Message not found",
+            "SENT_AS_EMAIL": "Message has been sent as an email",
+            "PUBLISCHED_AND_SENT": "Message published and sent to all clients",
+            "DELETE_MESSAGE": "Shall the message send to all registered clients ?",
+            "PUBLISCH_AND_SEND": "Publish and send via email",
+            "PUBLICHED_ON": "Published on",
+            "LAST_UPDATED": "last Updated"
         },
         "SERVICES": {
             "LOADING_FAILED": "Failed to load services",
@@ -96,6 +116,13 @@
             "ACCESS_DATA": "Access data",
             "LOGS": "Logs",
             "DASHBOARD": "Dashboard"
+        },
+        "MODULES": {
+            "MODULE_LABEL": "Modules"
+        },
+        "SYSTEM": {
+            "SYSTEM_LABEL": "System",
+            "CREATE_ADMIN" : "Create admin"
         },
         "MESSAGES": {
             "ATTENTION": "Attention!",

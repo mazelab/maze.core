@@ -3,7 +3,7 @@
         <div class="row-fluid cssListing">
             <div class="span12 cssHeaderList">
                 <div class="cssButton span12">
-                    <a class="btn btn-info jsButton" href="<?= $this->url(array(), "addNews") ?>">
+                    <a class="btn btn-info jsButton" href="#/news/add">
                         <?= $this->translate("New Message") ?>
                     </a>
                 </div>
@@ -18,16 +18,16 @@
                 <li class="row-fluid">
                     <div class="span10">
                         <a class="cssListItem span12" title="<?= $this->translate("detail") ?>"
-                            href="<?= $this->url(array($page->html("_id")), "newsDetail") ?>">
+                            href="#/news/edit/<?= $page->html("_id"). "/". $page->html("title"); ?>">
                             <span>
                                 <? if ($page->toBool("sticky") == true): ?>
                                 <span class="jsTooltip icon-arrow-up" style="opacity:0.6;"
                                       title="<?= $this->translate("always kept at the upper position") ?>."></span>
                                 <? endif; ?>
                                 <? if ($page->html("status") == Core_Model_NewsManager::STATUS_DRAFT): ?>
-                                <span class="label label-warning"><?= $this->translate("Draft"); ?></span> 
+                                <span class="label label-warning"><?= $this->translate("Draft"); ?></span>
                                 <? elseif ($page->html("status") == Core_Model_NewsManager::STATUS_CLOSED): ?>
-                                <span class="label"><?= $this->translate("Closed"); ?></span> 
+                                <span class="label"><?= $this->translate("Closed"); ?></span>
                                 <? endif; ?>
 
                                 <? if ($page->toBool("sentEmail") === true): ?>
@@ -52,28 +52,30 @@
 
         $(".jsTooltip").tooltip();
 
-        $('#newsSearchInput').mazeSearch({
+        search =  $("input[ng-model=mazesearch]");
+        search.mazeSearch({
             source: '<?= $this->url(array(), 'news') ?>?format=html',
-            target: '#jsNewsPagerContainer'
+            target: '#jsNewsPagerContainer',
+            page: '<?= $this->html("pager/page") ?>'
         });
 
         $('#jsPagerNext').unbind("click").click(function() {
-            $('#newsSearchInput').mazeSearch('next');
+            search.mazeSearch('next');
             return false;
         });
 
         $('#jsPagerPrev').unbind("click").click(function() {
-            $('#newsSearchInput').mazeSearch('prev');
+            search.mazeSearch('prev');
             return false;
         });
 
         $('.jsPagerFirst').unbind("click").click(function() {
-            $('#newsSearchInput').mazeSearch('first');
+            search.mazeSearch('first');
             return false;
         });
 
         $('.jsPagerLast').unbind("click").click(function() {
-            $('#newsSearchInput').mazeSearch('last');
+            search.mazeSearch('last');
             return false;
         });
     });

@@ -1,7 +1,7 @@
 <ul id="tabClientNodesList" class="unstyled cssTab">
     <li ng-repeat="node in nodes" id="tabClientNodesListEntry-{{node._id}}" class="row-fluid cssLine">
 
-        <a href="/nodes/#/edit/{{node._id}}" title="{{node.name}}" class="span8">
+        <a ng-href="#/nodes/edit/{{node._id}}" title="{{node.name}}" class="span8">
             {{node.name}}
         </a>
 
@@ -9,7 +9,7 @@
                                label="{{'CORE.LABELS.DOMAINS' | translate}} ({{countObject(node.domains) || 0}})">
             <ul id="tabClientNodesListDomains-{{node._id}}" class="cssPopoverTabList unstyled pull-left row-fluid">
                 <li ng-repeat="domain in node.domains">
-                    <a href="/domains#/edit/{{domain._id}}" title="{{domain.name}}" class="pull-left">
+                    <a ng-href="#/domains/edit/{{domain._id}}" title="{{domain.name}}" class="pull-left">
                         <span>
                             {{domain.name}}
                         </span>

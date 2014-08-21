@@ -10,7 +10,7 @@
       $scope.client = [];
       $scope.search = $location.search().search;
       initBreadCrumb = function() {
-        return $('ul.breadcrumb').html("<li><a href='/'>" + ($filter("translate")("CORE.LABELS.DASHBOARD")) + "</a><span class='divider'>/</span></li><li class='active'>" + ($filter("translate")("CORE.LABELS.CLIENTS")) + "</li>");
+        return $('ul.breadcrumb').html("<li><a href='#/'>" + ($filter("translate")("CORE.LABELS.DASHBOARD")) + "</a><span class='divider'>/</span></li><li class='active'>" + ($filter("translate")("CORE.LABELS.CLIENTS")) + "</li>");
       };
       $scope.loginAsClient = function(id) {
         $scope.loadClientLogin = true;
@@ -39,7 +39,7 @@
       $scope.client = {};
       $scope.clientId = $routeParams.clientId;
       initBreadCrumb = function() {
-        return $('ul.breadcrumb').html("<li><a href='/'>" + ($filter("translate")("CORE.LABELS.DASHBOARD")) + "</a><span class='divider'>/</span></li><li><a href='#/'>" + ($filter("translate")("CORE.LABELS.CLIENTS")) + "</a><span class='divider'>/</span></li><li class='active'>" + $scope.client.label + "</li>");
+        return $('ul.breadcrumb').html("<li><a href='#/'>" + ($filter("translate")("CORE.LABELS.DASHBOARD")) + "</a><span class='divider'>/</span></li><li><a href='#/clients'>" + ($filter("translate")("CORE.LABELS.CLIENTS")) + "</a><span class='divider'>/</span></li><li class='active'>" + $scope.client.label + "</li>");
       };
       $scope.activate = function() {
         return $scope.changeState(true);
@@ -370,15 +370,25 @@
     }
   ]);
 
+  controllers.controller('clientSwitchToController', [
+    '$routeParams', 'authService', function($routeParams, authService) {
+      return authService.client($routeParams.clientId).success(function() {
+        return location.href = "/";
+      }).error(function() {
+        return setErrorMessages([$filter("translate")("CORE.MESSAGES.REQUEST_FAILED")]);
+      });
+    }
+  ]);
+
   controllers.controller('clientNewController', [
     '$scope', 'clientsService', '$filter', function($scope, clientsService, $filter) {
       var initBreadCrumb;
       $scope.client = {};
       initBreadCrumb = function() {
-        return $('ul.breadcrumb').html("<li><a href='/'>" + ($filter("translate")("CORE.LABELS.DASHBOARD")) + "</a><span class='divider'>/</span></li><li><a href='#/'>" + ($filter("translate")("CORE.LABELS.CLIENTS")) + "</a><span class='divider'>/</span></li><li class='active'>" + ($filter("translate")("CORE.CLIENTS.CREATE_CLIENT")) + "</li>");
+        return $('ul.breadcrumb').html("<li><a href='#/'>" + ($filter("translate")("CORE.LABELS.DASHBOARD")) + "</a><span class='divider'>/</span></li><li><a href='#/clients'>" + ($filter("translate")("CORE.LABELS.CLIENTS")) + "</a><span class='divider'>/</span></li><li class='active'>" + ($filter("translate")("CORE.CLIENTS.CREATE_CLIENT")) + "</li>");
       };
       $scope.cancel = function() {
-        return window.location = '#/';
+        return window.history.back();
       };
       $scope.createClient = function() {
         $scope.formErrors = $scope.messages = [];
@@ -448,7 +458,7 @@
         return $scope.search = search;
       });
       initBreadCrumb = function() {
-        return $('ul.breadcrumb').html("<li><a href='/'>" + ($filter("translate")("CORE.LABELS.DASHBOARD")) + "</a><span class='divider'>/</span></li><li class='active'>" + ($filter("translate")("CORE.LABELS.DOMAINS")) + "</li>");
+        return $('ul.breadcrumb').html("<li><a href='#/'>" + ($filter("translate")("CORE.LABELS.DASHBOARD")) + "</a><span class='divider'>/</span></li><li class='active'>" + ($filter("translate")("CORE.LABELS.DOMAINS")) + "</li>");
       };
       return initBreadCrumb();
     }
@@ -459,7 +469,7 @@
       var initBreadCrumb, initServices;
       $scope.domainId = $routeParams.domainId;
       initBreadCrumb = function() {
-        return $('ul.breadcrumb').html("<li><a href='/'>" + ($filter("translate")("CORE.LABELS.DASHBOARD")) + "</a><span class='divider'>/</span></li><li><a href='#/'>" + ($filter("translate")("CORE.LABELS.DOMAINS")) + "</a><span class='divider'>/</span></li><li class='active'>" + $scope.domain.name + "</li>");
+        return $('ul.breadcrumb').html("<li><a href='#/'>" + ($filter("translate")("CORE.LABELS.DASHBOARD")) + "</a><span class='divider'>/</span></li><li><a href='#/domains'>" + ($filter("translate")("CORE.LABELS.DOMAINS")) + "</a><span class='divider'>/</span></li><li class='active'>" + $scope.domain.name + "</li>");
       };
       $scope.countObject = function(val) {
         if (!angular.isObject(val)) {
@@ -665,7 +675,7 @@
           if (headers('location')) {
             return window.location = headers('location');
           }
-          return location.href = "#/";
+          return window.history.back();
         }).error(function(data) {
           if (data.messages != null) {
             $scope.messages = data.messages;
@@ -676,10 +686,10 @@
         });
       };
       $scope.cancelCreation = function() {
-        return window.location = '#/';
+        return window.history.back();
       };
       initBreadCrumb = function() {
-        return $('ul.breadcrumb').html("<li><a href='/'>" + ($filter("translate")("CORE.LABELS.DASHBOARD")) + "</a><span class='divider'>/</span></li><li><a href='#/'>" + ($filter("translate")("CORE.LABELS.DOMAINS")) + "</a><span class='divider'>/</span></li><li class='active'>" + ($filter("translate")("CORE.DOMAINS.CREATE_DOMAIN")) + "</li>");
+        return $('ul.breadcrumb').html("<li><a href='#/'>" + ($filter("translate")("CORE.LABELS.DASHBOARD")) + "</a><span class='divider'>/</span></li><li><a href='#/domains'>" + ($filter("translate")("CORE.LABELS.DOMAINS")) + "</a><span class='divider'>/</span></li><li class='active'>" + ($filter("translate")("CORE.DOMAINS.CREATE_DOMAIN")) + "</li>");
       };
       return initBreadCrumb();
     }
@@ -705,7 +715,7 @@
         }
       ];
       initBreadCrumb = function() {
-        return $('ul.breadcrumb').html("<li><a href='/'>" + ($filter("translate")("CORE.LABELS.DASHBOARD")) + "</a><span class='divider'>/</span></li><li><a href='#/'>" + ($filter("translate")("CORE.LABELS.NODES")) + "</a><span class='divider'>/</span></li><li class='active'>" + $scope.node.name + "</li>");
+        return $('ul.breadcrumb').html("<li><a href='#/'>" + ($filter("translate")("CORE.LABELS.DASHBOARD")) + "</a><span class='divider'>/</span></li><li><a href='#/nodes'>" + ($filter("translate")("CORE.LABELS.NODES")) + "</a><span class='divider'>/</span></li><li class='active'>" + $scope.node.name + "</li>");
       };
       $scope.countObject = function(val) {
         if (!angular.isObject(val)) {
@@ -938,7 +948,7 @@
         return $scope.search = search;
       });
       initBreadCrumb = function() {
-        return $('ul.breadcrumb').html("<li><a href='/'>" + ($filter("translate")("CORE.LABELS.DASHBOARD")) + "</a><span class='divider'>/</span></li><li class='active'>" + ($filter("translate")("CORE.LABELS.NODES")) + "</li>");
+        return $('ul.breadcrumb').html("<li><a href='#/'>" + ($filter("translate")("CORE.LABELS.DASHBOARD")) + "</a><span class='divider'>/</span></li><li class='active'>" + ($filter("translate")("CORE.LABELS.NODES")) + "</li>");
       };
       return initBreadCrumb();
     }
@@ -967,10 +977,10 @@
         }
       ];
       $scope.cancelRegistration = function() {
-        return window.location = '#/';
+        return window.history.back();
       };
       initBreadCrumb = function() {
-        return $('ul.breadcrumb').html("<li><a href='/'>" + ($filter("translate")("CORE.LABELS.DASHBOARD")) + "</a><span class='divider'>/</span></li><li><a href='#/'>" + ($filter("translate")("CORE.LABELS.NODES")) + "</a><span class='divider'>/</span></li><li class='active'>" + ($filter("translate")("CORE.NODES.REGISTER")) + ": " + $scope.nodeName + "</li>");
+        return $('ul.breadcrumb').html("<li><a href='#/'>" + ($filter("translate")("CORE.LABELS.DASHBOARD")) + "</a><span class='divider'>/</span></li><li><a href='#/nodes'>" + ($filter("translate")("CORE.LABELS.NODES")) + "</a><span class='divider'>/</span></li><li class='active'>" + ($filter("translate")("CORE.NODES.REGISTER")) + ": " + $scope.nodeName + "</li>");
       };
       $scope.changetype = function(option) {
         if ((this.selected = $filter("filter")($scope.nodetypes, {
@@ -1069,9 +1079,88 @@
         return initBreadCrumb();
       });
       initBreadCrumb = function() {
-        return $('ul.breadcrumb').html("<li><a href='/'>" + ($filter("translate")("CORE.LABELS.DASHBOARD")) + "</a><span class='divider'>/</span></li><li><a >" + ($filter("translate")("CORE.DIRECTIVES.SEARCH_LABEL")) + "</a><span class='divider'>/</span></li><li class='active'>" + $scope.search + "</li>");
+        return $('ul.breadcrumb').html("<li><a href='#/'>" + ($filter("translate")("CORE.LABELS.DASHBOARD")) + "</a><span class='divider'>/</span></li><li><a>" + ($filter("translate")("CORE.DIRECTIVES.SEARCH_LABEL")) + "</a><span class='divider'>/</span></li><li class='active'>" + $scope.search + "</li>");
       };
       return initBreadCrumb();
+    }
+  ]);
+
+  controllers.controller('dashboardController', [
+    '$scope', '$filter', '$location', function($scope, $filter, $location) {
+      return $('ul.breadcrumb').html("<li class='active'>" + ($filter("translate")("CORE.LABELS.DASHBOARD")) + "</li>");
+    }
+  ]);
+
+  controllers.controller('newsListController', [
+    '$scope', '$filter', function($scope, $filter) {
+      return $('ul.breadcrumb').html("<li><a href='#/'>" + ($filter("translate")("CORE.LABELS.DASHBOARD")) + "</a><span class='divider'>/</span></li><li class='active'>" + ($filter("translate")("CORE.NEWS.MESSAGES")) + "</li>");
+    }
+  ]);
+
+  controllers.controller('newsEditController', [
+    '$scope', '$filter', '$routeParams', function($scope, $filter, $routeParams) {
+      return $('ul.breadcrumb').html("<li><a href='#/'>" + ($filter("translate")("CORE.LABELS.DASHBOARD")) + "</a><span class='divider'>/</span></li><li><a href='#/news/'>" + ($filter("translate")("CORE.NEWS.MESSAGES")) + "</a><span class='divider'>/</span></li><li class='active'>" + $routeParams.title + "</li>");
+    }
+  ]);
+
+  controllers.controller('newsAddController', [
+    '$scope', '$filter', function($scope, $filter) {
+      return $('ul.breadcrumb').html("<li><a href='#/'>" + ($filter("translate")("CORE.LABELS.DASHBOARD")) + "</a><span class='divider'>/</span></li><li><a href='#/news/'>" + ($filter("translate")("CORE.NEWS.MESSAGES")) + "</a><span class='divider'>/</span></li><li class='active'>" + ($filter("translate")("CORE.NEWS.WRITE_MESSAGE")) + "</li>");
+    }
+  ]);
+
+  controllers.controller('profileController', [
+    '$scope', '$filter', function($scope, $filter) {
+      return $('ul.breadcrumb').html("<li><a href='#/'>" + ($filter("translate")("CORE.LABELS.DASHBOARD")) + "</a><span class='divider'>/</span></li><li class='active'>" + ($filter("translate")("CORE.CLIENTS.MY_PROFILE")) + "</li>");
+    }
+  ]);
+
+  controllers.controller('profileAccessController', [
+    '$scope', '$filter', function($scope, $filter) {
+      return $('ul.breadcrumb').html("<li><a href='#/'>" + ($filter("translate")("CORE.LABELS.DASHBOARD")) + "</a><span class='divider'>/</span></li><li><a href='#/profile/'>" + ($filter("translate")("CORE.CLIENTS.MY_PROFILE")) + "</a><span class='divider'>/</span></li><li class='active'>" + ($filter("translate")("CORE.LABELS.CHANGE_PASSWORD")) + "</li>");
+    }
+  ]);
+
+  controllers.controller('systemController', [
+    '$scope', '$filter', function($scope, $filter) {
+      return $('ul.breadcrumb').html("<li><a href='#/'>" + ($filter("translate")("CORE.LABELS.DASHBOARD")) + "</a><span class='divider'>/</span></li><li class='active'>" + ($filter("translate")("CORE.SYSTEM.SYSTEM_LABEL")) + "</li>");
+    }
+  ]);
+
+  controllers.controller('systemAddAdminController', [
+    '$scope', '$filter', function($scope, $filter) {
+      return $('ul.breadcrumb').html("<li><a href='#/'>" + ($filter("translate")("CORE.LABELS.DASHBOARD")) + "</a><span class='divider'>/</span></li><li><a href='#/system/'>" + ($filter("translate")("CORE.SYSTEM.SYSTEM_LABEL")) + "</a><span class='divider'>/</span></li><li class='active'>" + ($filter("translate")("CORE.SYSTEM.CREATE_ADMIN")) + "</li>");
+    }
+  ]);
+
+  controllers.controller('moduleListController', [
+    '$scope', '$filter', '$route', '$templateCache', function($scope, $filter, $route, $templateCache) {
+      $('ul.breadcrumb').html("<li><a href='#/'>" + ($filter("translate")("CORE.LABELS.DASHBOARD")) + "</a><span class='divider'>/</span></li><li class='active'>" + ($filter("translate")("CORE.MODULES.MODULE_LABEL")) + "</li>");
+      return angular.element("#buttonListUpdate").on("reloadTemplateCache", function() {
+        $templateCache.remove($route.current.templateUrl);
+        return $route.reload();
+      });
+    }
+  ]);
+
+  controllers.controller('moduleDetailController', [
+    '$scope', '$filter', '$routeParams', 'modulesService', function($scope, $filter, $routeParams, modulesService) {
+      $('ul.breadcrumb').html("<li><a href='#/'>" + ($filter("translate")("CORE.LABELS.DASHBOARD")) + "</a><span class='divider'>/</span></li><li><a href='#/modules/'>" + ($filter("translate")("CORE.MODULES.MODULE_LABEL")) + "</a><span class='divider'>/</span></li><li class='active'>" + ($filter("translate")($routeParams.moduleName)) + "</li>");
+      $scope.module = {
+        name: $routeParams.moduleName
+      };
+      $scope.update = function(data) {
+        return modulesService.set($scope.module.name, data).success(function(module, status) {
+          if (status === 202) {
+            return $scope.module = module;
+          }
+        });
+      };
+      return modulesService.get($scope.module.name).success(function(module) {
+        if (module) {
+          return $scope.module = module;
+        }
+      });
     }
   ]);
 

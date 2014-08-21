@@ -1,10 +1,10 @@
-<div class="row-fluid">
+<div class="row-fluid" id="jsAdmin">
     <div class="span12">
         <div class="row-fluid ">
             <div class="cssUserImage span2">
                 <img class="img-polaroid" name="avatar" src="<?= $this->baseUrl() ?>/img/dummy_admin_200.png" alt="<?= $this->translate('avatar') ?>">
             </div>
-            <form class="span10" action="<?= $this->url(array(), 'addAdministrator') ?>" method="post">
+            <form class="span10" action="<?= $this->url(array(), 'addAdministrator') ?>" method="post" id="jsAddAdmin">
                 <dl class="row-fluid">
                     <dt class="span3">
                     <label>
@@ -51,7 +51,25 @@
 <script type="text/javascript">
     $(document).ready(function() {
         $('#jsCancelButton').click(function() {
-            location.href = '<?= $this->url(array(), 'system'); ?>';
+            window.history.back()
+        });
+
+        $("form#jsAddAdmin").submit(function(event){
+
+            $.ajax({
+                url:  this.action,
+                type: this.method,
+                data: $(this).serializeArray(),
+                success: function(data){
+                    if ($(data).find(".alert.alert-error").length) {
+                        $("#jsAdmin").html(data)
+                    } else if ($(data).find("#createadmin").length) {
+                        window.location = "#/system/"
+                    }
+                }
+            });
+
+            event.preventDefault();
         });
 
         setPasswordStrength("#password");

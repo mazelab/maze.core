@@ -1,5 +1,5 @@
 <div class="row-fluid">
-    <div class="span12" ng-controller="ModuleController">
+    <div class="span12">
         <? if ($this->toBool("module/installed") == true): ?>
         <div class="row-fluid text-left cssBoxCenter">
             <a href="<?= $this->url(array($this->html('module/name')), 'moduleDeinstall'); ?>" id="jsUninstallModule"
@@ -164,24 +164,6 @@
     </div>
 </div>
 <script type="text/javascript">
-    var app = angular.module('maze');
-
-    app.controller('ModuleController', ['$scope', 'modulesService', function($scope, modulesService){
-        $scope.module = {name: "<?= $this->html("module/name"); ?>"};
-
-        $scope.update = function(data){
-            return modulesService.set($scope.module.name, data).success(function(module, status){
-                if (status === 202) {
-                    $scope.module = module;
-                }
-            });
-        };
-
-        modulesService.get($scope.module.name).success(function(module){
-            $scope.module = module;
-        });
-    }]);
-
     $(document).ready(function() {
         initTabClickEvent();
         $('a[data-toggle="tab"]:visible:first').click();
@@ -197,7 +179,7 @@
                     data: {format: "json"},
                     success:function(data){
                         if (data.result === true){
-                            location.href = "<?= $this->url(array(), "modules") ?>";
+                            window.location = "#/modules/#jsAvailableModule"
                         }
                         setMessages(data, true);
                     },

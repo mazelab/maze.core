@@ -18,7 +18,7 @@
                 <li ng-repeat="nodeLog in unregisteredNodes" id="itemUnregisteredNode-{{nodeLog._id}}">
                     <div class="span10">
 
-                        <a href="{{nodeLog.url}}" class="cssListItem span12" title="{{'CORE.NODES.UNREGISTERED_NODE' | translate}}">
+                        <a ng-href="#/nodes/register/{{nodeLog.contextId}}" class="cssListItem span12" title="{{'CORE.NODES.UNREGISTERED_NODE' | translate}}">
                             <span class="cssAvatar">
                                 <img src="/img/dummy_node_50_red.png" alt="{{'CORE.LABELS.AVATAR' | translate}}"/>
                             </span>
@@ -29,7 +29,7 @@
 
                     </div>
                     <div class="span2 cssAction">
-                        <a href="{{nodeLog.url}}" class="btn btn-mini btn-danger" title="{{'CORE.NODES.REGISTER' | translate}}">
+                        <a ng-href="#/nodes/register/{{nodeLog.contextId}}" class="btn btn-mini btn-danger" title="{{'CORE.NODES.REGISTER' | translate}}">
                             <i class="icon-wrench icon-white"></i>
                             <span translate="CORE.NODES.REGISTER"></span>
                         </a>
@@ -46,7 +46,7 @@
                 <ul class="span12 unstyled">
                     <li class="row-fluid" ng-repeat="node in nodes">
                         <div class="span12">
-                            <a href="#/edit/{{node._id}}" class="cssListItem span12">
+                            <a ng-href="#/nodes/edit/{{node._id}}" class="cssListItem span12">
                                 <span class="cssAvatar">
                                     <img src="/img/dummy_domain_50.png" alt="{{'CORE.LABELS.AVATAR' | translate}}"/>
                                 </span>

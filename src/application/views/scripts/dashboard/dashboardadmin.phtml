@@ -7,7 +7,7 @@
                         <div class="row-fluid">
                             <div class="span12 cssToolboxHead">
                                 <a class="span12 cssToolboxHeadLink" 
-                                   href="<?= $this->url(array(), 'clients')?>" 
+                                   href="#/clients"
                                    title="{{'CORE.LABELS.CLIENTS' | translate}}"
                                    id="goToClients">
                                     <span translate="CORE.LABELS.CLIENTS"></span>
@@ -15,7 +15,7 @@
                                 </a>
                                 <a class="cssAddIcon pull-right" 
                                    title="{{'CORE.CLIENTS.CREATE_CLIENT' | translate}}"
-                                   href="/clients#/new">
+                                   href="#/clients/new">
                                     <i class="icon-plus icon-white"></i>
                                 </a>
                             </div>
@@ -23,7 +23,7 @@
                         <ul class="cssToolboxList row-fluid unstyled">
                             <? foreach ($this->lastClients as $client): ?>
                             <li class="row-fluid">
-                                <a class="row-fluid" href="/clients#/edit/<?= $client->html("_id") ?>">
+                                <a class="row-fluid" href="#/clients/edit/<?= $client->html("_id") ?>">
                                     <small><?= $client->html("label"); ?></small>
                                     <i class="icon-chevron-right pull-right"></i>
                                 </a>
@@ -36,7 +36,7 @@
                         <div class="row-fluid">
                             <div class="span12 cssToolboxHead">
                                 <a class="span12 cssToolboxHeadLink" 
-                                   href="<?= $this->url(array(), 'domains')?>" 
+                                   href="#/domains"
                                    title="{{'CORE.LABELS.DOMAINS' | translate}}"
                                    id="goToDomains">
                                     <span translate="CORE.LABELS.DOMAINS"></span>
@@ -44,7 +44,7 @@
                                 </a>
                                 <a class="cssAddIcon pull-right" 
                                    title="{{'CORE.DOMAINS.CREATE_DOMAIN' | translate}}"
-                                   href="/domains#/new">
+                                   href="#/domains/new">
                                     <i class="icon-plus icon-white"></i>
                                 </a>
                             </div>
@@ -52,7 +52,7 @@
                         <ul class="cssToolboxList row-fluid unstyled">
                             <? foreach ($this->lastDomains as $domain): ?>
                             <li class="row-fluid">
-                                <a href="/domains#/edit/<?= $domain->html("_id") ?>">
+                                <a href="#/domains/edit/<?= $domain->html("_id") ?>">
                                     <small><?= $domain->html("name"); ?></small>
                                     <i class="icon-chevron-right pull-right"></i>
                                 </a>
@@ -65,7 +65,7 @@
                         <div class="row-fluid ">
                             <div class="span12 cssToolboxHead">
                                 <a class="span12 cssToolboxHeadLink" 
-                                   href="<?= $this->url(array(), 'nodes')?>" 
+                                   href="#/nodes"
                                    title="{{'CORE.LABELS.NODES' | translate}}"
                                    id="goToNodes">
                                     <span translate="CORE.LABELS.NODES"></span>
@@ -76,7 +76,7 @@
                         <ul class="cssToolboxList row-fluid unstyled">
                             <? foreach ($this->lastNodes as $node): ?>
                             <li class="row-fluid">
-                                <a href="/nodes#/edit/<?= $node->html("_id") ?>">
+                                <a href="#/nodes/edit/<?= $node->html("_id") ?>">
                                     <small><?= $node->html("name"); ?></small>
                                     <i class="icon-chevron-right pull-right"></i>
                                 </a>
@@ -102,7 +102,7 @@
                     <div class="span12">
                         <div class=" row-fluid">
                             <div class="span12 cssToolboxHead">
-                                <a href="<?= $this->url(array(), "news"); ?>"
+                                <a href="#/news"
                                    title="{{'CORE.NEWS.LATEST_NEWS' | translate}}"
                                    class="span12 cssToolboxHeadLink"
                                    id="showLogs">
@@ -114,7 +114,7 @@
                         <ul class="row-fluid jsLineColor cssNewsListing unstyled">
                             <? foreach ($this->lastNews as $news): ?>
                             <li id="jsNews-<?= $news->html('_id') ?>" class="cssLine jsLine">
-                                <a href="<?= $this->url(array($news->html("_id")), "newsDetail"); ?>">
+                                <a href="#/news/edit/<?= $news->html("_id"). "/". $news->html("title"); ?>">
                                     <h3 title="<?= $news->html("title"); ?>"><?= $news->html("title"); ?></h3>
                                     <p><small><?= $news->toBool("teaser") ? $news->html("teaser") : $news->html("content"); ?></small></p>
                                 </a>

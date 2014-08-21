@@ -11,7 +11,7 @@
         <li class="cssListRow row-fluid jsModuleEntry">
             <div class="span10">
                 <a class="cssListItem cssEllipsis span12" title="<?= $this->translate('detail') ?>"
-                href="<?= $this->url(array($module->html('name')), 'moduleDetail')?>">
+                href="#/modules/detail/<?= $module->html('name');?>">
                     <span class="cssAvatar">
                         <img src="<?= $this->baseUrl() ?>/img/dummy_module_50.png"
                              alt="<?= $this->translate('avatar') ?>"/>
@@ -61,8 +61,8 @@
                     url : button.attr("href"),
                     data: {format: "json"},
                     success: function(data){
-                        if (data.result && data.result === true && data.route){
-                            window.location = data.route;
+                        if (data.result && data.result === true && data.name ){
+                            window.location = "#/modules/detail/"+ data.name;
                         }
                         button.show();
                         module.find(".jsModuleLoading").hide();

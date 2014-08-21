@@ -13,7 +13,7 @@
         <? foreach($this->conflicts as $conflict): ?>
         <? if($conflict->tobool('client')): ?>
             <li class="row-fluid">
-                <a href="<?= $this->url(array(), 'switchToClient') ?>?clientId=<?= $conflict->html('client/id') ?>"
+                <a href="#/clients/login/<?= $conflict->html('client/id'); ?>"
                    class="cssDashboardDiff row-fluid">
                     <div class="span2">
                         <small>

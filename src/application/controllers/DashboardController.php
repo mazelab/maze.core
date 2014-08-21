@@ -25,17 +25,15 @@ class DashboardController extends Zend_Controller_Action
     {
         $identity = Zend_Auth::getInstance()->getIdentity();
 
-        if (isset($identity['group']) && $identity['group'] == Core_Model_UserManager::GROUP_ADMIN) {
-            $this->forward('dashboardadmin');
-            return;
+        if (isset($identity['group']) && $identity['group'] == Core_Model_UserManager::GROUP_CLIENT) {
+            return $this->forward('dashboardclient');
         }
-
-        $this->forward('dashboardclient');
-        return;
     }
 
     public function dashboardadminAction()
     {
+        $this->_helper->layout()->disableLayout();
+
         $domainManager = Core_Model_DiFactory::getDomainManager();
         $clientManager = Core_Model_DiFactory::getClientManager();
         $nodeManager = Core_Model_DiFactory::getNodeManager();

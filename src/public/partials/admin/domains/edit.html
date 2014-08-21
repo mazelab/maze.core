@@ -27,7 +27,7 @@
                         </div>
 
                         <div maze-dl-wrapper label="{{'CORE.CLIENTS.CLIENT_LABEL' | translate}}" dt-class="span3" dd-class="span9">
-                            <a ng-if="domain.ownerData.url" href="{{domain.ownerData.url}}">
+                            <a ng-if="domain.ownerData.url" ng-href="#/clients/edit/{{domain.owner}}">
                                 {{domain.ownerData.label}}
                             </a>
                             <span ng-if="!domain.ownerData.url">

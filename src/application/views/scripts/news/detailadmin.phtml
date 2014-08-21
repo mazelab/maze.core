@@ -125,6 +125,194 @@
 
 </div>
 <script type="text/javascript">
+    (function($){
+        var settings = {};
+        var tagStack = {};
+
+        $.fn.mazeMessageTags = function(args){
+            var argVector = arguments;
+            var selector  = this;
+
+            processAjax = function(data){
+                // creates an value object
+                if (typeof data === "string"){
+                    valueObject   = {id: data, value: data};
+                }else valueObject = data;
+
+                // data to be sent to the server
+                sendObject = {};
+                sendObject["tags["+ valueObject.id +"]"] = valueObject.value;
+                ajaxOption = {
+                    data: sendObject,
+                    success :function(data){
+                        if (valueObject.value === null && data.result){
+                            settings.animation === false
+                                ? methods.get(valueObject.id).remove()
+                                : methods.get(valueObject.id).animate({
+                                opacity: .1,
+                                width  : 0
+                            }, settings.duration, function() {
+                                $(this).remove();
+                            });
+                            delete tagStack[valueObject.id];
+                        }else if (data.result !== false && valueObject.id){
+                            methods.add({id: data.result, value: valueObject.value}, false);
+                        }
+                        setMessages(data, true);
+                    },
+                    beforeSend :function(){
+                        settings.onRequest.before.apply(this);
+                    },
+                    complete :function(){
+                        settings.onRequest.done.apply(this);
+                    }
+                };
+
+                $.ajax($.extend(ajaxOption, settings.ajax));
+            };
+
+            /**
+             * @type Object
+             */
+            var methods = {
+
+                /**
+                 * deletes an certain tag entry
+                 *
+                 * @param   {String} tagId
+                 * @returns {Boolean}
+                 */
+                del:function(tagId) {
+                    valueObject   = {id: tagId, value: null};;
+
+                    if (typeof methods.get(valueObject.id) === "object"){
+                        processAjax(valueObject);
+                        return true;
+                    }
+
+                    return false;
+                },
+
+                /**
+                 * returns a certain registered tag entry
+                 *
+                 * @param   {String} tagId
+                 * @returns {Boolean|HTMLSpanElement}
+                 */
+                get:function(tagId) {
+                    if (typeof tagStack[tagId] === "object"){
+                        return tagStack[tagId];
+                    }
+
+                    return false;
+                },
+
+                /**
+                 * checks if an value already registered
+                 *
+                 * @param   {String} value
+                 * @returns {Boolean}
+                 */
+                tagExist: function(value){
+                    for (index in tagStack){
+                        if (value === tagStack[index].tagValue && !tagStack[index].is(":hidden")){
+                            return true;
+                        }
+                    }
+                    return false;
+                },
+
+                /**
+                 * adds a new tag entry
+                 *
+                 * @example add("valueString") || add({id:"idString", value: "valueString"})
+                 * @param   {String|PlainObject} data
+                 * @param   {Boolean} sendRequest
+                 * @returns {Boolean|HTMLSpanElement}
+                 */
+                add:function(data, sendRequest){
+                    // creates an value object
+                    if (typeof data === "string"){
+                        var valueObject   = {id: data, value: data};
+                    }else valueObject = data;
+
+                    if ($.trim(valueObject.value) === "" || methods.tagExist(valueObject.value)){
+                        return false;
+                    }
+
+                    // build the tag element basend on the value object and sets the button handler
+                    tag = methods._buildTag(valueObject);
+                    tag.tagValue = valueObject.value;
+                    tag.find(settings.classButtonDelete).click(function(){
+                        methods.del(valueObject.id);
+                    });
+
+                    // registered the created tag and append to container
+                    settings.container.append(tagStack[valueObject.id] = tag);
+
+                    if (typeof sendRequest === "undefined" || sendRequest === true){
+                        processAjax(valueObject);
+                    } else  settings.animation === false
+                        ? tag.show()
+                        : tag.animate({
+                        opacity: .9,
+                        width: "toggle"
+                    }, settings.duration);
+
+                    return tag;
+                },
+
+                /**
+                 * builds the tag element
+                 *
+                 * @protected
+                 * @param   {PlainObject} valueObject
+                 * @returns {HTMLSpanElement}
+                 */
+                _buildTag: function(valueObject){
+                    template = document.getElementById("templateTag").cloneNode(true);
+                    template.tagId = valueObject.id;
+
+                    return $(template.innerHTML.replace(/\:name\:/, valueObject.value)).hide();
+                }
+            };
+
+            return(selector.each(function(index, element){
+                if (typeof args === "string" && typeof methods[args] === "function"){
+                    return methods[args].apply(this, Array.prototype.slice.call(argVector, 1));
+                }
+
+                settings = $.extend($.fn.mazeMessageTags.defaults, typeof args === "object" ? args : {});
+                template = document.getElementById("templateContainer").firstElementChild.cloneNode(true);
+
+                $(template).appendTo($(this));
+
+                // refresh the selector
+                if (typeof settings.container !== "object" || typeof settings.container[0] === "undefined"){
+                    settings.container = $(settings.container);
+                }
+
+                return this;
+            }));
+        };
+
+        $.fn.mazeMessageTags.defaults = {
+            classButtonDelete: ".jsTagButtonDelete",
+            container: "#jsTagContainer",
+            animation: false,
+            duration : 300,
+            ajax: {
+                type: "post"
+            },
+            onRequest : {
+                done  : function(){},
+                before: function(){}
+            }
+        };
+    })($);
+
+</script>
+<script type="text/javascript">
 $(document).ready(function() {
 
     $(".jsTooltip").tooltip();
@@ -165,7 +353,7 @@ $(document).ready(function() {
         $(".jsNewsTags").mazeMessageTags("add", newtag.val(), true);
         newtag.val(null);
     });
-    
+
     $("button.jsIconDelete").click(function() {
         elem = this;
         dialog = $("#jsConfirmDeleteNews").modal({backdrop:"static", show:true});
@@ -218,7 +406,7 @@ $(document).ready(function() {
             });
             $(this).modal("hide");
         });
- 
+
         return;
     });
 
@@ -250,197 +438,11 @@ $(document).ready(function() {
             }
         });
     });
-    
+
 <? foreach ($this->form->tags->getElements() as $tag): ?>
     $(".jsNewsTags").mazeMessageTags("add", {id: "<?= $tag->getName(); ?>", value: "<?= $tag->getValue(); ?>"}, false);
 <? endforeach; ?>
 
 });
-
-(function($){
-    var settings = {};
-    var tagStack = {};
-
-    $.fn.mazeMessageTags = function(args){
-        var argVector = arguments;
-        var selector  = this;
-
-        processAjax = function(data){
-            // creates an value object
-            if (typeof data === "string"){
-                valueObject   = {id: data, value: data};
-            }else valueObject = data;
-
-            // data to be sent to the server
-            sendObject = {};
-            sendObject["tags["+ valueObject.id +"]"] = valueObject.value;
-            ajaxOption = {
-                data: sendObject,
-                success :function(data){
-                    if (valueObject.value === null && data.result){
-                        settings.animation === false
-                        ? methods.get(valueObject.id).remove()
-                        : methods.get(valueObject.id).animate({
-                            opacity: .1,
-                            width  : 0
-                        }, settings.duration, function() {
-                            $(this).remove();
-                        });
-                        delete tagStack[valueObject.id];
-                    }else if (data.result !== false && valueObject.id){
-                        methods.add({id: data.result, value: valueObject.value}, false);
-                    }
-                    setMessages(data, true);
-                },
-                beforeSend :function(){
-                    settings.onRequest.before.apply(this);
-                },
-                complete :function(){
-                    settings.onRequest.done.apply(this);
-                }
-            };
-
-            $.ajax($.extend(ajaxOption, settings.ajax));
-        };
-
-        /**
-         * @type Object
-         */
-        var methods = {
-
-            /**
-             * deletes an certain tag entry
-             *
-             * @param   {String} tagId
-             * @returns {Boolean}
-             */
-            del:function(tagId) {
-                valueObject   = {id: tagId, value: null};;
-
-                if (typeof methods.get(valueObject.id) === "object"){
-                    processAjax(valueObject);
-                    return true;
-                }
-
-                return false;
-            },
-
-            /**
-             * returns a certain registered tag entry
-             *
-             * @param   {String} tagId
-             * @returns {Boolean|HTMLSpanElement}
-             */
-            get:function(tagId) {
-                if (typeof tagStack[tagId] === "object"){
-                    return tagStack[tagId];
-                }
-
-                return false;
-            },
-
-            /**
-             * checks if an value already registered
-             * 
-             * @param   {String} value
-             * @returns {Boolean}
-             */
-            tagExist: function(value){
-                for (index in tagStack){
-                    if (value === tagStack[index].tagValue && !tagStack[index].is(":hidden")){
-                        return true;
-                    }
-                }
-                return false;
-            },
-
-            /**
-             * adds a new tag entry
-             *
-             * @example add("valueString") || add({id:"idString", value: "valueString"})
-             * @param   {String|PlainObject} data
-             * @param   {Boolean} sendRequest
-             * @returns {Boolean|HTMLSpanElement}
-             */
-            add:function(data, sendRequest){
-                // creates an value object
-                if (typeof data === "string"){
-                    var valueObject   = {id: data, value: data};
-                }else valueObject = data;
-
-                if ($.trim(valueObject.value) === "" || methods.tagExist(valueObject.value)){
-                    return false;
-                }
-
-                // build the tag element basend on the value object and sets the button handler
-                tag = methods._buildTag(valueObject);
-                tag.tagValue = valueObject.value;
-                tag.find(settings.classButtonDelete).click(function(){
-                    methods.del(valueObject.id);
-                });
-
-                // registered the created tag and append to container
-                settings.container.append(tagStack[valueObject.id] = tag);
-
-                if (typeof sendRequest === "undefined" || sendRequest === true){
-                    processAjax(valueObject);
-                } else  settings.animation === false
-                        ? tag.show()
-                        : tag.animate({
-                            opacity: .9,
-                            width: "toggle"
-                        }, settings.duration);
-
-                return tag;
-            },
-
-            /**
-             * builds the tag element
-             *
-             * @protected
-             * @param   {PlainObject} valueObject
-             * @returns {HTMLSpanElement}
-             */
-            _buildTag: function(valueObject){
-                template = document.getElementById("templateTag").cloneNode(true);
-                template.tagId = valueObject.id;
-
-                return $(template.innerHTML.replace(/\:name\:/, valueObject.value)).hide();
-            }
-        };
-
-        return(selector.each(function(index, element){
-            if (typeof args === "string" && typeof methods[args] === "function"){
-                return methods[args].apply(this, Array.prototype.slice.call(argVector, 1));
-            }
-
-            settings = $.extend($.fn.mazeMessageTags.defaults, typeof args === "object" ? args : {});
-            template = document.getElementById("templateContainer").firstElementChild.cloneNode(true);
-
-             $(template).appendTo($(this));
-
-             // refresh the selector
-            if (typeof settings.container !== "object" || typeof settings.container[0] === "undefined"){
-                settings.container = $(settings.container);
-            }
-
-            return this;
-        }));
-    };
-
-    $.fn.mazeMessageTags.defaults = {
-        classButtonDelete: ".jsTagButtonDelete",
-        container: "#jsTagContainer",
-        animation: false,
-        duration : 300,
-        ajax: {
-            type: "post"
-        },
-        onRequest : {
-            done  : function(){},
-            before: function(){}
-        }
-    };
-})(jQuery);
 
 </script>

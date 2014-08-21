@@ -25,16 +25,12 @@ class ClientsController extends Zend_Controller_Action
     
     public function detailAction()
     {
-        $url = $this->view->url(array(), 'clients') . "/#/edit/{$this->_getParam('clientId')}";
-
-        return $this->redirect($url, array('code'=>301));
+        $this->redirect("#/clients/edit/{$this->_getParam('clientId')}", array('code'=>301));
     }
     
     public function addAction()
     {
-        $url = $this->view->url(array(), 'clients') . "/#/new";
-
-        return $this->redirect($url, array('code'=>301));
+        $this->redirect("#/clients/new", array('code'=>301));
     }
 
 }

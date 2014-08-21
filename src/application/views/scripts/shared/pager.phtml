@@ -2,7 +2,7 @@
     <div id="coreSearchBreadcrumb" style="display:none">
         <?= $this->navigation()->breadcrumbs()->setMinDepth(0)->setMaxDepth(4)->setPartial("breadcrumbs.phtml"); ?>
     </div>
-    <? if($this->toBool('pager/total')): ?>
+    <? if($this->toBool('pager/total') && $this->html('pager/lastPosition') && $this->html('pager/total')): ?>
     <div class="cssPager pull-right">
         <div class="dropdown pull-left">
             <a class="cssPagerInfo dropdown-toggle" data-toggle="dropdown">
@@ -33,13 +33,13 @@
             <ul>
                 <? if($this->html('pager/position') <= 1): ?>
                     <li class="disabled">
-                        <a class="jsIconPrev inactive" href="#">
+                        <a class="jsIconPrev inactive" href="">
                             &laquo;
                         </a>
                     </li>
                 <? else: ?>
                     <li>
-                        <a id="jsPagerPrev" class="jsIconPrev" href="#">
+                        <a id="jsPagerPrev" class="jsIconPrev" href="">
                             &laquo;
                         </a>
                     </li>
@@ -47,14 +47,14 @@
                 <? if($this->html('pager/lastPosition') == $this->html('pager/total')): ?>
 
                      <li class="disabled">
-                        <a class="jsIconNext" href="#">
+                        <a class="jsIconNext" href="">
                             &raquo;
                         </a>
                     </li>
 
                 <? else: ?>
                     <li>
-                        <a id="jsPagerNext" class="jsIconNext" href="#">
+                        <a id="jsPagerNext" class="jsIconNext">
                             &raquo;
                         </a>
                     </li>
@@ -82,6 +82,9 @@
         $('#jsPagerPrev').click(function() {
             $('#coreSearchInput').mazeSearch('prev');
             return false;
+        });
+        $('.jsPagerBar li.disabled').click(function(event) {
+            event.preventDefault();
         });
     });
 </script>

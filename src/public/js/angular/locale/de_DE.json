@@ -6,6 +6,7 @@
             "CREATE_CLIENT": "Mandant anlegen",
             "THE_CLIENT_IS": "Der Mandant ist",
             "CLIENT_LABEL": "Mandant",
+            "MY_PROFILE": "Mein Profil",
             "CHOOSE_CLIENT": "Mandant auswählen",
             "DELETE_CLIENT": "Soll der Mandant wirklich gelöscht werden?",
             "REMOVE_SERVICE": "Dienst {{service}} von Mandant {{client}} entfernen",
@@ -43,7 +44,26 @@
             "DELETE_SERVICE": "Soll der Service {{service}} wirklich von der Node gelöscht werden?"
         },
         "NEWS": {
-            "LATEST_NEWS": "Aktuelle Nachrichten"
+            "LATEST_NEWS": "Aktuelle Nachrichten",
+            "WRITE_MESSAGE": "Neue Nachricht",
+            "MESSAGES": "Nachrichten",
+            "CONTENT": "Inhalt",
+            "HEADLINE": "Überschrift",
+            "STICKY": "Anpinnen",
+            "TAGS": "Stichwörter",
+            "STICKY_DESC": "wird immer an der oberen position gehalten",
+            "CLOSED": "Geschlossen",
+            "DRAFT": "Entwurf",
+            "PUBLIC": "Öffentlich",
+            "PUBLISCH": "Veröffentlichen",
+            "SAVE_DRAFT": "Als Entwurf speichern",
+            "NOT_FOUND": "Nachricht nicht gefunden",
+            "SENT_AS_EMAIL": "Nachricht wurde als E-Mail gesendet",
+            "PUBLISCHED_AND_SENT": "Nachricht Veröffentlicht und an alle Mandanten geschickt",
+            "DELETE_MESSAGE": "Soll diese Mitteilung wirklich an alle registrierten Mandanten gesendet werden ?",
+            "PUBLISCH_AND_SEND": "Veröffentlichen und via E-Mail versenden",
+            "PUBLICHED_ON": "Publiziert am",
+            "LAST_UPDATED": "letzte Aktualisierung"
         },
         "SERVICES": {
             "LOADING_FAILED": "Fehler beim laden der Dienste",
@@ -96,6 +116,13 @@
             "ACCESS_DATA": "Zugangsdaten",
             "LOGS": "Protokolle",
             "DASHBOARD": "Dashboard"
+        },
+        "MODULES": {
+            "MODULE_LABEL": "Module"
+        },
+        "SYSTEM": {
+            "SYSTEM_LABEL": "System",
+            "CREATE_ADMIN" : "Admin anlegen"
         },
         "MESSAGES": {
             "ATTENTION": "Achtung!",

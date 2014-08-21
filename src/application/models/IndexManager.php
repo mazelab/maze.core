@@ -136,8 +136,8 @@ class Core_Model_IndexManager
             $data['teaser'] .= ' ' .$client->getData('prename');
         }
         
-        $data['link'] = $this->_getUrlHelper()->url(array($client->getId(), $client->getLabel()), 'clientDetail');
-        $data['categoryLink'] = $this->_getUrlHelper()->url(array(), 'clients');
+        $data['link'] =  "#/clients/edit/{$client->getId()}";
+        $data['categoryLink'] = "#/clients";
         $data['pictureLeft'] = $this->_getUrlHelper()->url(array($client->getId()), 'avatar');
         
         return $this->_getSearchIndex()->setSearchIndex(self::SEARCH_CATEGORY_CLIENT, $clientId, $data);
@@ -158,8 +158,8 @@ class Core_Model_IndexManager
         $data['search'] = $domain->getName();
         $data['headline'] = $domain->getName();
         $data['teaser'] = $domain->getName();
-        $data['link'] = $this->_getUrlHelper()->url(array($domain->getId()), 'domaindetail');
-        $data['categoryLink'] = $this->_getUrlHelper()->url(array(), 'domains');
+        $data['link'] = "#/domains/{$domain->getId()}";
+        $data['categoryLink'] = "#/domains";
         $data['pictureLeft'] = self::SEARCH_CATEGORY_DOMAIN_IMG;
         
         return $this->_getSearchIndex()->setSearchIndex(self::SEARCH_CATEGORY_DOMAIN, $domainId, $data);
@@ -180,8 +180,8 @@ class Core_Model_IndexManager
         $data['search'] = $node->getName() . ' ' . $node->getData('ipAddress');
         $data['headline'] = $node->getName();
         $data['teaser'] = $node->getName();
-        $data['link'] = $this->_getUrlHelper()->url(array($node->getId()), 'nodedetail');
-        $data['categoryLink'] = $this->_getUrlHelper()->url(array(), 'nodes');
+        $data['link'] = "#/nodes/{$node->getId()}";
+        $data['categoryLink'] = "#/nodes";
         $data['pictureLeft'] = self::SEARCH_CATEGORY_NODE_IMG;
         
         return $this->_getSearchIndex()->setSearchIndex(self::SEARCH_CATEGORY_NODE, $nodeId, $data);

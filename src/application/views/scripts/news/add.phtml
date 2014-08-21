@@ -1,12 +1,12 @@
-<div class="row-fluid">
+<div class="row-fluid" id="addnews">
     <div class="span12">
         <div class="row-fluid ">
             <form class="span10" id="newsAdd" action="<?= $this->url(array(), "addNews"); ?>" method="post">
                 <dl class="row-fluid">
                     <dt class="span3">
-                    <label>
-                        <?= $this->translate($this->form->title->getLabel()); ?>
-                    </label>
+                        <label>
+                            <?= $this->translate($this->form->title->getLabel()); ?>
+                        </label>
                     </dt>
                     <dd class="span9">
                         <?= $this->form->title; ?>
@@ -14,9 +14,9 @@
                 </dl>
                 <dl class="row-fluid">
                     <dt class="span3">
-                    <label>
-                        <?= $this->translate($this->form->content->getLabel()); ?>
-                    </label>
+                        <label>
+                            <?= $this->translate($this->form->content->getLabel()); ?>
+                        </label>
                     </dt>
                     <dd class="span9">
                         <?= $this->form->content; ?>
@@ -25,9 +25,9 @@
 
                 <dl class="row-fluid">
                     <dt class="span3">
-                    <label>
-                        <?= $this->translate($this->form->teaser->getLabel()); ?>
-                    </label>
+                        <label>
+                            <?= $this->translate($this->form->teaser->getLabel()); ?>
+                        </label>
                     </dt>
                     <dd class="span9">
                         <?= $this->form->teaser; ?>
@@ -38,10 +38,10 @@
 
                 <dl class="row-fluid">
                     <dt class="span3">
-                    <label>
-                        <?= $this->translate($this->form->sticky->getLabel()); ?>
-                        <span class="icon-info-sign jsStickyInfo"></span>
-                    </label>
+                        <label>
+                            <?= $this->translate($this->form->sticky->getLabel()); ?>
+                            <span class="icon-info-sign jsStickyInfo"></span>
+                        </label>
                     </dt>
                     <dd class="span9">
                         <?= $this->form->sticky; ?>
@@ -50,11 +50,11 @@
 
                 <dl class="row-fluid">
                     <dt class="span3">
-                    <label>
-                        <?= $this->translate("Tags"); ?>
-                    </label>
+                        <label>
+                            <?= $this->translate("Tags"); ?>
+                        </label>
                     </dt>
-                    <dd class="span9 jsNewsTags"></dd>
+                    <dd class="span9 newsTags"></dd>
                 </dl>
 
                 <div class="row-fluid">
@@ -95,18 +95,71 @@
             <span class="cssTagButtonDelete jsTagButtonDelete">x</span>
         </span>
     </div>
-    
+
 </div>
+<script>
+    (function($){
+        var settings = {};
+        var tagStack = {};
+
+        $.fn.mazeMessageTagsDummy = function(args){
+            var argVector = arguments;
+            var selector  = this;
+
+            var methods = {
+                get:function(tagId) {
+                    if (typeof tagStack[tagId] === "object")
+                        return tagStack[tagId];
+                    return false;
+                },
+                add:function(name, sendRequest){
+                    if (typeof methods.get(name) === "object" || $.trim(name) === "")
+                        return false;
+                    if (typeof settings.container !== "object" || typeof settings.container[0] === "undefined")
+                        settings.container = $(settings.container);
+
+                    tag = methods._buildTag(name);
+                    tag.attr("tagName", name);
+                    tag.find(settings.classButtonDelete).click(function(){
+                        $(this).parent().remove();
+                    });
+
+                    settings.container.append(tagStack[name] = tag);
+                    tag.animate({opacity: .9,width: "toggle"}, settings.duration);
+                    return tag;
+                },
+                _buildTag: function(name){
+                    template = document.getElementById("templateTag").cloneNode(true);
+                    return $(template.innerHTML.replace(/\:name\:/, name)).hide();
+                }
+            };
+
+            return(selector.each(function(index, element){
+                if (typeof args === "string" && typeof methods[args] === "function"){
+                    return methods[args].apply(this, Array.prototype.slice.call(argVector, 1));
+                }
+                settings = $.extend($.fn.mazeMessageTagsDummy.defaults, typeof args === "object" ? args : {});
+                $(document.getElementById("templateContainer").firstElementChild.cloneNode(true)).appendTo($(this));
+                return this;
+            }));
+        };
+
+        $.fn.mazeMessageTagsDummy.defaults = {
+            classButtonDelete: ".jsTagButtonDelete",
+            container: "#jsTagContainer:visible"
+        };
+    })(jQuery);
+</script>
 <script type="text/javascript">
     $(document).ready(function() {
         $(".jsStickyInfo").tooltip({title: "<?= $this->translate("always kept at the upper position") ?>."});
 
-        $(".jsNewsTags").mazeMessageTagsDummy();
+        $(".newsTags").mazeMessageTagsDummy();
 
-        $("#jsCancelButton").click(function(e){
+        $("#jsCancelButton").unbind("click").click(function(e){
             e.preventDefault();
             this.disabled = true;
-            location = "<?= $this->url(array(), "news"); ?>";
+            window.history.back();
         });
 
         $("#jsTagName").keydown(function(e){
@@ -117,11 +170,11 @@
             }
         }).next().click(function(){
             var newtag = $("#jsTagName");
-            $(".jsNewsTags").mazeMessageTagsDummy("add", newtag.val());
+            $(".newsTags").mazeMessageTagsDummy("add", newtag.val());
             newtag.val(null);
         });
 
-        $("form#newsAdd").submit(function(e){
+        $("form#newsAdd").unbind("submit").submit(function(event){
             var self = $(this);
 
             $("#jsTagContainer > span").each(function(){
@@ -132,75 +185,37 @@
                     value: $(this).attr("tagName")
                 }).appendTo(self);
             });
+
+            $.ajax({
+                url: this.action,
+                type: this.method,
+                data: $(this).serializeArray(),
+                success: function(data){
+                    if ($(data).find(".alert.alert-error").length) {
+                        $("#addnews").html(data);
+                    }else if ($(data).find("#jsNewsPagerContainer").length) {
+                        window.location = "#/news"
+                    }
+                }
+            });
+
+            event.preventDefault();
         });
-        
+
         $("#content").keydown(function(e) {
             if((e.keyCode || e.which) === 9) {
                 var start = this.selectionStart;
 
                 $(this).val($(this).val().substring(0, start)
-                            + "\t"
-                            + $(this).val().substring(this.selectionEnd));
+                    + "\t"
+                    + $(this).val().substring(this.selectionEnd));
                 this.selectionStart = this.selectionEnd = start + 1;
                 e.preventDefault();
             }
         });
-        
-    <? foreach ($this->form->tags as $tag): ?>
-        $(".jsNewsTags").mazeMessageTagsDummy("add", "<?= $tag->getValue(); ?>");
-    <? endforeach; ?>
+
+        <? foreach ($this->form->tags as $tag): ?>
+        $(".newsTags").mazeMessageTagsDummy("add", "<?= $tag->getValue(); ?>");
+        <? endforeach; ?>
     });
-    
-
-(function($){
-    var settings = {};
-    var tagStack = {};
-
-    $.fn.mazeMessageTagsDummy = function(args){
-        var argVector = arguments;
-        var selector  = this;
-
-        var methods = {
-            get:function(tagId) {
-                if (typeof tagStack[tagId] === "object")
-                    return tagStack[tagId];
-                return false;
-            },
-            add:function(name, sendRequest){
-                if (typeof methods.get(name) === "object" || $.trim(name) === "")
-                    return false;
-                if (typeof settings.container !== "object" || typeof settings.container[0] === "undefined")
-                    settings.container = $(settings.container);
-
-                tag = methods._buildTag(name);
-                tag.attr("tagName", name);
-                tag.find(settings.classButtonDelete).click(function(){
-                    $(this).parent().remove();
-                });
-
-                settings.container.append(tagStack[name] = tag);
-                tag.animate({opacity: .9,width: "toggle"}, settings.duration);
-                return tag;
-            },
-            _buildTag: function(name){
-                template = document.getElementById("templateTag").cloneNode(true);
-                return $(template.innerHTML.replace(/\:name\:/, name)).hide();
-            }
-        };
-
-        return(selector.each(function(index, element){
-            if (typeof args === "string" && typeof methods[args] === "function"){
-                return methods[args].apply(this, Array.prototype.slice.call(argVector, 1));
-            }
-            settings = $.extend($.fn.mazeMessageTagsDummy.defaults, typeof args === "object" ? args : {});
-            $(document.getElementById("templateContainer").firstElementChild.cloneNode(true)).appendTo($(this));
-            return this;
-        }));
-    };
-
-    $.fn.mazeMessageTagsDummy.defaults = {
-        classButtonDelete: ".jsTagButtonDelete",
-        container: "#jsTagContainer:visible"
-    };
-})(jQuery);
 </script>

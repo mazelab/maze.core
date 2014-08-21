@@ -1,6 +1,6 @@
 <ul id="tabDomainNodesList" class="unstyled jsLineColor cssTab">
     <li ng-repeat="node in nodes" id="tabDomainNodesListEntry-{{node._id}}" class="row-fluid cssLine jsLine">
-        <a href="/nodes#/edit/{{node._id}}" title="{{node.name}}" class="span8">
+        <a ng-href="#/nodes/edit/{{node._id}}" title="{{node.name}}" class="span8">
             {{node.name}}
         </a>
 
@@ -8,7 +8,7 @@
              label="{{'CORE.LABELS.SERVICES' | translate}} ({{countObject(node.services) || 0}})">
             <ul id="tabDomainNodesListServices-{{node._id}}" class="cssPopoverTabList unstyled pull-left row-fluid">
                 <li ng-repeat="service in node.services">
-                    <a href="/modules/detail/{{service.name}}" title="{{service.label}}" class="pull-left">
+                    <a ng-href="#/modules/detail/{{service.name}}" title="{{service.label}}" class="pull-left">
                         <span>
                         {{service.label}}
                         </span>

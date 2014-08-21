@@ -33,6 +33,7 @@ class NewsController extends Zend_Controller_Action
 
         // set view messages from MessageManager
         $this->_helper->getHelper("SetDefaultViewVars");
+        $this->_helper->layout()->disableLayout();
     }
 
     public function indexAction()

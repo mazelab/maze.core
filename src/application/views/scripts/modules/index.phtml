@@ -14,13 +14,13 @@
 
         <ul class="nav nav-tabs" id="jsTabsModules">
             <li class="active">
-                <a href="#jsInstalledModule" data-toggle="tab"><?= $this->translate("Installed"); ?> (<?= count($this->installedModules) ?>)</a>
+                <a href="#/modules/#jsInstalledModule" data-toggle="tab"><?= $this->translate("Installed"); ?> (<?= count($this->installedModules) ?>)</a>
             </li>
             <li>
-                <a href="#jsAvailableModule" data-toggle="tab"><?= $this->translate("Available"); ?> (<?= count($this->availableModules) ?>)</a>
+                <a href="#/modules/#jsAvailableModule" data-toggle="tab"><?= $this->translate("Available"); ?> (<?= count($this->availableModules) ?>)</a>
             </li>
             <li>
-                <a href="#jsUpdateModule" data-toggle="tab"><?= $this->translate("Latest Updates"); ?> (<?= count($this->updateableModules) ?>)</a>
+                <a href="#/modules/#jsUpdateModule" data-toggle="tab"><?= $this->translate("Latest Updates"); ?> (<?= count($this->updateableModules) ?>)</a>
             </li>
         </ul>
 
@@ -56,7 +56,7 @@
                 type: 'POST',
                 success: function(data) {
                     if(data.result === true) {
-                        location.href = '<?= $this->url(array(), 'modules'); ?>';
+                        self.trigger("reloadTemplateCache");
                     }
                     setMessages(data);
                 },

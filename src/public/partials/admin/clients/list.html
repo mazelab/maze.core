@@ -2,7 +2,7 @@
     <div class="row-fluid cssListing">
         <div class="span12 cssHeaderList">
             <div class="cssButton span12">
-                <a class="btn btn-info" href="#/new" translate="CORE.CLIENTS.CREATE_CLIENT"></a>
+                <a class="btn btn-info" href="#/clients/new" translate="CORE.CLIENTS.CREATE_CLIENT"></a>
             </div>
         </div>
     </div>
@@ -18,7 +18,7 @@
                                  class="img-rounded cssAvatar" alt="{{'CORE.LABELS.AVATAR' | translate}}"/>
                         </a>
 
-                        <a href="#/edit/{{client._id}}" title="{{'CORE.LABELS.EDIT' | translate}}" class="span9">
+                        <a ng-href="#/clients/edit/{{client._id}}" title="{{'CORE.LABELS.EDIT' | translate}}" class="span9">
                             <span class="pull-left cssUserItemSpan">
                                 {{client.label}}
                             </span>

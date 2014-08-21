@@ -5,7 +5,7 @@ controllers.controller 'clientListController', ['$scope', 'authService', '$filte
   $scope.search = $location.search().search
 
   initBreadCrumb = () ->
-    $('ul.breadcrumb').html "<li><a href='/'>#{$filter("translate")("CORE.LABELS.DASHBOARD")}</a><span class='divider'>/</span></li><li class='active'>#{$filter("translate")("CORE.LABELS.CLIENTS")}</li>"
+    $('ul.breadcrumb').html "<li><a href='#/'>#{$filter("translate")("CORE.LABELS.DASHBOARD")}</a><span class='divider'>/</span></li><li class='active'>#{$filter("translate")("CORE.LABELS.CLIENTS")}</li>"
 
   $scope.loginAsClient = (id) ->
     $scope.loadClientLogin = true;
@@ -30,7 +30,7 @@ controllers.controller 'clientEditController', ['$scope', '$routeParams', '$q', 
   $scope.clientId = $routeParams.clientId
 
   initBreadCrumb = () ->
-    $('ul.breadcrumb').html "<li><a href='/'>#{$filter("translate")("CORE.LABELS.DASHBOARD")}</a><span class='divider'>/</span></li><li><a href='#/'>#{$filter("translate")("CORE.LABELS.CLIENTS")}</a><span class='divider'>/</span></li><li class='active'>#{$scope.client.label}</li>"
+    $('ul.breadcrumb').html "<li><a href='#/'>#{$filter("translate")("CORE.LABELS.DASHBOARD")}</a><span class='divider'>/</span></li><li><a href='#/clients'>#{$filter("translate")("CORE.LABELS.CLIENTS")}</a><span class='divider'>/</span></li><li class='active'>#{$scope.client.label}</li>"
 
   $scope.activate = () ->
     $scope.changeState true
@@ -271,14 +271,22 @@ controllers.controller 'clientModalRemoveService', ['$scope', '$filter', '$modal
     $modalInstance.dismiss()
 ]
 
+controllers.controller 'clientSwitchToController', ['$routeParams', 'authService', ($routeParams, authService) ->
+  authService.client $routeParams.clientId
+  .success ->
+      location.href = "/";
+  .error ->
+      setErrorMessages [$filter("translate")("CORE.MESSAGES.REQUEST_FAILED")]
+]
+
 controllers.controller 'clientNewController', ['$scope', 'clientsService', '$filter', ($scope, clientsService, $filter) ->
   $scope.client = {}
 
   initBreadCrumb = () ->
-    $('ul.breadcrumb').html "<li><a href='/'>#{$filter("translate")("CORE.LABELS.DASHBOARD")}</a><span class='divider'>/</span></li><li><a href='#/'>#{$filter("translate")("CORE.LABELS.CLIENTS")}</a><span class='divider'>/</span></li><li class='active'>#{$filter("translate")("CORE.CLIENTS.CREATE_CLIENT")}</li>"
+    $('ul.breadcrumb').html "<li><a href='#/'>#{$filter("translate")("CORE.LABELS.DASHBOARD")}</a><span class='divider'>/</span></li><li><a href='#/clients'>#{$filter("translate")("CORE.LABELS.CLIENTS")}</a><span class='divider'>/</span></li><li class='active'>#{$filter("translate")("CORE.CLIENTS.CREATE_CLIENT")}</li>"
 
   $scope.cancel = () ->
-    window.location = '#/'
+    window.history.back()
 
   $scope.createClient = () ->
     $scope.formErrors = $scope.messages = []
@@ -335,7 +343,7 @@ controllers.controller 'domainListController', ['$scope', '$filter', '$location'
     $scope.search = search
 
   initBreadCrumb = () ->
-    $('ul.breadcrumb').html "<li><a href='/'>#{$filter("translate")("CORE.LABELS.DASHBOARD")}</a><span class='divider'>/</span></li><li class='active'>#{$filter("translate")("CORE.LABELS.DOMAINS")}</li>"
+    $('ul.breadcrumb').html "<li><a href='#/'>#{$filter("translate")("CORE.LABELS.DASHBOARD")}</a><span class='divider'>/</span></li><li class='active'>#{$filter("translate")("CORE.LABELS.DOMAINS")}</li>"
 
   initBreadCrumb()
 ]
@@ -344,7 +352,7 @@ controllers.controller 'domainEditController', [ '$scope', '$filter', '$modal', 
   $scope.domainId = $routeParams.domainId
 
   initBreadCrumb = () ->
-    $('ul.breadcrumb').html "<li><a href='/'>#{$filter("translate")("CORE.LABELS.DASHBOARD")}</a><span class='divider'>/</span></li><li><a href='#/'>#{$filter("translate")("CORE.LABELS.DOMAINS")}</a><span class='divider'>/</span></li><li class='active'>#{$scope.domain.name}</li>"
+    $('ul.breadcrumb').html "<li><a href='#/'>#{$filter("translate")("CORE.LABELS.DASHBOARD")}</a><span class='divider'>/</span></li><li><a href='#/domains'>#{$filter("translate")("CORE.LABELS.DOMAINS")}</a><span class='divider'>/</span></li><li class='active'>#{$scope.domain.name}</li>"
 
   $scope.countObject = (val) ->
     return 0 if not angular.isObject(val)
@@ -497,16 +505,16 @@ controllers.controller 'domainNewController', [ '$scope', '$filter', 'domainsSer
     domainsService.create $.param($scope.domain)
     .success (data, status, headers) ->
       return window.location = headers('location') if headers('location')
-      return location.href = "#/";
+      return window.history.back()
     .error (data) ->
       $scope.messages = data.messages if data.messages?
       $scope.formErrors = data.formErrors if data.formErrors?
 
   $scope.cancelCreation = () ->
-    window.location = '#/';
+    window.history.back()
 
   initBreadCrumb = () ->
-    $('ul.breadcrumb').html "<li><a href='/'>#{$filter("translate")("CORE.LABELS.DASHBOARD")}</a><span class='divider'>/</span></li><li><a href='#/'>#{$filter("translate")("CORE.LABELS.DOMAINS")}</a><span class='divider'>/</span></li><li class='active'>#{$filter("translate")("CORE.DOMAINS.CREATE_DOMAIN")}</li>"
+    $('ul.breadcrumb').html "<li><a href='#/'>#{$filter("translate")("CORE.LABELS.DASHBOARD")}</a><span class='divider'>/</span></li><li><a href='#/domains'>#{$filter("translate")("CORE.LABELS.DOMAINS")}</a><span class='divider'>/</span></li><li class='active'>#{$filter("translate")("CORE.DOMAINS.CREATE_DOMAIN")}</li>"
 
   initBreadCrumb()
 ]
@@ -520,7 +528,7 @@ controllers.controller 'nodeEditController', ['$scope', '$filter', '$modal', '$q
   ]
 
   initBreadCrumb = () ->
-    $('ul.breadcrumb').html "<li><a href='/'>#{$filter("translate")("CORE.LABELS.DASHBOARD")}</a><span class='divider'>/</span></li><li><a href='#/'>#{$filter("translate")("CORE.LABELS.NODES")}</a><span class='divider'>/</span></li><li class='active'>#{$scope.node.name}</li>"
+    $('ul.breadcrumb').html "<li><a href='#/'>#{$filter("translate")("CORE.LABELS.DASHBOARD")}</a><span class='divider'>/</span></li><li><a href='#/nodes'>#{$filter("translate")("CORE.LABELS.NODES")}</a><span class='divider'>/</span></li><li class='active'>#{$scope.node.name}</li>"
 
   $scope.countObject = (val) ->
     return 0 if not angular.isObject(val)
@@ -697,7 +705,7 @@ controllers.controller 'nodeListController', ['$scope', 'nodesService', '$filter
     $scope.search = search
 
   initBreadCrumb = () ->
-    $('ul.breadcrumb').html "<li><a href='/'>#{$filter("translate")("CORE.LABELS.DASHBOARD")}</a><span class='divider'>/</span></li><li class='active'>#{$filter("translate")("CORE.LABELS.NODES")}</li>"
+    $('ul.breadcrumb').html "<li><a href='#/'>#{$filter("translate")("CORE.LABELS.DASHBOARD")}</a><span class='divider'>/</span></li><li class='active'>#{$filter("translate")("CORE.LABELS.NODES")}</li>"
 
   initBreadCrumb()
 ]
@@ -712,10 +720,10 @@ controllers.controller 'nodeRegisterController', [ '$scope', '$filter', '$routeP
   ]
 
   $scope.cancelRegistration = () ->
-    window.location = '#/';
+    window.history.back()
 
   initBreadCrumb = () ->
-    $('ul.breadcrumb').html "<li><a href='/'>#{$filter("translate")("CORE.LABELS.DASHBOARD")}</a><span class='divider'>/</span></li><li><a href='#/'>#{$filter("translate")("CORE.LABELS.NODES")}</a><span class='divider'>/</span></li><li class='active'>#{$filter("translate")("CORE.NODES.REGISTER")}: #{$scope.nodeName}</li>"
+    $('ul.breadcrumb').html "<li><a href='#/'>#{$filter("translate")("CORE.LABELS.DASHBOARD")}</a><span class='divider'>/</span></li><li><a href='#/nodes'>#{$filter("translate")("CORE.LABELS.NODES")}</a><span class='divider'>/</span></li><li class='active'>#{$filter("translate")("CORE.NODES.REGISTER")}: #{$scope.nodeName}</li>"
 
   $scope.changetype = (option) ->
     if (@selected = $filter("filter")($scope.nodetypes, {value: (option || "")})[0])
@@ -793,7 +801,62 @@ controllers.controller 'searchListController', ['$scope', '$filter', '$location'
     initBreadCrumb()
 
   initBreadCrumb = () ->
-    $('ul.breadcrumb').html "<li><a href='/'>#{$filter("translate")("CORE.LABELS.DASHBOARD")}</a><span class='divider'>/</span></li><li><a >#{$filter("translate")("CORE.DIRECTIVES.SEARCH_LABEL")}</a><span class='divider'>/</span></li><li class='active'>#{$scope.search}</li>"
+    $('ul.breadcrumb').html "<li><a href='#/'>#{$filter("translate")("CORE.LABELS.DASHBOARD")}</a><span class='divider'>/</span></li><li><a>#{$filter("translate")("CORE.DIRECTIVES.SEARCH_LABEL")}</a><span class='divider'>/</span></li><li class='active'>#{$scope.search}</li>"
 
   initBreadCrumb()
+]
+
+controllers.controller 'dashboardController', ['$scope', '$filter', '$location', ($scope, $filter, $location) ->
+  $('ul.breadcrumb').html "<li class='active'>#{$filter("translate")("CORE.LABELS.DASHBOARD")}</li>"
+]
+
+controllers.controller 'newsListController', ['$scope', '$filter', ($scope, $filter) ->
+  $('ul.breadcrumb').html "<li><a href='#/'>#{$filter("translate")("CORE.LABELS.DASHBOARD")}</a><span class='divider'>/</span></li><li class='active'>#{$filter("translate")("CORE.NEWS.MESSAGES")}</li>"
+]
+
+controllers.controller 'newsEditController', ['$scope', '$filter', '$routeParams', ($scope, $filter, $routeParams) ->
+  $('ul.breadcrumb').html "<li><a href='#/'>#{$filter("translate")("CORE.LABELS.DASHBOARD")}</a><span class='divider'>/</span></li><li><a href='#/news/'>#{$filter("translate")("CORE.NEWS.MESSAGES")}</a><span class='divider'>/</span></li><li class='active'>#{$routeParams.title}</li>"
+]
+
+controllers.controller 'newsAddController', ['$scope', '$filter', ($scope, $filter) ->
+  $('ul.breadcrumb').html "<li><a href='#/'>#{$filter("translate")("CORE.LABELS.DASHBOARD")}</a><span class='divider'>/</span></li><li><a href='#/news/'>#{$filter("translate")("CORE.NEWS.MESSAGES")}</a><span class='divider'>/</span></li><li class='active'>#{$filter("translate")("CORE.NEWS.WRITE_MESSAGE")}</li>"
+]
+
+controllers.controller 'profileController', ['$scope', '$filter', ($scope, $filter) ->
+  $('ul.breadcrumb').html "<li><a href='#/'>#{$filter("translate")("CORE.LABELS.DASHBOARD")}</a><span class='divider'>/</span></li><li class='active'>#{$filter("translate")("CORE.CLIENTS.MY_PROFILE")}</li>"
+]
+
+controllers.controller 'profileAccessController', ['$scope', '$filter', ($scope, $filter) ->
+  $('ul.breadcrumb').html "<li><a href='#/'>#{$filter("translate")("CORE.LABELS.DASHBOARD")}</a><span class='divider'>/</span></li><li><a href='#/profile/'>#{$filter("translate")("CORE.CLIENTS.MY_PROFILE")}</a><span class='divider'>/</span></li><li class='active'>#{$filter("translate")("CORE.LABELS.CHANGE_PASSWORD")}</li>"
+]
+
+controllers.controller 'systemController', ['$scope', '$filter', ($scope, $filter) ->
+  $('ul.breadcrumb').html "<li><a href='#/'>#{$filter("translate")("CORE.LABELS.DASHBOARD")}</a><span class='divider'>/</span></li><li class='active'>#{$filter("translate")("CORE.SYSTEM.SYSTEM_LABEL")}</li>"
+]
+
+controllers.controller 'systemAddAdminController', ['$scope', '$filter', ($scope, $filter) ->
+  $('ul.breadcrumb').html "<li><a href='#/'>#{$filter("translate")("CORE.LABELS.DASHBOARD")}</a><span class='divider'>/</span></li><li><a href='#/system/'>#{$filter("translate")("CORE.SYSTEM.SYSTEM_LABEL")}</a><span class='divider'>/</span></li><li class='active'>#{$filter("translate")("CORE.SYSTEM.CREATE_ADMIN")}</li>"
+]
+
+controllers.controller 'moduleListController', ['$scope', '$filter', '$route', '$templateCache',($scope, $filter, $route, $templateCache) ->
+  $('ul.breadcrumb').html "<li><a href='#/'>#{$filter("translate")("CORE.LABELS.DASHBOARD")}</a><span class='divider'>/</span></li><li class='active'>#{$filter("translate")("CORE.MODULES.MODULE_LABEL")}</li>"
+  angular.element("#buttonListUpdate").on "reloadTemplateCache", ->
+    $templateCache.remove $route.current.templateUrl
+    $route.reload()
+]
+
+controllers.controller 'moduleDetailController', ['$scope', '$filter', '$routeParams', 'modulesService', ($scope, $filter, $routeParams, modulesService) ->
+  $('ul.breadcrumb').html "<li><a href='#/'>#{$filter("translate")("CORE.LABELS.DASHBOARD")}</a><span class='divider'>/</span></li><li><a href='#/modules/'>#{$filter("translate")("CORE.MODULES.MODULE_LABEL")}</a><span class='divider'>/</span></li><li class='active'>#{$filter("translate")($routeParams.moduleName)}</li>"
+
+  $scope.module =
+    name: $routeParams.moduleName
+
+  $scope.update = (data) ->
+    modulesService.set $scope.module.name, data
+    .success (module, status) ->
+        $scope.module = module if status == 202
+
+  modulesService.get $scope.module.name
+    .success (module) ->
+      $scope.module = module if module
 ]

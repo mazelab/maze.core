@@ -25,6 +25,7 @@ class SystemController extends Zend_Controller_Action
 
         // set view messages from MessageManager
         $this->_helper->getHelper("SetDefaultViewVars");
+        $this->_helper->layout()->disableLayout();
     }
 
     public function indexAction()
@@ -96,8 +97,7 @@ class SystemController extends Zend_Controller_Action
             Zend_Auth::getInstance()->getStorage()->write($identity['adminUser']);
         }
 
-        $redirector = $this->_helper->getHelper('Redirector');
-        $redirector->goToRoute(array(), 'clients');
+        return $this->redirect("/", array('code'=>301));
     }
 
     public function addadminAction()

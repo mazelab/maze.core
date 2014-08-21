@@ -51,6 +51,7 @@ class ModulesController extends Zend_Controller_Action
 
         // set view messages from MessageManager
         $this->_helper->getHelper("SetDefaultViewVars");
+        $this->_helper->layout()->disableLayout();
         
         // sync module data on daily basis
         $moduleSync = Core_Model_DiFactory::getModuleSync();
@@ -78,6 +79,7 @@ class ModulesController extends Zend_Controller_Action
                     ->addError(self::MESSAGE_MODULE_INSTALL_FAILED, $this->getParam('moduleName'));
         }else {
             $this->view->result = true;
+            $this->view->name  = $this->getParam('moduleName');
             $this->view->route = $this->view->url(array($module->getName()), "moduleDetail");
         }
     }
