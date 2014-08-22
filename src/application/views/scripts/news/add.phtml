@@ -139,7 +139,7 @@
                     return methods[args].apply(this, Array.prototype.slice.call(argVector, 1));
                 }
                 settings = $.extend($.fn.mazeMessageTagsDummy.defaults, typeof args === "object" ? args : {});
-                $(document.getElementById("templateContainer").firstElementChild.cloneNode(true)).appendTo($(this));
+                $("#templateContainer > div").clone(true).appendTo($(this));
                 return this;
             }));
         };

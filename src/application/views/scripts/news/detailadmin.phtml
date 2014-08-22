@@ -270,7 +270,7 @@
                  * @returns {HTMLSpanElement}
                  */
                 _buildTag: function(valueObject){
-                    template = document.getElementById("templateTag").cloneNode(true);
+                    template = $("#templateTag").clone(true)[0];
                     template.tagId = valueObject.id;
 
                     return $(template.innerHTML.replace(/\:name\:/, valueObject.value)).hide();
@@ -283,9 +283,7 @@
                 }
 
                 settings = $.extend($.fn.mazeMessageTags.defaults, typeof args === "object" ? args : {});
-                template = document.getElementById("templateContainer").firstElementChild.cloneNode(true);
-
-                $(template).appendTo($(this));
+                $("#templateContainer > div").clone(true).appendTo($(this));
 
                 // refresh the selector
                 if (typeof settings.container !== "object" || typeof settings.container[0] === "undefined"){
@@ -321,8 +319,8 @@ $(document).ready(function() {
         whiteSpace: true,
         type: "textarea",
         textarea : {
-            rows : 9,
-            class: true
+            "rows" : 9,
+            "class": true
         }
     }, mazeEditableOptions));
 
