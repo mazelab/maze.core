@@ -12,7 +12,7 @@
             </ul>
         </div>
 
-        <input class="input-xxlarge" ng-model="mazesearch" type="text"
+        <input class="input-xxlarge" ng-model="mazesearch" type="text" ng-keydown="submit($event);"
                placeholder="{{'CORE.DIRECTIVES.SEARCH_LABEL' | translate}}..."/>
 
     </div>

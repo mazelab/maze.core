@@ -197,39 +197,38 @@ directives.directive 'mazeAdminSearch', ['$filter', ($filter) ->
   controller: ['$scope', '$http', '$q', '$location', '$filter', ($scope, $http, $q, $location, $filter) ->
     $scope.mazesearch = $location.search().search || ""
     $scope.categories =
-      all     : {name: $filter("translate")("CORE.DIRECTIVES.SEARCH_All"), source: "/search/"},
-      clients : {name: $filter("translate")("CORE.LABELS.CLIENTS"), source: "/clients/"},
-      domains : {name: $filter("translate")("CORE.LABELS.DOMAINS"), source: "/domains/"},
-      nodes   : {name: $filter("translate")("CORE.LABELS.NODES"), source: "/nodes/"}
+      all     : {name: $filter("translate")("CORE.DIRECTIVES.SEARCH_All"), source: "/search"},
+      clients : {name: $filter("translate")("CORE.LABELS.CLIENTS"), source: "/clients"},
+      domains : {name: $filter("translate")("CORE.LABELS.DOMAINS"), source: "/domains"},
+      nodes   : {name: $filter("translate")("CORE.LABELS.NODES"), source: "/nodes"}
     $scope.selection = $scope.categories.all
 
+    $scope.submit = (event) ->
+      $scope.search $scope.mazesearch; event.preventDefault() if event.keyCode == 13 && $scope.mazesearch
+
+    $scope.sameOrigin = ->
+      if $location.path().indexOf($scope.selection.source) == 0 then true else false
+
     $scope.search = (search) ->
-      return if search == undefined
-      $scope.oldcontent().hide() if $scope.oldcontent().is ":visible"
-      if search == "" && $scope.oldcontent().is(":hidden") && $scope.categories.all.source == $scope.selection.source
-        $scope.oldcontent().show()
-        $location.path "/"
-        return false
-      return $location.search({search: search}) if $scope.location() == $scope.selection.source
-      $location.path($scope.selection.source)
-
-    $scope.location = ->
-      if $location.path() == "/" then window.location.pathname+ "/" else $location.path()
-
-    $scope.$watch "mazesearch", (search) ->
-      $scope.search(search) if search
-
-    $scope.oldcontent = ->
-      @content = angular.element "#mainContent" if not @content
-      @content
+      return $location.search({}) if not search
+      return $location.search({search: search}) if search && $location.path() == $scope.selection.source
+      $location.search({search: search}).path $scope.selection.source if search
 
     $scope.toggle = (category) ->
       $scope.selection = category
       $scope.mazesearch = $scope.mazesearch
-      $scope.search($scope.mazesearch)
+      $scope.search $scope.mazesearch
+      $location.path $scope.selection.source if not $scope.sameOrigin()
 
-    for category of $scope.categories
-      $scope.toggle($scope.categories[category]) if $scope.categories[category].source == $scope.location()
+    $scope.dropdownSelection = ->
+      for category of $scope.categories
+        return $scope.selection = $scope.categories[category] if $location.path().indexOf($scope.categories[category].source) == 0
+      $scope.selection = $scope.categories.all
+
+    $scope.$on "$locationChangeSuccess", -> $scope.dropdownSelection()
+    $scope.dropdownSelection()
+    $scope.$watch "mazesearch", (search) ->
+      $scope.search search
   ]
   }
 ]

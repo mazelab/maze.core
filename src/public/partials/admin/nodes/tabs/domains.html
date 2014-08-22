@@ -5,7 +5,7 @@
             {{domain.name}}
         </a>
 
-        <a ng-if="domain.client" href="/clients#/edit/{{domain.client._id}}"
+        <a ng-if="domain.client" ng-href="/#/clients/edit/{{domain.client._id}}"
            title="{{domain.client.label}}" class="pull-right">
             <span>
                 {{domain.client.label}}

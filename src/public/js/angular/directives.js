@@ -235,78 +235,78 @@
         templateUrl: '/partials/admin/directives/adminSearch.html',
         controller: [
           '$scope', '$http', '$q', '$location', '$filter', function($scope, $http, $q, $location, $filter) {
-            var category, _results;
             $scope.mazesearch = $location.search().search || "";
             $scope.categories = {
               all: {
                 name: $filter("translate")("CORE.DIRECTIVES.SEARCH_All"),
-                source: "/search/"
+                source: "/search"
               },
               clients: {
                 name: $filter("translate")("CORE.LABELS.CLIENTS"),
-                source: "/clients/"
+                source: "/clients"
               },
               domains: {
                 name: $filter("translate")("CORE.LABELS.DOMAINS"),
-                source: "/domains/"
+                source: "/domains"
               },
               nodes: {
                 name: $filter("translate")("CORE.LABELS.NODES"),
-                source: "/nodes/"
+                source: "/nodes"
               }
             };
             $scope.selection = $scope.categories.all;
-            $scope.search = function(search) {
-              if (search === void 0) {
-                return;
+            $scope.submit = function(event) {
+              $scope.search($scope.mazesearch);
+              if (event.keyCode === 13 && $scope.mazesearch) {
+                return event.preventDefault();
               }
-              if ($scope.oldcontent().is(":visible")) {
-                $scope.oldcontent().hide();
-              }
-              if (search === "" && $scope.oldcontent().is(":hidden") && $scope.categories.all.source === $scope.selection.source) {
-                $scope.oldcontent().show();
-                $location.path("/");
+            };
+            $scope.sameOrigin = function() {
+              if ($location.path().indexOf($scope.selection.source) === 0) {
+                return true;
+              } else {
                 return false;
               }
-              if ($scope.location() === $scope.selection.source) {
+            };
+            $scope.search = function(search) {
+              if (!search) {
+                return $location.search({});
+              }
+              if (search && $location.path() === $scope.selection.source) {
                 return $location.search({
                   search: search
                 });
               }
-              return $location.path($scope.selection.source);
-            };
-            $scope.location = function() {
-              if ($location.path() === "/") {
-                return window.location.pathname + "/";
-              } else {
-                return $location.path();
-              }
-            };
-            $scope.$watch("mazesearch", function(search) {
               if (search) {
-                return $scope.search(search);
+                return $location.search({
+                  search: search
+                }).path($scope.selection.source);
               }
-            });
-            $scope.oldcontent = function() {
-              if (!this.content) {
-                this.content = angular.element("#mainContent");
-              }
-              return this.content;
             };
             $scope.toggle = function(category) {
               $scope.selection = category;
               $scope.mazesearch = $scope.mazesearch;
-              return $scope.search($scope.mazesearch);
-            };
-            _results = [];
-            for (category in $scope.categories) {
-              if ($scope.categories[category].source === $scope.location()) {
-                _results.push($scope.toggle($scope.categories[category]));
-              } else {
-                _results.push(void 0);
+              $scope.search($scope.mazesearch);
+              if (!$scope.sameOrigin()) {
+                return $location.path($scope.selection.source);
               }
-            }
-            return _results;
+            };
+            $scope.dropdownSelection = function() {
+              var category;
+              for (category in $scope.categories) {
+                if ($location.path().indexOf($scope.categories[category].source) === 0) {
+                  return $scope.selection = $scope.categories[category];
+                }
+              }
+              return $scope.selection = $scope.categories.all;
+            };
+            $scope.$on("$locationChangeSuccess", function() {
+              return $scope.dropdownSelection();
+            });
+            $scope.dropdownSelection();
+            return $scope.$watch("mazesearch", function(search) {
+              return $scope.search(search);
+            });
           }
         ]
       };
