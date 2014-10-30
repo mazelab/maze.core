@@ -438,10 +438,14 @@ class Core_Model_ClientManager
      * returns a certain client object
      * 
      * @param string $clientId
-     * @return Core_Model_ValueObject_Client
+     * @return Core_Model_ValueObject_Client|null
      */
     public function getClient($clientId)
     {
+        if(!$clientId) {
+            return null;
+        }
+
         if(!$this->isClientRegistered($clientId)) {
             $this->_loadClient($clientId);
         }

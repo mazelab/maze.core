@@ -1,19 +1,20 @@
-angular.module 'maze', ['ui.bootstrap', 'maze.directives', 'maze.services', 'maze.filters', 'maze.controllers', 'xeditable', 'ngRoute', 'angular-md5', 'pascalprecht.translate']
-.run (editableOptions) ->
-  editableOptions.theme = 'bs2';
+angular.module 'maze.core', []
+.run ['editableOptions', (editableOptions) ->
+  editableOptions.theme = 'bs2'
+]
 
-.config ($translateProvider, $routeProvider) ->
+.run ['$rootScope', '$location', ($rootScope, $location) ->
+  $rootScope.$on '$routeChangeError', (event, current, previous, error) ->
+    $location.path('/404') if error.status == 404
+]
+
+.config ['$translateProvider', '$routeProvider', ($translateProvider, $routeProvider) ->
   $translateProvider.useStaticFilesLoader [] =
     prefix: "/js/angular/locale/"
     suffix: ".json"
   $translateProvider.preferredLanguage("en_US");
 
-  ##
-  # Core Routes
-  ##
-
   $routeProvider
-
   .when "/",
     templateUrl: "/dashboardadmin",
     controller: "dashboardController"
@@ -81,3 +82,10 @@ angular.module 'maze', ['ui.bootstrap', 'maze.directives', 'maze.services', 'maz
     templateUrl: "/partials/admin/search/list.html"
     controller: "searchListController"
     reloadOnSearch: false
+
+  # error routes
+  .when "/error/404",
+    templateUrl: "/partials/admin/error/404.html"
+  .otherwise
+    redirectTo: '/error/404'
+]

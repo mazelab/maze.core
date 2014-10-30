@@ -184,7 +184,7 @@ class MazeLib_Plugins_Init extends Zend_Controller_Plugin_Abstract
         } else {
             $resource = $controller;
         }
-        
+
         if ($this->_acl->isAllowed($this->_role, $resource, $action)) {
             // set userdata in view
             $view = Zend_Controller_Front::getInstance()->getParam('bootstrap')->getResource('view');

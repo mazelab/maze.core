@@ -45,26 +45,6 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         return $config;
     }
     
-    public function _initLayout()
-    {
-        $resource = $this->getPluginResource('layout');
-
-        if(($identity = Zend_Auth::getInstance()->getIdentity())) {
-            switch ($identity["group"]) {
-                case "admin":
-                    $script = "admin/layout";
-                    break;
-                default:
-                    $script = "client/layout";
-                    break;
-            }
-            
-            $resource->setOptions(array('layout' => $script));
-        }
-        
-        return $resource->getLayout();
-    }
-    
     protected function _initNavigation()
     {
         $naviPath = __DIR__ . '/configs/navigation.ini';

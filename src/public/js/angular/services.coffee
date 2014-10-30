@@ -1,6 +1,6 @@
-services = angular.module "maze.services", []
+angular.module "maze.services", []
 
-services.service 'nodesService',[ '$http', ($http) ->
+.service 'nodesService',[ '$http', ($http) ->
   {
     list: (params) ->
       $http.get('/api/nodes', {params: params})
@@ -37,7 +37,7 @@ services.service 'nodesService',[ '$http', ($http) ->
   }
 ]
 
-services.service 'clientsService', [ '$http', ($http) ->
+.service 'clientsService', [ '$http', ($http) ->
   {
     list: (params) ->
       $http.get('/api/clients', {params: params})
@@ -77,7 +77,7 @@ services.service 'clientsService', [ '$http', ($http) ->
   }
 ]
 
-services.service 'modulesService', ['$http', ($http) ->
+.service 'modulesService', ['$http', ($http) ->
   {
     list: (params) ->
       $http.get('/api/modules', {params: params})
@@ -102,7 +102,7 @@ services.service 'modulesService', ['$http', ($http) ->
   }
 ]
 
-services.service 'domainsService', [ '$http', ($http) ->
+.service 'domainsService', [ '$http', ($http) ->
   {
     list: (params) ->
       $http.get('/api/domains', {params: params})
@@ -139,14 +139,14 @@ services.service 'domainsService', [ '$http', ($http) ->
   }
 ]
 
-services.service 'logsService', [ '$http', ($http) ->
+.service 'logsService', [ '$http', ($http) ->
   {
     list: (params) ->
       $http.get('/api/logs', {params: params})
   }
 ]
 
-services.service 'authService', [ '$http', ($http) ->
+.service 'authService', [ '$http', ($http) ->
   {
     client: (id) ->
       $http.post('/api/auth/' + id, {})

@@ -1,6 +1,6 @@
-filters = angular.module "maze.filters", []
+angular.module "maze.filters", []
 
-filters.filter 'filterObject', [ () ->
+.filter 'filterObject', [ () ->
   (items, search) ->
     result = {}
 

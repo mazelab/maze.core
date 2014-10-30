@@ -159,8 +159,9 @@
             <?= $this->render('footer.phtml'); ?>
         </div>
 
-        <script type="text/javascript">
+        <?= $this->render('admin/angular.phtml') ?>
 
+        <script type="text/javascript">
             if (Array.prototype.indexOf === undefined) {
                 Array.prototype.indexOf = function(obj, start) {
                     for (var i = (start || 0), j = this.length; i < j; i++) {

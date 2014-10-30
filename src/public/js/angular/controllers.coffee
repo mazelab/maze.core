@@ -1,6 +1,6 @@
-controllers = angular.module 'maze.controllers', []
+angular.module 'maze.controllers', []
 
-controllers.controller 'clientListController', ['$scope', 'authService', '$filter', '$location', ($scope, authService, $filter, $location) ->
+.controller 'clientListController', ['$scope', 'authService', '$filter', '$location', ($scope, authService, $filter, $location) ->
   $scope.client = []
   $scope.search = $location.search().search
 
@@ -25,7 +25,7 @@ controllers.controller 'clientListController', ['$scope', 'authService', '$filte
   initBreadCrumb()
 ]
 
-controllers.controller 'clientEditController', ['$scope', '$routeParams', '$q', '$modal', '$filter', '$timeout', 'clientsService', 'authService', 'modulesService', 'domainsService', 'logsService', 'nodesService', ($scope, $routeParams, $q, $modal, $filter, $timeout, clientsService, authService, modulesService, domainsService, logsService, nodesService) ->
+.controller 'clientEditController', ['$scope', '$routeParams', '$q', '$modal', '$filter', '$timeout', 'clientsService', 'authService', 'modulesService', 'domainsService', 'logsService', 'nodesService', ($scope, $routeParams, $q, $modal, $filter, $timeout, clientsService, authService, modulesService, domainsService, logsService, nodesService) ->
   $scope.client = {}
   $scope.clientId = $routeParams.clientId
 
@@ -232,7 +232,7 @@ controllers.controller 'clientEditController', ['$scope', '$routeParams', '$q', 
 
       $scope.services.available = $scope.services.available.concat(availableServices);
 ]
-controllers.controller 'clientModalDelete', [ '$scope', '$filter', '$modalInstance', 'clientsService', 'clientId', ($scope, $filter, $modalInstance, clientsService, clientId) ->
+.controller 'clientModalDelete', [ '$scope', '$filter', '$modalInstance', 'clientsService', 'clientId', ($scope, $filter, $modalInstance, clientsService, clientId) ->
   $scope.ok = () ->
     $scope.errMessages = []
 
@@ -246,7 +246,7 @@ controllers.controller 'clientModalDelete', [ '$scope', '$filter', '$modalInstan
     $modalInstance.dismiss()
 ]
 
-controllers.controller 'clientModalRemoveService', ['$scope', '$filter', '$modalInstance', 'service', 'client', 'clientsService', ($scope, $filter, $modalInstance, service, client, clientsService) ->
+.controller 'clientModalRemoveService', ['$scope', '$filter', '$modalInstance', 'service', 'client', 'clientsService', ($scope, $filter, $modalInstance, service, client, clientsService) ->
   $scope.service = service
   $scope.client = client
   $scope.errMessages = []
@@ -271,7 +271,7 @@ controllers.controller 'clientModalRemoveService', ['$scope', '$filter', '$modal
     $modalInstance.dismiss()
 ]
 
-controllers.controller 'clientSwitchToController', ['$routeParams', 'authService', ($routeParams, authService) ->
+.controller 'clientSwitchToController', ['$routeParams', 'authService', ($routeParams, authService) ->
   authService.client $routeParams.clientId
   .success ->
       location.href = "/";
@@ -279,7 +279,7 @@ controllers.controller 'clientSwitchToController', ['$routeParams', 'authService
       setErrorMessages [$filter("translate")("CORE.MESSAGES.REQUEST_FAILED")]
 ]
 
-controllers.controller 'clientNewController', ['$scope', 'clientsService', '$filter', ($scope, clientsService, $filter) ->
+.controller 'clientNewController', ['$scope', 'clientsService', '$filter', ($scope, clientsService, $filter) ->
   $scope.client = {}
 
   initBreadCrumb = () ->
@@ -301,7 +301,7 @@ controllers.controller 'clientNewController', ['$scope', 'clientsService', '$fil
   initBreadCrumb()
 ]
 
-controllers.controller 'domainModalRemoveService', ['$scope', '$filter', '$modalInstance', 'service', 'domain', 'domainsService', ($scope, $filter, $modalInstance, service, domain, domainsService) ->
+.controller 'domainModalRemoveService', ['$scope', '$filter', '$modalInstance', 'service', 'domain', 'domainsService', ($scope, $filter, $modalInstance, service, domain, domainsService) ->
   $scope.service = service
   $scope.domain = domain
 
@@ -321,7 +321,7 @@ controllers.controller 'domainModalRemoveService', ['$scope', '$filter', '$modal
     $modalInstance.dismiss()
 ]
 
-controllers.controller 'domainModalDelete', ['$scope', '$filter', '$modalInstance', 'domainsService', 'domainId', ($scope, $filter, $modalInstance, domainsService, domainId) ->
+.controller 'domainModalDelete', ['$scope', '$filter', '$modalInstance', 'domainsService', 'domainId', ($scope, $filter, $modalInstance, domainsService, domainId) ->
   $scope.ok = () ->
     $scope.errMessages = []
 
@@ -335,7 +335,7 @@ controllers.controller 'domainModalDelete', ['$scope', '$filter', '$modalInstanc
     $modalInstance.dismiss()
 ]
 
-controllers.controller 'domainListController', ['$scope', '$filter', '$location', ($scope, $filter, $location) ->
+.controller 'domainListController', ['$scope', '$filter', '$location', ($scope, $filter, $location) ->
   $scope.domains = []
   $scope.search = $location.search().search
 
@@ -348,7 +348,7 @@ controllers.controller 'domainListController', ['$scope', '$filter', '$location'
   initBreadCrumb()
 ]
 
-controllers.controller 'domainEditController', [ '$scope', '$filter', '$modal', '$q', 'domainsService', '$routeParams', 'modulesService', 'logsService', 'nodesService', ($scope, $filter, $modal, $q, domainsService, $routeParams, modulesService, logsService, nodesService) ->
+.controller 'domainEditController', [ '$scope', '$filter', '$modal', '$q', 'domainsService', '$routeParams', 'modulesService', 'logsService', 'nodesService', ($scope, $filter, $modal, $q, domainsService, $routeParams, modulesService, logsService, nodesService) ->
   $scope.domainId = $routeParams.domainId
 
   initBreadCrumb = () ->
@@ -359,9 +359,9 @@ controllers.controller 'domainEditController', [ '$scope', '$filter', '$modal', 
     Object.keys(val).length
 
   $scope.updateAdditional = (data) ->
-    return domainsService.update $scope.domainId, $.param(data)
+    domainsService.update $scope.domainId, $.param(data)
     .success (data) ->
-        $scope.domain.additionalFields = data.domain.additionalFields if data.domain?.additionalFields?
+      $scope.domain.additionalFields = data.domain.additionalFields if data.domain?.additionalFields?
 
   $scope.loadLogs = true
   logsService.list {domain: $scope.domainId, limit: 10}
@@ -490,7 +490,7 @@ controllers.controller 'domainEditController', [ '$scope', '$filter', '$modal', 
       $scope.services.available = $scope.services.available.concat(availableServices);
 ]
 
-controllers.controller 'domainNewController', [ '$scope', '$filter', 'domainsService', 'clientsService', ($scope, $filter, domainsService, clientsService) ->
+.controller 'domainNewController', [ '$scope', '$filter', 'domainsService', 'clientsService', ($scope, $filter, domainsService, clientsService) ->
   $scope.clients  = $scope.domain = $scope.selected = {};
 
   $scope.changeclient = (option) ->
@@ -519,7 +519,7 @@ controllers.controller 'domainNewController', [ '$scope', '$filter', 'domainsSer
   initBreadCrumb()
 ]
 
-controllers.controller 'nodeEditController', ['$scope', '$filter', '$modal', '$q', '$routeParams', 'nodesService', 'logsService', 'modulesService', 'clientsService', 'domainsService' , ($scope, $filter, $modal, $q, $routeParams, nodesService, logsService, modulesService, clientsService, domainsService) ->
+.controller 'nodeEditController', ['$scope', '$filter', '$modal', '$q', '$routeParams', 'nodesService', 'logsService', 'modulesService', 'clientsService', 'domainsService' , ($scope, $filter, $modal, $q, $routeParams, nodesService, logsService, modulesService, clientsService, domainsService) ->
   $scope.nodeId = $routeParams.nodeId
   $scope.nodetypes = [
     {name: $filter("translate")("CORE.NODES.SERVER_VIRTUAL"), value: "virtual", image: "dummy_vm_200.png"}
@@ -688,7 +688,7 @@ controllers.controller 'nodeEditController', ['$scope', '$filter', '$modal', '$q
       $scope.services.available = $scope.services.available.concat(availableServices);
 ]
 
-controllers.controller 'nodeListController', ['$scope', 'nodesService', '$filter', '$location', ($scope, nodesService, $filter, $location) ->
+.controller 'nodeListController', ['$scope', 'nodesService', '$filter', '$location', ($scope, nodesService, $filter, $location) ->
   $scope.nodes = []
   $scope.search = $location.search().search
 
@@ -710,7 +710,7 @@ controllers.controller 'nodeListController', ['$scope', 'nodesService', '$filter
   initBreadCrumb()
 ]
 
-controllers.controller 'nodeRegisterController', [ '$scope', '$filter', '$routeParams', 'logsService', 'nodesService', ($scope, $filter, $routeParams, logsService, nodesService) ->
+.controller 'nodeRegisterController', [ '$scope', '$filter', '$routeParams', 'logsService', 'nodesService', ($scope, $filter, $routeParams, logsService, nodesService) ->
   $scope.nodeName = $routeParams.nodeName
   $scope.nodetypes = [
     {name: $filter("translate")("CORE.NODES.SELECT_NODETYPE"), value: ''}
@@ -758,7 +758,7 @@ controllers.controller 'nodeRegisterController', [ '$scope', '$filter', '$routeP
   initBreadCrumb();
 ]
 
-controllers.controller 'nodeModalDelete', [ '$scope', '$filter', '$modalInstance', 'nodesService', 'nodeId', ($scope, $filter, $modalInstance, nodesService, nodeId) ->
+.controller 'nodeModalDelete', [ '$scope', '$filter', '$modalInstance', 'nodesService', 'nodeId', ($scope, $filter, $modalInstance, nodesService, nodeId) ->
   $scope.ok = () ->
     $scope.errMessages = [];
 
@@ -772,7 +772,7 @@ controllers.controller 'nodeModalDelete', [ '$scope', '$filter', '$modalInstance
     $modalInstance.dismiss()
 ]
 
-controllers.controller 'nodeModalRemoveService', [ '$scope', '$filter', '$modalInstance', 'service', 'node', 'nodesService', ($scope, $filter, $modalInstance, service, node, nodesService) ->
+.controller 'nodeModalRemoveService', [ '$scope', '$filter', '$modalInstance', 'service', 'node', 'nodesService', ($scope, $filter, $modalInstance, service, node, nodesService) ->
   $scope.service = service
   $scope.node = node
 
@@ -792,7 +792,7 @@ controllers.controller 'nodeModalRemoveService', [ '$scope', '$filter', '$modalI
     $modalInstance.dismiss()
 ]
 
-controllers.controller 'searchListController', ['$scope', '$filter', '$location', ($scope, $filter, $location) ->
+.controller 'searchListController', ['$scope', '$filter', '$location', ($scope, $filter, $location) ->
   $scope.result = []
   $scope.search = $location.search().search
 
@@ -806,46 +806,46 @@ controllers.controller 'searchListController', ['$scope', '$filter', '$location'
   initBreadCrumb()
 ]
 
-controllers.controller 'dashboardController', ['$scope', '$filter', '$location', ($scope, $filter, $location) ->
+.controller 'dashboardController', ['$scope', '$filter', '$location', ($scope, $filter, $location) ->
   $('ul.breadcrumb').html "<li class='active'>#{$filter("translate")("CORE.LABELS.DASHBOARD")}</li>"
 ]
 
-controllers.controller 'newsListController', ['$scope', '$filter', ($scope, $filter) ->
+.controller 'newsListController', ['$scope', '$filter', ($scope, $filter) ->
   $('ul.breadcrumb').html "<li><a href='#/'>#{$filter("translate")("CORE.LABELS.DASHBOARD")}</a><span class='divider'>/</span></li><li class='active'>#{$filter("translate")("CORE.NEWS.MESSAGES")}</li>"
 ]
 
-controllers.controller 'newsEditController', ['$scope', '$filter', '$routeParams', ($scope, $filter, $routeParams) ->
+.controller 'newsEditController', ['$scope', '$filter', '$routeParams', ($scope, $filter, $routeParams) ->
   $('ul.breadcrumb').html "<li><a href='#/'>#{$filter("translate")("CORE.LABELS.DASHBOARD")}</a><span class='divider'>/</span></li><li><a href='#/news/'>#{$filter("translate")("CORE.NEWS.MESSAGES")}</a><span class='divider'>/</span></li><li class='active'>#{$routeParams.title}</li>"
 ]
 
-controllers.controller 'newsAddController', ['$scope', '$filter', ($scope, $filter) ->
+.controller 'newsAddController', ['$scope', '$filter', ($scope, $filter) ->
   $('ul.breadcrumb').html "<li><a href='#/'>#{$filter("translate")("CORE.LABELS.DASHBOARD")}</a><span class='divider'>/</span></li><li><a href='#/news/'>#{$filter("translate")("CORE.NEWS.MESSAGES")}</a><span class='divider'>/</span></li><li class='active'>#{$filter("translate")("CORE.NEWS.WRITE_MESSAGE")}</li>"
 ]
 
-controllers.controller 'profileController', ['$scope', '$filter', ($scope, $filter) ->
+.controller 'profileController', ['$scope', '$filter', ($scope, $filter) ->
   $('ul.breadcrumb').html "<li><a href='#/'>#{$filter("translate")("CORE.LABELS.DASHBOARD")}</a><span class='divider'>/</span></li><li class='active'>#{$filter("translate")("CORE.CLIENTS.MY_PROFILE")}</li>"
 ]
 
-controllers.controller 'profileAccessController', ['$scope', '$filter', ($scope, $filter) ->
+.controller 'profileAccessController', ['$scope', '$filter', ($scope, $filter) ->
   $('ul.breadcrumb').html "<li><a href='#/'>#{$filter("translate")("CORE.LABELS.DASHBOARD")}</a><span class='divider'>/</span></li><li><a href='#/profile/'>#{$filter("translate")("CORE.CLIENTS.MY_PROFILE")}</a><span class='divider'>/</span></li><li class='active'>#{$filter("translate")("CORE.LABELS.CHANGE_PASSWORD")}</li>"
 ]
 
-controllers.controller 'systemController', ['$scope', '$filter', ($scope, $filter) ->
+.controller 'systemController', ['$scope', '$filter', ($scope, $filter) ->
   $('ul.breadcrumb').html "<li><a href='#/'>#{$filter("translate")("CORE.LABELS.DASHBOARD")}</a><span class='divider'>/</span></li><li class='active'>#{$filter("translate")("CORE.SYSTEM.SYSTEM_LABEL")}</li>"
 ]
 
-controllers.controller 'systemAddAdminController', ['$scope', '$filter', ($scope, $filter) ->
+.controller 'systemAddAdminController', ['$scope', '$filter', ($scope, $filter) ->
   $('ul.breadcrumb').html "<li><a href='#/'>#{$filter("translate")("CORE.LABELS.DASHBOARD")}</a><span class='divider'>/</span></li><li><a href='#/system/'>#{$filter("translate")("CORE.SYSTEM.SYSTEM_LABEL")}</a><span class='divider'>/</span></li><li class='active'>#{$filter("translate")("CORE.SYSTEM.CREATE_ADMIN")}</li>"
 ]
 
-controllers.controller 'moduleListController', ['$scope', '$filter', '$route', '$templateCache',($scope, $filter, $route, $templateCache) ->
+.controller 'moduleListController', ['$scope', '$filter', '$route', '$templateCache',($scope, $filter, $route, $templateCache) ->
   $('ul.breadcrumb').html "<li><a href='#/'>#{$filter("translate")("CORE.LABELS.DASHBOARD")}</a><span class='divider'>/</span></li><li class='active'>#{$filter("translate")("CORE.MODULES.MODULE_LABEL")}</li>"
   angular.element("#buttonListUpdate").on "reloadTemplateCache", ->
     $templateCache.remove $route.current.templateUrl
     $route.reload()
 ]
 
-controllers.controller 'moduleDetailController', ['$scope', '$filter', '$routeParams', 'modulesService', ($scope, $filter, $routeParams, modulesService) ->
+.controller 'moduleDetailController', ['$scope', '$filter', '$routeParams', 'modulesService', ($scope, $filter, $routeParams, modulesService) ->
   $('ul.breadcrumb').html "<li><a href='#/'>#{$filter("translate")("CORE.LABELS.DASHBOARD")}</a><span class='divider'>/</span></li><li><a href='#/modules/'>#{$filter("translate")("CORE.MODULES.MODULE_LABEL")}</a><span class='divider'>/</span></li><li class='active'>#{$filter("translate")($routeParams.moduleName)}</li>"
 
   $scope.module =
