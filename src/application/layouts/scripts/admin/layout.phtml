@@ -31,10 +31,7 @@
         <? $this->headScript()->prependFile($this->baseUrl() . '/js/min/jquery.form.min.js') ?>
         <? $this->headScript()->prependFile($this->baseUrl() . '/js/min/bootstrap-select.min.js') ?>
         <? $this->headScript()->prependFile($this->baseUrl() . '/js/bootstrap.min.js') ?>
-        <? $this->headScript()->prependFile($this->baseUrl() . '/js/min/jquery-1.8.2.min.js') ?>
-
-        <!-- jquery versions over 1.8.3 crashes with bootstrap-modal -->
-        <!--<script src="http://code.jquery.com/jquery.js"></script>--> 
+        <? $this->headScript()->prependFile($this->baseUrl() . '/js/min/jquery-1.11.1.min.js') ?>
         <?= $this->headScript() ?>
     </head>
     <body id="ng-app" ng-app="maze">
