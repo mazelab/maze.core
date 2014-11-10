@@ -33,32 +33,38 @@ class MazeLib_Plugins_Layout extends Zend_Controller_Plugin_Abstract
      * includes files in layout from module definitions
      *
      * @todo refactoring
+     * @param string $group
+     *
      */
-    protected function _includeModuleLayoutFiles()
+    protected function _includeModuleLayoutFiles($group = null)
     {
+        if (!$group || empty($group)) {
+            return;
+        }
+
         $modules = Core_Model_DiFactory::getModuleManager()->getInstalledModules();
         $view  = Zend_Layout::getMvcInstance()->getView();
 
         foreach($modules as $module) {
-            if(isset($module['admin']['scripts']['prepend']) && ($files = $module['admin']['scripts']['prepend']) &&
+            if(isset($module[$group]['scripts']['prepend']) && ($files = $module[$group]['scripts']['prepend']) &&
                     is_array($files)) {
                 foreach($files as $prepend) {
                     $view->headScript()->prependFile($view->baseUrl() . $prepend);
                 }
             }
-            if(isset($module['admin']['css']['prepend']) && ($files = $module['admin']['css']['prepend']) &&
+            if(isset($module[$group]['css']['prepend']) && ($files = $module[$group]['css']['prepend']) &&
                 is_array($files)) {
                 foreach($files as $append) {
                     $view->headLink()->prependStylesheet($view->baseUrl() . $append);
                 }
             }
-            if(isset($module['admin']['scripts']['append']) && ($files = $module['admin']['scripts']['append']) &&
+            if(isset($module[$group]['scripts']['append']) && ($files = $module[$group]['scripts']['append']) &&
                     is_array($files)) {
                 foreach($files as $append) {
                     $view->headScript()->appendFile($view->baseUrl() . $append);
                 }
             }
-            if(isset($module['admin']['css']['append']) && ($files = $module['admin']['css']['append']) &&
+            if(isset($module[$group]['css']['append']) && ($files = $module[$group]['css']['append']) &&
                     is_array($files)) {
                 foreach($files as $append) {
                     $view->headLink()->appendStylesheet($view->baseUrl() . $append);
@@ -130,8 +136,11 @@ class MazeLib_Plugins_Layout extends Zend_Controller_Plugin_Abstract
 
         // include angular relevant implementation
         if ($this->_role === Core_Model_UserManager::GROUP_ADMIN) {
-            $this->_includeModuleLayoutFiles();
+            $this->_includeModuleLayoutFiles(Core_Model_UserManager::GROUP_ADMIN);
             $this->_setAngularModuleString();
+        } else if ($this->_role === Core_Model_UserManager::GROUP_CLIENT &&
+            !empty($request->getModuleName()) && $request->getModuleName() !== "Core") {
+            $this->_includeModuleLayoutFiles(Core_Model_UserManager::GROUP_CLIENT);
         }
     }
 
