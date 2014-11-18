@@ -37,7 +37,7 @@ class Core_Model_ValueObject_Node extends Core_Model_ServiceObject
      * @var Core_Model_Node_Commands
      */
     protected $_commands;
-    
+
     /**
      * flag to determine if search index should be rebuild after save operation
      * 
@@ -88,6 +88,36 @@ class Core_Model_ValueObject_Node extends Core_Model_ServiceObject
         }
 
         return $id;
+    }
+
+    /**
+     * add commands grouped by a context
+     *
+     * @param string $context name of the command group
+     * @param string|array $commands
+     * @param string $service (core) name of the module namespace. If module not active then skip
+     * @return boolean
+     */
+    public function addCommands($context, $commands, $service = 'core')
+    {
+        if(!$context || !is_string($context)) {
+            return false;
+        }
+        if(!$service || !is_string($service) || ($service !== 'core' && !$this->hasService($service))) {
+            return false;
+        }
+        if(!$commands || (!is_string($commands) && !is_array($commands))) {
+            return false;
+        } elseif(is_string($commands)) {
+            $commands = array($commands);
+        }
+
+        $hash = md5($context);
+
+        $this->unsetProperty("services/${service}/commands/{$hash}");
+        $this->setProperty("services/${service}/commands/{$hash}", $commands);
+
+        return true;
     }
 
     /**
@@ -144,20 +174,6 @@ class Core_Model_ValueObject_Node extends Core_Model_ServiceObject
     }
     
     /**
-     * gets commands object
-     * 
-     * @return Core_Model_Node_Commands
-     */
-    public function getCommands()
-    {
-        if (!$this->_commands) {
-            $this->_commands = Core_Model_DiFactory::newNodeCommand($this->getId());
-        }
-        
-        return $this->_commands;
-    }
-
-    /**
      * gets complete node data enriched with api dependencies for api use
      *
      * @return array()
@@ -199,30 +215,62 @@ class Core_Model_ValueObject_Node extends Core_Model_ServiceObject
     }
     
     /**
-     * get node commands of a certain service
-     * 
+     * get commands of a certain service
+     *
      * @param string $service
      * @return array
      */
-    public function getServiceCommands($service)
+    public function getCommands($service)
     {
-        return $this->getCommands()->getCommands($service);
+        if(!$service || !is_string($service)) {
+            return array();
+        }
+        if(!($commands = $this->getData("services/${service}/commands")) || !is_array($commands)) {
+            return array();
+        }
+
+        $resolvedCommands = array();
+        foreach($commands as $context) {
+            if(is_array($context)) {
+                foreach($context as $subCommands) {
+                    array_push($resolvedCommands, $subCommands);
+                }
+            }
+        }
+
+        return $resolvedCommands;
     }
-    
+
     /**
      * get hash of last service report
      * 
      * @param string $service
      * @return string|null
      */
-    public function getServiceReportHash($service)
+    public function getReportHash($service)
     {
-        if(!$this->hasService($service) || 
-                !($hash = $this->getData("services/${service}/report"))) {
+        if(!$this->hasService($service) || !($hash = $this->getData("services/${service}/report"))) {
             return null;
         }
         
         return $hash;
+    }
+
+    /**
+     * clears all commands entries of a certain service
+     *
+     * @param string $service name of the service
+     * @return boolean
+     */
+    public function clearCommands($service)
+    {
+        if(!$service || !is_string($service)) {
+            return false;
+        }
+
+        $this->unsetProperty("services/${service}/commands");
+
+        return true;
     }
 
     /**
@@ -271,10 +319,9 @@ class Core_Model_ValueObject_Node extends Core_Model_ServiceObject
             ->setAction(self::ACTION_REPORT_NODE_SERVICE)->setModuleRef($service)
             ->setNodeRef($this->getId())->saveByContext($reportHash);
         
-        $this->getCommands()->removeCommands($service);
+        $this->removeCommands($service);
         
-        if(!Core_Model_DiFactory::getModuleApi()
-                ->reportNodeService($service, $this->getId(), $report)){
+        if(!Core_Model_DiFactory::getModuleApi()->reportNodeService($service, $this->getId(), $report)){
             return false;
         }
         

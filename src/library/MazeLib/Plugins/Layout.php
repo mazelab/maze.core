@@ -82,12 +82,14 @@ class MazeLib_Plugins_Layout extends Zend_Controller_Plugin_Abstract
             case "admin":
                 $script = "admin/layout";
                 break;
-            default:
+            case "client":
                 $script = "client/layout";
                 break;
         }
 
-        Zend_Layout::getMvcInstance()->setLayout($script);
+        if(isset($script)) {
+            Zend_Layout::getMvcInstance()->setLayout($script);
+        }
     }
 
     /**

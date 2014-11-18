@@ -1225,16 +1225,6 @@ class Core_Model_DiFactory
     }
     
     /**
-     * returns new instance of Core_Model_Node_Commands
-     * 
-     * @return Core_Model_Node_Commands
-     */
-    static public function newNodeCommand($nodeId = null)
-    {
-        return new Core_Model_Node_Commands($nodeId);
-    }    
-    
-    /**
      * @return Core_Model_UserManager
      */
     static public function newUserManager()

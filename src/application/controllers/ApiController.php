@@ -50,13 +50,13 @@ class ApiController extends Zend_Controller_Action
         if(!$node->hasService($service)) {
             return $this->setNotFound();
         }
-        
+
         $this->getResponse()->setHeader('Content-type', 'text/plain');
         $this->_helper->layout()->disableLayout();
 
         $this->view->service = $service;
-        $this->view->reportHash = $node->getServiceReportHash($service);
-        $this->view->commands = $node->getServiceCommands($service);
+        $this->view->reportHash = $node->getReportHash($service);
+        $this->view->commands = $node->getCommands($service);
     }
     
     public function reportnodeserviceAction()

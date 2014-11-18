@@ -1,8 +1,6 @@
 <script type="application/javascript">
     var angularModules = ['ngRoute', 'ui.bootstrap', 'pascalprecht.translate', 'xeditable', 'angular-md5'];
     var coreModules = ['maze.core', 'maze.directives', 'maze.services', 'maze.filters', 'maze.controllers'];
-
-
     var mazeModules = [<?= $this->angularModules? $this->raw('angularModules') : null  ?>];
 
     angular.module('maze', angularModules.concat(coreModules, mazeModules));
