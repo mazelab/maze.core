@@ -37,6 +37,10 @@ class ApiController extends Zend_Controller_Action
     
     public function init()
     {
+        $this->_helper->getHelper('contextSwitch')
+            ->addActionContext('reportnodeservice', 'json')
+            ->initContext();
+
         $this->_apiKey = $this->getRequest()->getHeader('X-Maze-Node-Api');
     }
 
@@ -64,7 +68,7 @@ class ApiController extends Zend_Controller_Action
         if(!($node = $this->_getApiNode())) {
             return $this->setForbidden();
         }
-        
+
         $service = $this->getParam('serviceName');
         if(!$node->hasService($service)) {
             return $this->setNotFound();

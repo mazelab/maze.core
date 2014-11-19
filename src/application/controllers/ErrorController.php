@@ -13,6 +13,13 @@
 class ErrorController extends Zend_Controller_Action
 {
 
+    public function init()
+    {
+        $this->_helper->getHelper('contextSwitch')
+            ->addActionContext('error', 'json')
+            ->initContext();
+    }
+
     public function errorAction()
     {
         $errors = $this->_getParam('error_handler');

@@ -20,6 +20,13 @@ class MazeLib_Plugins_Layout extends Zend_Controller_Plugin_Abstract
      */
     protected $_role;
 
+    /**
+     * api call
+     *
+     * @var boolean
+     */
+    protected $_api = false;
+
     public function __construct()
     {
         $identity = Zend_Auth::getInstance()->getIdentity();
@@ -134,6 +141,10 @@ class MazeLib_Plugins_Layout extends Zend_Controller_Plugin_Abstract
      */
     public function dispatchLoopStartup(Zend_Controller_Request_Abstract $request)
     {
+        if($this->_api) {
+            return false;
+        }
+
         $this->_initLayout();
 
         // include angular relevant implementation
@@ -143,6 +154,21 @@ class MazeLib_Plugins_Layout extends Zend_Controller_Plugin_Abstract
         } else if ($this->_role === Core_Model_UserManager::GROUP_CLIENT &&
             !empty($request->getModuleName()) && $request->getModuleName() !== "Core") {
             $this->_includeModuleLayoutFiles(Core_Model_UserManager::GROUP_CLIENT);
+        }
+    }
+
+    /**
+     * Called before Zend_Controller_Front begins evaluating the
+     * request against its routes.
+     *
+     * @param Zend_Controller_Request_Abstract $request
+     * @return void
+     */
+    public function routeStartup(Zend_Controller_Request_Abstract $request)
+    {
+        if(($requestUri = $request->getRequestUri()) && preg_match('/^\/api\//', $requestUri)) {
+            $request->setParam('format', 'json');
+            $this->_api = true;
         }
     }
 

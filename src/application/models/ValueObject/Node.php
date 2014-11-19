@@ -319,7 +319,7 @@ class Core_Model_ValueObject_Node extends Core_Model_ServiceObject
             ->setAction(self::ACTION_REPORT_NODE_SERVICE)->setModuleRef($service)
             ->setNodeRef($this->getId())->saveByContext($reportHash);
         
-        $this->removeCommands($service);
+        $this->clearCommands($service);
         
         if(!Core_Model_DiFactory::getModuleApi()->reportNodeService($service, $this->getId(), $report)){
             return false;
