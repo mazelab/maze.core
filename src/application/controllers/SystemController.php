@@ -24,7 +24,6 @@ class SystemController extends Zend_Controller_Action
                       ->initContext();
 
         // set view messages from MessageManager
-        $this->_helper->getHelper("SetDefaultViewVars");
         $this->_helper->layout()->disableLayout();
     }
 
@@ -154,4 +153,13 @@ class SystemController extends Zend_Controller_Action
             $this->view->exception = $emailManager->getException()->getMessage();
         }
     }
+
+    /**
+     * set messages for view usage
+     */
+    public function postDispatch()
+    {
+        $this->view->assign(Core_Model_DiFactory::getMessageManager()->getMessages());
+    }
+
 }

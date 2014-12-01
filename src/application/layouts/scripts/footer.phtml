@@ -1,10 +1,12 @@
 <div class="container_16 row-fluid cssFooterContent">
+    <? if($this->html("company")): ?>
     <div class="grid_16 span12">
         <span>
             <?= $this->translate('Cloud configuration tool for server management by the provider') ?>
             <span id="jsFooterProvider"><?= $this->html("company") ?></span>
         </span>
     </div>
+    <? endif; ?>
 <!--    <div class=grid_16>
         <ul>
             <li>

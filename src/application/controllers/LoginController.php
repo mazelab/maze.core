@@ -18,9 +18,6 @@ class LoginController extends Zend_Controller_Action
     public function init()
     {
         $this->_redirector = $this->_helper->getHelper('Redirector');
-
-        // set view messages from MessageManager
-        $this->_helper->getHelper("SetDefaultViewVars");
     }
     
     public function loginAction()
@@ -181,6 +178,14 @@ class LoginController extends Zend_Controller_Action
         }
 
         return false;
+    }
+
+    /**
+     * set messages for view usage
+     */
+    public function postDispatch()
+    {
+        $this->view->assign(Core_Model_DiFactory::getMessageManager()->getMessages());
     }
 
 }

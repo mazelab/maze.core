@@ -13,14 +13,6 @@
 class DashboardController extends Zend_Controller_Action
 {
 
-    public function init()
-    {
-        /* Initialize action controller here */
-
-        // set view messages from MessageManager
-        $this->_helper->getHelper("SetDefaultViewVars");
-    }
-
     public function indexAction()
     {
         $identity = Zend_Auth::getInstance()->getIdentity();
@@ -69,6 +61,14 @@ class DashboardController extends Zend_Controller_Action
         $this->view->modules = $clientManager->getClientServices($identity['_id']);
         $this->view->log = $logManager->getClientLogs($identity['_id']);
         $this->view->lastNews = $newsManager->getMessages(4, Core_Model_NewsManager::STATUS_PUBLIC);
+    }
+
+    /**
+     * set messages for view usage
+     */
+    public function postDispatch()
+    {
+        $this->view->assign(Core_Model_DiFactory::getMessageManager()->getMessages());
     }
 
 }

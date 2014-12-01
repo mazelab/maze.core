@@ -48,7 +48,6 @@ class ProfileController extends Zend_Controller_Action
                     ->initContext();
 
         // set view messages from MessageManager
-        $this->_helper->getHelper("SetDefaultViewVars");
         $this->_helper->layout()->disableLayout();
     }
 
@@ -187,6 +186,14 @@ class ProfileController extends Zend_Controller_Action
     public function accessclientAction()
     {
         $this->_processAccessView();
+    }
+
+    /**
+     * set messages for view usage
+     */
+    public function postDispatch()
+    {
+        $this->view->assign(Core_Model_DiFactory::getMessageManager()->getMessages());
     }
     
 }

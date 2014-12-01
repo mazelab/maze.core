@@ -13,12 +13,6 @@
 class DomainsController extends Zend_Controller_Action
 {
 
-    public function init()
-    {
-        // set view messages from MessageManager
-        $this->_helper->getHelper("SetDefaultViewVars");
-    }
-
     public function indexAction()
     {
     }

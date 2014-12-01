@@ -21,11 +21,14 @@ class MazeLib_Plugins_Layout extends Zend_Controller_Plugin_Abstract
     protected $_role;
 
     /**
-     * api call
-     *
-     * @var boolean
+     * @var Zend_Layout
      */
-    protected $_api = false;
+    protected $_layout;
+
+    /**
+     * @var Zend_View_Interface
+     */
+    protected $_view;
 
     public function __construct()
     {
@@ -97,6 +100,11 @@ class MazeLib_Plugins_Layout extends Zend_Controller_Plugin_Abstract
         if(isset($script)) {
             Zend_Layout::getMvcInstance()->setLayout($script);
         }
+
+        $mazeConfig = Core_Model_DiFactory::getConfig();
+        $view  = Zend_Layout::getMvcInstance()->getView();
+
+        $view->assign("company", (string) $mazeConfig->getData("company"));
     }
 
     /**
@@ -141,7 +149,10 @@ class MazeLib_Plugins_Layout extends Zend_Controller_Plugin_Abstract
      */
     public function dispatchLoopStartup(Zend_Controller_Request_Abstract $request)
     {
-        if($this->_api) {
+        // skip further layout initializing when api uri or error controller
+        if((($requestUri = $request->getRequestUri()) && preg_match('/^\/api\//', $requestUri))
+                || $request->getControllerName() === 'error') {
+            $request->setParam('format', 'json');
             return false;
         }
 
@@ -152,23 +163,8 @@ class MazeLib_Plugins_Layout extends Zend_Controller_Plugin_Abstract
             $this->_includeModuleLayoutFiles(Core_Model_UserManager::GROUP_ADMIN);
             $this->_setAngularModuleString();
         } else if ($this->_role === Core_Model_UserManager::GROUP_CLIENT &&
-            !empty($request->getModuleName()) && $request->getModuleName() !== "Core") {
+                !$request->getModuleName() && $request->getModuleName() !== "Core") {
             $this->_includeModuleLayoutFiles(Core_Model_UserManager::GROUP_CLIENT);
-        }
-    }
-
-    /**
-     * Called before Zend_Controller_Front begins evaluating the
-     * request against its routes.
-     *
-     * @param Zend_Controller_Request_Abstract $request
-     * @return void
-     */
-    public function routeStartup(Zend_Controller_Request_Abstract $request)
-    {
-        if(($requestUri = $request->getRequestUri()) && preg_match('/^\/api\//', $requestUri)) {
-            $request->setParam('format', 'json');
-            $this->_api = true;
         }
     }
 

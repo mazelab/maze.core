@@ -24,9 +24,6 @@ class InstallController extends Zend_Controller_Action
     {
         $this->_redirector = $this->_helper->getHelper('Redirector');
         $this->_helper->layout()->setLayout('install');
-
-        // set view messages from MessageManager
-        $this->_helper->getHelper("SetDefaultViewVars");
     }
 
     public function indexAction()
@@ -158,6 +155,14 @@ class InstallController extends Zend_Controller_Action
     public function failedAction()
     {
         
+    }
+
+    /**
+     * set messages for view usage
+     */
+    public function postDispatch()
+    {
+        $this->view->assign(Core_Model_DiFactory::getMessageManager()->getMessages());
     }
 
 }

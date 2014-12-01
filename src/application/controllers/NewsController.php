@@ -32,7 +32,6 @@ class NewsController extends Zend_Controller_Action
                 ->initContext();
 
         // set view messages from MessageManager
-        $this->_helper->getHelper("SetDefaultViewVars");
         $this->_helper->layout()->disableLayout();
     }
 
@@ -176,4 +175,13 @@ class NewsController extends Zend_Controller_Action
 
         return $emailManager->send();
     }
+
+    /**
+     * set messages for view usage
+     */
+    public function postDispatch()
+    {
+        $this->view->assign(Core_Model_DiFactory::getMessageManager()->getMessages());
+    }
+
 }

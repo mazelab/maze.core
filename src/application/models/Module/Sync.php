@@ -172,7 +172,7 @@ class Core_Model_Module_Sync
      */
     public function syncDaily()
     {
-        $mazeConfig = Zend_Registry::getInstance()->get('mazeConfig');
+        $mazeConfig = Core_Model_DiFactory::getConfig();
         $date = new Zend_Date($mazeConfig->getData('lastModuleSync'));
         
         if(!$mazeConfig->getData('lastModuleSync') || !$date->isToday()) {

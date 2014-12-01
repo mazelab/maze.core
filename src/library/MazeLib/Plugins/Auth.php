@@ -6,11 +6,11 @@
  */
 
 /**
- * MazeLib_Plugins_Init
+ * MazeLib_Plugins_Auth
  * 
  * @license http://opensource.org/licenses/MIT MIT
  */
-class MazeLib_Plugins_Init extends Zend_Controller_Plugin_Abstract
+class MazeLib_Plugins_Auth extends Zend_Controller_Plugin_Abstract
 {
     
     /**
@@ -50,11 +50,6 @@ class MazeLib_Plugins_Init extends Zend_Controller_Plugin_Abstract
      */
     CONST ROLE_API_REGISTERED = 'api_registered';
     
-    /**
-     * exception message when database connection check failed
-     */
-    CONST EXCEPTION_DATABASE_CONNECTION_FAILED = "Error Establishing a Database Connection";
-    
     public function __construct()
     {
         $this->_auth = Zend_Auth::getInstance();
@@ -82,75 +77,6 @@ class MazeLib_Plugins_Init extends Zend_Controller_Plugin_Abstract
     protected function _getLogger()
     {
         return Core_Model_DiFactory::getLogger();
-    }
-
-    /**
-     * register mazeConfig in zend_Registry and sets locale
-     * 
-     * called by dispatchLoopStartup()
-     */
-    protected function _initMazeConfig()
-    {
-        $config = Core_Model_DiFactory::newConfig();
-        if ($this->_connection){
-            $config = Core_Model_DiFactory::getConfig();
-        }
-
-        Zend_Registry::getInstance()->set("mazeConfig", $config);
-    }
-    
-    /**
-     * initialize already bootstrapped modules for usage in maze
-     */
-    protected function _initModules()
-    {
-        $front = Zend_Controller_Front::getInstance();
-        $defaultModule = $front->getDefaultModule();
-
-        foreach ($front->getControllerDirectory() as $module => $path) {
-            if ($module == $defaultModule) {
-                continue;
-            }
-          
-            // init module
-            $configPath = dirname($path) . DIRECTORY_SEPARATOR . "module.ini";
-            if (file_exists($configPath)) {
-                Core_Model_DiFactory::getModuleRegistry()->registerModule($configPath);
-            }
-        }
-    }
-
-    /**
-     * set ui language
-     * 
-     * called by dispatchLoopStartup()
-     */
-    protected function _initTranslation()
-    {
-        $registry = Zend_Registry::getInstance();
-        if ($this->_connection && $registry->isRegistered("Zend_Translate")){
-            $config = Core_Model_DiFactory::getConfig();
-            $translate = $registry->get("Zend_Translate");
-            $translate->getAdapter()->setLocale($config->getData("locale"));
-        }
-    }
-
-    /**
-     * connection test to the database server
-     * 
-     * called by routeShutdown()
-     * 
-     * @param  Zend_Controller_Request_Abstract $request
-     * @throws Core_Model_Dataprovider_Exception
-     * @return boolean
-     */
-    protected function _initCheckDataprovider(Zend_Controller_Request_Abstract $request)
-    {
-        $this->_connection = Core_Model_Dataprovider_DiFactory::getConnection()->status();
-
-        if (!$this->_connection && $request->getControllerName() != "install"){
-            throw new Exception(self::EXCEPTION_DATABASE_CONNECTION_FAILED);
-        }
     }
 
     /**
@@ -277,7 +203,9 @@ class MazeLib_Plugins_Init extends Zend_Controller_Plugin_Abstract
      */
     public function routeShutdown(Zend_Controller_Request_Abstract $request)
     {
-        $this->_initCheckDataprovider($request);
+        if($request->getControllerName() === 'error') {
+            return false;
+        }
 
         if($request->getHeader('X-Authorization-Token')) {
             $this->_initAuthenticateToken($request);
@@ -286,16 +214,4 @@ class MazeLib_Plugins_Init extends Zend_Controller_Plugin_Abstract
         }
     }
 
-    /**
-     * @param Zend_Controller_Request_Abstract $request
-     */
-    public function dispatchLoopStartup(Zend_Controller_Request_Abstract $request)
-    {
-        if ($this->_connection){
-            $this->_initMazeConfig();
-            $this->_initTranslation();
-            $this->_initModules();
-        }
-    }
-    
 }

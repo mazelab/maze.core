@@ -15,6 +15,8 @@ class ErrorController extends Zend_Controller_Action
 
     public function init()
     {
+        $this->_helper->_layout->setLayout('layout');
+
         $this->_helper->getHelper('contextSwitch')
             ->addActionContext('error', 'json')
             ->initContext();
